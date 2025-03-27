@@ -1,7 +1,7 @@
 import SecondaryHero from "../../components/layout/SecondaryHero";
 import Container from "../../components/common/Container";
 import GenericCard from "@/components/common/GenericCard";
-import DestinationRecommendations from "@/components/layout/DestinationRecommendations";
+import DestinationRecommendations from "@/components/layout/Recommendations";
 
 export default function Explore() {
   return (
@@ -14,7 +14,7 @@ export default function Explore() {
       <Container>
         <div className="py-12 space-y-16">
           {/* Description */}
-          <span>
+          <span className="block text-center">
             We offer convenient flights between Australia, Fiji, Vanuatu, and
             Honiara, the vibrant capital of the Solomon Islands. Discover the
             beauty and diversity of the Solomons with our extensive network of

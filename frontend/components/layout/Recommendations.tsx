@@ -1,6 +1,6 @@
 import DestinationCard from "../common/DestinationCard";
 
-function DestinationRecommendations() {
+function Recommendations() {
   return (
     <div className="space-y-8">
       <h2 className="text-3xl text-center font-bold text-blue-500">
@@ -26,4 +26,4 @@ function DestinationRecommendations() {
   );
 }
 
-export default DestinationRecommendations;
+export default Recommendations;
