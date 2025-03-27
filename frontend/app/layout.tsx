@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 import "./globals.css";
 
 const inter = Inter({
-  variable: '--font-inter',
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-})
+});
 
 const rubik = Rubik({
-  variable: '--font-rubik',
+  variable: "--font-rubik",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
-})
-
+});
 
 export const metadata: Metadata = {
   title: "Airlines Awesome Imagination",
@@ -29,13 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${rubik.variable} antialiased`}
-      >
-        
-        <Header/>
+      <body className={`${inter.variable} ${rubik.variable} antialiased`}>
+        <Header />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );

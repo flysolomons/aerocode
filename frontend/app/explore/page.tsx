@@ -1,6 +1,6 @@
-import SecondaryHero from "../components/SecondaryHero";
+import SecondaryHero from "../../components/layout/SecondaryHero";
 import Image from "next/image";
-import Container from "../ui/Container";
+import Container from "../../components/common/Container";
 
 export default function Explore() {
   return (
