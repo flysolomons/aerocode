@@ -1,15 +1,15 @@
 type PrimaryButtonProps = {
-    text: string;
+  text: string;
 };
 
 function PrimaryButton({ text }: PrimaryButtonProps) {
-    return (
-        <div className="text-center">
-            <button className="bg-blue-500 text-white px-6 py-2 w-[192px] h-[48px] rounded-full font-semibold hover:bg-opacity-90 transition-colors">
-                {text}
-            </button>
-        </div>
-    );
+  return (
+    <div className="text-center">
+      <button className="bg-blue-500 text-white px-6 py-2 min-w-[192px] h-[48px] rounded-full font-semibold hover:bg-opacity-90 transition-colors">
+        {text}
+      </button>
+    </div>
+  );
 }
 
 export default PrimaryButton;
