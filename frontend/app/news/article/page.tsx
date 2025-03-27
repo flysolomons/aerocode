@@ -83,7 +83,7 @@ export default function NewsArticle() {
                         Soar Into New Year Savings with our International Sale
                       </a>
                       <div className="text-sm text-gray-500 mt-1">
-                        Dec 10th 2024
+                        Jan 17th 2025 12:00PM
                       </div>
                     </div>
                   </div>
