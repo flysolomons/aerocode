@@ -1,7 +1,7 @@
 import SecondaryHero from "../../components/layout/SecondaryHero";
 import Container from "../../components/common/Container";
 import GenericCard from "@/components/common/GenericCard";
-import DestinationRecommendations from "@/components/layout/Recommendations";
+import Recommendations from "@/components/layout/Recommendations";
 
 export default function Explore() {
   return (
@@ -34,7 +34,7 @@ export default function Explore() {
           </div>
 
           {/* Recommendations section */}
-          <DestinationRecommendations />
+          <Recommendations />
         </div>
       </Container>
     </>

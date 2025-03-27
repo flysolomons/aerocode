@@ -1,6 +1,6 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
-import DestinationRecommendations from "@/components/layout/Recommendations";
+import Recommendations from "@/components/layout/Recommendations";
 import SpecialsCard from "@/components/common/SpecialsCard";
 
 export default function Specials() {
@@ -47,7 +47,7 @@ export default function Specials() {
           </div>
 
           {/* Recommendations section */}
-          <DestinationRecommendations />
+          <Recommendations />
         </div>
       </Container>
     </>
