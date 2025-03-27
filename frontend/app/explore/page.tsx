@@ -1,6 +1,7 @@
 import SecondaryHero from "../../components/layout/SecondaryHero";
 import Image from "next/image";
 import Container from "../../components/common/Container";
+import GenericCard from "@/components/common/GenericCard";
 
 export default function Explore() {
   return (
@@ -19,67 +20,11 @@ export default function Explore() {
             exciting locations in Europe, Asia, and North America.
           </span>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="relative rounded-3xl overflow-hidden w-[264px] h-[256px] shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-              <Image
-                src="/image.jpg"
-                alt="Where We Fly"
-                width={500}
-                height={300}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-                <span className="text-2xl font-semibold text-center">
-                  Where We Fly
-                </span>
-              </div>
-            </div>
-            <div className="relative rounded-3xl overflow-hidden w-[264px] h-[256px] shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-              <Image
-                src="/image.jpg"
-                alt="Flight Schedules"
-                width={500}
-                height={300}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-                <span className="text-2xl font-semibold text-center">
-                  Flight Schedules
-                </span>
-              </div>
-            </div>
-            <div className="relative rounded-3xl overflow-hidden w-[264px] h-[256px] shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-              <Image
-                src="/image.jpg"
-                alt="Our Specials"
-                width={500}
-                height={300}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-                <span className="text-2xl font-semibold text-center">
-                  Our Specials
-                </span>
-              </div>
-            </div>
-            <div className="relative rounded-3xl overflow-hidden w-[264px] h-[256px] shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-              <Image
-                src="/image.jpg"
-                alt="Cargo Information"
-                width={500}
-                height={300}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-                <span className="text-2xl font-semibold text-center">
-                  Cargo
-                </span>
-              </div>
-            </div>
+          <div className="grid grid-cols-3 gap-6">
+            <GenericCard title="Where We Fly" image="/image.jpg" />
+            <GenericCard title="Flight Schedules" image="/image.jpg" />
+            <GenericCard title="Our Specials" image="/image.jpg" />
+            <GenericCard title="Cargo" image="/image.jpg" />
           </div>
 
           {/* our destinations */}
