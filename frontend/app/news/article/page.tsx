@@ -1,6 +1,7 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import Image from "next/image";
+import OtherNewsSection from "@/components/layout/OtherNewsSection";
 
 export default function NewsArticle() {
   return (
@@ -59,37 +60,7 @@ export default function NewsArticle() {
               </div>
             </div>
 
-            <div>
-              <h2 className="text-lg font-semibold text-blue-500 mb-4">
-                In Other News
-              </h2>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-3">
-                  <div className="flex items-start relative h-20">
-                    <div className="w-20 h-20 absolute overflow-hidden rounded-lg">
-                      <Image
-                        src="/image.jpg"
-                        alt="Holiday Travel"
-                        layout="fill"
-                        objectFit="fill"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="pl-24">
-                      <a
-                        href="#"
-                        className="text-blue-500 hover:underline font-medium"
-                      >
-                        Soar Into New Year Savings with our International Sale
-                      </a>
-                      <div className="text-sm text-gray-500 mt-1">
-                        Jan 17th 2025 12:00PM
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <OtherNewsSection />
           </div>
         </div>
       </Container>

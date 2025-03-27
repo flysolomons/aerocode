@@ -26,7 +26,7 @@ export default function Explore() {
           </span>
 
           {/* Explore options */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4 h-64">
             <GenericCard title="Where We Fly" image="/image.jpg" />
             <GenericCard title="Flight Schedules" image="/image.jpg" />
             <GenericCard title="Our Specials" image="/image.jpg" />
