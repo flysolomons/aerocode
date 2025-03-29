@@ -52,9 +52,9 @@ export default function NewsArticle() {
                   <Image
                     src="/image.jpg"
                     alt="Where We Fly: International"
-                    width={500}
-                    height={500}
-                    className="w-full rounded-3xl"
+                    width={1000}
+                    height={1000}
+                    className="w-full h-[400px] rounded-3xl object-cover"
                   />
                 </div>
               </div>
