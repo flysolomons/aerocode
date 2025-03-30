@@ -8,7 +8,7 @@ interface MembershipCardProps {
 function MembershipCard({ title, price }: MembershipCardProps) {
   return (
     <>
-      <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl p-6 flex flex-col justify-between border-solid border-1 border-gray-300">
+      <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl p-6 flex flex-col justify-between border-solid border-2 border-gray-300">
         <div className="space-y-8">
           <div className="space-y-6 text-center">
             <h3 className="text-2xl font-bold text-blue-500">{title}</h3>
