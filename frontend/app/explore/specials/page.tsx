@@ -1,7 +1,7 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import Recommendations from "@/components/layout/Recommendations";
-import SpecialsCard from "@/components/common/SpecialsCard";
+import SpecialsCard from "@/components/common/SpecialCard";
 
 export default function Specials() {
   return (
@@ -27,19 +27,16 @@ export default function Specials() {
           {/* Latest specials options */}
           <div className="grid grid-cols-3 gap-4 h-[256px]">
             <SpecialsCard
-              route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"
               specialName="Early Bird Sale"
             />
             <SpecialsCard
-              route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"
               specialName="Early Bird Sale"
             />
             <SpecialsCard
-              route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"
               specialName="Early Bird Sale"

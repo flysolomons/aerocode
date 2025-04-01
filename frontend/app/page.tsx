@@ -1,6 +1,6 @@
 import Container from "@/components/common/Container";
 import PrimaryHero from "@/components/layout/PrimaryHero";
-import SpecialsCard from "@/components/common/SpecialsCard";
+import RouteSpecial from "@/components/common/RouteSpecialCard";
 import Image from "next/image";
 export default function Home() {
   return (
@@ -19,19 +19,19 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-3 gap-4 h-[256px]">
-            <SpecialsCard
+            <RouteSpecial
               route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"
               specialName="Early Bird Sale"
             />
-            <SpecialsCard
+            <RouteSpecial
               route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"
               specialName="Early Bird Sale"
             />
-            <SpecialsCard
+            <RouteSpecial
               route="Honiara to Brisbane"
               price="$650AUD"
               image="/image.jpg"

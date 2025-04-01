@@ -2,14 +2,19 @@ import Image from "next/image";
 
 // props: card title, image
 
-interface SpecialsCardProps {
+interface RouteSpecialCardProps {
   route: string;
   price: string;
   image: string;
   specialName?: string;
 }
 
-function SpecialsCard({ route, price, image, specialName }: SpecialsCardProps) {
+function RouteSpecialCard({
+  route,
+  price,
+  image,
+  specialName,
+}: RouteSpecialCardProps) {
   return (
     <>
       <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl">
@@ -36,4 +41,4 @@ function SpecialsCard({ route, price, image, specialName }: SpecialsCardProps) {
   );
 }
 
-export default SpecialsCard;
+export default RouteSpecialCard;

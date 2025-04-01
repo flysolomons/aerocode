@@ -1,0 +1,132 @@
+6 Destinations
+
+Vanuatu
+
+Brisbane to Port Vila 
+Brisbane to Santo 
+Honiara to Port Vila 
+Auckland to Port Vila 
+Auckland to Santo 
+Wellington to Port Vila 
+Christchurch to Port Vila
+Honiara to Santo 
+
+
+New Zealand
+
+Port Vila to Auckland 
+Santo to Auckland 
+Port Vila to Christchurch 
+Port Vila to Wellington
+Honiara to Auckland 
+Melbourne to Auckland 
+Darwin to Auckland 
+Adelaide to Auckland 
+Canberra to Auckland 
+Cairns to Auckland 
+Sydney to Auckland 
+Mackay to Auckland 
+Perth to Auckland 
+Townsville to Auckland
+Brisbane to Auckland 
+Brisbane to Christchurch 
+Brisbane to Wellington 
+
+
+Papua New Guinea
+
+Honiara to Port Moresby 
+
+
+Australia
+
+Gizo to Brisbane 
+Honiara to Sydney 
+Munda to Brisbane 
+Honiara to Mackay 
+Honiara to Adelaide 
+Honiara to Townsville 
+Honiara to Cairns 
+Honiara to Perth 
+Honiara to Brisbane 
+Honiara to Darwin 
+Honiara to Melbourne 
+Seghe to Brisbane 
+Honiara to Canberra 
+Suavanao to Brisbane 
+Auckland to Brisbane 
+Christchurch to Brisbane 
+Auckland to Sydney 
+Auckland to Cairns 
+Wellington to Brisbane
+Auckland to Adelaide 
+Auckland to Darwin 
+Auckland to Mackay 
+Auckland to Townsville 
+Auckland to Perth 
+Auckland to Canberra 
+Auckland to Melbourne 
+Port Vila to Brisbane 
+Santo to Brisbane 
+
+
+Solomon Islands
+
+Darwin to Honiara 
+Brisbane to Auki 
+Adelaide to Honiara 
+Canberra to Honiara 
+Brisbane to Honiara 
+Cairns to Honiara 
+Brisbane to Munda 
+Sydney to Honiara 
+Brisbane to Gizo 
+Mackay to Honiara 
+Brisbane to Seghe 
+Perth to Honiara 
+Brisbane to Suavanao 
+Townsville to Honiara 
+Brisbane to Nadi 
+Melbourne to Honiara 
+Suavanao to Honiara 
+Honiara to Gizo 
+Honiara to Munda 
+Honiara to Seghe 
+Honiara to Auki 
+Honiara to Suavanao 
+Honiara to Lomlom 
+Honiara to Santa Ana 
+Honiara to Santa Cruz 
+Honiara to Atoifi 
+Honiara to Arona 
+Honiara to Balalae 
+Honiara to Parasi 
+Honiara to Bellona 
+Honiara to Choiseul Bay 
+Honiara to Fera 
+Honiara to Kagau 
+Honiara to Kirakira 
+Honiara to Ramata 
+Honiara to Rennell 
+Gizo to Balalae 
+Gizo to Munda 
+Gizo to Choiseul Bay 
+Auki to Atoifi 
+Arona to Kirakira 
+Santa Cruz to Lomlom 
+Santa Ana to Kirakira 
+Rennell to Bellona 
+Ramata to Seghe
+Auckland to Honiara 
+Christchurch to Honiara 
+Wellington to Honiara 
+Nadi to Honiara
+Santo to Honiara 
+Port Vila to Honiara 
+Port Moresby to Honiara
+
+
+
+Fiji
+
+Honiara to Nadi 
