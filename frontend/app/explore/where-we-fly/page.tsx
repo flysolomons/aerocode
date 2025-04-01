@@ -1,6 +1,6 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
-import DestinationRecommendations from "@/components/layout/Recommendations";
+import Recommendations from "@/components/layout/Recommendations";
 import RadioButton from "@/components/common/RadioButton";
 import Image from "next/image";
 
@@ -32,7 +32,7 @@ export default function WhereWeFly() {
 
           <div className="w-full relative">
             <Image
-              src="/image.jpg" // Replace with your image path
+              src="/image.jpg"
               alt="Where We Fly: Interanational"
               width={1128}
               height={770}
@@ -40,7 +40,7 @@ export default function WhereWeFly() {
             />
           </div>
           {/* Recommendations section */}
-          <DestinationRecommendations />
+          <Recommendations />
         </div>
       </Container>
     </>

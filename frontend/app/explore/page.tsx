@@ -1,7 +1,7 @@
 import SecondaryHero from "../../components/layout/SecondaryHero";
 import Container from "../../components/common/Container";
 import GenericCard from "@/components/common/GenericCard";
-import DestinationRecommendations from "@/components/layout/Recommendations";
+import Recommendations from "@/components/layout/Recommendations";
 
 export default function Explore() {
   return (
@@ -26,7 +26,7 @@ export default function Explore() {
           </span>
 
           {/* Explore options */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-4 h-64">
             <GenericCard title="Where We Fly" image="/image.jpg" />
             <GenericCard title="Flight Schedules" image="/image.jpg" />
             <GenericCard title="Our Specials" image="/image.jpg" />
@@ -34,7 +34,7 @@ export default function Explore() {
           </div>
 
           {/* Recommendations section */}
-          <DestinationRecommendations />
+          <Recommendations />
         </div>
       </Container>
     </>
