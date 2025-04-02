@@ -3,6 +3,7 @@ import PrimaryHero from "@/components/layout/PrimaryHero";
 import RouteSpecial from "@/components/common/RouteSpecialCard";
 import Image from "next/image";
 import ReasonToVisitCard from "@/components/common/ReasonToVisit";
+import InfoCard from "@/components/common/InfoCard";
 export default function Destination() {
   return (
     <>
@@ -59,15 +60,30 @@ export default function Destination() {
             imageOnLeft={true}
           />
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">
                 New Zealand Travel Requirements
               </h2>
             </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <InfoCard
+                title="Visa"
+                description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
+              />
+              <InfoCard
+                title="Passport"
+                description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
+              />
+              <InfoCard
+                title="Customs"
+                description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
+              />
+            </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">
                 Our New Zealand Routes
