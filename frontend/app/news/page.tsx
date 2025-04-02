@@ -13,7 +13,7 @@ export default function News() {
       />
       <Container>
         <div className="py-12 space-y-16">
-          <div className="grid grid-cols-3 gap-x-4 gap-y-16">
+          <div className="grid grid-cols-3 gap-x-4 gap-y-8">
             <NewsCard
               headline="Soar Into New Year Savings with our International Sale"
               image="/image.jpg"

@@ -5,7 +5,7 @@ interface InfoCardProps {
   description: string;
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({ title, description }) => {
+function InfoCard({ title, description }: InfoCardProps) {
   return (
     <div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-300">
       <div className="flex items-start gap-3">
@@ -41,6 +41,6 @@ const InfoCard: React.FC<InfoCardProps> = ({ title, description }) => {
       </div>
     </div>
   );
-};
+}
 
 export default InfoCard;
