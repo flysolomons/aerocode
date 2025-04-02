@@ -7,7 +7,7 @@ function Recommendations() {
         Our Destinations
       </h2>
 
-      <div className="grid grid-cols-3 gap-4 h-[400px]">
+      <div className="grid grid-cols-3 gap-4 h-[25rem]">
         <DestinationCard title="Port Vila, Vanuatu" image="/image.jpg" />
 
         <div className="space-y-4 h-full">

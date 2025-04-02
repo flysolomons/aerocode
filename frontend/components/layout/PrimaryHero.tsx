@@ -1,17 +1,20 @@
 // props: card title, image
 
 import BookingWidget from "../common/BookingWidget";
+import StrippedBookingWidget from "../common/StrippedBookingWidget";
 
 interface PrimaryHeroProps {
   title: string;
   image: string;
   breadcrumbs?: string;
+  widget?: string;
 }
 
 export default function PrimaryHero({
   title,
   image,
   breadcrumbs,
+  widget,
 }: PrimaryHeroProps) {
   return (
     <main>
@@ -30,7 +33,12 @@ export default function PrimaryHero({
           <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center">
             <h1 className="text-5xl font-bold mb-4">{title}</h1>
           </div>
-          <BookingWidget />
+
+          {widget === "stripped" ? (
+            <StrippedBookingWidget />
+          ) : (
+            <BookingWidget />
+          )}
         </div>
       </div>
     </main>

@@ -35,7 +35,7 @@ export default function Belama() {
             alt="Where We Fly: International"
             width={4000}
             height={1000}
-            className="w-full h-[400px] rounded-3xl object-cover"
+            className="w-full h-[25rem] rounded-3xl object-cover"
           />
 
           <div className="space-y-8">

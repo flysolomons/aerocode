@@ -48,7 +48,7 @@ function Header() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="max-w-[1128px] mx-auto flex items-center justify-between py-4">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
           <div className="flex items-center">
             <Image
               src={isHovered ? "/logo.svg" : "/logo-white.svg"}
@@ -123,7 +123,7 @@ function Header() {
           isWhiteHeader ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        <div className="max-w-[1128px] mx-auto flex items-center justify-between py-4">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
           <div className="flex items-center">
             <Image
               src={isHovered ? "/logo-white.svg" : "/logo.svg"}
@@ -195,7 +195,7 @@ function Header() {
             : "opacity-0 pointer-events-none"
         }`}
       >
-        <div className="max-w-[1128px] mx-auto flex items-center justify-between py-4">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
           <div className="flex items-center">
             <Image
               src="/logo.svg"

@@ -54,7 +54,7 @@ export default function NewsArticle() {
                     alt="Where We Fly: International"
                     width={1000}
                     height={1000}
-                    className="w-full h-[400px] rounded-3xl object-cover"
+                    className="w-full h-[25rem] rounded-3xl object-cover"
                   />
                 </div>
               </div>
