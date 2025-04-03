@@ -24,7 +24,7 @@ export default function Route() {
       >
         <SecondaryHero
           title="Flights from Honiara to Auckland"
-          image="/hero2.jpg"
+          image="/hero3.jpg"
           breadcrumbs="Home > Explore > Destinations > New Zealand > Honiara to Auckland"
           onColorCalculated={setGradientStartColor}
         />
