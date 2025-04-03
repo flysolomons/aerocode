@@ -2,7 +2,7 @@ import RadioButton from "./RadioButton";
 
 export default function StrippedBookingWidget() {
   return (
-    <div className="relative flex flex-col items-center pt-8 h-1/2 text-white">
+    <div className="relative flex flex-col items-center h-1/2 text-white">
       <div className="w-[70.5rem] rounded-[32px]">
         <div className="px-4 py-3 flex flex-col items-center space-y-4">
           <RadioButton optionOne="Round Trip" optionTwo="One Way" />
