@@ -3,15 +3,15 @@ import RadioButton from "./RadioButton";
 export default function BookingWidget() {
   return (
     <div className="relative flex flex-col items-center pt-8 h-1/2 text-white">
-      <div className="w-[70.5rem] bg-white rounded-[32px] shadow-lg">
+      <div className="w-[70.5rem] bg-white rounded-[2rem] shadow-lg">
         <div className="flex border-b">
-          <div className="flex border-b-2 border-b-blue-500 px-4 py-3 h-[48px] w-[165px]">
-            <button className="text-blue-500 text-sm font-semibold w-[165px] text-center">
+          <div className="flex border-b-2 border-b-blue-500 px-4 py-3 h-12 w-[11rem]">
+            <button className="text-blue-500 text-sm font-semibold w-[11rem] text-center">
               Book a Trip
             </button>
           </div>
-          <div className="flex px-4 py-3 h-[48px] w-[165px]">
-            <button className="text-gray-500 font-semibold text-sm hover:text-gray-700 w-[165px] text-center">
+          <div className="flex px-4 py-3 h-12 w-[11rem]">
+            <button className="text-gray-500 font-semibold text-sm hover:text-gray-700 w-[11rem] text-center">
               Manage Booking
             </button>
           </div>
@@ -21,9 +21,9 @@ export default function BookingWidget() {
           <RadioButton optionOne="Round Trip" optionTwo="One Way" />
 
           {/* search form */}
-          <div className="flex items-center border border-[#E5E7EB] rounded-full px-2 shadow-md">
+          <div className="flex items-center border border-gray-200 rounded-full px-2 shadow-md">
             <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-[#222222] font-semibold">
+              <label className="block text-xs text-black font-semibold">
                 Flying from?
               </label>
               <input
@@ -34,7 +34,7 @@ export default function BookingWidget() {
             </div>
             <div className="w-[1px] h-10 bg-gray-200"></div>
             <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-[#222222] font-semibold">
+              <label className="block text-xs text-black font-semibold">
                 Flying to?
               </label>
               <input
@@ -47,7 +47,7 @@ export default function BookingWidget() {
             <div className="flex-1 px-6 py-3">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs text-[#222222] font-semibold">
+                  <label className="block text-xs text-black font-semibold">
                     Departure
                   </label>
                   <input
@@ -58,7 +58,7 @@ export default function BookingWidget() {
                 </div>
                 <div className="w-[1px] h-10 bg-gray-200"></div>
                 <div className="flex-1">
-                  <label className="block text-xs text-[#222222] font-semibold">
+                  <label className="block text-xs text-black font-semibold">
                     Return
                   </label>
                   <input
@@ -72,7 +72,7 @@ export default function BookingWidget() {
             <div className="w-[1px] h-10 bg-gray-200"></div>
             <div className="flex-1 flex">
               <div className="px-6 py-3">
-                <label className="block text-xs text-[#222222] font-semibold">
+                <label className="block text-xs text-black font-semibold">
                   Travelling with?
                 </label>
                 <input

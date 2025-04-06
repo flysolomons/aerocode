@@ -43,7 +43,7 @@ export default function Route() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 h-[256px]">
+              <div className="grid grid-cols-3 gap-4 h-64">
                 <RouteSpecial
                   route="Honiara to Auckland"
                   price="$650AUD"

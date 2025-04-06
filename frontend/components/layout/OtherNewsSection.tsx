@@ -2,7 +2,7 @@ import OtherNewsCard from "../common/OtherNewsCard";
 
 function OtherNewsSection() {
   return (
-    <div>
+    <div className="bg-white p-4 shadow-md rounded-3xl">
       <h2 className="text-lg font-semibold text-blue-500 mb-4">
         In Other News
       </h2>

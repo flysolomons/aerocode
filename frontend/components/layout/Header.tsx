@@ -55,7 +55,7 @@ function Header() {
               alt="Solomon Airlines Logo"
               width={150}
               height={40}
-              className="h-[24px] w-auto"
+              className="h-6 w-auto"
             />
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
@@ -64,17 +64,17 @@ function Header() {
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 className={`text-sm font-bold transition-colors ${
-                  isHovered ? "text-[#212061]" : "text-white"
+                  isHovered ? "text-blue-500" : "text-white"
                 }`}
               >
                 {item}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center justify-end gap-3 w-[152px]">
+          <div className="flex items-center justify-end gap-3 w-36">
             <button
               className={`transition-colors ${
-                isHovered ? "text-[#212061]" : "text-white"
+                isHovered ? "text-blue-500" : "text-white"
               } hover:text-blue-700`}
               aria-label="Information"
             >
@@ -95,7 +95,7 @@ function Header() {
             </button>
             <button
               className={`transition-colors ${
-                isHovered ? "text-[#212061]" : "text-white"
+                isHovered ? "text-blue-500" : "text-white"
               } hover:text-blue-700`}
               aria-label="Language"
             >
@@ -130,7 +130,7 @@ function Header() {
               alt="Solomon Airlines Logo"
               width={150}
               height={40}
-              className="h-[24px] w-auto"
+              className="h-6 w-auto"
             />
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
@@ -139,17 +139,17 @@ function Header() {
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 className={`text-sm font-bold transition-colors ${
-                  isHovered ? "text-[#212061]" : "text-white"
+                  isHovered ? "text-blue-500" : "text-white"
                 }`}
               >
                 {item}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center justify-end gap-3 w-[152px]">
+          <div className="flex items-center justify-end gap-3 w-36">
             <button
               className={`transition-colors ${
-                isHovered ? "text-[#212061]" : "text-white"
+                isHovered ? "text-blue-500" : "text-white"
               } hover:text-blue-700`}
               aria-label="Information"
             >
@@ -170,7 +170,7 @@ function Header() {
             </button>
             <button
               className={`transition-colors ${
-                isHovered ? "text-[#212061]" : "text-white"
+                isHovered ? "text-blue-500" : "text-white"
               } hover:text-blue-700`}
               aria-label="Language"
             >
@@ -202,7 +202,7 @@ function Header() {
               alt="Solomon Airlines Logo"
               width={150}
               height={40}
-              className="h-[24px] w-auto"
+              className="h-6 w-auto"
             />
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
@@ -210,15 +210,15 @@ function Header() {
               <Link
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-[#212061] text-sm font-bold transition-colors"
+                className="text-blue-500 text-sm font-bold transition-colors"
               >
                 {item}
               </Link>
             ))}
           </nav>
-          <div className="flex items-center justify-end gap-3 w-[152px]">
+          <div className="flex items-center justify-end gap-3 w-36">
             <button
-              className="text-[#212061] hover:text-blue-700 transition-colors"
+              className="text-blue-500 hover:text-blue-700 transition-colors"
               aria-label="Information"
             >
               <svg
@@ -237,7 +237,7 @@ function Header() {
               </svg>
             </button>
             <button
-              className="text-[#212061] hover:text-blue-700 transition-colors"
+              className="text-blue-500 hover:text-blue-700 transition-colors"
               aria-label="Language"
             >
               <svg

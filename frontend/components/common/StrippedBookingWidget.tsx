@@ -3,14 +3,14 @@ import RadioButton from "./RadioButton";
 export default function StrippedBookingWidget() {
   return (
     <div className="relative flex flex-col items-center h-1/2 text-white">
-      <div className="w-[70.5rem] rounded-[32px]">
+      <div className="w-[70.5rem] rounded-[2rem]">
         <div className="px-4 py-3 flex flex-col items-center space-y-4">
           <RadioButton optionOne="Round Trip" optionTwo="One Way" />
 
           {/* search form */}
-          <div className="flex items-center border border-[#E5E7EB] rounded-full px-2 shadow-md bg-white">
+          <div className="flex items-center border border-gray-200 rounded-full px-2 shadow-md bg-white">
             <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-[#222222] font-semibold">
+              <label className="block text-xs text-black font-semibold">
                 Flying from?
               </label>
               <input
@@ -21,7 +21,7 @@ export default function StrippedBookingWidget() {
             </div>
             <div className="w-[1px] h-10 bg-gray-200"></div>
             <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-[#222222] font-semibold">
+              <label className="block text-xs text-black font-semibold">
                 Flying to?
               </label>
               <input
@@ -34,7 +34,7 @@ export default function StrippedBookingWidget() {
             <div className="flex-1 px-6 py-3">
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs text-[#222222] font-semibold">
+                  <label className="block text-xs text-black font-semibold">
                     Departure
                   </label>
                   <input
@@ -45,7 +45,7 @@ export default function StrippedBookingWidget() {
                 </div>
                 <div className="w-[1px] h-10 bg-gray-200"></div>
                 <div className="flex-1">
-                  <label className="block text-xs text-[#222222] font-semibold">
+                  <label className="block text-xs text-black font-semibold">
                     Return
                   </label>
                   <input
@@ -59,7 +59,7 @@ export default function StrippedBookingWidget() {
             <div className="w-[1px] h-10 bg-gray-200"></div>
             <div className="flex-1 flex">
               <div className="px-6 py-3">
-                <label className="block text-xs text-[#222222] font-semibold">
+                <label className="block text-xs text-black font-semibold">
                   Travelling with?
                 </label>
                 <input

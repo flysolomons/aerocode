@@ -14,7 +14,7 @@ export default function NewsArticle() {
       <Container>
         <div className="py-12">
           <div className="grid grid-cols-[65%_35%] space-x-16">
-            <div className="space-y-6">
+            <div className="space-y-6 bg-white p-4 shadow-md rounded-3xl">
               <h1 className="text-4xl font-bold text-blue-500 mb-2">
                 Solomon Airlines Update on Vanuatu flights due to earthquake
               </h1>
@@ -60,7 +60,9 @@ export default function NewsArticle() {
               </div>
             </div>
 
-            <OtherNewsSection />
+            <div className="h-[25rem]">
+              <OtherNewsSection />
+            </div>
           </div>
         </div>
       </Container>

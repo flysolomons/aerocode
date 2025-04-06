@@ -23,9 +23,8 @@ export default function Belama() {
               Individual Memberships
             </h2>
 
-            <div className="grid grid-cols-3 gap-4 h-[500px]">
+            <div className="grid grid-cols-3 gap-4 h-[31rem]">
               <MembershipCard title="Belama Me" price="$3,995.00" />
-
               <MembershipCard title="Belama Plus" price="$7,995.00" />
               <MembershipCard title="Belama Max" price="$9,995.00" />
             </div>
@@ -43,7 +42,7 @@ export default function Belama() {
               Group Memberships
             </h2>
 
-            <div className="grid grid-cols-2 gap-4 h-[500px]">
+            <div className="grid grid-cols-2 gap-4 h-[31rem]">
               <MembershipCard title="Belama Family" price="$3,995.00" />
               <MembershipCard title="Belama Business" price="$7,995.00" />
             </div>

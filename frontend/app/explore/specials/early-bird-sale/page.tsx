@@ -25,7 +25,7 @@ export default function SpecialInformation() {
           </span>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-3 gap-4 h-[256px]">
+            <div className="grid grid-cols-3 gap-4 h-64">
               <RouteSpecialCard
                 route="Honiara to Brisbane"
                 price="$650AUD"
@@ -46,7 +46,7 @@ export default function SpecialInformation() {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 h-[256px]">
+            <div className="grid grid-cols-3 gap-4 h-64">
               <RouteSpecialCard
                 route="Honiara to Brisbane"
                 price="$650AUD"

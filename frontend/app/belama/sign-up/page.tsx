@@ -31,7 +31,7 @@ const BelamaSignUp = () => {
 
   const renderMemberPreferences = (memberCount: number) => {
     return (
-      <div className="border p-4 rounded shadow mb-4">
+      <div className="border p-4 rounded shadow mb-4 bg-white">
         <h3 className="font-medium text-lg">Special Requests</h3>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <select
@@ -64,7 +64,11 @@ const BelamaSignUp = () => {
       />
       <Container>
         <div className="py-12 space-y-8">
-          <select className="border rounded p-2 w-full" onChange={handleMembershipChange} value={membershipType}>
+          <select
+            className="border rounded p-2 w-full"
+            onChange={handleMembershipChange}
+            value={membershipType}
+          >
             <option value="">Select Membership Type</option>
             {membershipOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -76,8 +80,10 @@ const BelamaSignUp = () => {
           {membershipType && membershipType !== "" && (
             <>
               {membershipType === "business" && (
-                <div className="border p-4 rounded shadow mb-4">
-                  <h3 className="text-lg font-semibold">Personal Details (Up to 3 Persons)</h3>
+                <div className="border p-4 rounded shadow mb-4 bg-white">
+                  <h3 className="text-lg font-semibold">
+                    Personal Details (Up to 3 Persons)
+                  </h3>
                   {[1, 2, 3].map((member) => (
                     <div key={member} className="mb-4">
                       <h4 className="font-medium">Member {member}</h4>
@@ -105,10 +111,11 @@ const BelamaSignUp = () => {
                   ))}
                 </div>
               )}
-
               {membershipType === "family" && (
-                <div className="border p-4 rounded shadow mb-4">
-                  <h3 className="text-lg font-semibold">Personal Details (2 Adults and 2-3 Children)</h3>
+                <div className="border p-4 rounded shadow mb-4 bg-white">
+                  <h3 className="text-lg font-semibold">
+                    Personal Details (2 Adults and 2-3 Children)
+                  </h3>
                   {[1, 2].map((adult) => (
                     <div key={`adult${adult}`} className="mb-4">
                       <h4 className="font-medium">Adult {adult}</h4>
@@ -161,10 +168,11 @@ const BelamaSignUp = () => {
                   ))}
                 </div>
               )}
-
               {membershipType === "max" && (
-                <div className="border p-4 rounded shadow mb-4">
-                  <h3 className="text-lg font-semibold">Personal Details (One Person)</h3>
+                <div className="border p-4 rounded shadow mb-4 bg-white">
+                  <h3 className="text-lg font-semibold">
+                    Personal Details (One Person)
+                  </h3>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <input
@@ -187,10 +195,11 @@ const BelamaSignUp = () => {
                   </div>
                 </div>
               )}
-
               {membershipType === "me" && (
-                <div className="border p-4 rounded shadow mb-4">
-                  <h3 className="text-lg font-semibold">Personal Details (One Person + One Guest)</h3>
+                <div className="border p-4 rounded shadow mb-4 bg-white">
+                  <h3 className="text-lg font-semibold">
+                    Personal Details (One Person + One Guest)
+                  </h3>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <input
@@ -213,10 +222,11 @@ const BelamaSignUp = () => {
                   </div>
                 </div>
               )}
-
               {membershipType === "plus" && (
-                <div className="border p-4 rounded shadow mb-4">
-                  <h3 className="text-lg font-semibold">Personal Details (One Person + One Guest)</h3>
+                <div className="border p-4 rounded shadow mb-4 bg-white">
+                  <h3 className="text-lg font-semibold">
+                    Personal Details (One Person + One Guest)
+                  </h3>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
                       <input
@@ -239,18 +249,22 @@ const BelamaSignUp = () => {
                   </div>
                 </div>
               )}
-
               {/* Special Requests Section */}
-              {membershipType === "business" && renderMemberPreferences(3)} {/* For Business */}
-              {membershipType === "family" && renderMemberPreferences(5)} {/* 2 Adults + 3 Children */}
-              {membershipType === "max" && renderMemberPreferences(1)} {/* 1 Member */}
-              {membershipType === "me" && renderMemberPreferences(2)} {/* 1 Member + 1 Guest */}
-              {membershipType === "plus" && renderMemberPreferences(2)} {/* 1 Member + 1 Guest */}
+              {membershipType === "business" && renderMemberPreferences(3)}{" "}
+              {/* For Business */}
+              {membershipType === "family" && renderMemberPreferences(5)}{" "}
+              {/* 2 Adults + 3 Children */}
+              {membershipType === "max" && renderMemberPreferences(1)}{" "}
+              {/* 1 Member */}
+              {membershipType === "me" && renderMemberPreferences(2)}{" "}
+              {/* 1 Member + 1 Guest */}
+              {membershipType === "plus" && renderMemberPreferences(2)}{" "}
+              {/* 1 Member + 1 Guest */}
             </>
           )}
 
           {/* Always show Contact Details and Payment sections */}
-          <div className="border p-4 rounded shadow mb-4">
+          <div className="border p-4 rounded shadow mb-4 bg-white">
             <h3 className="text-lg font-semibold">Contact Details</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <input
@@ -284,7 +298,7 @@ const BelamaSignUp = () => {
             </div>
           </div>
 
-          <div className="border p-4 rounded shadow mb-4">
+          <div className="border p-4 rounded shadow mb-4 bg-white">
             <h3 className="text-lg font-semibold">Payment</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <input

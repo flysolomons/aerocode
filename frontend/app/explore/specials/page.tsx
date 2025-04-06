@@ -25,7 +25,7 @@ export default function Specials() {
           </div>
 
           {/* Latest specials options */}
-          <div className="grid grid-cols-3 gap-4 h-[256px]">
+          <div className="grid grid-cols-3 gap-4 h-64">
             <SpecialsCard
               price="$650AUD"
               image="/image.jpg"

@@ -16,7 +16,7 @@ function ReasonToVisitCard({
   return (
     <>
       <div
-        className={`flex w-full rounded-3xl overflow-hidden bg-white shadow-lg p-4 h-[392px] ${
+        className={`flex w-full rounded-3xl overflow-hidden bg-white shadow-lg p-4 h-[24.5rem] ${
           imageOnLeft ? "flex-row" : "flex-row-reverse"
         } ${imageOnLeft ? "space-x-8" : "space-x-8 space-x-reverse"}`}
       >

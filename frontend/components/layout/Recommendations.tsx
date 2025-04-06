@@ -11,11 +11,11 @@ function Recommendations() {
         <DestinationCard title="Port Vila, Vanuatu" image="/image.jpg" />
 
         <div className="space-y-4 h-full">
-          <div className="h-[192px]">
+          <div className="h-[12rem]">
             <DestinationCard title="Port Moresby, PNG" image="/image.jpg" />
           </div>
 
-          <div className="h-[192px]">
+          <div className="h-[12rem]">
             <DestinationCard title="Nadi, Fiji" image="/image.jpg" />
           </div>
         </div>
