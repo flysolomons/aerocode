@@ -69,9 +69,12 @@ export default function SpecialInformation() {
             </div>
           </div>
 
-          <h2 className="text-3xl text-center font-bold text-blue-500">
-            Terms & Conditions
-          </h2>
+          <div className="space-y-8">
+            <h2 className="text-3xl text-center font-bold text-blue-500">
+              Terms & Conditions
+            </h2>
+            {/* Accordion goes here for terms and conditions */}
+          </div>
         </div>
       </Container>
 
