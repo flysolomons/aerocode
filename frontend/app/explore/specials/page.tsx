@@ -63,8 +63,6 @@ export default function Specials() {
           <Recommendations />
         </div>
       </Container>
-      {/* <Slider /> */}
-      {/* Recommendations section */}
     </>
   );
 }
