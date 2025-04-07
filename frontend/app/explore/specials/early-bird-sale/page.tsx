@@ -1,6 +1,7 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import RouteSpecialCard from "@/components/common/RouteSpecialCard";
+import Slider from "@/components/common/Slider";
 
 export default function SpecialInformation() {
   return (
@@ -11,7 +12,7 @@ export default function SpecialInformation() {
         breadcrumbs="Home > Explore > Specials > Early Bird Sale"
       />
       <Container>
-        <div className="py-12 space-y-16">
+        <div className="pt-12 space-y-16">
           {/* Description */}
           <span className="block text-center">
             We offer convenient flights between Australia, Fiji, Vanuatu, and
@@ -73,6 +74,15 @@ export default function SpecialInformation() {
           </h2>
         </div>
       </Container>
+
+      <div className="my-16">
+        <div className="space-y-8">
+          <h2 className="text-3xl text-center font-bold text-blue-500">
+            Other Specials
+          </h2>
+          <Slider />
+        </div>
+      </div>
     </>
   );
 }
