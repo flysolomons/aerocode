@@ -3,7 +3,7 @@ import { useState } from "react";
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import StrippedBookingWidget from "@/components/common/StrippedBookingWidget";
-import RouteSpecial from "@/components/common/RouteSpecialCard";
+import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 import RouteCard from "@/components/common/RouteCard";
 import FareCard from "@/components/common/FareCard";
 import FlightInfoCard from "@/components/common/FlightInfoCard";
@@ -31,39 +31,10 @@ export default function Route() {
         <Container>
           <div className="py-12 space-y-16">
             <StrippedBookingWidget />
-
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-3xl text-center font-bold text-blue-500">
-                  Honiara to Auckland Specials
-                </h2>
-                <span className="block text-center">
-                  We offer convenient flights between Australia, Fiji, Vanuatu,
-                  and Honiara, the vibrant capital of the Solomon Islands.
-                </span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 h-64">
-                <RouteSpecial
-                  route="Honiara to Auckland"
-                  price="$650AUD"
-                  image="/image.jpg"
-                  specialName="Early Bird Sale"
-                />
-                <RouteSpecial
-                  route="Honiara to Auckland"
-                  price="$650AUD"
-                  image="/image.jpg"
-                  specialName="Early Bird Sale"
-                />
-                <RouteSpecial
-                  route="Honiara to Auckland"
-                  price="$650AUD"
-                  image="/image.jpg"
-                  specialName="Early Bird Sale"
-                />
-              </div>
-            </div>
+            <RouteSpecialSection
+              heading="Honiara to Auckland Specials"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+            />
 
             <div className="space-y-8">
               <div className="space-y-2">

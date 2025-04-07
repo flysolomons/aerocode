@@ -1,6 +1,6 @@
 import Container from "@/components/common/Container";
 import PrimaryHero from "@/components/layout/PrimaryHero";
-import RouteSpecial from "@/components/common/RouteSpecialCard";
+import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 import ReasonToVisitCard from "@/components/common/ReasonToVisit";
 import InfoCard from "@/components/common/InfoCard";
 import RouteCard from "@/components/common/RouteCard";
@@ -16,38 +16,10 @@ export default function Destination() {
       />
       <Container>
         <div className="py-12 space-y-16">
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
-                New Zealand Specials
-              </h2>
-              <span className="block text-center">
-                We offer convenient flights between Australia, Fiji, Vanuatu,
-                and Honiara, the vibrant capital of the Solomon Islands.
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 h-64">
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-            </div>
-          </div>
+          <RouteSpecialSection
+            heading="New Zealand Specials"
+            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+          />
 
           <ReasonToVisitCard
             title="REASON 1 TO VISIT NEW ZEALAND"

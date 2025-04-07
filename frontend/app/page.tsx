@@ -1,48 +1,21 @@
 import Container from "@/components/common/Container";
 import PrimaryHero from "@/components/layout/PrimaryHero";
-import RouteSpecial from "@/components/common/RouteSpecialCard";
 import InfoCard from "@/components/common/InfoCard";
 import Image from "next/image";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import Slider from "@/components/common/Slider";
+import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
+
 export default function Home() {
   return (
     <>
       <PrimaryHero title="Connecting the Hapi Isles..." image="./image.jpg" />
       <Container>
         <div className="pt-12 space-y-16">
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
-                Our Specials
-              </h2>
-              <span className="block text-center">
-                We offer convenient flights between Australia, Fiji, Vanuatu,
-                and Honiara, the vibrant capital of the Solomon Islands.
-              </span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 h-64">
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-              <RouteSpecial
-                route="Honiara to Auckland"
-                price="$650AUD"
-                image="/image.jpg"
-                specialName="Early Bird Sale"
-              />
-            </div>
-          </div>
+          <RouteSpecialSection
+            heading="Our Specials"
+            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+          />
         </div>
       </Container>
       <div className="my-16 space-y-16">
