@@ -2,6 +2,7 @@ import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import Recommendations from "@/components/layout/Recommendations";
 import SpecialsCard from "@/components/common/SpecialCard";
+// import Slider from "@/components/common/Slider";
 
 export default function Specials() {
   return (
@@ -43,6 +44,7 @@ export default function Specials() {
             />
           </div>
 
+          {/* <Slider /> */}
           {/* Recommendations section */}
           <Recommendations />
         </div>
