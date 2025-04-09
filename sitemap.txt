@@ -1,0 +1,43 @@
+- root(home)
+    - explore (only 1)
+        - destinations index (only 1)
+            - destination (can be multiple)
+                - route (can be multiple)
+        - specials index (only 1)
+            - special (can be multiple)
+        - where we fly
+        - flight schedules
+        - cargo
+    - experience (only 1)
+        - flight upgrades
+        - baggage allowance
+        - seat selection
+        - dangerous goods
+        - conditions of carriage
+        - travel advice
+    - belama (only 1)
+        - sign up
+    - about (only 1)
+    - news (only 1)
+        - news article (can be multiple)
+
+
+
+Proposed App Structure:
+    core: Contains BasePage, snippets (e.g., author profiles, categories), API configurations, and utilities.
+    home: Contains HomePage (root).
+    explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
+    experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc.
+    belama: Contains BelamaPage and SignUpPage.
+    about: Contains AboutPage.
+    news: Contains NewsIndexPage and NewsArticlePage.
+    
+    schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
+    fares: contains logic for parsing of fare data (year round fares). Each route page could reference this model.
+
+
+brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
+
+brainstorm how to routes that fall under each special
+
+
