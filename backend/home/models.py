@@ -7,9 +7,6 @@ from core.models import BasePage
 class HomePage(BasePage):
     max_count = 1  # Only one homepage
 
-    # No additional fields needed beyond BasePage for now
-    subpage_types = []  # Will be updated later
-
     content_panels = BasePage.content_panels  # Inherit from BasePage
 
     # Use inherited graphql_fields from BasePage, or override if needed

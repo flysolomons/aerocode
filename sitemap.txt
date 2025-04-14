@@ -38,6 +38,8 @@ Proposed App Structure:
 
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
 
-brainstorm how to routes that fall under each special
+brainstorm how to routes that fall under each special (AN IMPORTANT ONE)
+
+brainstorm how to handle breadcrumbs
 
 

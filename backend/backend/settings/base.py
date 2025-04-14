@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "grapple",
     "graphene_django",
     "corsheaders",
+    "news",
 ]
 
 MIDDLEWARE = [
@@ -204,7 +205,7 @@ WAGTAILDOCS_EXTENSIONS = [
 # Grapple config:
 GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
 GRAPPLE = {
-    "APPS": ["home"],
+    "APPS": ["core", "home", "news"],
 }
 
 

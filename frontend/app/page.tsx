@@ -15,7 +15,7 @@ const GET_HOMEPAGE = gql`
     pages {
       ... on HomePage {
         id
-        pageTitle
+        heroTitle
         heroImage {
           id
           title
@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <>
       <PrimaryHero
-        title={data.pages[0].pageTitle}
+        title={data.pages[0].heroTitle}
         image={data.pages[0].heroImage.src}
       />
       <Container>

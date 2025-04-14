@@ -9,7 +9,7 @@ interface NewsCardProps {
 function NewsCard({ headline, image, date, description }: NewsCardProps) {
   return (
     <>
-      <div className="p-2 rounded-2xl shadow-md bg-white">
+      <div className="p-2 rounded-2xl shadow-md bg-white h-[30rem]">
         <div className="relative mb-2 space-y-2">
           <Image
             src={image}
