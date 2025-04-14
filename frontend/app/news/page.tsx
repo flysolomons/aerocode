@@ -15,6 +15,15 @@ const GET_NEWS_ARTICLES = gql`
         body
         date
         slug
+        heroImage {
+          id
+          title
+          description
+          width
+          height
+          src
+          url
+        }
       }
     }
   }
@@ -114,7 +123,7 @@ export default function News() {
                 <a href={`/news/${article.slug}`} key={article.id}>
                   <NewsCard
                     headline={article.articleTitle}
-                    image="/image.jpg"
+                    image={article.heroImage.src}
                     date={new Date(article.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",

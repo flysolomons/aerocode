@@ -14,17 +14,22 @@ class BasePage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
+        help_text="Image that will be displayed on this page's hero section",
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel("hero_title"),
-        FieldPanel("hero_image"),
+        FieldPanel("hero_image", heading="Hero Image"),
     ]
 
     graphql_fields = [
         GraphQLRichText("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
     ]
+
+    def save(self, *args, **kwargs):
+        # Set hero_title to match title before saving
+        self.hero_title = self.title
+        super().save(*args, **kwargs)
 
     class Meta:
         abstract = True

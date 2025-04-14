@@ -19,20 +19,20 @@ class NewsIndexPage(BasePage):
 
 
 class NewsArticle(BasePage):
-    date = models.DateField("Post date")
+    date = models.DateField(help_text="The date of the news article")
     article_title = models.CharField(
-        max_length=255, blank=True, help_text="Article title"
+        max_length=255, blank=False, help_text="The title of the news article"
     )
-    body = RichTextField(blank=True)
+    body = RichTextField(blank=False, help_text="The content of the article")
 
     search_fields = BasePage.search_fields + [
         index.SearchField("article_title"),
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("date"),
-        FieldPanel("article_title"),
-        FieldPanel("body"),
+        FieldPanel("date", heading="Post Date"),
+        FieldPanel("article_title", heading="Article Title"),
+        FieldPanel("body", heading="Body"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
