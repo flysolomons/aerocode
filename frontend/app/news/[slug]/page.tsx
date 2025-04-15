@@ -1,5 +1,6 @@
 "use client";
 import SecondaryHero from "@/components/layout/SecondaryHero";
+import SkeletonSecondaryHero from "@/components/layout/skeleton/SkeletonSecondaryHero";
 import Container from "@/components/common/Container";
 import OtherNewsSection from "@/components/layout/OtherNewsSection";
 import { useQuery, gql } from "@apollo/client";
@@ -41,11 +42,6 @@ export default function NewsArticle() {
   if (error) return <p>Error: {error.message}</p>;
   if (!data?.page && !loading) return <p>Article not found</p>;
 
-  // Skeleton components
-  const SkeletonHero = () => (
-    <div className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 h-[25rem] rounded animate-pulse"></div>
-  );
-
   const SkeletonArticleContent = () => (
     <div className="space-y-6 bg-white p-4 shadow-md rounded-3xl animate-pulse h-[60rem]">
       <div className="h-10 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-3/4"></div>
@@ -68,7 +64,7 @@ export default function NewsArticle() {
   if (loading) {
     return (
       <>
-        <SkeletonHero />
+        <SkeletonSecondaryHero />
         <Container>
           <div className="py-12">
             <div className="grid grid-cols-[65%_35%] space-x-16">

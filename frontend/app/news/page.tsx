@@ -1,14 +1,24 @@
 "use client";
 import SecondaryHero from "@/components/layout/SecondaryHero";
+import SkeletonSecondaryHero from "@/components/layout/skeleton/SkeletonSecondaryHero";
 import Container from "@/components/common/Container";
 import NewsCard from "@/components/common/NewsCard";
+import SkeletonNewsCard from "@/components/layout/skeleton/SkeletonNewsCard";
 import PrimaryButton from "@/components/common/PrimaryButton";
 import { useQuery, gql } from "@apollo/client";
 import client from "../../lib/apolloClient";
+import { stripHtmlTags } from "../../lib/utils";
 
-const GET_NEWS_ARTICLES = gql`
-  query GetArticles {
+// Combined GraphQL query
+const GET_NEWS_PAGE_DATA = gql`
+  query GetNewsPageData {
     pages {
+      ... on NewsIndexPage {
+        heroTitle
+        heroImage {
+          src
+        }
+      }
       ... on NewsArticle {
         id
         articleTitle
@@ -16,32 +26,7 @@ const GET_NEWS_ARTICLES = gql`
         date
         slug
         heroImage {
-          id
-          title
-          description
-          width
-          height
           src
-          url
-        }
-      }
-    }
-  }
-`;
-
-const GET_HERO_DETAILS = gql`
-  query GetHero {
-    pages {
-      ... on NewsIndexPage {
-        heroTitle
-        heroImage {
-          id
-          title
-          description
-          width
-          height
-          src
-          url
         }
       }
     }
@@ -49,39 +34,20 @@ const GET_HERO_DETAILS = gql`
 `;
 
 export default function News() {
+  // Fetching both the hero data and articles data in one query
   const {
     loading: articlesLoading,
     error: articlesError,
     data: articlesData,
-  } = useQuery(GET_NEWS_ARTICLES, { client });
-  const {
-    loading: heroLoading,
-    error: heroError,
-    data: heroData,
-  } = useQuery(GET_HERO_DETAILS, { client });
+  } = useQuery(GET_NEWS_PAGE_DATA, { client });
 
+  // Handle loading and error states (this needs to be more friendly)
   if (articlesError)
     return <p>Error loading articles: {articlesError.message}</p>;
-  if (heroError) return <p>Error loading hero: {heroError.message}</p>;
-
-  // Improved Skeleton NewsCard with better proportions and shimmer
-  const SkeletonNewsCard = () => (
-    <div className="bg-white rounded shadow-md p-4 border border-gray-100">
-      <div className="h-48 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded mb-4"></div>
-      <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-full mb-2"></div>
-      <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-3/4 mb-2"></div>
-      <div className="h-4 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-full"></div>
-    </div>
-  );
-
-  // Improved Skeleton Hero
-  const SkeletonHero = () => (
-    <div className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 h-[25rem] rounded animate-pulse"></div>
-  );
 
   // Create a copy of the array before sorting to avoid modifying the immutable data
   const newsArticles = articlesLoading
-    ? Array.from({ length: 6 }) // Assuming 6 cards as placeholder
+    ? Array.from({ length: 6 }) // setting 6 cards for skeleton loading
     : [
         ...articlesData.pages.filter(
           (page: any) => page.__typename === "NewsArticle"
@@ -90,27 +56,21 @@ export default function News() {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
 
-  // Get hero data from heroData or show skeleton
-  const hero = heroLoading
+  const hero = articlesLoading
     ? { heroTitle: "", heroImage: { src: "" } }
-    : heroData.pages.find(
+    : articlesData.pages.find(
         (page: any) => page.__typename === "NewsIndexPage"
       ) || { heroTitle: "", heroImage: { src: "/default-hero.jpg" } };
 
-  const stripHtmlTags = (html: string | undefined) => {
-    if (!html) return "";
-    return html.replace(/<[^>]*>/g, "");
-  };
-
   return (
     <>
-      {heroLoading ? (
-        <SkeletonHero />
+      {articlesLoading ? (
+        <SkeletonSecondaryHero />
       ) : (
         hero && (
           <SecondaryHero
             title={hero.heroTitle}
-            image={hero.heroImage?.src || "/default-hero.jpg"} // Fallback image if no hero image
+            image={hero.heroImage?.src || "/default-hero.jpg"}
             breadcrumbs="Home > News"
           />
         )
