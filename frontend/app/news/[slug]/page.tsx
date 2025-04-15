@@ -12,6 +12,7 @@ const GET_ARTICLE = gql`
     page(slug: $slug) {
       ... on NewsArticle {
         id
+        url
         date
         articleTitle
         body
@@ -88,7 +89,7 @@ export default function NewsArticle() {
       <SecondaryHero
         title={article.heroTitle}
         image={article.heroImage.src}
-        breadcrumbs="Home > News > Article"
+        breadcrumbs={article.url}
       />
       <Container>
         <div className="py-12">

@@ -18,6 +18,7 @@ const GET_NEWS_PAGE_DATA = gql`
         heroImage {
           src
         }
+        url
       }
       ... on NewsArticle {
         id
@@ -57,10 +58,16 @@ export default function News() {
       });
 
   const hero = articlesLoading
-    ? { heroTitle: "", heroImage: { src: "" } }
+    ? { heroTitle: "", heroImage: { src: "" }, urlPath: "" }
     : articlesData.pages.find(
         (page: any) => page.__typename === "NewsIndexPage"
-      ) || { heroTitle: "", heroImage: { src: "/default-hero.jpg" } };
+      ) || {
+        heroTitle: "",
+        heroImage: { src: "/default-hero.jpg" },
+        urlPath: "",
+      };
+
+  console.log(articlesData);
 
   return (
     <>
@@ -71,7 +78,7 @@ export default function News() {
           <SecondaryHero
             title={hero.heroTitle}
             image={hero.heroImage?.src || "/default-hero.jpg"}
-            breadcrumbs="Home > News"
+            breadcrumbs={hero.url}
           />
         )
       )}
