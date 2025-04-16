@@ -24,7 +24,8 @@
 
 
 Proposed App Structure:
-    core: Contains BasePage, snippets (e.g., author profiles, categories), API configurations, and utilities.
+    api: API configurations
+    core: Contains BasePage, snippets (e.g., author profiles, categories), and utilities.
     home: Contains HomePage (root).
     explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
     experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc.
@@ -39,7 +40,5 @@ Proposed App Structure:
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
 
 brainstorm how to routes that fall under each special (AN IMPORTANT ONE)
-
-brainstorm how to handle breadcrumbs
 
 

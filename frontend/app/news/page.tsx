@@ -55,9 +55,9 @@ const GET_HERO_DATA = gql`
 
 export default function News() {
   const [offset, setOffset] = useState(0);
-  const [articles, setArticles] = useState<Article[]>([]); // Explicitly define the type for articles
+  const [articles, setArticles] = useState<Article[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 6; // Define limit as a variable
+  const limit = 6; // limit of the number of articles to fetch
 
   const {
     loading: articlesLoading,
