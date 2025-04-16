@@ -13,7 +13,7 @@ const GET_ARTICLE = gql`
       ... on NewsArticle {
         id
         url
-        date
+        firstPublishedAt
         articleTitle
         body
         heroTitle
@@ -99,11 +99,14 @@ export default function NewsArticle() {
                 {article.articleTitle}
               </h1>
               <div className="text-sm text-gray-500">
-                {new Date(article.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
+                {new Date(article.firstPublishedAt).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  }
+                )}
               </div>
               <div
                 className="space-y-4"

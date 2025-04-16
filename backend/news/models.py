@@ -19,7 +19,7 @@ class NewsIndexPage(BasePage):
 
 
 class NewsArticle(BasePage):
-    date = models.DateField(help_text="The date of the news article")
+    # date = models.DateField(help_text="The date of the news article")
     article_title = models.CharField(
         max_length=255, blank=False, help_text="The title of the news article"
     )
@@ -30,13 +30,13 @@ class NewsArticle(BasePage):
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("date", heading="Post Date"),
+        # FieldPanel("date", heading="Post Date"),
         FieldPanel("article_title", heading="Article Title"),
         FieldPanel("body", heading="Body"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("date"),
+        # GraphQLString("date"),
         GraphQLString("article_title"),
         GraphQLRichText("body"),
     ]

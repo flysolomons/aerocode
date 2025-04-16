@@ -9,9 +9,9 @@ import { useQuery, gql } from "@apollo/client";
 import client from "../../lib/apolloClient";
 import { stripHtmlTags } from "../../lib/utils";
 
-// Combined GraphQL query
-const GET_NEWS_PAGE_DATA = gql`
-  query GetNewsPageData {
+// Define a query for fetching hero data
+const GET_HERO_DATA = gql`
+  query GetHeroData {
     pages {
       ... on NewsIndexPage {
         heroTitle
@@ -20,11 +20,19 @@ const GET_NEWS_PAGE_DATA = gql`
         }
         url
       }
+    }
+  }
+`;
+
+// Define a query for fetching news articles
+const GET_NEWS_ARTICLES = gql`
+  query GetNewsArticles {
+    pages(limit: 12, order: "-first_published_at") {
       ... on NewsArticle {
         id
         articleTitle
         body
-        date
+        firstPublishedAt
         slug
         heroImage {
           src
@@ -40,11 +48,19 @@ export default function News() {
     loading: articlesLoading,
     error: articlesError,
     data: articlesData,
-  } = useQuery(GET_NEWS_PAGE_DATA, { client });
+  } = useQuery(GET_NEWS_ARTICLES, { client });
+
+  const {
+    loading: heroLoading,
+    error: heroError,
+    data: heroData,
+  } = useQuery(GET_HERO_DATA, { client });
 
   // Handle loading and error states (this needs to be more friendly)
   if (articlesError)
     return <p>Error loading articles: {articlesError.message}</p>;
+
+  if (heroError) return <p>Error loading hero: {heroError.message}</p>;
 
   // Create a copy of the array before sorting to avoid modifying the immutable data
   const newsArticles = articlesLoading
@@ -53,25 +69,23 @@ export default function News() {
         ...articlesData.pages.filter(
           (page: any) => page.__typename === "NewsArticle"
         ),
-      ].sort((a: any, b: any) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
+      ];
 
-  const hero = articlesLoading
-    ? { heroTitle: "", heroImage: { src: "" }, urlPath: "" }
-    : articlesData.pages.find(
+  const hero = heroLoading
+    ? { heroTitle: "", heroImage: { src: "" }, url: "" }
+    : heroData.pages.find(
         (page: any) => page.__typename === "NewsIndexPage"
       ) || {
         heroTitle: "",
         heroImage: { src: "/default-hero.jpg" },
-        urlPath: "",
+        url: "",
       };
 
   console.log(articlesData);
 
   return (
     <>
-      {articlesLoading ? (
+      {heroLoading ? (
         <SkeletonSecondaryHero />
       ) : (
         hero && (
@@ -91,11 +105,7 @@ export default function News() {
                   <NewsCard
                     headline={article.articleTitle}
                     image={article.heroImage.src}
-                    date={new Date(article.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
+                    date={article.firstPublishedAt}
                     description={
                       stripHtmlTags(article.body)?.substring(0, 200) + "..."
                     }
