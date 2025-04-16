@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "api",
     "home",
     "search",
     "core",
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "grapple",
     "graphene_django",
+    "wagtail_headless_preview",
     "corsheaders",
     "news",
 ]
@@ -203,10 +205,11 @@ WAGTAILDOCS_EXTENSIONS = [
 
 
 # Grapple config:
-GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
-GRAPPLE = {
-    "APPS": ["core", "home", "news"],
+GRAPHENE = {
+    "SCHEMA": "api.schema.schema",
 }
+# GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+GRAPPLE = {"APPS": ["core", "home", "news"]}
 
 
 CORS_ALLOW_ALL_ORIGINS = True  # or set to False and use CORS_ALLOWED_ORIGINS
