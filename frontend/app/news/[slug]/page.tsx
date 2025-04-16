@@ -88,7 +88,7 @@ export default function NewsArticle() {
     <>
       <SecondaryHero
         title={article.heroTitle}
-        image={article.heroImage.src}
+        image={article.heroImage.url}
         breadcrumbs={article.url}
       />
       <Container>
