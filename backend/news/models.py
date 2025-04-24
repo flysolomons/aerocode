@@ -18,6 +18,9 @@ class NewsIndexPage(BasePage):
     graphql_fields = BasePage.graphql_fields
     parent_page_types = ["home.HomePage"]
 
+    class Meta:
+        verbose_name = "News Index Page"
+
 
 @register_query_field("news_article")
 class NewsArticle(BasePage):
@@ -45,3 +48,7 @@ class NewsArticle(BasePage):
 
     parent_page_types = ["news.NewsIndexPage"]
     subpage_types = []
+
+    class Meta:
+        verbose_name = "News Article"
+        verbose_name_plural = "News Articles"
