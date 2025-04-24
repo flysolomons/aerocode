@@ -30,7 +30,7 @@ Proposed App Structure:
     explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
     experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc.
     belama: Contains BelamaPage and SignUpPage.
-    about: Contains AboutPage.
+    about: Contains AboutPage. (generic page: streamfield)
     news: Contains NewsIndexPage and NewsArticlePage.
     
     schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 

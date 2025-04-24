@@ -5,6 +5,7 @@ from core.models import BasePage
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel
 from grapple.models import GraphQLRichText, GraphQLString, GraphQLStreamfield
+from grapple.helpers import register_query_field
 
 # from wagtail.images.blocks import ImageChooserBlock
 # from wagtail.blocks import CharBlock, RichTextBlock
@@ -18,6 +19,7 @@ class NewsIndexPage(BasePage):
     parent_page_types = ["home.HomePage"]
 
 
+@register_query_field("news_article")
 class NewsArticle(BasePage):
     # date = models.DateField(help_text="The date of the news article")
     article_title = models.CharField(

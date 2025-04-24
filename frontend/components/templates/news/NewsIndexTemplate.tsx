@@ -1,4 +1,4 @@
-// app/news/NewsClient.tsx
+// app/news/NewsIndexTemplate.tsx
 "use client";
 
 import SecondaryHero from "@/components/layout/SecondaryHero";
@@ -7,51 +7,17 @@ import Container from "@/components/common/Container";
 import NewsCard from "@/components/common/NewsCard";
 import SkeletonNewsCard from "@/components/layout/skeleton/SkeletonNewsCard";
 import PrimaryButton from "@/components/common/PrimaryButton";
-import { useQuery, gql } from "@apollo/client";
-import client from "../../lib/apolloClient";
-import { stripHtmlTags } from "../../lib/utils";
+import { useQuery } from "@apollo/client";
+import client from "@/lib/apolloClient";
+import { stripHtmlTags } from "@/lib/utils";
 import { useState } from "react";
-
-// Define a type for the articles
-interface Article {
-  id: string;
-  articleTitle: string;
-  body: string;
-  firstPublishedAt: string;
-  slug: string;
-  heroImage: {
-    url: string;
-  };
-}
-
-// Define a type for the hero prop
-interface Hero {
-  heroTitle: string;
-  heroImage: { url: string };
-  url: string;
-}
-
-// Modify the GET_NEWS_ARTICLES query
-const GET_NEWS_ARTICLES = gql`
-  query GetNewsArticles($limit: Int, $offset: Int) {
-    newsArticles(limit: $limit, offset: $offset, order: "-first_published_at") {
-      id
-      articleTitle
-      body
-      firstPublishedAt
-      slug
-      heroImage {
-        url
-      }
-    }
-  }
-`;
+import { Article, Hero, GET_NEWS_ARTICLES } from "@/graphql/NewsPageQuery";
 
 interface NewsProps {
-  initialHero: Hero;
+  initialPage: Hero;
 }
 
-export default function NewsClient({ initialHero }: NewsProps) {
+export default function NewsIndexTemplate({ initialPage }: NewsProps) {
   const [offset, setOffset] = useState(0);
   const [articles, setArticles] = useState<Article[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -104,11 +70,11 @@ export default function NewsClient({ initialHero }: NewsProps) {
 
   return (
     <>
-      {initialHero ? (
+      {initialPage ? (
         <SecondaryHero
-          title={initialHero.heroTitle}
-          image={initialHero.heroImage?.url || "/default-hero.jpg"}
-          breadcrumbs={initialHero.url}
+          title={initialPage.heroTitle}
+          image={initialPage.heroImage?.url || "/default-hero.jpg"}
+          breadcrumbs={initialPage.url}
         />
       ) : (
         <SkeletonSecondaryHero />
@@ -118,7 +84,7 @@ export default function NewsClient({ initialHero }: NewsProps) {
           <div className="grid grid-cols-3 gap-x-4 gap-y-8">
             {newsArticles.map((article: any, index: number) =>
               article ? (
-                <a href={`/news/${article.slug}`} key={article.id}>
+                <a href={article.url} key={article.id}>
                   <NewsCard
                     headline={article.articleTitle}
                     image={article.heroImage.url}

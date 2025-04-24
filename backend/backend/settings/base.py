@@ -205,10 +205,10 @@ WAGTAILDOCS_EXTENSIONS = [
 
 
 # Grapple config:
-GRAPHENE = {
-    "SCHEMA": "api.schema.schema",
-}
-# GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
+# GRAPHENE = {
+#     "SCHEMA": "api.schema.schema",
+# }
+GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
 GRAPPLE = {"APPS": ["core", "home", "news"]}
 
 

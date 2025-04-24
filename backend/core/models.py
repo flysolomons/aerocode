@@ -1,7 +1,20 @@
 from django.db import models
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
-from grapple.models import GraphQLRichText, GraphQLImage
+from grapple.models import (
+    GraphQLImage,
+    GraphQLStreamfield,
+    GraphQLString,
+)
+from grapple.helpers import register_query_field
+from wagtail.fields import StreamField
+from .blocks import (
+    TextBlock,
+    ImageBlock,
+    SectionBlock,
+    GridCardSectionBlock,
+    HeadingTextBlock,
+)
 
 
 class BasePage(Page):
@@ -22,7 +35,7 @@ class BasePage(Page):
     ]
 
     graphql_fields = [
-        GraphQLRichText("hero_title", name="heroTitle"),
+        GraphQLString("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
     ]
 
@@ -33,3 +46,36 @@ class BasePage(Page):
 
     class Meta:
         abstract = True
+
+
+@register_query_field("generic_page")
+class GenericPage(BasePage):
+    content = StreamField(
+        [
+            ("text", TextBlock()),
+            ("image", ImageBlock()),
+            ("section", SectionBlock()),
+            ("grid_card_section", GridCardSectionBlock()),
+            ("heading_text", HeadingTextBlock()),
+        ],
+        use_json_field=True,
+        blank=True,
+        help_text="Add and arrange content blocks to build the page.",
+    )
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel("content"),
+    ]
+
+    graphql_fields = BasePage.graphql_fields + [
+        GraphQLStreamfield("content"),
+    ]
+
+    subpage_types = [
+        "core.GenericPage",
+        "news.NewsIndexPage",
+    ]
+
+    class Meta:
+        verbose_name = "Generic Page"
+        verbose_name_plural = "Generic Pages"
