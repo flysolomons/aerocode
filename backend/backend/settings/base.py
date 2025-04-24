@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "wagtail_headless_preview",
     "corsheaders",
     "news",
+    "experience",
 ]
 
 MIDDLEWARE = [
@@ -209,7 +210,7 @@ WAGTAILDOCS_EXTENSIONS = [
 #     "SCHEMA": "api.schema.schema",
 # }
 GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
-GRAPPLE = {"APPS": ["core", "home", "news"]}
+GRAPPLE = {"APPS": ["core", "home", "news", "experience"]}
 
 
 CORS_ALLOW_ALL_ORIGINS = True  # or set to False and use CORS_ALLOWED_ORIGINS

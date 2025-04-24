@@ -74,6 +74,7 @@ class GenericPage(BasePage):
     subpage_types = [
         "core.GenericPage",
         "news.NewsIndexPage",
+        "experience.ExperienceIndexPage",
     ]
 
     class Meta:
