@@ -11,10 +11,14 @@ import { useQuery } from "@apollo/client";
 import client from "@/lib/apolloClient";
 import { stripHtmlTags } from "@/lib/utils";
 import { useState } from "react";
-import { Article, Hero, GET_NEWS_ARTICLES } from "@/graphql/NewsPageQuery";
+import {
+  Article,
+  NewsIndexPage,
+  GET_NEWS_ARTICLES,
+} from "@/graphql/NewsPageQuery";
 
 interface NewsProps {
-  initialPage: Hero;
+  initialPage: NewsIndexPage;
 }
 
 export default function NewsIndexTemplate({ initialPage }: NewsProps) {

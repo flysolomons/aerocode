@@ -1,9 +1,16 @@
 import { gql } from "@apollo/client";
 import client from "@/lib/apolloClient";
 
+export interface NewsIndexPage {
+  heroTitle: string;
+  heroImage: { url: string };
+  url: string;
+  seoTitle: string;
+}
+
 const GET_NEWS_INDEX_PAGE_QUERY = gql`
   query GetNewsIndexPage {
-    pages {
+    pages(contentType: "news.NewsIndexPage") {
       ... on NewsIndexPage {
         heroTitle
         heroImage {
@@ -28,13 +35,6 @@ export interface Article {
   };
 }
 
-// Define a type for the hero prop
-export interface Hero {
-  heroTitle: string;
-  heroImage: { url: string };
-  url: string;
-}
-
 // Modify the GET_NEWS_ARTICLES query
 export const GET_NEWS_ARTICLES = gql`
   query GetNewsArticles($limit: PositiveInt, $offset: PositiveInt) {
@@ -55,7 +55,7 @@ export const GET_NEWS_ARTICLES = gql`
 export async function fetchNewsIndexPage() {
   try {
     const { data } = await client.query({ query: GET_NEWS_INDEX_PAGE_QUERY });
-    const hero = data.pages.find(
+    const pageData = data.pages.find(
       (page: any) => page.__typename === "NewsIndexPage"
     ) || {
       heroTitle: "",
@@ -63,9 +63,9 @@ export async function fetchNewsIndexPage() {
       url: "",
       seoTitle: "News",
     };
-    return hero;
+    return pageData;
   } catch (error) {
-    console.error("Error fetching hero data:", error);
+    console.error("Error fetching news index page data:", error);
     return {
       heroTitle: "",
       heroImage: { url: "/default-hero.jpg" },
@@ -73,6 +73,23 @@ export async function fetchNewsIndexPage() {
       seoTitle: "News",
     };
   }
+}
+export interface NewsArticle {
+  id: string;
+  url: string;
+  firstPublishedAt: string;
+  articleTitle: string;
+  body: string;
+  heroTitle: string;
+  heroImage: {
+    id: string;
+    title: string;
+    description: string;
+    width: number;
+    height: number;
+    src: string;
+    url: string;
+  };
 }
 
 export const GET_ARTICLE = gql`
@@ -96,24 +113,6 @@ export const GET_ARTICLE = gql`
     }
   }
 `;
-
-export interface NewsArticle {
-  id: string;
-  url: string;
-  firstPublishedAt: string;
-  articleTitle: string;
-  body: string;
-  heroTitle: string;
-  heroImage: {
-    id: string;
-    title: string;
-    description: string;
-    width: number;
-    height: number;
-    src: string;
-    url: string;
-  };
-}
 
 export async function fetchNewsArticlePage(
   slug: string
