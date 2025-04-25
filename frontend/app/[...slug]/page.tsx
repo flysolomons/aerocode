@@ -20,14 +20,8 @@ async function fetchPageData(slug: string, fullPath: string) {
     return null;
   }
 
-  const pathSegments = pageType.urlPath.split("/").filter(Boolean);
-  const normalizedUrlPath =
-    pathSegments.length > 1
-      ? `/${pathSegments.slice(1).join("/")}/`
-      : pageType.urlPath;
-
   // Verify the page's normalized urlPath matches the full path
-  if (normalizedUrlPath !== `/${fullPath}/`) {
+  if (pageType.url !== `/${fullPath}/`) {
     return null;
   }
 
@@ -65,14 +59,8 @@ export async function generateMetadata({
     };
   }
 
-  const pathSegments = pageType.urlPath.split("/").filter(Boolean);
-  const normalizedUrlPath =
-    pathSegments.length > 1
-      ? `/${pathSegments.slice(1).join("/")}/`
-      : pageType.urlPath;
-
   // Check if paths match
-  if (normalizedUrlPath !== `/${fullPath}/`) {
+  if (pageType.url !== `/${fullPath}/`) {
     return {
       title: "Page Not Found",
     };
@@ -80,7 +68,7 @@ export async function generateMetadata({
 
   return {
     title: pageType.seoTitle || "Generic Page",
-    // Add description if seoDescription is added to schema
+    // Add more to metadata as needed
   };
 }
 
@@ -92,10 +80,7 @@ export default async function Page({
 }) {
   const resolvedParams = await params;
   const fullPath = resolvedParams.slug.join("/"); // Full path for urlPath comparison
-  const slug = resolvedParams.slug[resolvedParams.slug.length - 1] || ""; // Last segment as slug
-
-  // For server components in Next.js, we can use React Suspense boundaries
-  // to handle loading states, but we'll keep our approach simple
+  const slug = resolvedParams.slug[resolvedParams.slug.length - 1] || "";
 
   try {
     const page = await fetchPageData(slug, fullPath);
@@ -148,7 +133,7 @@ export default async function Page({
 //       query: GET_ALL_SLUGS_QUERY,
 //     });
 //     return data.pages.map((page) => ({
-//       slug: page.urlPath.split('/').filter(Boolean), // Use urlPath to generate full path segments
+//       slug: page.url.split('/').filter(Boolean), // Use urlPath to generate full path segments
 //     }));
 //   } catch (error) {
 //     console.error('Error fetching slugs:', error);

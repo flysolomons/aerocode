@@ -8,6 +8,7 @@ const GET_PAGE_TYPE_QUERY = gql`
       id
       seoTitle
       urlPath
+      url
     }
   }
 `;
@@ -17,6 +18,7 @@ interface PageType {
   id: string;
   seoTitle?: string;
   urlPath: string;
+  url: string;
 }
 
 // Fetch page type by slug (last segment of the path)
