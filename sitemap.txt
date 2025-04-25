@@ -29,8 +29,8 @@ Proposed App Structure:
     home: Contains HomePage (root).
     explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
     experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc.
-    belama: Contains BelamaPage and SignUpPage.
-    about: Contains AboutPage. (generic page: streamfield)
+    belama: Contains BelamaPage and SignUpPage. (this has a form)
+    about: Contains AboutPage, ContactPage
     news: Contains NewsIndexPage and NewsArticlePage.
     
     schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
@@ -40,5 +40,23 @@ Proposed App Structure:
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
 
 brainstorm how to routes that fall under each special (AN IMPORTANT ONE)
+
+
+explore:
+    explore index page: same as experience index 
+
+        cargo page: generic page 
+        destination index: same as explore index 
+        special index: same as explore index 
+        where we fly: 
+            - description
+            - domestic image 
+            - international image 
+        
+        flight schedule: 
+            - description 
+            
+
+
 
 
