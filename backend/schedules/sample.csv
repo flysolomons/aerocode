@@ -1,0 +1,4 @@
+Start Date,End Date,Day,Flight Number,Departure Port,Arrival Port,Departure Time,Arrival Time,Flight Scope
+2025-04-28,2025-04-29,Monday,AA123,JFK,LAX,08:00,11:00,Domestic
+2025-04-28,2025-04-29,Monday,BA456,LHR,JFK,14:00,17:00,International
+2025-05-01,2025-05-02,Tuesday,DL789,ATL,MIA,09:00,11:30,Domestic

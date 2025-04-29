@@ -59,4 +59,22 @@ explore:
 
 
 
+schedules:
+    - start date 
+    - end date
+    - day
+    - flight number
+    - departure port
+    - arrival port
+    - departure time
+    - arrival time 
+    - flight scope
 
+
+fares: 
+    - fare class 
+    - price
+    - trip type
+    - departure port
+    - arrival port
+    - route (how do we map the route to the route page??) convention: use Airport Codes for example, BNE-HIR

@@ -1,0 +1,117 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <!-- Header -->
+    <header class="merged nice-padding">
+        <div class="row">
+            <div class="left">
+                <div class="col">
+                    <h1 class="w-text-2xl w-font-bold">{% trans "Flight Schedules" %}</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="nice-padding">
+        <!-- Upload Form Section -->
+        <section class="w-rounded-lg w-shadow-sm w-p-8 w-mb-10">
+            <h2 class="w-text-lg w-font-semibold w-mb-6">{% trans "Upload Excel File" %}</h2>
+            <form method="POST" enctype="multipart/form-data" class="w-mt-6">
+                {% csrf_token %}
+                <div class="w-mb-8">
+                    <label for="excel_file" class="w-block w-text-sm w-font-medium w-mb-3">
+                        {% trans "Select Excel File (XLSX or XLS)" %}
+                    </label>
+                    <input
+                        type="file"
+                        name="excel_file"
+                        id="excel_file"
+                        accept=".xlsx,.xls"
+                        required
+                        class="w-block w-w-full w-p-3 w-text-sm w-border w-rounded-md"
+                    >
+                </div>
+                <button
+                    type="submit"
+                    class="button button-primary w-rounded-md w-px-8 w-py-3 w-font-semibold w-text-sm w-flex w-justify-center w-items-center"
+                >
+                    {% trans "Upload" %}
+                </button>
+            </form>
+        </section>
+
+        <!-- Existing Schedules and Flights Section -->
+        {% if schedules %}
+            <section class="w-rounded-lg w-shadow-sm w-p-8">
+                <h2 class="w-text-lg w-font-semibold w-mb-6">{% trans "Existing Schedules" %}</h2>
+                {% for schedule in schedules %}
+                    <div class="w-mb-8 w-pb-4 w-border-b last:w-border-b-0">
+                        <h3 class="w-text-base w-font-bold w-mb-4">
+                            {% trans "Schedule" %}: {{ schedule.start_date }} {% trans "to" %} {{ schedule.end_date }}
+                        </h3>
+                        {% if schedule.flights.all %}
+                            <div class="w-overflow-x-auto">
+                                <table class="listing w-w-full w-text-sm w-border-collapse">
+                                    <thead>
+                                        <tr class="w-text-left w-font-semibold">
+                                            <th class="w-p-3">{% trans "Flight Number" %}</th>
+                                            <th class="w-p-3">{% trans "Day" %}</th>
+                                            <th class="w-p-3">{% trans "Departure Port" %}</th>
+                                            <th class="w-p-3">{% trans "Arrival Port" %}</th>
+                                            <th class="w-p-3">{% trans "Departure Time" %}</th>
+                                            <th class="w-p-3">{% trans "Arrival Time" %}</th>
+                                            <th class="w-p-3">{% trans "Flight Scope" %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for flight in schedule.flights.all %}
+                                            <tr class="w-border-b">
+                                                <td class="w-p-3">{{ flight.flight_number }}</td>
+                                                <td class="w-p-3">{{ flight.day }}</td>
+                                                <td class="w-p-3">{{ flight.departure_port }}</td>
+                                                <td class="w-p-3">{{ flight.arrival_port }}</td>
+                                                <td class="w-p-3">{{ flight.departure_time }}</td>
+                                                <td class="w-p-3">{{ flight.arrival_time }}</td>
+                                                <td class="w-p-3">{{ flight.flight_scope }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="w-mt-3 w-text-sm">{% trans "No flights for this schedule." %}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </section>
+        {% else %}
+            <section class="w-rounded-lg w-shadow-sm w-p-8 w-mt-10">
+                <p class="w-text-sm">{% trans "No schedules available." %}</p>
+            </section>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        /* Custom styles for layout and responsiveness */
+        .listing th,
+        .listing td {
+            white-space: nowrap;
+            min-width: 100px; /* Prevents columns from collapsing too narrowly */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .listing {
+                font-size: 0.85rem;
+            }
+            .listing th,
+            .listing td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+{% endblock %}
