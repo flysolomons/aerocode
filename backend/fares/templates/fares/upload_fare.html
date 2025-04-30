@@ -1,0 +1,65 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<header class="merged nice-padding">
+    <div class="row">
+        <div class="left">
+            <div class="col">
+                <h1 class="w-text-2xl w-font-bold">{% trans "Year Round Fares" %}</h1>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div class="nice-padding">
+        <!-- Upload Form -->
+        <section>
+            <h2 class="w-text-lg w-font-semibold">{% trans "Upload Excel File" %}</h2>
+            <form method="POST" enctype="multipart/form-data" class="w-mt-4">
+                {% csrf_token %}
+                <div class="w-mb-4">
+                    <input type="file" name="excel_file" accept=".xlsx,.xls" required class="w-input w-input--file">
+                </div>
+                <button type="submit" class="button button-primary">{% trans "Upload" %}</button>
+            </form>
+        </section>
+
+        <!-- Existing Fares -->
+        {% if fares %}
+            <section class="w-mt-8">
+                <h2 class="w-text-lg w-font-semibold">{% trans "Existing Fares" %}</h2>
+                <table class="listing w-mt-2">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Fare Family" %}</th>
+                            <th>{% trans "Price" %}</th>
+                            <th>{% trans "Currency" %}</th>
+                            <th>{% trans "Trip Type" %}</th>
+                            <th>{% trans "Origin" %}</th>
+                            <th>{% trans "Destination" %}</th>
+                            <th>{% trans "Route" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fare in fares %}
+                            <tr>
+                                <td>{{ fare.fare_family }}</td>
+                                <td>{{ fare.price }}</td>
+                                <td>{{ fare.currency }}</td>
+                                <td>{{ fare.trip_type }}</td>
+                                <td>{{ fare.origin }}</td>
+                                <td>{{ fare.destination }}</td>
+                                <td>{{ fare.route }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% else %}
+            <section class="w-mt-8">
+                <p>{% trans "No fares available." %}</p>
+            </section>
+        {% endif %}
+    </div>
+{% endblock %}

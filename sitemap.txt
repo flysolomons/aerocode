@@ -70,11 +70,17 @@ schedules:
     - arrival time 
     - flight scope
 
-
 fares: 
-    - fare class 
+    - fare family 
     - price
-    - trip type
-    - departure port
-    - arrival port
-    - route (how do we map the route to the route page??) convention: use Airport Codes for example, BNE-HIR
+    - currency
+    - trip type (will always be "one way" )
+    - origin
+    - destination
+    - route (origin-destination)
+
+specials: 
+    - start date
+    - end date
+    - terms and conditions
+    - routes (all routes that this special applies to)

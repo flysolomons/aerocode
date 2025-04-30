@@ -26,12 +26,12 @@ export default function Destinations() {
 
           {/* Destinations options */}
           <div className="grid grid-cols-3 gap-4">
-            <GenericCard title="Solomon Islands" image="/image.jpg" />
-            <GenericCard title="Australia" image="/image.jpg" />
-            <GenericCard title="New Zealand" image="/image.jpg" />
-            <GenericCard title="Vanuatu" image="/image.jpg" />
-            <GenericCard title="Fiji" image="/image.jpg" />
-            <GenericCard title="Papua New Guinea" image="/image.jpg" />
+            <GenericCard title="Solomon Islands" image="/image.jpg" url="#" />
+            <GenericCard title="Australia" image="/image.jpg" url="#" />
+            <GenericCard title="New Zealand" image="/image.jpg" url="#" />
+            <GenericCard title="Vanuatu" image="/image.jpg" url="#" />
+            <GenericCard title="Fiji" image="/image.jpg" url="#" />
+            <GenericCard title="Papua New Guinea" image="/image.jpg" url="#" />
           </div>
         </div>
       </Container>

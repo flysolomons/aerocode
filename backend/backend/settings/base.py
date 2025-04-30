@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "explore",
     "about",
     "schedules",
+    "fares",
 ]
 
 MIDDLEWARE = [
@@ -214,7 +215,16 @@ WAGTAILDOCS_EXTENSIONS = [
 # }
 GRAPHENE = {"SCHEMA": "grapple.schema.schema"}
 GRAPPLE = {
-    "APPS": ["core", "home", "news", "experience", "explore", "about", "schedules"],
+    "APPS": [
+        "core",
+        "home",
+        "news",
+        "experience",
+        "explore",
+        "about",
+        "schedules",
+        "fares",
+    ],
     "EXPOSE_SNIPPETS": True,
 }
 
