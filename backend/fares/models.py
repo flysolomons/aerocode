@@ -10,7 +10,7 @@ class Fare(models.Model):
     fare_family = models.CharField(max_length=50)  # e.g., "Economy", "Business"
     price = models.DecimalField(max_digits=10, decimal_places=2)  # e.g., 199.99
     currency = models.CharField(max_length=3)  # e.g., "USD", "EUR"
-    trip_type = models.CharField(max_length=10, default="One Way")  # Always "one way"
+    trip_type = models.CharField(max_length=10, default="One Way")
     origin = models.CharField(max_length=10)  # e.g., "JFK"
     destination = models.CharField(max_length=10)  # e.g., "LAX"
     route = models.CharField(max_length=20)  # e.g., "JFK-LAX"

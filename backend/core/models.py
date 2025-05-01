@@ -73,7 +73,10 @@ class GenericPage(BasePage):
 
     subpage_types = [
         "core.GenericPage",
-        "news.NewsIndexPage",
+    ]
+
+    parent_page_types = [
+        "explore.ExploreIndexPage",
         "experience.ExperienceIndexPage",
     ]
 

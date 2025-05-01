@@ -79,8 +79,22 @@ fares:
     - destination
     - route (origin-destination)
 
-specials: 
+specialsPage: 
     - start date
     - end date
-    - terms and conditions
-    - routes (all routes that this special applies to)
+    - terms and conditions: for a start, it's just a richtext ???
+    - routes (all routes that this special applies to), the user/admin will select the routes that this special applies to. this will reference all the routepages. 
+
+
+
+RoutePage
+    - origin
+    - destination 
+    - country of destination 
+    
+
+
+booking widget: 
+    - manage booking
+    - flight upgrades
+    - flight schedules

@@ -61,6 +61,27 @@ class GridCardBlock(StructBlock):
 
 
 @register_streamfield_block
+class TravelRequirementBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    description = TextBlock(required=True)
+    link = RichTextBlock(
+        features=["link"],
+        blank=True,
+        help_text="A link to the visa requirements",
+        required=True,
+    )
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+        GraphQLString("link", name="link"),
+    ]
+
+    class Meta:
+        graphql_type = "TravelRequirementBlock"
+
+
+@register_streamfield_block
 class GridCardSectionBlock(StructBlock):
     heading = CharBlock(required=True, max_length=100)
     grid_cards = ListBlock(GridCardBlock())
