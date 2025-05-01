@@ -1,4 +1,5 @@
 from core.models import BasePage
+from wagtail.search import index
 from modelcluster.fields import ParentalManyToManyField
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
@@ -134,6 +135,7 @@ class Route(BasePage):
         GraphQLString("arrival_airport_code", name="arrivalAirportCode"),
         GraphQLForeignKey("destination_country", "explore.Destination"),
         GraphQLString("name", name="routeName"),
+        GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
     ]
 
     parent_page_types = ["explore.Destination"]
@@ -168,6 +170,7 @@ class SpecialsIndexPage(BasePage):
 
 @register_query_field("special")
 class Special(BasePage):
+    name = models.CharField(max_length=20, null=True, blank=True)
     start_date = models.DateField(
         null=True, blank=True, help_text="Start date of the flight special"
     )
@@ -187,9 +190,15 @@ class Special(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("start_date", heading="Start Date"),
-        FieldPanel("end_date", heading="End Date"),
-        FieldPanel("terms_and_conditions", heading="Terms and Conditions"),
+        MultiFieldPanel(
+            [
+                FieldPanel("name", heading="Special Name"),
+                FieldPanel("start_date", heading="Start Date"),
+                FieldPanel("end_date", heading="End Date"),
+                FieldPanel("terms_and_conditions", heading="Terms and Conditions"),
+            ],
+            heading="Special Details",
+        ),
         MultiFieldPanel(
             [
                 FieldPanel("routes", widget=forms.CheckboxSelectMultiple),

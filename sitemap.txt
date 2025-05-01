@@ -26,20 +26,18 @@
 Proposed App Structure:
     api: API configurations
     core: Contains BasePage, snippets (e.g., author profiles, categories), and utilities.
-    home: Contains HomePage (root).
+    home: Contains HomePage (root). this will be a collection of data from other pages
     explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
-    experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc.
-    belama: Contains BelamaPage and SignUpPage. (this has a form)
-    about: Contains AboutPage, ContactPage
-    news: Contains NewsIndexPage and NewsArticlePage.
+    experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc. DONE
+    belama: Contains BelamaPage and SignUpPage. (this has a form -- may skip the sign up page for now)
+    about: Contains AboutPage, ContactPage (maybe generic pages)
+    news: Contains NewsIndexPage and NewsArticlePage. DONE
     
     schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
     fares: contains logic for parsing of fare data (year round fares). Each route page could reference this model.
 
 
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
-
-brainstorm how to routes that fall under each special (AN IMPORTANT ONE)
 
 
 explore:
@@ -58,43 +56,11 @@ explore:
             
 
 
-
-schedules:
-    - start date 
-    - end date
-    - day
-    - flight number
-    - departure port
-    - arrival port
-    - departure time
-    - arrival time 
-    - flight scope
-
-fares: 
-    - fare family 
-    - price
-    - currency
-    - trip type (will always be "one way" )
-    - origin
-    - destination
-    - route (origin-destination)
-
-specialsPage: 
-    - start date
-    - end date
-    - terms and conditions: for a start, it's just a richtext ???
-    - routes (all routes that this special applies to), the user/admin will select the routes that this special applies to. this will reference all the routepages. 
-
-
-
-RoutePage
-    - origin
-    - destination 
-    - country of destination 
-    
-
-
 booking widget: 
     - manage booking
     - flight upgrades
     - flight schedules
+
+
+
+for specials sections, maybe make it in a way such that the user can select which three specials to display. the possible ones that are displayed must be valid ones (relevant to that page)
