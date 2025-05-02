@@ -4,6 +4,7 @@ import GenericPageTemplate from "@/components/templates/generic/GenericPageTempl
 import NewsIndexTemplate from "@/components/templates/news/NewsIndexTemplate";
 import NewsArticleTemplate from "@/components/templates/news/NewsArticleTemplate";
 import ExperienceIndexTemplate from "@/components/templates/experience/ExperienceIndexTemplate";
+import ExploreIndexTemplate from "@/components/templates/explore/ExploreIndexTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -11,6 +12,7 @@ import { fetchGenericPage } from "@/graphql/genericPageQuery";
 import { fetchNewsIndexPage } from "@/graphql/NewsPageQuery";
 import { fetchNewsArticlePage } from "@/graphql/NewsPageQuery";
 import { fetchExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
+import { fetchExploreIndexPage } from "@/graphql/ExplorePageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
@@ -35,6 +37,8 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchNewsArticlePage(slug);
     case "ExperienceIndexPage":
       return fetchExperienceIndexPage();
+    case "ExploreIndexPage":
+      return fetchExploreIndexPage();
     default:
       return null;
   }
@@ -100,6 +104,8 @@ export default async function Page({
         return <NewsArticleTemplate data={page} />;
       case "ExperienceIndexPage":
         return <ExperienceIndexTemplate initialPage={page} />;
+      case "ExploreIndexPage":
+        return <ExploreIndexTemplate initialPage={page} />;
       default:
         notFound();
     }
