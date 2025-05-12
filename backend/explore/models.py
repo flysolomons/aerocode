@@ -8,6 +8,7 @@ from grapple.models import (
     GraphQLStreamfield,
     GraphQLForeignKey,
     GraphQLCollection,
+    GraphQLImage,
 )
 from core.blocks import SectionBlock, TravelRequirementBlock
 from grapple.helpers import register_query_field
@@ -229,12 +230,37 @@ class WhereWeFly(BasePage):
         blank=True,
         help_text="A short description of the page",
     )
+
+    domestic_routes = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Image of your domestic routes",
+    )
+
+    international_routes = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Image of your international routes",
+    )
+
     content_panels = BasePage.content_panels + [
         FieldPanel("description", heading="Description"),
+        FieldPanel("domestic_routes", heading="Domestic Routes"),
+        FieldPanel("international_routes", heading="International Routes"),
     ]
+
     graphql_fields = BasePage.graphql_fields + [
         GraphQLString("description"),
+        GraphQLImage("domestic_routes", name="domesticRoutes"),
+        GraphQLImage("international_routes", name="internationalRoutes"),
     ]
+
     parent_page_types = ["explore.ExploreIndexPage"]
 
     class Meta:

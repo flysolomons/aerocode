@@ -24,18 +24,21 @@
 
 
 Proposed App Structure:
-    api: API configurations
-    core: Contains BasePage, snippets (e.g., author profiles, categories), and utilities.
+
     home: Contains HomePage (root). this will be a collection of data from other pages
     explore: Contains ExplorePage, DestinationsIndexPage, DestinationPage, RoutePage, SpecialsIndexPage, SpecialPage, WhereWeFlyPage, FlightSchedulesPage, and CargoPage.
-    experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc. DONE
     belama: Contains BelamaPage and SignUpPage. (this has a form -- may skip the sign up page for now)
     about: Contains AboutPage, ContactPage (maybe generic pages)
-    news: Contains NewsIndexPage and NewsArticlePage. DONE
     
     schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
     fares: contains logic for parsing of fare data (year round fares). Each route page could reference this model.
 
+
+    DONE:
+        news: Contains NewsIndexPage and NewsArticlePage. DONE
+        experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc. DONE
+        api: API configurations
+        core: Contains BasePage, snippets (e.g., author profiles, categories), and utilities.
 
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
 

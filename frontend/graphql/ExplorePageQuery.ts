@@ -48,6 +48,16 @@ export const GET_EXPLORE_INDEX_PAGE_QUERY = gql`
             url
           }
         }
+        ... on WhereWeFly {
+          heroImage {
+            url
+          }
+        }
+        ... on GenericPage {
+          heroImage {
+            url
+          }
+        }
       }
     }
   }
