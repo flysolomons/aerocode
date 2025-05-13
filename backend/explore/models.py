@@ -156,26 +156,6 @@ class Route(BasePage):
         verbose_name = "Route Page"
 
 
-class SpecialsIndexPage(BasePage):
-    max_count = 1
-
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
-    content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
-    ]
-    graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
-    ]
-    parent_page_types = ["explore.ExploreIndexPage"]
-
-    class Meta:
-        verbose_name = "Specials Index Page"
-
-
 @register_query_field("special")
 class Special(BasePage):
     name = models.CharField(max_length=20, null=True, blank=True)
@@ -227,6 +207,26 @@ class Special(BasePage):
 
     class Meta:
         verbose_name = "Specials Page"
+
+
+class SpecialsIndexPage(BasePage):
+    max_count = 1
+
+    description = RichTextField(
+        features=["bold", "italic", "link"],
+        blank=True,
+        help_text="A short description of the page",
+    )
+    content_panels = BasePage.content_panels + [
+        FieldPanel("description", heading="Description"),
+    ]
+    graphql_fields = BasePage.graphql_fields + [
+        GraphQLString("description"),
+    ]
+    parent_page_types = ["explore.ExploreIndexPage"]
+
+    class Meta:
+        verbose_name = "Specials Index Page"
 
 
 class WhereWeFly(BasePage):
