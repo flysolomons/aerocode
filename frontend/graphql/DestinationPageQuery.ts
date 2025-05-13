@@ -16,6 +16,12 @@ export interface TravelRequirementBlock {
   description: string;
 }
 
+// Interface for the Route
+export interface Route {
+  departureAirport: string;
+  arrivalAirport: string;
+}
+
 // Interface for the Destination page
 export interface DestinationPage {
   heroTitle: string;
@@ -27,6 +33,7 @@ export interface DestinationPage {
   country: string;
   reasonsToVisit: SectionBlock[];
   travelRequirements: TravelRequirementBlock[];
+  routes: Route[];
   __typename?: string;
 }
 
@@ -55,6 +62,10 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
           description
         }
       }
+      routes {
+        departureAirport
+        arrivalAirport
+      }
     }
   }
 `;
@@ -73,9 +84,7 @@ export async function fetchDestinationPage(
     }
 
     // Get the destination data
-    const destination = data.destination;
-
-    return {
+    const destination = data.destination;    return {
       heroTitle: destination.heroTitle || "",
       heroImage: destination.heroImage || { url: "/hero.jpg" },
       url: destination.url || "",
@@ -83,6 +92,7 @@ export async function fetchDestinationPage(
       country: destination.country || "",
       reasonsToVisit: destination.reasonsToVisit || [],
       travelRequirements: destination.travelRequirements || [],
+      routes: destination.routes || [],
       __typename: "Destination",
     };
   } catch (error) {

@@ -30,8 +30,6 @@ Proposed App Structure:
     belama: Contains BelamaPage and SignUpPage. (this has a form -- may skip the sign up page for now)
     about: Contains AboutPage, ContactPage (maybe generic pages)
     
-    schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
-    fares: contains logic for parsing of fare data (year round fares). Each route page could reference this model.
 
 
     DONE:
@@ -39,6 +37,9 @@ Proposed App Structure:
         experience: Contains ExperiencePage, FlightUpgradesPage, BaggageAllowancePage, etc. DONE
         api: API configurations
         core: Contains BasePage, snippets (e.g., author profiles, categories), and utilities.
+        schedules: Contains logic for parsing of flight schedule data. FlightSchedulePage could reference this model. 
+        fares: contains logic for parsing of fare data (year round fares). Each route page could reference this model.
+
 
 brainstorm how recommendations (destinations, specials) will be handled: snippets maybe
 
@@ -63,6 +64,10 @@ booking widget:
     - manage booking
     - flight upgrades
     - flight schedules
+
+
+ALL GRIDS:
+    - make dynamic grids for all
 
 
 

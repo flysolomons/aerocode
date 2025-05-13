@@ -104,6 +104,7 @@ class Route(BasePage):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="routes",
+        help_text="Destination country for the route",
     )
 
     departure_airport = models.CharField(
@@ -122,7 +123,7 @@ class Route(BasePage):
     name = models.CharField(max_length=20, null=True, blank=True)
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("destination_country", heading="Destination"),
+        # FieldPanel("destination_country", heading="Destination"),
         FieldPanel("departure_airport", heading="Departure Airport"),
         FieldPanel("arrival_airport", heading="Arrival Airport"),
         FieldPanel("departure_airport_code", heading="Departure Airport Code"),
@@ -142,6 +143,12 @@ class Route(BasePage):
     parent_page_types = ["explore.Destination"]
 
     def save(self, *args, **kwargs):
+        # Set destination_country to parent Destination page upon saving
+        if not self.destination_country and self.get_parent():
+            parent = self.get_parent().specific
+            if parent.__class__.__name__ == "Destination":
+                self.destination_country = parent
+
         self.name = f"{self.departure_airport_code}-{self.arrival_airport_code}"
         super().save(*args, **kwargs)
 

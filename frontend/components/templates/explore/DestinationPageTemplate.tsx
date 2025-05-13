@@ -65,28 +65,31 @@ export default function DestinationTemplate({
                   ))}
                 </div>
               </div>
-            )}
+            )}          {/* Routes Section - Using routes array from the API */}
+          {initialPage.routes && initialPage.routes.length > 0 && (
+            <div className="space-y-8">
+              <div className="space-y-2">
+                <h2 className="text-3xl text-center font-bold text-blue-500">
+                  Our {initialPage.country} Routes
+                </h2>
 
-          {/* Routes Section - Placeholder for routes that would come from another query */}
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
-                Our {initialPage.country} Routes
-              </h2>
+                <span className="block text-center">
+                  We offer convenient flights to {initialPage.country} from
+                  various locations.
+                </span>
+              </div>
 
-              <span className="block text-center">
-                We offer convenient flights to {initialPage.country} from
-                various locations.
-              </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+                {initialPage.routes.map((route, index) => (
+                  <RouteCard 
+                    key={index}
+                    origin={route.departureAirport} 
+                    destination={route.arrivalAirport} 
+                  />
+                ))}
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-              {/* These would ideally come from the API */}
-              <RouteCard origin="Honiara" destination="Auckland" />
-              <RouteCard origin="Honiara" destination="Auckland" />
-              <RouteCard origin="Honiara" destination="Auckland" />
-            </div>
-          </div>
+          )}
         </div>
       </Container>
     </>
