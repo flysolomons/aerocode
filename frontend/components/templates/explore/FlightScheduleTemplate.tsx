@@ -153,7 +153,7 @@ export default function FlightScheduleTemplate({
       typeof item.content === "object" &&
       "props" in item.content
   );
-
+  console.log(initialPage);
   return (
     <>
       <SecondaryHero

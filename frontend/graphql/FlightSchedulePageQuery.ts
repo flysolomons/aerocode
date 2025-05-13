@@ -35,6 +35,17 @@ export interface Flight {
 
 export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
   query GetFlightSchedules {
+    pages(contentType: "explore.FlightSchedule") {
+      ... on FlightSchedule {
+        heroTitle
+        heroImage {
+          url
+        }
+        description
+        seoTitle
+        url
+      }
+    }
     schedules {
       id
       startDate
@@ -68,18 +79,20 @@ export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData>
     // Extract the schedule data from the query response
     const schedules = data.schedules || [];
 
-    // Default page data
-    const pageData: ScheduleWithFlightData = {
-      heroTitle: "Flight Schedules",
-      heroImage: { url: "/hero.jpg" },
-      url: "/explore/flight-schedules/",
-      seoTitle: "Flight Schedules",
-      description:
-        "Explore our weekly flight schedules for both international and domestic routes.",
-      schedules: schedules,
-    };
+    // Extract page data if available (from the first matching page)
+    const pageData = data.pages && data.pages.length > 0 ? data.pages[0] : null;
 
-    return pageData;
+    // Combine page data with schedules
+    const result: ScheduleWithFlightData = {
+      heroTitle: pageData?.heroTitle || "Flight Schedules",
+      heroImage: pageData?.heroImage || { url: "/hero.jpg" },
+      url: pageData?.url || "/explore/flight-schedules/",
+      seoTitle: pageData?.seoTitle || "Flight Schedules",
+      description: pageData?.description,
+      schedules: schedules,
+      __typename: pageData?.__typename || "FlightSchedule",
+    };
+    return result;
   } catch (error) {
     console.error("Error fetching Flight Schedule page data:", error);
     return {
@@ -90,6 +103,7 @@ export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData>
       description:
         "Explore our weekly flight schedules for both international and domestic routes.",
       schedules: [],
+      __typename: "FlightSchedule",
     };
   }
 }
