@@ -53,6 +53,11 @@ export const GET_EXPLORE_INDEX_PAGE_QUERY = gql`
             url
           }
         }
+        ... on FlightSchedule {
+          heroImage {
+            url
+          }
+        }
         ... on GenericPage {
           heroImage {
             url

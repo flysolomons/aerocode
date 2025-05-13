@@ -7,6 +7,7 @@ import ExperienceIndexTemplate from "@/components/templates/experience/Experienc
 import ExploreIndexTemplate from "@/components/templates/explore/ExploreIndexTemplate";
 import DestinationIndexTemplate from "@/components/templates/explore/DestinationIndexTemplate";
 import WhereWeFlyTemplate from "@/components/templates/explore/WhereWeFlyTemplate";
+import FlightScheduleTemplate from "@/components/templates/explore/FlightScheduleTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -17,6 +18,7 @@ import { fetchExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
 import { fetchExploreIndexPage } from "@/graphql/ExplorePageQuery";
 import { fetchDestinationIndexPage } from "@/graphql/DestinationIndexPageQuery";
 import { fetchWhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
+import { fetchFlightSchedulePage } from "@/graphql/FlightSchedulePageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
@@ -34,7 +36,6 @@ async function fetchPageData(slug: string, fullPath: string) {
   switch (pageType.__typename) {
     case "GenericPage":
       return fetchGenericPage(slug);
-    // Add other page types here (e.g., NewsIndexPage)
     case "NewsIndexPage":
       return fetchNewsIndexPage();
     case "NewsArticle":
@@ -47,6 +48,8 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchDestinationIndexPage();
     case "WhereWeFly":
       return fetchWhereWeFlyPage();
+    case "FlightSchedule":
+      return fetchFlightSchedulePage();
     default:
       return null;
   }
@@ -102,8 +105,12 @@ export default async function Page({
       notFound();
     }
 
-    // Render based on __typename
-    switch (page.__typename) {
+    // Determine the page type by checking multiple properties
+    const pageType =
+      page.__typename || (page.schedules ? "FlightSchedule" : null);
+
+    // Render based on determined page type
+    switch (pageType) {
       case "GenericPage":
         return <GenericPageTemplate initialPage={page} />;
       case "NewsIndexPage":
@@ -118,6 +125,8 @@ export default async function Page({
         return <DestinationIndexTemplate initialPage={page} />;
       case "WhereWeFly":
         return <WhereWeFlyTemplate initialPage={page} />;
+      case "FlightSchedule":
+        return <FlightScheduleTemplate initialPage={page} />;
       default:
         notFound();
     }
