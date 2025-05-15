@@ -1,8 +1,8 @@
 from core.models import BasePage
 from wagtail.search import index
-from modelcluster.fields import ParentalManyToManyField
+from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 from grapple.models import (
     GraphQLString,
     GraphQLStreamfield,
@@ -151,8 +151,9 @@ class Route(BasePage):
         GraphQLForeignKey("destination_country", "explore.Destination"),
         GraphQLString("name", name="routeName"),
         GraphQLString("name_full", name="routeNameFull"),
-        GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
+        # GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
         GraphQLCollection(GraphQLForeignKey, "fares", "fares.Fare"),
+        GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
     ]
 
     parent_page_types = ["explore.Destination"]
@@ -205,11 +206,21 @@ class Route(BasePage):
 @register_query_field("special")
 class Special(BasePage):
     name = models.CharField(max_length=20, null=True, blank=True)
+
     start_date = models.DateField(
         null=True, blank=True, help_text="Start date of the flight special"
     )
+
     end_date = models.DateField(
         null=True, blank=True, help_text="End date of the flight special"
+    )
+
+    special_code = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True,
+        unique=True,
+        help_text="Unique ID for this flight special. This is used for tracking purposes only.",
     )
 
     terms_and_conditions = RichTextField(
@@ -218,27 +229,26 @@ class Special(BasePage):
         help_text="Terms and conditions for the flight special",
     )
 
-    routes = ParentalManyToManyField(
-        Route,
-        related_name="specials",
-    )
-
     content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
                 FieldPanel("name", heading="Special Name"),
+                FieldPanel("special_code", heading="Special ID"),
                 FieldPanel("start_date", heading="Start Date"),
                 FieldPanel("end_date", heading="End Date"),
                 FieldPanel("terms_and_conditions", heading="Terms and Conditions"),
             ],
             heading="Special Details",
         ),
-        MultiFieldPanel(
-            [
-                FieldPanel("routes", widget=forms.CheckboxSelectMultiple),
+        InlinePanel(
+            "special_routes",
+            label="Associated Routes and their Starting Prices",
+            panels=[
+                FieldPanel("route", widget=forms.Select),
+                FieldPanel("starting_price"),
+                FieldPanel("trip_type"),
             ],
-            heading="Associated Routes",
-            help_text="Select one or more routes associated with this special (required)",
+            help_text="Specify starting prices for routes associated with this special.",
         ),
     ]
 
@@ -246,7 +256,7 @@ class Special(BasePage):
         GraphQLString("start_date", name="startDate"),
         GraphQLString("end_date", name="endDate"),
         GraphQLString("terms_and_conditions", name="termsAndConditions"),
-        GraphQLCollection(GraphQLForeignKey, "routes", "explore.Route"),
+        GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
         GraphQLString("name", name="specialName"),
     ]
 
@@ -254,6 +264,64 @@ class Special(BasePage):
 
     class Meta:
         verbose_name = "Specials Page"
+
+
+class SpecialRoute(models.Model):
+    special = ParentalKey(
+        Special,
+        null=True,
+        blank=True,
+        related_name="special_routes",
+        on_delete=models.CASCADE,
+    )
+
+    route = ParentalKey(
+        Route,
+        null=True,
+        blank=True,
+        related_name="special_routes",
+        on_delete=models.CASCADE,
+    )
+
+    starting_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text="Starting price for this special on this route",
+    )
+
+    trip_type = models.CharField(
+        max_length=20,
+        choices=[
+            ("one way", "One Way"),
+            ("return", "Return"),
+        ],
+        default="one way",
+    )
+
+    panels = [
+        FieldPanel("route", widget=forms.Select),
+        FieldPanel("starting_price"),
+        FieldPanel("trip_type"),
+    ]
+
+    def get_trip_type_display(self):
+        """Return the human-readable trip type."""
+        return dict(self._meta.get_field("trip_type").choices).get(
+            self.trip_type, self.trip_type
+        )
+
+    graphql_fields = [
+        GraphQLString("starting_price", name="startingPrice"),
+        GraphQLForeignKey("route", "explore.Route"),
+        GraphQLForeignKey("special", "explore.Special"),
+    ]
+
+    def __str__(self):
+        return f"{self.special.name} - ({self.route.name_full})"
+
+    class Meta:
+        verbose_name = "Special Route"
+        unique_together = [["special", "route"]]
 
 
 class SpecialsIndexPage(BasePage):
