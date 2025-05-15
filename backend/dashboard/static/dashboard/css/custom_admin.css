@@ -1,0 +1,14 @@
+/* Solomon Airlines Custom Admin Styling */
+:root {
+    /* Fonts */
+    --w-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    
+    /* Slightly reduced UI density */
+    --w-density-factor: 0.9;
+}
+
+/* Dark theme customizations */
+.w-theme-dark {
+    --w-color-surface-page: #1a1a1a;
+    --w-color-surface-field: #262626;
+}

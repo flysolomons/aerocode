@@ -84,7 +84,7 @@ class SpecialRouteUploadView(View):
                         skipped_rows.append(index)
                         continue
 
-                    # Check if a special route with this special and route already exists
+                    # Check if a special fare with this special and route already exists
                     existing_special_route = SpecialRoute.objects.filter(
                         special=special_obj, route=route_obj
                     )
@@ -94,7 +94,7 @@ class SpecialRouteUploadView(View):
                             f"{special_obj.name} for route {route_obj.name}"
                         )
                         logger.warning(
-                            f"Duplicate special route: {special_obj.name} for route {route_obj.name}"
+                            f"Duplicate special fare: {special_obj.name} for route {route_obj.name}"
                         )
                         continue
 
@@ -106,31 +106,31 @@ class SpecialRouteUploadView(View):
                     )
                     created_special_routes += 1
                     logger.info(
-                        f"Created special route: {special_obj.name} {route_obj.name} at row {index}"
+                        f"Created special fare: {special_obj.name} {route_obj.name} at row {index}"
                     )
                 except IntegrityError as ie:
                     # Handle the case where unique_together constraint fails
-                    logger.error(f"Duplicate special route at row {index}: {str(ie)}")
+                    logger.error(f"Duplicate special fare at row {index}: {str(ie)}")
                     duplicate_special_routes.append(
                         f"Row {index+1}: {special_obj.name} for route {route_obj.name}"
                     )
                 except Exception as e:
                     logger.error(
-                        f"Error creating special route at row {index}: {str(e)}"
+                        f"Error creating special fare at row {index}: {str(e)}"
                     )
                     skipped_rows.append(index)
 
             if created_special_routes > 0:
                 messages.success(
-                    request, f"Uploaded {created_special_routes} special routes."
+                    request, f"Uploaded {created_special_routes} special fares."
                 )
             else:
-                messages.warning(request, "No special routes uploaded. Check data.")
+                messages.warning(request, "No special fares uploaded. Check data.")
 
             if duplicate_special_routes:
                 messages.error(
                     request,
-                    f"Duplicate special routes found: {'; '.join(duplicate_special_routes)}. Each special must be unique for a given route.",
+                    f"Duplicate special fares found: {'; '.join(duplicate_special_routes)}. Each special must be unique for a given route.",
                 )
 
             if skipped_rows:
@@ -147,7 +147,7 @@ class SpecialRouteUploadView(View):
             "special", "route"
         ).order_by("special__name", "route__name")
         logger.info(
-            f"Returning {special_routes.count()} special routes for admin display"
+            f"Returning {special_routes.count()} special fares for admin display"
         )
         return render(
             request,
@@ -160,7 +160,7 @@ class SpecialRouteUploadView(View):
             "special", "route"
         ).order_by("special__name", "route__name")
         logger.info(
-            f"Returning {special_routes.count()} special routes for admin display"
+            f"Returning {special_routes.count()} special fares for admin display"
         )
         return render(
             request,
@@ -199,14 +199,14 @@ def handle_special_route_validation(request, instance):
 
                 messages.error(
                     request,
-                    f'A special route for "{special_name}" already exists for route "{route_name}". Each special must be unique for a given route.',
+                    f'A special fare for "{special_name}" already exists for route "{route_name}". Each special must be unique for a given route.',
                 )
                 return
 
 
 def register_special_route_upload_menu_item():
     return MenuItem(
-        label="Special Routes",
+        label="Special Fares",
         url=reverse("special_route_upload"),
         name="special_route_upload",
         icon_name="upload",

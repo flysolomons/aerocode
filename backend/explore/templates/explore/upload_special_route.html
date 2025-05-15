@@ -6,7 +6,7 @@
     <div class="row">
         <div class="left">
             <div class="col">
-                <h1 class="w-text-2xl w-font-bold">{% trans "Special Routes" %}</h1>
+                <h1 class="w-text-2xl w-font-bold">{% trans "Special Fares" %}</h1>
             </div>
         </div>
     </div>
@@ -34,10 +34,10 @@
             </form>
         </section>
 
-        <!-- Existing Special Routes -->
+        <!-- Existing Special Fares -->
         {% if special_routes %}
             <section class="w-mt-8">
-                <h2 class="w-text-lg w-font-semibold">{% trans "Existing Special Routes" %}</h2>
+                <h2 class="w-text-lg w-font-semibold">{% trans "Existing Special Fares" %}</h2>
                 <table class="listing w-mt-2">
                     <thead>
                         <tr>
@@ -63,7 +63,7 @@
             </section>
         {% else %}
             <section class="w-mt-8">
-                <p>{% trans "No special routes available." %}</p>
+                <p>{% trans "No Special Fares available." %}</p>
             </section>
         {% endif %}
     </div>

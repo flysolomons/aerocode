@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "home",
     "search",
     "core",
+    "dashboard",  # Added dashboard app for customizing admin branding
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
