@@ -135,6 +135,12 @@ class Route(BasePage):
     search_fields = BasePage.search_fields + [
         index.SearchField("arrival_airport", partial_match=True),
         index.SearchField("arrival_airport_code", partial_match=True),
+        index.RelatedFields(
+            "destination_country",
+            [
+                index.SearchField("country", partial_match=True),
+            ],
+        ),
     ]
 
     graphql_fields = BasePage.graphql_fields + [

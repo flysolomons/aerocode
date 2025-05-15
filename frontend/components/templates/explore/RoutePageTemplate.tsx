@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
 import StrippedBookingWidget from "@/components/common/StrippedBookingWidget";
@@ -7,7 +7,11 @@ import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 import RouteCard from "@/components/common/RouteCard";
 import FareCard from "@/components/common/FareCard";
 import FlightInfoCard from "@/components/common/FlightInfoCard";
-import { RoutePage } from "@/graphql/RoutePageQuery";
+import {
+  RoutePage,
+  RouteSearchResult,
+  fetchRoutesByDestination,
+} from "@/graphql/RoutePageQuery";
 
 interface RoutePageTemplateProps {
   initialPage: RoutePage | null;
@@ -19,6 +23,34 @@ export default function RoutePageTemplate({
   loading = false,
 }: RoutePageTemplateProps) {
   const [gradientStartColor, setGradientStartColor] = useState("transparent");
+  const [relatedRoutes, setRelatedRoutes] = useState<RouteSearchResult[]>([]);
+  const [loadingRelatedRoutes, setLoadingRelatedRoutes] = useState(false);
+
+  // Fetch related routes when the component mounts
+  useEffect(() => {
+    if (initialPage?.arrivalAirportCode) {
+      setLoadingRelatedRoutes(true);
+      fetchRoutesByDestination(initialPage.arrivalAirportCode)
+        .then((routes) => {
+          // Filter out the current route if it exists in the results
+          const filteredRoutes = routes.filter(
+            (route) =>
+              !(
+                route.departureAirportCode ===
+                  initialPage.departureAirportCode &&
+                route.arrivalAirportCode === initialPage.arrivalAirportCode
+              )
+          );
+          setRelatedRoutes(filteredRoutes);
+        })
+        .catch((error) => {
+          console.error("Error fetching related routes:", error);
+        })
+        .finally(() => {
+          setLoadingRelatedRoutes(false);
+        });
+    }
+  }, [initialPage]);
 
   // Handle loading state
   if (loading) {
@@ -65,7 +97,6 @@ export default function RoutePageTemplate({
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
           />
-
           {fares && fares.length > 0 && (
             <div className="space-y-8">
               <div className="space-y-2">
@@ -90,7 +121,6 @@ export default function RoutePageTemplate({
               </div>
             </div>
           )}
-
           <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">
@@ -108,27 +138,37 @@ export default function RoutePageTemplate({
               arrivalAirport={arrivalAirport}
               arrivalAirportCode={arrivalAirportCode}
             />
-          </div>
-
-          {/* <div className="space-y-8">
+          </div>{" "}
+          <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">
-                Other Popular Routes
+                Other Routes to {initialPage.arrivalAirport}
               </h2>
               <span className="block text-center">
                 Explore other popular flight routes that might interest you.
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-              <RouteCard origin="Honiara" destination="Brisbane" />
-              <RouteCard origin="Honiara" destination="Sydney" />
-              <RouteCard origin="Honiara" destination="Auckland" />
-              <RouteCard origin="Honiara" destination="Nadi" />
-              <RouteCard origin="Honiara" destination="Port Vila" />
-              <RouteCard origin="Brisbane" destination="Honiara" />
-            </div>
-          </div> */}
+            {loadingRelatedRoutes ? (
+              <div className="text-center py-8">Loading related routes...</div>
+            ) : relatedRoutes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+                {relatedRoutes.map((route, index) => (
+                  <RouteCard
+                    key={index}
+                    origin={route.departureAirport}
+                    destination={route.arrivalAirport}
+                    url={route.url}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                No other routes to {initialPage.arrivalAirport} are currently
+                available.
+              </div>
+            )}
+          </div>
         </div>
       </Container>
     </>

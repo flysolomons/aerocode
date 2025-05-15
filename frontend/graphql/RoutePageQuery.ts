@@ -27,6 +27,21 @@ export interface RoutePage {
   __typename?: string;
 }
 
+// Interface for Route in search results
+export interface RouteSearchResult {
+  departureAirport: string;
+  arrivalAirport: string;
+  departureAirportCode: string;
+  arrivalAirportCode: string;
+  url: string;
+  name?: string;
+  nameFull?: string;
+  destinationCountry?: {
+    country: string;
+  };
+  __typename?: string;
+}
+
 export const GET_ROUTE_PAGE_QUERY = gql`
   query GetRoute($slug: String!) {
     route(slug: $slug) {
@@ -47,6 +62,37 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         price
         tripType
         currency
+      }
+    }
+  }
+`;
+
+export const GET_ROUTES_BY_DESTINATION_CODE_QUERY = gql`
+  query GetRoutesByDestinationCode($airportCode: String!) {
+    routes(searchQuery: $airportCode) {
+      departureAirport
+      arrivalAirport
+      departureAirportCode
+      arrivalAirportCode
+      url
+      name
+      nameFull
+    }
+  }
+`;
+
+export const GET_ROUTES_BY_COUNTRY_QUERY = gql`
+  query GetRoutesByCountry($country: String!) {
+    routes(searchQuery: $country) {
+      departureAirport
+      arrivalAirport
+      departureAirportCode
+      arrivalAirportCode
+      url
+      name
+      nameFull
+      destinationCountry {
+        country
       }
     }
   }
@@ -82,5 +128,66 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
   } catch (error) {
     console.error("Error fetching Route page data:", error);
     return null;
+  }
+}
+
+export async function fetchRoutesByDestination(
+  airportCode: string
+): Promise<RouteSearchResult[]> {
+  try {
+    const { data } = await client.query({
+      query: GET_ROUTES_BY_DESTINATION_CODE_QUERY,
+      variables: { airportCode },
+    });
+
+    if (!data.routes || !data.routes.length) {
+      return [];
+    }
+
+    // Return the routes array with default values for missing fields
+    return data.routes.map((route: any) => ({
+      departureAirport: route.departureAirport || "",
+      arrivalAirport: route.arrivalAirport || "",
+      departureAirportCode: route.departureAirportCode || "",
+      arrivalAirportCode: route.arrivalAirportCode || "",
+      url: route.url || "",
+      name: route.name || "",
+      nameFull: route.nameFull || "",
+      __typename: "Route",
+    }));
+  } catch (error) {
+    console.error("Error fetching routes by destination:", error);
+    return [];
+  }
+}
+
+export async function fetchRoutesByCountry(
+  country: string
+): Promise<RouteSearchResult[]> {
+  try {
+    const { data } = await client.query({
+      query: GET_ROUTES_BY_COUNTRY_QUERY,
+      variables: { country },
+    });
+
+    if (!data.routes || !data.routes.length) {
+      return [];
+    }
+
+    // Return the routes array with default values for missing fields
+    return data.routes.map((route: any) => ({
+      departureAirport: route.departureAirport || "",
+      arrivalAirport: route.arrivalAirport || "",
+      departureAirportCode: route.departureAirportCode || "",
+      arrivalAirportCode: route.arrivalAirportCode || "",
+      url: route.url || "",
+      name: route.name || "",
+      nameFull: route.nameFull || "",
+      destinationCountry: route.destinationCountry || { country: "" },
+      __typename: "Route",
+    }));
+  } catch (error) {
+    console.error("Error fetching routes by country:", error);
+    return [];
   }
 }
