@@ -16,10 +16,25 @@ export interface TravelRequirementBlock {
   description: string;
 }
 
+// Interface for Special Route in destination context
+export interface DestinationSpecialRoute {
+  special: {
+    name: string;
+    heroImage?: {
+      url: string;
+    };
+  };
+  route?: {
+    nameFull: string;
+  };
+  startingPrice?: string;
+}
+
 // Interface for the Route
 export interface Route {
   departureAirport: string;
   arrivalAirport: string;
+  specialRoutes?: DestinationSpecialRoute[];
 }
 
 // Interface for the Destination page
@@ -65,6 +80,18 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       routes {
         departureAirport
         arrivalAirport
+        specialRoutes {
+          special {
+            name
+            heroImage {
+              url
+            }
+          }
+          route {
+            nameFull
+          }
+          startingPrice
+        }
       }
     }
   }
@@ -81,10 +108,18 @@ export async function fetchDestinationPage(
 
     if (!data.destination) {
       return null;
-    }
+    } // Get the destination data
+    const destination = data.destination;
 
-    // Get the destination data
-    const destination = data.destination;    return {
+    // Process routes data to ensure specialRoutes is properly included
+    const routes =
+      destination.routes?.map((route: any) => ({
+        departureAirport: route.departureAirport || "",
+        arrivalAirport: route.arrivalAirport || "",
+        specialRoutes: route.specialRoutes || [],
+      })) || [];
+
+    return {
       heroTitle: destination.heroTitle || "",
       heroImage: destination.heroImage || { url: "/hero.jpg" },
       url: destination.url || "",
@@ -92,7 +127,7 @@ export async function fetchDestinationPage(
       country: destination.country || "",
       reasonsToVisit: destination.reasonsToVisit || [],
       travelRequirements: destination.travelRequirements || [],
-      routes: destination.routes || [],
+      routes: routes,
       __typename: "Destination",
     };
   } catch (error) {

@@ -11,6 +11,7 @@ import {
   RoutePage,
   RouteSearchResult,
   fetchRoutesByDestination,
+  SpecialRoute,
 } from "@/graphql/RoutePageQuery";
 
 interface RoutePageTemplateProps {
@@ -69,7 +70,6 @@ export default function RoutePageTemplate({
       </div>
     );
   }
-
   const {
     heroTitle,
     heroImage,
@@ -80,6 +80,7 @@ export default function RoutePageTemplate({
     name,
     url,
     fares = [],
+    specialRoutes = [],
   } = initialPage;
 
   return (
@@ -92,10 +93,11 @@ export default function RoutePageTemplate({
       />
       <Container>
         <div className="py-12 space-y-16">
-          <StrippedBookingWidget />
+          <StrippedBookingWidget />{" "}
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
+            specials={specialRoutes}
           />
           {fares && fares.length > 0 && (
             <div className="space-y-8">

@@ -6,8 +6,14 @@ import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 import ReasonToVisitCard from "@/components/common/ReasonToVisit";
 import InfoCard from "@/components/common/InfoCard";
 import RouteCard from "@/components/common/RouteCard";
-import { DestinationPage } from "@/graphql/DestinationPageQuery";
-import { RouteSearchResult, fetchRoutesByCountry } from "@/graphql/RoutePageQuery";
+import {
+  DestinationPage,
+  DestinationSpecialRoute,
+} from "@/graphql/DestinationPageQuery";
+import {
+  RouteSearchResult,
+  fetchRoutesByCountry,
+} from "@/graphql/RoutePageQuery";
 
 interface DestinationTemplateProps {
   initialPage: DestinationPage;
@@ -24,10 +30,10 @@ export default function DestinationTemplate({
     if (initialPage?.country) {
       setLoadingRoutes(true);
       fetchRoutesByCountry(initialPage.country)
-        .then(routesData => {
+        .then((routesData) => {
           setRoutes(routesData);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching routes by country:", error);
         })
         .finally(() => {
@@ -42,13 +48,22 @@ export default function DestinationTemplate({
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         widget="stripped"
-      />
+      />{" "}
       <Container>
         <div className="py-12 space-y-16">
-          {/* <RouteSpecialSection
-            heading={`${initialPage.country} Specials`}
-            description="Check out our special fares and promotions for flights to this destination."
-          /> */}
+          {" "}
+          {initialPage.routes?.some(
+            (route) => route.specialRoutes && route.specialRoutes.length > 0
+          ) && (
+            <RouteSpecialSection
+              heading={`${initialPage.country} Specials`}
+              description="Check out our special fares and promotions for flights to this destination."
+              specials={initialPage.routes
+                .flatMap((route) => route.specialRoutes || [])
+                .filter((special) => !!special)
+                .slice(0, 3)}
+            />
+          )}
           {/* Reasons to Visit */}
           {initialPage.reasonsToVisit &&
             initialPage.reasonsToVisit.map((reason, index) => (
@@ -85,7 +100,8 @@ export default function DestinationTemplate({
                   ))}
                 </div>
               </div>
-            )}{" "}          {/* Routes Section - Using dynamically fetched routes by country */}
+            )}{" "}
+          {/* Routes Section - Using dynamically fetched routes by country */}
           <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">

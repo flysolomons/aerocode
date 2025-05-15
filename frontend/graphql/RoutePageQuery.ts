@@ -9,6 +9,20 @@ export interface Fare {
   currency: string;
 }
 
+// Interface for Special Routes
+export interface SpecialRoute {
+  special: {
+    name: string;
+    heroImage?: {
+      url: string;
+    };
+  };
+  route?: {
+    nameFull: string;
+  };
+  startingPrice?: string;
+}
+
 // Interface for the Route page
 export interface RoutePage {
   heroTitle: string;
@@ -24,6 +38,7 @@ export interface RoutePage {
   departureAirportCode: string;
   arrivalAirportCode: string;
   fares?: Fare[];
+  specialRoutes?: SpecialRoute[];
   __typename?: string;
 }
 
@@ -62,6 +77,18 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         price
         tripType
         currency
+      }
+      specialRoutes {
+        special {
+          name
+          heroImage {
+            url
+          }
+        }
+        route {
+          nameFull
+        }
+        startingPrice
       }
     }
   }
@@ -123,6 +150,7 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       departureAirportCode: route.departureAirportCode || "",
       arrivalAirportCode: route.arrivalAirportCode || "",
       fares: route.fares || [],
+      specialRoutes: route.specialRoutes || [],
       __typename: "Route",
     };
   } catch (error) {
