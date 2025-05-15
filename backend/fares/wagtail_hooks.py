@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.views.generic import View
 import pandas as pd
 import logging
+from django.db import IntegrityError
 from .models import Fare
 
 logger = logging.getLogger(__name__)
@@ -43,6 +44,7 @@ class FareUploadView(View):
 
             created_fares = 0
             skipped_rows = []
+            duplicate_fares = []
 
             for index, row in df.iterrows():
                 # Check for invalid fields
@@ -65,24 +67,52 @@ class FareUploadView(View):
                     logger.warning(
                         f"Skipped row {index}: Invalid or missing fields: {', '.join(invalid_fields)}"
                     )
-                    continue
-
-                # Compute route
-                route = f"{row['Origin']}-{row['Destination']}"
+                    continue  # Compute route name to find the route object
+                route_name = f"{row['Origin']}-{row['Destination']}"
 
                 try:
+                    # Attempt to get the Route object
+                    from explore.models import Route
+
+                    try:
+                        route_obj = Route.objects.get(name=route_name)
+                    except Route.DoesNotExist:
+                        logger.error(f"Route {route_name} does not exist")
+                        skipped_rows.append(index)
+                        continue
+
+                    # Check if a fare with this fare_family and route already exists
+                    existing_fare = Fare.objects.filter(
+                        fare_family=row["Fare Family"], route=route_obj
+                    )
+
+                    if existing_fare.exists():
+                        duplicate_fares.append(
+                            f"{row['Fare Family']} for route {route_name}"
+                        )
+                        logger.warning(
+                            f"Duplicate fare: {row['Fare Family']} for route {route_name}"
+                        )
+                        continue
+
                     Fare.objects.create(
                         fare_family=row["Fare Family"],
                         price=row["Price"],
                         currency=row["Currency"],
-                        trip_type="one way",  # Enforce "one way"
+                        trip_type="One way",
                         origin=row["Origin"],
                         destination=row["Destination"],
-                        route=route,
+                        route=route_obj,
                     )
                     created_fares += 1
                     logger.info(
-                        f"Created fare: {row['Fare Family']} {route} at row {index}"
+                        f"Created fare: {row['Fare Family']} {route_name} at row {index}"
+                    )
+                except IntegrityError as ie:
+                    # Handle the case where unique_together constraint fails
+                    logger.error(f"Duplicate fare at row {index}: {str(ie)}")
+                    duplicate_fares.append(
+                        f"Row {index+1}: {row['Fare Family']} for route {route_name}"
                     )
                 except Exception as e:
                     logger.error(f"Error creating fare at row {index}: {str(e)}")
@@ -91,7 +121,14 @@ class FareUploadView(View):
             if created_fares > 0:
                 messages.success(request, f"Uploaded {created_fares} fares.")
             else:
-                messages.warning(request, "No fares uploaded. Check data formats.")
+                messages.warning(request, "No fares uploaded. Check data.")
+
+            if duplicate_fares:
+                messages.error(
+                    request,
+                    f"Duplicate fares found: {'; '.join(duplicate_fares)}. Each fare family must be unique for a given route.",
+                )
+
             if skipped_rows:
                 messages.warning(
                     request, f"Skipped rows {skipped_rows} due to invalid data."
@@ -110,6 +147,39 @@ class FareUploadView(View):
         fares = Fare.objects.order_by("route")
         logger.info(f"Returning {fares.count()} fares for admin display")
         return render(request, "fares/upload_fare.html", {"fares": fares})
+
+
+@hooks.register("before_edit_page")
+def handle_fare_validation(request, instance):
+    """Handle validation for Fare snippets in the admin interface"""
+    if isinstance(instance, Fare) and request.method == "POST":
+        # Extract the POST data
+        fare_family = request.POST.get("fare_family")
+        route_id = request.POST.get("route")
+
+        if fare_family and route_id:
+            # Check for duplicates
+            existing_fares = Fare.objects.filter(
+                fare_family=fare_family, route_id=route_id
+            )
+
+            # Exclude the current instance if updating
+            if instance.pk:
+                existing_fares = existing_fares.exclude(pk=instance.pk)
+
+            if existing_fares.exists():
+                from explore.models import Route
+
+                try:
+                    route_name = Route.objects.get(id=route_id).name
+                except Route.DoesNotExist:
+                    route_name = "Unknown Route"
+
+                messages.error(
+                    request,
+                    f'A fare for "{fare_family}" already exists for route "{route_name}". Each fare family must be unique for a given route.',
+                )
+                return
 
 
 def register_fare_upload_menu_item():

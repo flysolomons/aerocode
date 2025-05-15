@@ -1,6 +1,6 @@
 from django.db import models
 from wagtail.snippets.models import register_snippet
-from grapple.models import GraphQLString, GraphQLFloat
+from grapple.models import GraphQLString, GraphQLFloat, GraphQLForeignKey
 from grapple.helpers import register_query_field
 
 
@@ -13,7 +13,15 @@ class Fare(models.Model):
     trip_type = models.CharField(max_length=10, default="One Way")
     origin = models.CharField(max_length=10)  # e.g., "JFK"
     destination = models.CharField(max_length=10)  # e.g., "LAX"
-    route = models.CharField(max_length=20)  # e.g., "JFK-LAX"
+    # route = models.CharField(max_length=20)  # e.g., "JFK-LAX"
+    route = models.ForeignKey(
+        "explore.Route",
+        null=True,  # Allow null for flexibility during creation
+        blank=True,  # Allow blank in admin forms
+        on_delete=models.SET_NULL,  # Set to null if the Route is deleted
+        related_name="fares",  # Reverse relationship: route.fares
+        help_text="The route this fare applies to (e.g., JFK-LAX)",
+    )
 
     graphql_fields = [
         GraphQLString("fare_family"),
@@ -22,12 +30,16 @@ class Fare(models.Model):
         GraphQLString("trip_type"),
         GraphQLString("origin"),
         GraphQLString("destination"),
-        GraphQLString("route"),
+        # GraphQLString("route"),
+        GraphQLForeignKey("route", "explore.Route"),
     ]
 
+    # def __str__(self):
+    #     return f"{self.fare_family} {self.route}: {self.price} {self.currency}"
     def __str__(self):
-        return f"{self.fare_family} {self.route}: {self.price} {self.currency}"
+        return f"{self.route.name if self.route else 'No Route'} ({self.fare_family}): {self.price} {self.currency}"
 
     class Meta:
         verbose_name = "Fare"
         verbose_name_plural = "Fares"
+        unique_together = [["fare_family", "route"]]

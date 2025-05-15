@@ -99,7 +99,7 @@ class Destination(BasePage):
 @register_query_field("route")
 class Route(BasePage):
     destination_country = models.ForeignKey(
-        Destination,
+        "explore.Destination",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -120,14 +120,21 @@ class Route(BasePage):
         max_length=3, blank=True, help_text="IATA code for the arrival airport"
     )
 
-    name = models.CharField(max_length=20, null=True, blank=True)
+    name = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    name_full = models.CharField(
+        max_length=255, null=True, blank=True, help_text="Full name of the route"
+    )
 
     content_panels = BasePage.content_panels + [
-        # FieldPanel("destination_country", heading="Destination"),
         FieldPanel("departure_airport", heading="Departure Airport"),
         FieldPanel("arrival_airport", heading="Arrival Airport"),
         FieldPanel("departure_airport_code", heading="Departure Airport Code"),
         FieldPanel("arrival_airport_code", heading="Arrival Airport Code"),
+    ]
+
+    search_fields = BasePage.search_fields + [
+        index.SearchField("arrival_airport", partial_match=True),
+        index.SearchField("arrival_airport_code", partial_match=True),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
@@ -137,10 +144,35 @@ class Route(BasePage):
         GraphQLString("arrival_airport_code", name="arrivalAirportCode"),
         GraphQLForeignKey("destination_country", "explore.Destination"),
         GraphQLString("name", name="routeName"),
+        GraphQLString("name_full", name="routeNameFull"),
         GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
+        GraphQLCollection(GraphQLForeignKey, "fares", "fares.Fare"),
     ]
 
     parent_page_types = ["explore.Destination"]
+
+    def clean(self):
+        """
+        Validate that the combination of departure_airport_code and arrival_airport_code
+        is unique before saving.
+        """
+        super().clean()
+        if self.departure_airport_code and self.arrival_airport_code:
+            # Generate the name for validation
+            generated_name = (
+                f"{self.departure_airport_code}-{self.arrival_airport_code}"
+            )
+            # Check for existing routes with the same name, excluding the current instance
+            existing_routes = Route.objects.filter(name=generated_name).exclude(
+                pk=self.pk
+            )
+            if existing_routes.exists():
+                raise ValidationError(
+                    {
+                        "departure_airport_code": f"A route with {generated_name} already exists.",
+                        "arrival_airport_code": f"A route with {generated_name} already exists.",
+                    }
+                )
 
     def save(self, *args, **kwargs):
         # Set destination_country to parent Destination page upon saving
@@ -149,11 +181,19 @@ class Route(BasePage):
             if parent.__class__.__name__ == "Destination":
                 self.destination_country = parent
 
-        self.name = f"{self.departure_airport_code}-{self.arrival_airport_code}"
+        # Generate name and name_full
+        if self.departure_airport_code and self.arrival_airport_code:
+            self.name = f"{self.departure_airport_code}-{self.arrival_airport_code}"
+        if self.departure_airport and self.arrival_airport:
+            self.name_full = f"{self.departure_airport} to {self.arrival_airport}"
+
+        # Run full validation (including clean) before saving
+        self.full_clean()
         super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Route Page"
+        unique_together = [["departure_airport_code", "arrival_airport_code"]]
 
 
 @register_query_field("special")
@@ -201,6 +241,7 @@ class Special(BasePage):
         GraphQLString("end_date", name="endDate"),
         GraphQLString("terms_and_conditions", name="termsAndConditions"),
         GraphQLCollection(GraphQLForeignKey, "routes", "explore.Route"),
+        GraphQLString("name", name="specialName"),
     ]
 
     parent_page_types = ["explore.SpecialsIndexPage"]

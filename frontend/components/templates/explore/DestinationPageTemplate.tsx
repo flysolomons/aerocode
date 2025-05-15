@@ -23,11 +23,10 @@ export default function DestinationTemplate({
       />
       <Container>
         <div className="py-12 space-y-16">
-          <RouteSpecialSection
+          {/* <RouteSpecialSection
             heading={`${initialPage.country} Specials`}
             description="Check out our special fares and promotions for flights to this destination."
-          />
-
+          /> */}
           {/* Reasons to Visit */}
           {initialPage.reasonsToVisit &&
             initialPage.reasonsToVisit.map((reason, index) => (
@@ -39,7 +38,6 @@ export default function DestinationTemplate({
                 imageOnLeft={index % 2 !== 0}
               />
             ))}
-
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
@@ -65,7 +63,8 @@ export default function DestinationTemplate({
                   ))}
                 </div>
               </div>
-            )}          {/* Routes Section - Using routes array from the API */}
+            )}{" "}
+          {/* Routes Section - Using routes array from the API */}
           {initialPage.routes && initialPage.routes.length > 0 && (
             <div className="space-y-8">
               <div className="space-y-2">
@@ -81,10 +80,10 @@ export default function DestinationTemplate({
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                 {initialPage.routes.map((route, index) => (
-                  <RouteCard 
+                  <RouteCard
                     key={index}
-                    origin={route.departureAirport} 
-                    destination={route.arrivalAirport} 
+                    origin={route.departureAirport}
+                    destination={route.arrivalAirport}
                   />
                 ))}
               </div>
