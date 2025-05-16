@@ -13,12 +13,12 @@ export interface Fare {
 export interface SpecialRoute {
   special: {
     name: string;
-    heroImage?: {
-      url: string;
-    };
   };
   route?: {
     nameFull: string;
+    heroImage?: {
+      url: string;
+    };
   };
   startingPrice?: string;
 }
@@ -81,12 +81,11 @@ export const GET_ROUTE_PAGE_QUERY = gql`
       specialRoutes {
         special {
           name
-          heroImage {
-            url
-          }
         }
         route {
-          nameFull
+          nameFullheroImage {
+            url
+          }
         }
         startingPrice
       }

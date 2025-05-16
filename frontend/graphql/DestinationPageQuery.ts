@@ -20,12 +20,12 @@ export interface TravelRequirementBlock {
 export interface DestinationSpecialRoute {
   special: {
     name: string;
-    heroImage?: {
-      url: string;
-    };
   };
   route?: {
     nameFull: string;
+    heroImage?: {
+      url: string;
+    };
   };
   startingPrice?: string;
 }
@@ -83,12 +83,12 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
         specialRoutes {
           special {
             name
-            heroImage {
-              url
-            }
           }
           route {
             nameFull
+            heroImage {
+              url
+            }
           }
           startingPrice
         }

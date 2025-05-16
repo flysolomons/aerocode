@@ -11,6 +11,7 @@ import WhereWeFlyTemplate from "@/components/templates/explore/WhereWeFlyTemplat
 import FlightScheduleTemplate from "@/components/templates/explore/FlightScheduleTemplate";
 import RoutePageTemplate from "@/components/templates/explore/RoutePageTemplate";
 import SpecialsIndexTemplate from "@/components/templates/explore/SpecialsIndexTemplate";
+import SpecialPageTemplate from "@/components/templates/explore/SpecialPageTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -25,6 +26,7 @@ import { fetchRoutePage } from "@/graphql/RoutePageQuery";
 import { fetchWhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
 import { fetchFlightSchedulePage } from "@/graphql/FlightSchedulePageQuery";
 import { fetchSpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
+import { fetchSpecialPage } from "@/graphql/SpecialPageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
@@ -61,6 +63,8 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchRoutePage(slug);
     case "SpecialsIndexPage":
       return fetchSpecialsIndexPage();
+    case "Special":
+      return fetchSpecialPage(slug);
     default:
       return null;
   }
@@ -142,6 +146,8 @@ export default async function Page({
         return <RoutePageTemplate initialPage={page} />;
       case "SpecialsIndexPage":
         return <SpecialsIndexTemplate initialPage={page} />;
+      case "Special":
+        return <SpecialPageTemplate initialPage={page} />;
       default:
         notFound();
     }

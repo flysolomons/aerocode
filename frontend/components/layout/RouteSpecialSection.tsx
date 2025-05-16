@@ -33,7 +33,7 @@ export default function RouteSpecialSection({
                   key={index}
                   route={special.route?.nameFull || "Special Route"}
                   price={special.startingPrice || "Contact for price"}
-                  image={special.special?.heroImage?.url || "/image.jpg"}
+                  image={special.route?.heroImage?.url || "/image.jpg"}
                   specialName={special.special?.name || "Special"}
                 />
               ))}
