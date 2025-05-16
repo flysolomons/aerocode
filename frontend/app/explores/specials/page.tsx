@@ -13,7 +13,7 @@ export default function Specials() {
         breadcrumbs="Home > Explore > Specials"
       />
       <Container>
-        <div className="pt-12 space-y-16">
+        <div className="my-12 space-y-16">
           <div className="space-y-8">
             <div className="space-y-2">
               <h2 className="text-3xl text-center font-bold text-blue-500">
@@ -29,17 +29,17 @@ export default function Specials() {
             {/* Latest specials options */}
             <div className="grid grid-cols-3 gap-4 h-64">
               <SpecialsCard
-                price="$650AUD"
+                // price="$650AUD"
                 image="/image.jpg"
                 specialName="Early Bird Sale"
               />
               <SpecialsCard
-                price="$650AUD"
+                // price="$650AUD"
                 image="/image.jpg"
                 specialName="Early Bird Sale"
               />
               <SpecialsCard
-                price="$650AUD"
+                // price="$650AUD"
                 image="/image.jpg"
                 specialName="Early Bird Sale"
               />
@@ -48,7 +48,7 @@ export default function Specials() {
         </div>
       </Container>
 
-      <div className="my-16">
+      {/* <div className="my-16">
         <div className="space-y-8">
           <span className="block text-center">
             We offer convenient flights between Australia, Fiji, Vanuatu, and
@@ -62,7 +62,7 @@ export default function Specials() {
         <div className="mt-16 mb-12">
           <Recommendations />
         </div>
-      </Container>
+      </Container> */}
     </>
   );
 }
