@@ -1,10 +1,11 @@
 import SecondaryHero from "@/components/layout/SecondaryHero";
 import Container from "@/components/common/Container";
-import Image from "next/image";
 import MembershipCard from "@/components/common/MembershipCard";
+import Image from "next/image";
 
-export default function Belama() {
-  return (
+export default function BelamaIndexPageTemplate() {
+
+    return (
     <>
       <SecondaryHero
         title="Belama Club"
@@ -50,5 +51,5 @@ export default function Belama() {
         </div>
       </Container>
     </>
-  );
-}
+    );
+    }

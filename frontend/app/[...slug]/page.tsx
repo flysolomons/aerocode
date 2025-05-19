@@ -12,6 +12,9 @@ import FlightScheduleTemplate from "@/components/templates/explore/FlightSchedul
 import RoutePageTemplate from "@/components/templates/explore/RoutePageTemplate";
 import SpecialsIndexTemplate from "@/components/templates/explore/SpecialsIndexTemplate";
 import SpecialPageTemplate from "@/components/templates/explore/SpecialPageTemplate";
+import AboutPageTemplate from "@/components/templates/about/AboutPageTemplate";
+import BelamaIndexPageTemplate from "@/components/templates/belama/BelamaIndexPageTemplate";
+import BelamaSignUpPageTemplate from "@/components/templates/belama/BelamaSignUpPageTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -40,6 +43,7 @@ async function fetchPageData(slug: string, fullPath: string) {
   if (pageType.url !== `/${fullPath}/`) {
     return null;
   }
+
   switch (pageType.__typename) {
     case "GenericPage":
       return fetchGenericPage(slug);
@@ -65,6 +69,18 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchSpecialsIndexPage();
     case "Special":
       return fetchSpecialPage(slug);
+    case "AboutIndexPage":
+      return {
+        __typename: "AboutIndexPage",
+      };
+    case "BelamaIndexPage":
+      return {
+        __typename: "BelamaIndexPage",
+      };
+    case "BelamaSignUpPage":
+      return {
+        __typename: "BelamaSignUpPage",
+      };
     default:
       return null;
   }
@@ -148,6 +164,12 @@ export default async function Page({
         return <SpecialsIndexTemplate initialPage={page} />;
       case "Special":
         return <SpecialPageTemplate initialPage={page} />;
+      case "AboutIndexPage":
+        return <AboutPageTemplate />;
+      case "BelamaIndexPage":
+        return <BelamaIndexPageTemplate />;
+      case "BelamaSignUpPage":
+        return <BelamaSignUpPageTemplate />;
       default:
         notFound();
     }

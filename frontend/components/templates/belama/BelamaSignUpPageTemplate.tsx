@@ -13,7 +13,7 @@ const membershipOptions = [
   { value: "plus", label: "Belama Plus" },
 ];
 
-const BelamaSignUp = () => {
+const BelamaSignUpTemplate = () => {
   const [membershipType, setMembershipType] = useState("");
   const [formData, setFormData] = useState({});
 
@@ -328,4 +328,4 @@ const BelamaSignUp = () => {
   );
 };
 
-export default BelamaSignUp;
+export default BelamaSignUpTemplate;
