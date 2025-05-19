@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "about",
     "schedules",
     "fares",
+    "belama",
 ]
 
 MIDDLEWARE = [
@@ -225,6 +226,7 @@ GRAPPLE = {
         "about",
         "schedules",
         "fares",
+        "belama",
     ],
     "EXPOSE_SNIPPETS": True,
 }
