@@ -4,8 +4,7 @@ import MembershipCard from "@/components/common/MembershipCard";
 import Image from "next/image";
 
 export default function BelamaIndexPageTemplate() {
-
-    return (
+  return (
     <>
       <SecondaryHero
         title="Belama Club"
@@ -20,14 +19,26 @@ export default function BelamaIndexPageTemplate() {
             Honiara, the vibrant capital of the Solomon Islands.
           </span>
           <div className="space-y-8">
+            {" "}
             <h2 className="text-3xl text-center font-bold text-blue-500">
               Individual Memberships
             </h2>
-
             <div className="grid grid-cols-3 gap-4 h-[31rem]">
-              <MembershipCard title="Belama Me" price="$3,995.00" />
-              <MembershipCard title="Belama Plus" price="$7,995.00" />
-              <MembershipCard title="Belama Max" price="$9,995.00" />
+              <MembershipCard
+                title="Belama Me"
+                price="3,995.00"
+                signUpUrl="/belama/sign-up"
+              />
+              <MembershipCard
+                title="Belama Plus"
+                price="7,995.00"
+                signUpUrl="/belama/sign-up"
+              />
+              <MembershipCard
+                title="Belama Max"
+                price="9,995.00"
+                signUpUrl="/belama/sign-up"
+              />
             </div>
           </div>
           <Image
@@ -39,17 +50,25 @@ export default function BelamaIndexPageTemplate() {
           />
 
           <div className="space-y-8">
+            {" "}
             <h2 className="text-3xl text-center font-bold text-blue-500">
               Group Memberships
             </h2>
-
             <div className="grid grid-cols-2 gap-4 h-[31rem]">
-              <MembershipCard title="Belama Family" price="$3,995.00" />
-              <MembershipCard title="Belama Business" price="$7,995.00" />
+              <MembershipCard
+                title="Belama Family"
+                price="3,995.00"
+                signUpUrl="/belama/sign-up"
+              />
+              <MembershipCard
+                title="Belama Business"
+                price="7,995.00"
+                signUpUrl="/belama/sign-up"
+              />
             </div>
           </div>
         </div>
       </Container>
     </>
-    );
-    }
+  );
+}

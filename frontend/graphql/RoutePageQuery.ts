@@ -83,7 +83,8 @@ export const GET_ROUTE_PAGE_QUERY = gql`
           name
         }
         route {
-          nameFullheroImage {
+          nameFull
+          heroImage {
             url
           }
         }

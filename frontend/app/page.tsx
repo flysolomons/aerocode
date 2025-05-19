@@ -38,7 +38,7 @@ export default function Home() {
   const homePage = data.pages.find(
     (page: any) => page.__typename === "HomePage"
   );
-  console.log(data);
+  // console.log(data);
   return (
     <>
       <PrimaryHero
