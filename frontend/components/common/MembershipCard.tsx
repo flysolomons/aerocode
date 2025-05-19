@@ -3,9 +3,10 @@ import PrimaryButton from "./PrimaryButton";
 interface MembershipCardProps {
   title: string;
   price: string;
+  signUpUrl?: string;
 }
 
-function MembershipCard({ title, price }: MembershipCardProps) {
+function MembershipCard({ title, price, signUpUrl }: MembershipCardProps) {
   return (
     <>
       <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl p-6 flex flex-col justify-between border-solid border-2 border-gray-300 bg-white">
@@ -31,7 +32,7 @@ function MembershipCard({ title, price }: MembershipCardProps) {
           </div>
         </div>
 
-        <PrimaryButton text="Sign Up Now" />
+        <PrimaryButton text="Sign Up Now" href={signUpUrl} />
       </div>
     </>
   );

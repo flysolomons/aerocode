@@ -49,25 +49,32 @@ function Header() {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
+          {" "}
           <div className="flex items-center">
-            <Image
-              src={isHovered ? "/logo.svg" : "/logo-white.svg"}
-              alt="Solomon Airlines Logo"
-              width={150}
-              height={40}
-              className="h-6 w-auto"
-            />
+            <Link href="/">
+              <Image
+                src={isHovered ? "/logo.svg" : "/logo-white.svg"}
+                alt="Solomon Airlines Logo"
+                width={150}
+                height={40}
+                className="h-6 w-auto"
+              />
+            </Link>
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
-            {["Explore", "Experience", "Belama"].map((item) => (
+            {[
+              { name: "Explore", path: "/explore" },
+              { name: "Experience", path: "/experience" },
+              { name: "Belama", path: "/belama" },
+            ].map((item) => (
               <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.name}
+                href={item.path}
                 className={`text-sm font-bold transition-colors ${
                   isHovered ? "text-blue-500" : "text-white"
                 }`}
               >
-                {item}
+                {item.name}
               </Link>
             ))}
           </nav>
@@ -124,25 +131,32 @@ function Header() {
         }`}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
+          {" "}
           <div className="flex items-center">
-            <Image
-              src={isHovered ? "/logo-white.svg" : "/logo.svg"}
-              alt="Solomon Airlines Logo"
-              width={150}
-              height={40}
-              className="h-6 w-auto"
-            />
+            <Link href="/">
+              <Image
+                src={isHovered ? "/logo-white.svg" : "/logo.svg"}
+                alt="Solomon Airlines Logo"
+                width={150}
+                height={40}
+                className="h-6 w-auto"
+              />
+            </Link>
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
-            {["Explore", "Experience", "Belama"].map((item) => (
+            {[
+              { name: "Explore", path: "/explore" },
+              { name: "Experience", path: "/experience" },
+              { name: "Belama", path: "/belama" },
+            ].map((item) => (
               <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.name}
+                href={item.path}
                 className={`text-sm font-bold transition-colors ${
                   isHovered ? "text-blue-500" : "text-white"
                 }`}
               >
-                {item}
+                {item.name}
               </Link>
             ))}
           </nav>
@@ -196,23 +210,30 @@ function Header() {
         }`}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
+          {" "}
           <div className="flex items-center">
-            <Image
-              src="/logo.svg"
-              alt="Solomon Airlines Logo"
-              width={150}
-              height={40}
-              className="h-6 w-auto"
-            />
+            <Link href="/">
+              <Image
+                src="/logo.svg"
+                alt="Solomon Airlines Logo"
+                width={150}
+                height={40}
+                className="h-6 w-auto"
+              />
+            </Link>
           </div>
           <nav className="flex items-center space-x-8 justify-between font-sans">
-            {["Explore", "Experience", "Belama"].map((item) => (
+            {[
+              { name: "Explore", path: "/explore" },
+              { name: "Experience", path: "/experience" },
+              { name: "Belama", path: "/belama" },
+            ].map((item) => (
               <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.name}
+                href={item.path}
                 className="text-blue-500 text-sm font-bold transition-colors"
               >
-                {item}
+                {item.name}
               </Link>
             ))}
           </nav>

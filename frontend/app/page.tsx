@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/common/Container";
 import PrimaryHero from "@/components/layout/PrimaryHero";
 import InfoCard from "@/components/common/InfoCard";
@@ -6,10 +7,44 @@ import PrimaryButton from "@/components/common/PrimaryButton";
 import Slider from "@/components/common/Slider";
 import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 
+import { useQuery, gql } from "@apollo/client";
+import client from "../lib/apolloClient";
+
+const GET_HOMEPAGE = gql`
+  query Pages {
+    pages {
+      ... on HomePage {
+        id
+        heroTitle
+        heroImage {
+          id
+          title
+          description
+          width
+          height
+          src
+          url
+        }
+      }
+    }
+  }
+`;
+
 export default function Home() {
+  const { loading, error, data } = useQuery(GET_HOMEPAGE, { client });
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const homePage = data.pages.find(
+    (page: any) => page.__typename === "HomePage"
+  );
+  // console.log(data);
   return (
     <>
-      <PrimaryHero title="Connecting the Hapi Isles..." image="./image.jpg" />
+      <PrimaryHero
+        title={data.pages[0].heroTitle}
+        image={data.pages[0].heroImage.src}
+      />
       <Container>
         <div className="pt-12 space-y-16">
           <RouteSpecialSection

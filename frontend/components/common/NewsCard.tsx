@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 interface NewsCardProps {
   headline: string;
   image: string;
@@ -7,20 +8,23 @@ interface NewsCardProps {
 }
 
 function NewsCard({ headline, image, date, description }: NewsCardProps) {
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <>
-      <div className="p-2 rounded-2xl shadow-md bg-white">
+      <div className="p-2 rounded-2xl shadow-md bg-white h-[30rem]">
         <div className="relative mb-2 space-y-2">
-          <Image
-            src={image}
-            alt={headline}
-            className="w-full object-cover rounded-2xl"
-            width={500}
-            height={200}
-          />
-          <div className="text-sm text-gray-500">{date}</div>
+          <div className="relative h-[15rem] rounded-2xl overflow-hidden">
+            <Image src={image} alt={headline} fill className="object-cover" />
+          </div>
+
+          <div className="text-sm text-gray-500">{formattedDate}</div>
         </div>
-        <h2 className="text-lg font-bold text-blue-500 uppercase mb-2">
+        <h2 className="text-lg font-bold text-blue-500 uppercase mb-2 hover:underline">
           {headline}
         </h2>
         <p className="text-gray-700 text-sm">{description}</p>

@@ -1,15 +1,15 @@
 import Image from "next/image";
-
-// props: card title, image
+import Link from "next/link";
 
 interface GenericCardProps {
   title: string;
   image: string;
+  url: string; // Changed from optional to required
 }
 
-function GenericCard({ title, image }: GenericCardProps) {
+function GenericCard({ title, image, url }: GenericCardProps) {
   return (
-    <>
+    <Link href={url} className="block hover:opacity-90 transition-opacity">
       <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
         <Image
@@ -23,7 +23,7 @@ function GenericCard({ title, image }: GenericCardProps) {
           <span className="text-2xl font-semibold text-center">{title}</span>
         </div>
       </div>
-    </>
+    </Link>
   );
 }
 

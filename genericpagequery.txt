@@ -1,0 +1,53 @@
+query GenericPage {
+    genericPage(slug: "generic-page-test") {
+        seoTitle
+        heroTitle
+        heroImage {
+            url
+        }
+        content {
+            blockType
+            ... on SectionBlock {
+                heading
+                text
+                imagePosition
+                image {
+                    url
+                }
+            }
+            ... on ImageBlock {
+                blockType
+                caption
+                image {
+                    url
+                }
+            }
+            ... on HeadingTextBlock {
+                heading
+                text
+            }
+            ... on GridCardSectionBlock {
+                heading
+                blocks {
+                    ... on ListBlock {
+                        items {
+                            blockType
+                            ... on GridCardBlock {
+                                heading
+                                text
+                                image {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                    blockType
+                    field
+                }
+            }
+            ... on TextBlock {
+                value
+            }
+        }
+    }
+}

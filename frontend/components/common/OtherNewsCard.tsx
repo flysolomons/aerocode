@@ -11,7 +11,7 @@ interface OtherNewsCardProps {
 function OtherNewsCard({ headline, image, date }: OtherNewsCardProps) {
   return (
     <>
-      <div className="flex items-start space-x-3 p-2 bg-gray-100 rounded-lg">
+      <div className="flex items-start space-x-3 p-2 bg-gray-100 rounded-lg h-full">
         <div className="flex items-start relative h-20">
           <div className="size-20 absolute overflow-hidden rounded-lg">
             <Image
@@ -26,7 +26,7 @@ function OtherNewsCard({ headline, image, date }: OtherNewsCardProps) {
             <a href="#" className="text-blue-500 hover:underline font-medium">
               {headline}
             </a>
-            <div className="text-sm text-gray-500 mt-1">{date}</div>
+            <div className="text-xs text-gray-500 mt-1">{date}</div>
           </div>
         </div>
       </div>

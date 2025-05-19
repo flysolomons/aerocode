@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 // props: card title, image
 
@@ -70,6 +71,47 @@ export default function SecondaryHero({
     calculateAverageColor();
   }, [image, onColorCalculated]);
 
+  const renderBreadcrumbs = () => {
+    if (!breadcrumbs) return null;
+
+    const breadcrumbParts = breadcrumbs.split("/").filter(Boolean);
+    const breadcrumbLinks = breadcrumbParts.map((part, index) => {
+      const isAfterNews =
+        breadcrumbParts.includes("news") &&
+        index > breadcrumbParts.indexOf("news");
+      const href = "/" + breadcrumbParts.slice(0, index + 1).join("/");
+      const label = isAfterNews
+        ? "Article"
+        : part
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      if (index === breadcrumbParts.length - 1) {
+        // Last part of the breadcrumb, not clickable
+        return <span key={index}> / {label}</span>;
+      }
+
+      return (
+        <span key={index}>
+          {index > 0 && " / "}
+          <Link href={href} className="hover:underline">
+            {label}
+          </Link>
+        </span>
+      );
+    });
+
+    return (
+      <div className="text-sm">
+        <Link href="/" className="hover:underline">
+          Home
+        </Link>
+        {breadcrumbParts.length > 1 && " / "}
+        {breadcrumbLinks}
+      </div>
+    );
+  };
+
   return (
     <div
       className="h-[25rem] bg-cover bg-center"
@@ -80,7 +122,7 @@ export default function SecondaryHero({
       <div className="flex items-center justify-center h-full text-white bg-black bg-opacity-20 rounded-lg">
         <div className="text-center space-y-2 max-w-[70.5rem]">
           <div className="text-5xl font-bold font-sans">{title}</div>
-          <div className="text-sm">{breadcrumbs}</div>
+          {renderBreadcrumbs()}
         </div>
       </div>
     </div>
