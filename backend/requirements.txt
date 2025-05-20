@@ -46,3 +46,4 @@ wagtail==6.4.1
 wagtail-grapple==0.28.0
 wagtail-headless-preview==0.8.0
 Willow==1.9.0
+python-dotenv==1.1.0
