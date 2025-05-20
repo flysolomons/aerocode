@@ -39,10 +39,14 @@ class BasePage(Page):
         GraphQLImage("hero_image", name="heroImage"),
     ]
 
-    def save(self, *args, **kwargs):
-        # Set hero_title to match title before saving
+    def clean(self):
         self.hero_title = self.title
-        super().save(*args, **kwargs)
+        super().clean()
+
+    # def save(self, *args, **kwargs):
+    #     # Set hero_title to match title before saving
+    #     self.hero_title = self.title
+    #     super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
