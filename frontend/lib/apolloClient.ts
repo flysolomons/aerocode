@@ -59,6 +59,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   },
 });
 
-console.log("link is " + process.env.NEXT_PUBLIC_GRAPHQL_URL);
+// console.log("link is " + process.env.NEXT_PUBLIC_GRAPHQL_URL);
 
 export default client;
