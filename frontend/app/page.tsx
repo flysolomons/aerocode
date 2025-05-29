@@ -1,4 +1,5 @@
 "use client";
+
 import Container from "@/components/common/Container";
 import PrimaryHero from "@/components/layout/PrimaryHero";
 import InfoCard from "@/components/common/InfoCard";
