@@ -19,7 +19,9 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}      # Build and push Docker image
+          password: ${{ secrets.GITHUB_TOKEN }}      
+          
+      # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -27,5 +29,5 @@ jobs:
           file: backend/Dockerfile
           push: true          
           tags: |
-            ghcr.io/flysolomons/backend:latest
-            ghcr.io/flysolomons/backend:${{ github.sha }}
+            ghcr.io/flysolomons/website/backend:latest
+            ghcr.io/flysolomons/website/backend:${{ github.sha }}
