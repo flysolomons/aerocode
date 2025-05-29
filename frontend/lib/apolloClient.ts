@@ -30,7 +30,9 @@ const cache = new InMemoryCache({
 // Create the Apollo Client instance
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: new HttpLink({
-    uri: "http://localhost:8000/api/graphql/", // Your Wagtail GraphQL endpoint
+    // uri: "http://localhost:8000/api/graphql/", // Your Wagtail GraphQL endpoint
+    // fetch url from environment variable if needed
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
     // Disable caching of HTTP responses at network level
     // This ensures Apollo always validates with the network
     fetchOptions: {
