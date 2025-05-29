@@ -122,7 +122,7 @@ function Footer() {
       </div>
       {isProd ? (
         <div
-          className="h-[86px] w-full bg-[url('/demo/design.svg')] bg-repeat-x mt-8 [background-size:422px_86px]"
+          className="h-[86px] w-full bg-[url('/design.svg')] bg-repeat-x mt-8 [background-size:422px_86px]"
           aria-hidden="true"
         ></div>
       ) : (

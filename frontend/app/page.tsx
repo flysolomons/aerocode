@@ -7,44 +7,29 @@ import PrimaryButton from "@/components/common/PrimaryButton";
 import Slider from "@/components/common/Slider";
 import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
 
-import { useQuery, gql } from "@apollo/client";
-import client from "../lib/apolloClient";
-
-const GET_HOMEPAGE = gql`
-  query Pages {
-    pages {
-      ... on HomePage {
-        id
-        heroTitle
-        heroImage {
-          id
-          title
-          description
-          width
-          height
-          src
-          url
-        }
-      }
-    }
-  }
-`;
+import { useQuery } from "@apollo/client";
+import client from "@/lib/apolloClient";
+import { GET_HOMEPAGE, HomePageData } from "@/graphql/HomePageQuery";
 
 export default function Home() {
-  const { loading, error, data } = useQuery(GET_HOMEPAGE, { client });
+  const { loading, error, data } = useQuery<HomePageData>(GET_HOMEPAGE, {
+    client,
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+  console.log(data);
 
-  const homePage = data.pages.find(
-    (page: any) => page.__typename === "HomePage"
-  );
-  // console.log(data);
+  // Since we know there's only one homepage, we can directly use the first item
+  // We still check to make sure it exists for type safety
+  if (!data || !data.pages[0]) {
+    return <p>No homepage data available</p>;
+  }
+
+  const homePage = data.pages[0];
+
   return (
     <>
-      <PrimaryHero
-        title={data.pages[0].heroTitle}
-        image={data.pages[0].heroImage.src}
-      />
+      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
       <Container>
         <div className="pt-12 space-y-16">
           <RouteSpecialSection
