@@ -130,6 +130,17 @@ export default async function Page({
   console.log("Full Path:", fullPath);
 
   try {
+    // workaround just to ignore these unexpected routes
+    if (
+      !fullPath ||
+      fullPath === "graphql" ||
+      fullPath.startsWith("_next") ||
+      fullPath.startsWith(".well-known")
+    ) {
+      console.log("Ignoring path:", fullPath);
+      return;
+    }
+
     const page = await fetchPageData(slug, fullPath);
 
     // Trigger 404 if page is not found
