@@ -13,24 +13,24 @@ import client from "@/lib/apolloClient";
 import { GET_HOMEPAGE, HomePageData } from "@/graphql/HomePageQuery";
 
 export default function Home() {
-  const { loading, error, data } = useQuery<HomePageData>(GET_HOMEPAGE, {
-    client,
-  });
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  console.log(data);
+  // const { loading, error, data } = useQuery<HomePageData>(GET_HOMEPAGE, {
+  //   client,
+  // });
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // console.log(data);
 
-  // Since we know there's only one homepage, we can directly use the first item
-  // We still check to make sure it exists for type safety
-  if (!data || !data.pages[0]) {
-    return <p>No homepage data available</p>;
-  }
+  // // Since we know there's only one homepage, we can directly use the first item
+  // // We still check to make sure it exists for type safety
+  // if (!data || !data.pages[0]) {
+  //   return <p>No homepage data available</p>;
+  // }
 
-  const homePage = data.pages[0];
+  // const homePage = data.pages[0];
 
   return (
     <>
-      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
+      {/* <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
       <Container>
         <div className="pt-12 space-y-16">
           <RouteSpecialSection
@@ -122,7 +122,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </Container>
+      </Container> */}
+      <h1 className="text-3xl text-center font-bold text-blue-500">
+        THIS IS THE HOME PAGE
+      </h1>
     </>
   );
 }
