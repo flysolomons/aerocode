@@ -11,7 +11,11 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  }
+  },
+
+  productionBrowserSourceMaps: false,
+  // Explicitly disable source maps in development
+  // devtool: false,
 };
 
 export default nextConfig;
