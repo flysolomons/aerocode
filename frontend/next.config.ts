@@ -3,7 +3,17 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ["127.0.0.1"], // Add localhost
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "backend",
+        port: "8000",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
+    ],
   },
   // Ignore ESLint and TypeScript errors during builds as requested
   eslint: {
