@@ -65,6 +65,7 @@ booking widget:
     - manage booking
     - flight upgrades
     - flight schedules
+    - flight search/ book a trip
 
 
 ALL GRIDS:
