@@ -1,8 +1,19 @@
+"use client";
+import { useState } from "react";
 import RadioButton from "./RadioButton";
+import TravelerDropdown, {Travelers} from "./TravelerDropDown";
+
 
 export default function BookingWidget() {
+  //Initialize default values for travelers.
+  const [travelers, setTravelers] = useState<Travelers>({ adults: 1, children: 0, infants: 0 });
+  
+  //Oneway or return 
+  // TODO: Hook up with datepicker component to show return date field depend on oneway/return
+  const [isOneWay, setIsOneWay] = useState<boolean>(false);
+
   return (
-    <div className="relative flex flex-col items-center pt-8 h-1/2 text-white">
+    <div className="relative flex flex-col items-center pt-8 h-1/2 text-white animate__animated animate__fadeInUp">
       <div className="w-[70.5rem] bg-white rounded-[2rem] shadow-lg">
         <div className="flex border-b">
           <div className="flex border-b-2 border-b-blue-500 px-4 py-3 h-12 w-[11rem]">
@@ -18,7 +29,7 @@ export default function BookingWidget() {
         </div>
 
         <div className="px-4 py-3 flex flex-col items-center space-y-4">
-          <RadioButton optionOne="Round Trip" optionTwo="One Way" />
+          <RadioButton optionOne="Round Trip" optionTwo="One Way" onOptionChange={(value: string) => setIsOneWay(value === "One Way")}/>
 
           {/* search form */}
           <div className="flex items-center border border-gray-200 rounded-full px-2 shadow-md">
@@ -28,7 +39,7 @@ export default function BookingWidget() {
               </label>
               <input
                 type="text"
-                placeholder="Search destination"
+                placeholder="Search airport"
                 className="w-full text-sm outline-none text-black"
               />
             </div>
@@ -69,8 +80,11 @@ export default function BookingWidget() {
                 </div>
               </div>
             </div>
+            
             <div className="w-[1px] h-10 bg-gray-200"></div>
             <div className="flex-1 flex">
+            <TravelerDropdown onChange={setTravelers} />
+              {/** 
               <div className="px-6 py-3">
                 <label className="block text-xs text-black font-semibold">
                   Travelling with?
@@ -81,6 +95,7 @@ export default function BookingWidget() {
                   className="w-full text-sm outline-none text-black"
                 />
               </div>
+              */}
               <div className="flex items-center justify-center">
                 <button className="bg-blue-500 text-white p-4 rounded-full">
                   <svg
