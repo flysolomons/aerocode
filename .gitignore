@@ -1,1 +1,5 @@
 venv
+.env
+
+docker-compose.yml
+nginx.conf
