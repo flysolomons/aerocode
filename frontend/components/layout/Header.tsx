@@ -4,84 +4,195 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface SubMenuItem {
-  name: string;
-  href: string;
-}
-interface MenuItem {
-  title: string;
-  href?: string;
-  subItems?: SubMenuItem[];
-}
-
-const menuItems: MenuItem[] = [
-  {
-    title: "Explore",
-    href:"/explore",
-    subItems: [
-      { name: "Destinations", href: "/explore/destinations" },
-      { name: "Our Specials", href: "/explore/our-specials" },
-      { name: "Schedules", href: "/explore/flight-schedules" },
-      { name: "Cargo", href: "/explore/cargo" }
-    ],
-  },
-  {
-    title: "Experience",
-    href:"/experience",
-    subItems: [
-      { name: "Baggage Allowance", href: "/experience/baggage-allowance" },
-      { name: "Seat Selection", href: "/experience/seat-selection" },
-      { name: "Dangerous Goods", href: "/experience/dangerous-goods" },
-    ],
-  },
-  {
-    title: "Belama",
-    href: "/belama",
-  },
-];
-
-const currencyItems: MenuItem[] = [
-  {
-    title: "USD",
-    href: "/currency/usd",
-  },
-  {
-    title: "AUD",
-    href: "/currency/aud",
-  },
-  {
-    title: "EUR",
-    href: "/currency/eur",
-  },
-  
-];
-
 function Header() {
   const [isWhiteHeader, setIsWhiteHeader] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+
+  // Dummy data for mega menus
+  const megaMenuData = {
+    explore: {
+      // title: "Explore Destinations",
+      sections: [
+        {
+          title: "Popular Destinations",
+          items: [
+            { name: "Honiara", description: "Capital city and gateway" },
+            { name: "Gizo", description: "Western Province hub" },
+            { name: "Munda", description: "Beautiful lagoons" },
+            { name: "Tulagi", description: "Historic island" },
+          ],
+        },
+        {
+          title: "Island Groups",
+          items: [
+            {
+              name: "Central Province",
+              description: "Heart of Solomon Islands",
+            },
+            { name: "Western Province", description: "Pristine waters" },
+            { name: "Guadalcanal", description: "Main island adventures" },
+            { name: "Malaita", description: "Cultural experiences" },
+          ],
+        },
+        {
+          title: "Activities",
+          items: [
+            {
+              name: "Diving & Snorkeling",
+              description: "World-class dive sites",
+            },
+            { name: "Island Hopping", description: "Explore multiple islands" },
+            { name: "Cultural Tours", description: "Traditional experiences" },
+            { name: "Adventure Sports", description: "Thrilling activities" },
+          ],
+        },
+      ],
+    },
+    experience: {
+      // title: "Unique Experiences",
+      sections: [
+        {
+          title: "Cultural Experiences",
+          items: [
+            {
+              name: "Traditional Villages",
+              description: "Authentic community visits",
+            },
+            { name: "Local Markets", description: "Fresh produce and crafts" },
+            { name: "Cultural Shows", description: "Traditional performances" },
+            { name: "Cooking Classes", description: "Learn local cuisine" },
+          ],
+        },
+        {
+          title: "Adventure Activities",
+          items: [
+            { name: "Scuba Diving", description: "WWII wrecks and reefs" },
+            { name: "Fishing Charters", description: "Sport and game fishing" },
+            { name: "Hiking Tours", description: "Jungle and mountain trails" },
+            { name: "Kayaking", description: "Lagoon explorations" },
+          ],
+        },
+        {
+          title: "Relaxation",
+          items: [
+            { name: "Beach Resorts", description: "Luxury accommodations" },
+            { name: "Spa Treatments", description: "Traditional wellness" },
+            { name: "Sunset Cruises", description: "Romantic evenings" },
+            { name: "Private Islands", description: "Exclusive getaways" },
+          ],
+        },
+      ],
+    },
+    belama: {
+      // title: "Belama Express",
+      sections: [
+        {
+          title: "Services",
+          items: [
+            {
+              name: "Express Flights",
+              description: "Fast inter-island connections",
+            },
+            {
+              name: "Charter Services",
+              description: "Private flight solutions",
+            },
+            { name: "Scenic Tours", description: "Aerial sightseeing" },
+            { name: "Medical Transfers", description: "Emergency transport" },
+          ],
+        },
+        {
+          title: "Routes",
+          items: [
+            { name: "Honiara Hub", description: "Central connections" },
+            { name: "Western Routes", description: "Gizo and Munda" },
+            { name: "Eastern Routes", description: "Remote island access" },
+            { name: "Special Charters", description: "Custom destinations" },
+          ],
+        },
+        {
+          title: "Benefits",
+          items: [
+            {
+              name: "Time Saving",
+              description: "Quick travel between islands",
+            },
+            { name: "Reliability", description: "Weather-dependent service" },
+            { name: "Comfort", description: "Modern aircraft fleet" },
+            { name: "Flexibility", description: "Multiple daily flights" },
+          ],
+        },
+      ],
+    },
+  }; // Mega Menu Component
+  const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px]"
+        >
+          <div className="max-w-[70.5rem] mx-auto py-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              {data.title}
+            </h3>
+            <div className="grid grid-cols-3 gap-6">
+              {data.sections.map((section: any, index: number) => (
+                <div key={index} className="space-y-3">
+                  <h4 className="text-base font-semibold text-blue-600">
+                    {section.title}
+                  </h4>
+                  <ul className="space-y-2">
+                    {section.items.map((item: any, itemIndex: number) => (
+                      <li key={itemIndex}>
+                        <Link
+                          href="#"
+                          className="group block p-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                        >
+                          <div className="text-sm font-medium text-gray-800 group-hover:text-blue-600">
+                            {item.name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {item.description}
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
       // Determine scroll direction
       const isScrollUp = currentScrollY < lastScrollY;
-      setIsScrollingUp(isScrollUp);
-
-      // Check if we're at the top
+      setIsScrollingUp(isScrollUp); // Check if we're at the top
       const isTop = currentScrollY < 50;
-      setIsAtTop(isTop);
-
-      // Logic for white header
-      if (isScrollingUp && currentScrollY > 100) {
+      setIsAtTop(isTop); // Logic for white header - only show when scrolling up significantly and not at top
+      if (
+        isScrollUp &&
+        currentScrollY > 200 &&
+        !isTop &&
+        lastScrollY - currentScrollY > 10
+      ) {
         setIsWhiteHeader(true);
       }
-      // Only hide white header when scrolling down OR at top
-      else if (!isScrollingUp || isTop) {
+      // Hide white header immediately when scrolling down or at top
+      else if (!isScrollUp || isTop) {
         setIsWhiteHeader(false);
       }
 
@@ -90,99 +201,94 @@ function Header() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, isScrollingUp]);
-
-  const handleMouseEnter = (index: number) => {
-    setIsOpen(index);
-  };
-
-  const handleMouseLeave = () => {
-    setIsOpen(null);
-  };
-
-  const handleCurrencyMouseEnter = () => {
-    setIsCurrencyOpen(true);
-  };
-
-  const handleCurrencyMouseLeave = () => {
-    setIsCurrencyOpen(false);
-  };
-  // If at top, render transparent header
-  
+  }, [lastScrollY, isScrollingUp]); // If at top, render transparent header
   if (isAtTop) {
     return (
-      
-      <header
-        className={`w-full absolute top-0 z-50 transition-all duration-1000 ease-in-out ${
-          isHovered ? "bg-white shadow-sm rounded-b-lg opacity-100 translate-y-0" : "bg-transparent"
-        }`}
+      <motion.header
+        className="w-full absolute top-0 z-50"
+        animate={{
+          backgroundColor:
+            isHovered || activeMegaMenu
+              ? "rgba(255, 255, 255, 1)"
+              : "rgba(255, 255, 255, 0)",
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          setActiveMegaMenu(null);
+        }}
+        style={{
+          boxShadow:
+            isHovered || activeMegaMenu
+              ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+              : "none",
+        }}
       >
-        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
-          {" "}
-          <div className="flex items-center animate__animated animate__fadeInDown">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 relative">
+          <div className="flex items-center">
             <Link href="/">
-              <Image
-                src={isHovered ? "/logo.svg" : "/logo-white.svg"}
-                alt="Solomon Airlines Logo"
-                width={150}
-                height={40}
-                className="h-6 w-auto"
-              />
+              {" "}
+              <motion.div
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <Image
+                  src={
+                    isHovered || activeMegaMenu
+                      ? "/logo.svg"
+                      : "/logo-white.svg"
+                  }
+                  alt="Solomon Airlines Logo"
+                  width={150}
+                  height={40}
+                  className="h-6 w-auto"
+                />
+              </motion.div>
             </Link>
           </div>
-          <nav className="flex items-center space-x-8 justify-between font-sans animate__animated animate__fadeInDown">
-          <ul className="flex space-x-8 font-sans animate__animated animate__fadeInDown">
-          {menuItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="relative"
-                  onMouseEnter={() => item.subItems && handleMouseEnter(index)}
-                  onMouseLeave={() => item.subItems && handleMouseLeave()}
-                >
-                  <Link
-                    href={item.href || "#"}
-                    className={`text-sm font-bold transition-colors ${
-                      isHovered ? "text-blue-500" : "text-white"
-                    } hover:text-blue-700`}
+          <nav className="flex items-center space-x-8 justify-between font-sans relative">
+            {[
+              { name: "Explore", path: "/explore", key: "explore" },
+              { name: "Experience", path: "/experience", key: "experience" },
+              { name: "Belama", path: "/belama", key: "belama" },
+            ].map((item) => (
+              <div
+                key={item.name}
+                className="relative"
+                onMouseEnter={() => setActiveMegaMenu(item.key)}
+              >
+                <Link href={item.path}>
+                  <motion.span
+                    className="text-sm font-bold cursor-pointer"
+                    animate={{
+                      color:
+                        isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                    }}
+                    whileHover={{
+                      color: "#2563eb",
+                    }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
-                    {item.title}
-                  </Link>
-                  {item.subItems && (
-                    <AnimatePresence>
-                      {isOpen === index && (
-                        <motion.div
-                          className="absolute mt-8 transform -translate-x-1/2 bg-white text-black shadow-lg rounded-lg p-6 grid grid-cols-1 gap-4 w-60 z-10 -ml-20"
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.4, ease: "easeInOut" }}
-                        >
-                          {item.subItems.map((subItem, subIndex) => (
-                            <Link
-                              key={subIndex}
-                              href={subItem.href}
-                              className="text-sm text-blue-500 hover:text-slate-800 transition-colors hover:bg-slate-200 p-1 rounded-md"
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  )}
-                </li>
-              ))}
-              
-          </ul>
-            
-          </nav>
-          <div className="flex items-center justify-end gap-3 w-36 animate__animated animate__fadeInDown">
-            <button
-              className={`transition-colors ${
-                isHovered ? "text-blue-500" : "text-white"
-              } hover:text-blue-700`}
+                    {item.name}
+                  </motion.span>
+                </Link>
+              </div>
+            ))}
+          </nav>{" "}
+          <div className="flex items-center justify-end gap-3 w-36">
+            {" "}
+            <motion.button
+              className="cursor-pointer"
+              animate={{
+                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              }}
+              whileHover={{
+                color: "#1d4ed8",
+              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               aria-label="Information"
             >
               <svg
@@ -199,67 +305,85 @@ function Header() {
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-            </button>
-            {/* Currency dropdown */}
-            <div className="relative mt-1"
-                 onMouseEnter={handleCurrencyMouseEnter}
-                 onMouseLeave={handleCurrencyMouseLeave}>
-                
-                <button
-                className={`transition-colors ${
-                  isHovered ? "text-blue-500" : "text-white"
-                } hover:text-blue-700`}
-                aria-label="Currency"
+            </motion.button>
+            <motion.button
+              className="cursor-pointer"
+              animate={{
+                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              }}
+              whileHover={{
+                color: "#1d4ed8",
+              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              aria-label="Language"
+            >
+              {" "}
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                animate={{
+                  fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                viewBox="0 0 256 256"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill={`${isHovered ? "#212061" : "#ffffff"}`}
-                  viewBox="0 0 256 256"
-                >
-                  <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
-                </svg>
-              </button>
-              <AnimatePresence>
-                {isCurrencyOpen && (
-                  <motion.div
-                    className="absolute mt-8 transform -translate-x-1/2 bg-white text-black shadow-lg rounded-lg p-6 grid grid-cols-1 gap-4 w-20 z-10 -ml-10"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                  >
-                    {currencyItems.map((subItem, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        href={"#"}
-                        className="text-sm text-blue-500 hover:text-slate-800 transition-colors hover:bg-slate-200 p-1 rounded-md"
-                      >
-                        {subItem.title}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-
-            </div>
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
+              </motion.svg>
+            </motion.button>{" "}
+            <motion.button
+              className="cursor-pointer"
+              animate={{
+                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              }}
+              whileHover={{
+                color: "#1d4ed8",
+              }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              aria-label="Contact"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
+                />
+              </svg>
+            </motion.button>
           </div>
-        </div>
-      </header>
+        </div>{" "}
+        {/* Mega Menu */}
+        {activeMegaMenu &&
+          megaMenuData[activeMegaMenu as keyof typeof megaMenuData] && (
+            <MegaMenu
+              data={megaMenuData[activeMegaMenu as keyof typeof megaMenuData]}
+              isVisible={true}
+            />
+          )}
+      </motion.header>
     );
   }
-
   // White header that appears when scrolling up
   return (
     <>
-      {/* Transparent Header */}
-      <header
-        className={`w-full absolute top-0 z-50 bg-transparent transition-all duration-1000 ease-in-out ${
-          isWhiteHeader ? " pointer-events-none translate-y-0" : "opacity-100"
-        }`}
+      {/* Transparent Header */}{" "}
+      {/* <motion.header
+        className="w-full absolute top-0 z-50 bg-transparent"
+        animate={{
+          opacity: isWhiteHeader ? 0 : 1,
+        }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        style={{
+          pointerEvents: isWhiteHeader ? "none" : "auto",
+        }}
       >
-        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 animate__animated animate__fadeInDown">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
           {" "}
           <div className="flex items-center">
             <Link href="/">
@@ -346,19 +470,29 @@ function Header() {
                   strokeWidth={2}
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
                 />
-              </svg>
+              </svg>{" "}
             </button>
           </div>
         </div>
-      </header>
-
+      </motion.header>{" "} */}
       {/* White Header */}
-      <header
-        className={`w-full fixed top-0 z-50 transition-all duration-1000 ease-in-out ${
-          isWhiteHeader
-            ? "opacity-100 translate-y-0 bg-white shadow-sm rounded-b-lg"
-            : "opacity-0 pointer-events-none"
-        }`}
+      {/* <motion.header
+        className="w-full fixed top-0 z-50"
+        animate={{
+          opacity: isWhiteHeader ? 1 : 0,
+          y: isWhiteHeader ? 0 : -10,
+          backgroundColor: "rgba(255, 255, 255, 1)",
+        }}
+        transition={{
+          duration: isWhiteHeader ? 0.15 : 0.1,
+          ease: "easeInOut",
+        }}
+        style={{
+          pointerEvents: isWhiteHeader ? "auto" : "none",
+          boxShadow: isWhiteHeader
+            ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+            : "none",
+        }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
           {" "}
@@ -439,12 +573,11 @@ function Header() {
                   strokeWidth={2}
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
                 />
-              </svg>
+              </svg>{" "}
             </button>
           </div>
         </div>
-      </header>
-      
+      </motion.header> */}
     </>
   );
 }
