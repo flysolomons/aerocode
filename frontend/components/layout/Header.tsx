@@ -36,7 +36,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
             column.items?.map((item: any) => ({
               name: item.title,
               description: "", // Add description if available in your GraphQL
-              href: item.url || item.externalUrl || "#",
+              href: item.url || "#",
             })) || [],
         })) || [];
 
@@ -173,11 +173,10 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
       ? transformedMegaMenuData
       : megaMenuData;
 
-  console.log("Final mega menu data being used:", finalMegaMenuData);
-  // Transform header menu data into navigation items
+  console.log("Final mega menu data being used:", finalMegaMenuData);  // Transform header menu data into navigation items
   const navigationItems = headerMenus[0]?.menuItems?.map((menuItem: any) => ({
     name: menuItem.title,
-    path: menuItem.url || menuItem.externalLink || "#",
+    path: menuItem.url || "#",
     key: menuItem.title.toLowerCase(),
   })) || [
     // Fallback navigation items

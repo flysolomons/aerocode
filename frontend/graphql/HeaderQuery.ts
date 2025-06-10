@@ -13,7 +13,6 @@ export interface PageChooserBlock {
 export interface MegaMenuItemBlock {
   __typename?: string;
   title: string;
-  externalUrl?: string;
   blocks?: (PageChooserBlock | { __typename?: string })[];
 }
 
@@ -31,7 +30,6 @@ export interface MegaMenuColumnBlock {
 export interface MegaMenuBlock {
   __typename?: string;
   title: string;
-  externalLink?: string;
   blocks: (PageChooserBlock | { __typename?: string; items?: MegaMenuColumnBlock[] })[];
 }
 
@@ -53,7 +51,6 @@ export const GET_HEADER_MENU = gql`
       menuItems {
         ... on MegaMenuBlock {
           title
-          externalLink
           blocks {
             ... on PageChooserBlock {
               page {
@@ -69,7 +66,6 @@ export const GET_HEADER_MENU = gql`
                       items {
                         ... on MegaMenuItemBlock {
                           title
-                          externalUrl
                           blocks {
                             ... on PageChooserBlock {
                               page {
@@ -95,7 +91,6 @@ export const GET_HEADER_MENU = gql`
 export interface TransformedMegaMenuItemBlock {
   title: string;
   url?: string;
-  externalUrl?: string;
 }
 
 export interface TransformedMegaMenuColumnBlock {
@@ -106,7 +101,6 @@ export interface TransformedMegaMenuColumnBlock {
 export interface TransformedMegaMenuBlock {
   title: string;
   url?: string;
-  externalLink?: string;
   columns: TransformedMegaMenuColumnBlock[];
 }
 
@@ -123,7 +117,6 @@ function transformMegaMenuBlock(
 ): TransformedMegaMenuBlock {
   const transformed: TransformedMegaMenuBlock = {
     title: block.title,
-    externalLink: block.externalLink,
     columns: [],
   };
 
@@ -138,7 +131,7 @@ function transformMegaMenuBlock(
     | undefined;
   if (pageChooserBlock) {
     transformed.url = pageChooserBlock.page.url;
-  }  // Extract columns from ListBlock
+  }// Extract columns from ListBlock
   const listBlock = block.blocks.find((b) => b.__typename === "ListBlock" && "items" in b) as
     | { items: MegaMenuColumnBlock[] }
     | undefined;
@@ -148,11 +141,9 @@ function transformMegaMenuBlock(
       const columnListBlock = column.blocks.find((b) => b.__typename === "ListBlock" && "items" in b) as { items: MegaMenuItemBlock[] } | undefined;
       
       return {
-        columnTitle: column.columnTitle,
-        items: columnListBlock?.items.map((item) => {
+        columnTitle: column.columnTitle,        items: columnListBlock?.items.map((item) => {
           const transformedItem: TransformedMegaMenuItemBlock = {
             title: item.title,
-            externalUrl: item.externalUrl,
           };
 
           // Extract URL from PageChooserBlock if it exists (skip CharBlocks)

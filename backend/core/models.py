@@ -15,7 +15,9 @@ from .blocks import (
     GridCardSectionBlock,
     HeadingTextBlock,
     MegaMenuBlock,
+    MegaMenuColumnBlock,
 )
+from wagtail.blocks import ListBlock
 
 from grapple.helpers import register_query_field
 from wagtail.snippets.models import register_snippet
@@ -135,3 +137,40 @@ class HeaderMenu(models.Model):
 
 
 # footer
+@register_snippet
+@register_query_field("footer_menu")
+class FooterMenu(models.Model):
+    name = models.CharField(
+        max_length=100, help_text="Name of the footer menu (e.g., Footer Menu)"
+    )
+    menu_items = StreamField(
+        [
+            ("mega_menu_item", ListBlock(MegaMenuColumnBlock())),
+        ],
+        use_json_field=True,
+        blank=True,
+    )
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("menu_items"),
+    ]
+
+    graphql_fields = [
+        GraphQLString("name"),
+        GraphQLStreamfield("menu_items"),
+    ]
+
+    def clean(self):
+        # Ensure only one FooterMenu instance exists
+        if FooterMenu.objects.exclude(id=self.id).exists():
+            raise ValidationError(
+                "Only one FooterMenu instance is allowed. Please edit the existing Footer Menu instead of creating a new one."
+            )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Footer Menu"
+        verbose_name_plural = "Footer Menu"

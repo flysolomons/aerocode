@@ -1,102 +1,89 @@
-function Footer() {
-  const isProd = process.env.NODE_ENV === "production";
+import Link from "next/link";
+import { TransformedFooterMenu } from "@/graphql/FooterQuery";
+
+interface FooterProps {
+  footerMenus?: TransformedFooterMenu[];
+}
+
+function Footer({ footerMenus }: FooterProps) {
+  // Get the first footer menu (assuming there's typically one main footer menu)
+  const footerMenu =
+    footerMenus && footerMenus.length > 0 ? footerMenus[0] : null;
+
+  // Fallback data if no footer menu is provided
+  const fallbackColumns = [
+    {
+      columnTitle: "Services",
+      items: [
+        { title: "Book a Trip", url: "/book" },
+        { title: "Manage Booking", url: "/manage" },
+        { title: "Cargo Information", url: "/cargo" },
+      ],
+    },
+    {
+      columnTitle: "Destinations",
+      items: [
+        { title: "Flights to Brisbane", url: "/flights/brisbane" },
+        { title: "Flights to Auckland", url: "/flights/auckland" },
+        { title: "Flights to Port Vila", url: "/flights/port-vila" },
+        { title: "Flights to Santo", url: "/flights/santo" },
+        { title: "Flights to Munda", url: "/flights/munda" },
+        { title: "Flights to Gizo", url: "/flights/gizo" },
+      ],
+    },
+    {
+      columnTitle: "Policies",
+      items: [
+        { title: "Baggage Information", url: "/baggage" },
+        { title: "Conditions of Carriage", url: "/conditions" },
+        { title: "Fare Conditions", url: "/fare-conditions" },
+        { title: "Terms of Service", url: "/terms" },
+        { title: "Privacy Policy", url: "/privacy" },
+      ],
+    },
+    {
+      columnTitle: "Company",
+      items: [
+        { title: "About", url: "/about" },
+        { title: "Careers", url: "/careers" },
+        { title: "News", url: "/news" },
+      ],
+    },
+    {
+      columnTitle: "Help",
+      items: [
+        { title: "Contact us", url: "/contact" },
+        { title: "Travel Alerts", url: "/alerts" },
+      ],
+    },
+  ];
+
+  // Use footer menu data if available, otherwise use fallback
+  const columnsToRender = footerMenu?.columns || fallbackColumns;
+
   return (
     <footer className="bg-blue-600 text-white pt-8">
       <div className="container mx-auto px-4 max-w-[70.5rem]">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
-          {/* Services Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Services</h3>
-            <ul className="space-y-2 text-xs font-normal">
-              <li>
-                <a href="/book">Book a Trip</a>
-              </li>
-              <li>
-                <a href="/manage">Manage Booking</a>
-              </li>
-              <li>
-                <a href="/cargo">Cargo Information</a>
-              </li>
-            </ul>
-          </div>
+          {/* Dynamic Columns from FooterQuery */}
+          {columnsToRender.map((column, index) => (
+            <div key={index}>
+              <h3 className="text-sm font-semibold mb-2">
+                {column.columnTitle}
+              </h3>
+              <ul className="space-y-2 text-xs font-normal">
+                {column.items.map((item, itemIndex) => (
+                  <li key={itemIndex}>
+                    <Link href={item.url || "#"} className="hover:underline">
+                      {item.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
-          {/* Destinations Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Destinations</h3>
-            <ul className="space-y-2 text-xs font-normal">
-              <li>
-                <a href="/flights/brisbane">Flights to Brisbane</a>
-              </li>
-              <li>
-                <a href="/flights/auckland">Flights to Auckland</a>
-              </li>
-              <li>
-                <a href="/flights/port-vila">Flights to Port Vila</a>
-              </li>
-              <li>
-                <a href="/flights/santo">Flights to Santo</a>
-              </li>
-              <li>
-                <a href="/flights/munda">Flights to Munda</a>
-              </li>
-              <li>
-                <a href="/flights/gizo">Flights to Gizo</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Policies Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Policies</h3>
-            <ul className="space-y-2 text-xs font-normal">
-              <li>
-                <a href="/baggage">Baggage Information</a>
-              </li>
-              <li>
-                <a href="/conditions">Conditions of Carriage</a>
-              </li>
-              <li>
-                <a href="/fare-conditions">Fare Conditions</a>
-              </li>
-              <li>
-                <a href="/terms">Terms of Service</a>
-              </li>
-              <li>
-                <a href="/privacy">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Company Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Company</h3>
-            <ul className="space-y-2 text-xs font-normal">
-              <li>
-                <a href="/about">About</a>
-              </li>
-              <li>
-                <a href="/careers">Careers</a>
-              </li>
-              <li>
-                <a href="/news">News</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Help Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Help</h3>
-            <ul className="space-y-2 text-xs font-normal">
-              <li>
-                <a href="/contact">Contact us</a>
-              </li>
-              <li>
-                <a href="/alerts">Travel Alerts</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Follow Us Column */}
+          {/* Follow Us Column - Static (last column) */}
           <div>
             <h3 className="text-sm font-semibold mb-2">Follow Us</h3>
             <div className="space-x-4">
@@ -120,17 +107,10 @@ function Footer() {
           <p>Solomon Airlines. All Rights Reserved</p>
         </div>
       </div>
-      {isProd ? (
-        <div
-          className="h-[86px] w-full bg-[url('/design.svg')] bg-repeat-x mt-8 [background-size:422px_86px]"
-          aria-hidden="true"
-        ></div>
-      ) : (
-        <div
-          className="h-[86px] w-full bg-[url('/design.svg')] bg-repeat-x mt-8 [background-size:422px_86px]"
-          aria-hidden="true"
-        ></div>
-      )}
+      <div
+        className="h-[86px] w-full bg-[url('/design.svg')] bg-repeat-x mt-8 [background-size:422px_86px]"
+        aria-hidden="true"
+      ></div>
     </footer>
   );
 }

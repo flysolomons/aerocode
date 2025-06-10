@@ -7,6 +7,10 @@ import {
   fetchHeaderMenuServer,
   fallbackHeaderMenu,
 } from "../graphql/HeaderQuery";
+import {
+  fetchFooterMenuServer,
+  fallbackFooterMenu,
+} from "../graphql/FooterQuery";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,12 +50,24 @@ export default async function RootLayout({
     );
   }
 
+  // Fetch footer menu data server-side
+  let footerMenus = fallbackFooterMenu;
+
+  try {
+    footerMenus = await fetchFooterMenuServer();
+  } catch (error) {
+    console.error(
+      "Failed to fetch footer menu in layout, using fallback:",
+      error
+    );
+  }
+
   return (
     <html lang="en">
       <body className={`${inter.variable} ${rubik.variable} antialiased`}>
         <Header headerMenus={headerMenus} />
         {children}
-        <Footer />
+        <Footer footerMenus={footerMenus} />
       </body>
     </html>
   );
