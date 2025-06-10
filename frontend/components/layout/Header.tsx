@@ -1,10 +1,12 @@
 "use client";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { TransformedHeaderMenu } from "@/graphql/HeaderQuery";
 
-function Header() {
+function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
   const [isWhiteHeader, setIsWhiteHeader] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -12,7 +14,42 @@ function Header() {
   const [isHovered, setIsHovered] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
 
-  // Dummy data for mega menus
+  // Debug: Log the passed header menus
+  console.log("Header Menus received:", headerMenus);
+  // Transform headerMenus data into megaMenuData structure
+  const transformedMegaMenuData = React.useMemo(() => {
+    if (!headerMenus || !headerMenus[0]?.menuItems) {
+      console.log("No header menu data, using fallback");
+      return {};
+    }
+
+    const transformed: any = {};
+
+    headerMenus[0].menuItems.forEach((menuItem: any) => {
+      const key = menuItem.title.toLowerCase();
+
+      // Transform the new structure with columns
+      const sections =
+        menuItem.columns?.map((column: any) => ({
+          title: column.columnTitle,
+          items:
+            column.items?.map((item: any) => ({
+              name: item.title,
+              description: "", // Add description if available in your GraphQL
+              href: item.url || item.externalUrl || "#",
+            })) || [],
+        })) || [];
+
+      transformed[key] = {
+        sections: sections,
+      };
+    });
+
+    console.log("Transformed mega menu data:", transformed);
+    return transformed;
+  }, [headerMenus]);
+
+  // Fallback data for mega menus
   const megaMenuData = {
     explore: {
       // title: "Explore Destinations",
@@ -128,7 +165,28 @@ function Header() {
         },
       ],
     },
-  }; // Mega Menu Component
+  };
+
+  // Use transformed data if available, otherwise use fallback
+  const finalMegaMenuData =
+    Object.keys(transformedMegaMenuData).length > 0
+      ? transformedMegaMenuData
+      : megaMenuData;
+
+  console.log("Final mega menu data being used:", finalMegaMenuData);
+  // Transform header menu data into navigation items
+  const navigationItems = headerMenus[0]?.menuItems?.map((menuItem: any) => ({
+    name: menuItem.title,
+    path: menuItem.url || menuItem.externalLink || "#",
+    key: menuItem.title.toLowerCase(),
+  })) || [
+    // Fallback navigation items
+    { name: "Explore", path: "/explore", key: "explore" },
+    { name: "Experience", path: "/experience", key: "experience" },
+    { name: "Belama", path: "/belama", key: "belama" },
+  ];
+
+  console.log("Navigation items:", navigationItems); // Mega Menu Component
   const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
     <AnimatePresence>
       {isVisible && (
@@ -150,18 +208,25 @@ function Header() {
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
+                    {" "}
                     {section.items.map((item: any, itemIndex: number) => (
                       <li key={itemIndex}>
                         <Link
-                          href="#"
+                          href={item.href || "#"}
                           className="group block p-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                          onClick={() => {
+                            setActiveMegaMenu(null);
+                            setIsHovered(false);
+                          }}
                         >
                           <div className="text-sm font-medium text-gray-800 group-hover:text-blue-600">
                             {item.name}
                           </div>
-                          <div className="text-xs text-gray-500">
-                            {item.description}
-                          </div>
+                          {item.description && (
+                            <div className="text-xs text-gray-500">
+                              {item.description}
+                            </div>
+                          )}
                         </Link>
                       </li>
                     ))}
@@ -248,19 +313,23 @@ function Header() {
                 />
               </motion.div>
             </Link>
-          </div>
+          </div>{" "}
           <nav className="flex items-center space-x-8 justify-between font-sans relative">
-            {[
-              { name: "Explore", path: "/explore", key: "explore" },
-              { name: "Experience", path: "/experience", key: "experience" },
-              { name: "Belama", path: "/belama", key: "belama" },
-            ].map((item) => (
+            {" "}
+            {navigationItems.map((item: any) => (
               <div
                 key={item.name}
                 className="relative"
                 onMouseEnter={() => setActiveMegaMenu(item.key)}
               >
-                <Link href={item.path}>
+                {" "}
+                <Link
+                  href={item.path}
+                  onClick={() => {
+                    setActiveMegaMenu(null);
+                    // Don't reset hover state since user is still hovering over header
+                  }}
+                >
                   <motion.span
                     className="text-sm font-bold cursor-pointer"
                     animate={{
@@ -360,9 +429,15 @@ function Header() {
         </div>{" "}
         {/* Mega Menu */}
         {activeMegaMenu &&
-          megaMenuData[activeMegaMenu as keyof typeof megaMenuData] && (
+          finalMegaMenuData[
+            activeMegaMenu as keyof typeof finalMegaMenuData
+          ] && (
             <MegaMenu
-              data={megaMenuData[activeMegaMenu as keyof typeof megaMenuData]}
+              data={
+                finalMegaMenuData[
+                  activeMegaMenu as keyof typeof finalMegaMenuData
+                ]
+              }
               isVisible={true}
             />
           )}

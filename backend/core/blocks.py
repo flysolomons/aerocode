@@ -1,7 +1,14 @@
 from wagtail.blocks import CharBlock, ChoiceBlock, ListBlock, RichTextBlock, StructBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.blocks import PageChooserBlock
 from grapple.helpers import register_streamfield_block
-from grapple.models import GraphQLImage, GraphQLString, GraphQLCollection
+from grapple.models import (
+    GraphQLImage,
+    GraphQLString,
+    GraphQLCollection,
+    GraphQLForeignKey,
+    GraphQLStreamfield,
+)
 
 
 @register_streamfield_block
@@ -111,3 +118,74 @@ class HeadingTextBlock(StructBlock):
 
     class Meta:
         graphql_type = "HeadingTextBlock"
+
+
+@register_streamfield_block
+class MegaMenuItemBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100, help_text="Item title")
+    link_page = PageChooserBlock(required=False, help_text="Select a page to link to.")
+    external_url = CharBlock(
+        required=False, max_length=200, help_text="Enter an external URL to link to."
+    )
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("link_page", name="linkPage"),
+        GraphQLString("external_url", name="externalUrl"),
+    ]
+
+    # only external URL or page link can be set, not both
+    # def clean(self):
+    #     super().clean()
+    #     if self.value.get("link_page") and self.value.get("external_url"):
+    #         raise ValueError(
+    #             "You can only set either a page link or an external URL, not both."
+    #         )
+
+    class Meta:
+        graphql_type = "MegaMenuItemBlock"
+
+
+@register_streamfield_block
+class MegaMenuColumnBlock(StructBlock):
+    column_title = CharBlock(required=True, max_length=100, help_text="Column title")
+    items = ListBlock(MegaMenuItemBlock())
+
+    graphql_fields = [
+        GraphQLString("column_title", name="columnTitle"),
+    ]
+
+    class Meta:
+        graphql_type = "MegaMenuColumnBlock"
+
+
+@register_streamfield_block
+class MegaMenuBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    link_page = PageChooserBlock(
+        required=False,
+        help_text="Select a page to link to.",
+    )
+    external_link = CharBlock(
+        required=False,
+        max_length=200,
+        help_text="Enter an external URL to link to.",
+    )
+    columns = ListBlock(MegaMenuColumnBlock())
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("link_page", name="linkPage"),
+        GraphQLString("external_link", name="externalLink"),
+    ]
+
+    # only external link or page link can be set, not both
+    # def clean(self):
+    #     super().clean()
+    #     if self.value.get("link_page") and self.value.get("external_link"):
+    #         raise ValueError(
+    #             "You can only set either a page link or an external link, not both."
+    #         )
+
+    class Meta:
+        graphql_type = "MegaMenuBlock"

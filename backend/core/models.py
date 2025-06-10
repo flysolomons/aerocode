@@ -14,7 +14,12 @@ from .blocks import (
     SectionBlock,
     GridCardSectionBlock,
     HeadingTextBlock,
+    MegaMenuBlock,
 )
+
+from grapple.helpers import register_query_field
+from wagtail.snippets.models import register_snippet
+from django.core.exceptions import ValidationError
 
 
 class BasePage(Page):
@@ -87,3 +92,46 @@ class GenericPage(BasePage):
     class Meta:
         verbose_name = "Generic Page"
         verbose_name_plural = "Generic Pages"
+
+
+# header
+@register_snippet
+@register_query_field("header_menu")
+class HeaderMenu(models.Model):
+    name = models.CharField(
+        max_length=100, help_text="Name of the menu (e.g., Main Menu)"
+    )
+    menu_items = StreamField(
+        [
+            ("mega_menu_item", MegaMenuBlock()),
+        ],
+        use_json_field=True,
+        blank=True,
+    )
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("menu_items"),
+    ]
+
+    graphql_fields = [
+        GraphQLString("name"),
+        GraphQLStreamfield("menu_items"),
+    ]
+
+    def clean(self):
+        # Ensure only one HeaderMenu instance exists
+        if HeaderMenu.objects.exclude(id=self.id).exists():
+            raise ValidationError(
+                "Only one HeaderMenu instance is allowed. Please edit the existing Header Menu instead of creating a new one."
+            )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Header Menu"
+        verbose_name_plural = "Header Menu"
+
+
+# footer
