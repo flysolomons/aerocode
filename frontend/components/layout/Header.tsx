@@ -176,10 +176,10 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
   const hasMegaMenuContent = (key: string) => {
     const menuData = finalMegaMenuData[key];
     if (!menuData || !menuData.sections) return false;
-    
+
     // Check if there are sections with items
-    return menuData.sections.some((section: any) => 
-      section.items && section.items.length > 0
+    return menuData.sections.some(
+      (section: any) => section.items && section.items.length > 0
     );
   };
 
@@ -324,7 +324,8 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
             </Link>
           </div>{" "}
           <nav className="flex items-center space-x-8 justify-between font-sans relative">
-            {" "}            {navigationItems.map((item: any) => (
+            {" "}
+            {navigationItems.map((item: any) => (
               <div
                 key={item.name}
                 className="relative"

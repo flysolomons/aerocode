@@ -60,7 +60,7 @@ class DestinationIndexPage(BasePage):
 @register_query_field("destination")
 class Destination(BasePage):
     country = models.CharField(
-        max_length=255, blank=True, help_text="Name of Country/Destination"
+        max_length=255, blank=False, help_text="Name of Country/Destination"
     )
 
     reasons_to_visit = StreamField(
@@ -101,7 +101,7 @@ class Route(BasePage):
     destination_country = models.ForeignKey(
         "explore.Destination",
         null=True,
-        blank=True,
+        blank=False,
         on_delete=models.SET_NULL,
         related_name="routes",
         help_text="Destination country for the route",
@@ -114,19 +114,21 @@ class Route(BasePage):
             ("domestic route", "Domestic Route"),
         ],
         default="international route",
+        blank=False,
+        help_text="Scope of the flight route (International or Domestic)",
     )
 
     departure_airport = models.CharField(
-        max_length=255, blank=True, help_text="Departure airport for the route"
+        max_length=255, blank=False, help_text="Departure airport for the route"
     )
     arrival_airport = models.CharField(
-        max_length=255, blank=True, help_text="Arrival airport for the route"
+        max_length=255, blank=False, help_text="Arrival airport for the route"
     )
     departure_airport_code = models.CharField(
-        max_length=3, blank=True, help_text="IATA code for the departure airport"
+        max_length=3, blank=False, help_text="IATA code for the departure airport"
     )
     arrival_airport_code = models.CharField(
-        max_length=3, blank=True, help_text="IATA code for the arrival airport"
+        max_length=3, blank=False, help_text="IATA code for the arrival airport"
     )
 
     name = models.CharField(max_length=20, null=True, blank=True, unique=True)
@@ -217,20 +219,20 @@ class Route(BasePage):
 
 @register_query_field("special")
 class Special(BasePage):
-    name = models.CharField(max_length=20, null=True, blank=True)
+    name = models.CharField(max_length=20, null=True, blank=False)
 
     start_date = models.DateField(
-        null=True, blank=True, help_text="Start date of the flight special"
+        null=True, blank=False, help_text="Start date of the flight special"
     )
 
     end_date = models.DateField(
-        null=True, blank=True, help_text="End date of the flight special"
+        null=True, blank=False, help_text="End date of the flight special"
     )
 
     special_code = models.CharField(
         max_length=50,
         null=True,
-        blank=True,
+        blank=False,
         unique=True,
         help_text="Unique ID for this flight special. This is used for tracking purposes only.",
     )

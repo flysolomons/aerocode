@@ -144,6 +144,8 @@ class MegaMenuColumnBlock(StructBlock):
     column_title = CharBlock(required=True, max_length=100, help_text="Column title")
     items = ListBlock(MegaMenuItemBlock())
 
+    # can add an image here
+
     graphql_fields = [
         GraphQLString("column_title", name="columnTitle"),
     ]
