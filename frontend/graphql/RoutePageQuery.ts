@@ -108,6 +108,20 @@ export const GET_ROUTES_BY_DESTINATION_CODE_QUERY = gql`
   }
 `;
 
+export const GET_ROUTES_BY_FLIGHT_SCOPE_QUERY = gql`
+  query GetRoutesByFlightScope($flightScope: String!) {
+    routes(searchQuery: $flightScope) {
+      departureAirport
+      arrivalAirport
+      departureAirportCode
+      arrivalAirportCode
+      url
+      name
+      nameFull
+    }
+  }
+`;
+
 export const GET_ROUTES_BY_COUNTRY_QUERY = gql`
   query GetRoutesByCountry($country: String!) {
     routes(searchQuery: $country) {
@@ -216,6 +230,36 @@ export async function fetchRoutesByCountry(
     }));
   } catch (error) {
     console.error("Error fetching routes by country:", error);
+    return [];
+  }
+}
+
+export async function fetchRoutesByFlightScope(
+  flightScope: string
+): Promise<RouteSearchResult[]> {
+  try {
+    const { data } = await client.query({
+      query: GET_ROUTES_BY_FLIGHT_SCOPE_QUERY,
+      variables: { flightScope },
+    });
+
+    if (!data.routes || !data.routes.length) {
+      return [];
+    }
+
+    // Return the routes array with default values for missing fields
+    return data.routes.map((route: any) => ({
+      departureAirport: route.departureAirport || "",
+      arrivalAirport: route.arrivalAirport || "",
+      departureAirportCode: route.departureAirportCode || "",
+      arrivalAirportCode: route.arrivalAirportCode || "",
+      url: route.url || "",
+      name: route.name || "",
+      nameFull: route.nameFull || "",
+      __typename: "Route",
+    }));
+  } catch (error) {
+    console.error("Error fetching routes by flight scope:", error);
     return [];
   }
 }
