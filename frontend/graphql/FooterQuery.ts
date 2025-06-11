@@ -21,10 +21,10 @@ export interface MegaMenuItemBlock {
 export interface MegaMenuColumnBlock {
   __typename?: string;
   columnTitle: string;
-  blocks: ({
+  blocks: {
     __typename?: string;
     items?: MegaMenuItemBlock[];
-  })[];
+  }[];
 }
 
 // Interface for footer menu items (ListBlock containing columns)
@@ -169,7 +169,7 @@ export async function fetchFooterMenu(): Promise<TransformedFooterMenu[]> {
       errorPolicy: "all",
     });
 
-    console.log("Footer - Raw GraphQL data:", JSON.stringify(data, null, 2));
+    // console.log("Footer - Raw GraphQL data:", JSON.stringify(data, null, 2));
 
     if (!data.footerMenus || data.footerMenus.length === 0) {
       console.warn("No footer menu items found");
@@ -177,8 +177,8 @@ export async function fetchFooterMenu(): Promise<TransformedFooterMenu[]> {
     }
 
     const transformed = transformFooterMenuData(data.footerMenus);
-    console.log("Footer - Transformed data:", JSON.stringify(transformed, null, 2));
-    
+    // console.log("Footer - Transformed data:", JSON.stringify(transformed, null, 2));
+
     return transformed;
   } catch (error) {
     console.error("Error fetching footer menu data:", error);
@@ -192,7 +192,9 @@ export async function fetchFooterMenu(): Promise<TransformedFooterMenu[]> {
  * Use this in getStaticProps, getServerSideProps, or server components
  * @returns Promise with an array of TransformedFooterMenu objects
  */
-export async function fetchFooterMenuServer(): Promise<TransformedFooterMenu[]> {
+export async function fetchFooterMenuServer(): Promise<
+  TransformedFooterMenu[]
+> {
   try {
     const { data } = await client.query<FooterData>({
       query: GET_FOOTER_MENU,
@@ -200,7 +202,7 @@ export async function fetchFooterMenuServer(): Promise<TransformedFooterMenu[]> 
       errorPolicy: "all",
     });
 
-    console.log("Footer Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
+    // console.log("Footer Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
 
     if (!data.footerMenus || data.footerMenus.length === 0) {
       console.warn("No footer menu items found on server");
@@ -208,8 +210,8 @@ export async function fetchFooterMenuServer(): Promise<TransformedFooterMenu[]> 
     }
 
     const transformed = transformFooterMenuData(data.footerMenus);
-    console.log("Footer Server - Transformed data:", JSON.stringify(transformed, null, 2));
-    
+    // console.log("Footer Server - Transformed data:", JSON.stringify(transformed, null, 2));
+
     return transformed;
   } catch (error) {
     console.error("Error fetching footer menu data on server:", error);

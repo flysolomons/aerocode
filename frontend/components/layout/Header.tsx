@@ -15,7 +15,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
 
   // Debug: Log the passed header menus
-  console.log("Header Menus received:", headerMenus);
+  // console.log("Header Menus received:", headerMenus);
   // Transform headerMenus data into megaMenuData structure
   const transformedMegaMenuData = React.useMemo(() => {
     if (!headerMenus || !headerMenus[0]?.menuItems) {
@@ -45,7 +45,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
       };
     });
 
-    console.log("Transformed mega menu data:", transformed);
+    // console.log("Transformed mega menu data:", transformed);
     return transformed;
   }, [headerMenus]);
 
@@ -173,7 +173,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
       ? transformedMegaMenuData
       : megaMenuData;
 
-  console.log("Final mega menu data being used:", finalMegaMenuData);  // Transform header menu data into navigation items
+  // console.log("Final mega menu data being used:", finalMegaMenuData);  // Transform header menu data into navigation items
   const navigationItems = headerMenus[0]?.menuItems?.map((menuItem: any) => ({
     name: menuItem.title,
     path: menuItem.url || "#",
@@ -185,7 +185,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
     { name: "Belama", path: "/belama", key: "belama" },
   ];
 
-  console.log("Navigation items:", navigationItems); // Mega Menu Component
+  // console.log("Navigation items:", navigationItems); // Mega Menu Component
   const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
     <AnimatePresence>
       {isVisible && (

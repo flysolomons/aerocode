@@ -29,7 +29,6 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
           ? "international route"
           : "domestic route";
         const routeData = await fetchRoutesByFlightScope(flightScope);
-        console.log("Fetched routes:", routeData);
         setRoutes(routeData);
       } catch (error) {
         console.error("Error fetching routes:", error);

@@ -20,17 +20,20 @@ export interface MegaMenuItemBlock {
 export interface MegaMenuColumnBlock {
   __typename?: string;
   columnTitle: string;
-  blocks: ({
+  blocks: {
     __typename?: string;
     items?: MegaMenuItemBlock[];
-  })[];
+  }[];
 }
 
 // Interface for mega menu blocks
 export interface MegaMenuBlock {
   __typename?: string;
   title: string;
-  blocks: (PageChooserBlock | { __typename?: string; items?: MegaMenuColumnBlock[] })[];
+  blocks: (
+    | PageChooserBlock
+    | { __typename?: string; items?: MegaMenuColumnBlock[] }
+  )[];
 }
 
 // Interface for header menu
@@ -126,34 +129,40 @@ function transformMegaMenuBlock(
     return transformed;
   }
   // Extract URL from PageChooserBlock if it exists
-  const pageChooserBlock = block.blocks.find((b) => b.__typename === "PageChooserBlock" && "page" in b) as
-    | PageChooserBlock
-    | undefined;
+  const pageChooserBlock = block.blocks.find(
+    (b) => b.__typename === "PageChooserBlock" && "page" in b
+  ) as PageChooserBlock | undefined;
   if (pageChooserBlock) {
     transformed.url = pageChooserBlock.page.url;
-  }// Extract columns from ListBlock
-  const listBlock = block.blocks.find((b) => b.__typename === "ListBlock" && "items" in b) as
-    | { items: MegaMenuColumnBlock[] }
-    | undefined;
+  } // Extract columns from ListBlock
+  const listBlock = block.blocks.find(
+    (b) => b.__typename === "ListBlock" && "items" in b
+  ) as { items: MegaMenuColumnBlock[] } | undefined;
   if (listBlock && listBlock.items) {
     transformed.columns = listBlock.items.map((column) => {
       // Find the ListBlock within the column's blocks (skip CharBlocks)
-      const columnListBlock = column.blocks.find((b) => b.__typename === "ListBlock" && "items" in b) as { items: MegaMenuItemBlock[] } | undefined;
-      
+      const columnListBlock = column.blocks.find(
+        (b) => b.__typename === "ListBlock" && "items" in b
+      ) as { items: MegaMenuItemBlock[] } | undefined;
+
       return {
-        columnTitle: column.columnTitle,        items: columnListBlock?.items.map((item) => {
-          const transformedItem: TransformedMegaMenuItemBlock = {
-            title: item.title,
-          };
+        columnTitle: column.columnTitle,
+        items:
+          columnListBlock?.items.map((item) => {
+            const transformedItem: TransformedMegaMenuItemBlock = {
+              title: item.title,
+            };
 
-          // Extract URL from PageChooserBlock if it exists (skip CharBlocks)
-          const itemPageChooserBlock = item.blocks?.find((b) => b.__typename === "PageChooserBlock" && "page" in b) as PageChooserBlock | undefined;
-          if (itemPageChooserBlock) {
-            transformedItem.url = itemPageChooserBlock.page.url;
-          }
+            // Extract URL from PageChooserBlock if it exists (skip CharBlocks)
+            const itemPageChooserBlock = item.blocks?.find(
+              (b) => b.__typename === "PageChooserBlock" && "page" in b
+            ) as PageChooserBlock | undefined;
+            if (itemPageChooserBlock) {
+              transformedItem.url = itemPageChooserBlock.page.url;
+            }
 
-          return transformedItem;
-        }) || []
+            return transformedItem;
+          }) || [],
       };
     });
   }
@@ -174,7 +183,7 @@ function transformHeaderMenuData(
 
   return headerMenus.map((menu) => ({
     name: menu.name,
-    menuItems: Array.isArray(menu.menuItems) 
+    menuItems: Array.isArray(menu.menuItems)
       ? menu.menuItems.map(transformMegaMenuBlock)
       : [],
   }));
@@ -192,7 +201,7 @@ export async function fetchHeaderMenu(): Promise<TransformedHeaderMenu[]> {
       errorPolicy: "all",
     });
 
-    console.log("Raw GraphQL data:", JSON.stringify(data, null, 2));
+    // console.log("Raw GraphQL data:", JSON.stringify(data, null, 2));
 
     if (!data.headerMenus || data.headerMenus.length === 0) {
       console.warn("No menu items found");
@@ -200,8 +209,8 @@ export async function fetchHeaderMenu(): Promise<TransformedHeaderMenu[]> {
     }
 
     const transformed = transformHeaderMenuData(data.headerMenus);
-    console.log("Transformed data:", JSON.stringify(transformed, null, 2));
-    
+    // console.log("Transformed data:", JSON.stringify(transformed, null, 2));
+
     return transformed;
   } catch (error) {
     console.error("Error fetching header menu data:", error);
@@ -225,7 +234,7 @@ export async function fetchHeaderMenuServer(): Promise<
       errorPolicy: "all",
     });
 
-    console.log("Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
+    // console.log("Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
 
     if (!data.headerMenus || data.headerMenus.length === 0) {
       console.warn("No menu items found on server");
@@ -233,8 +242,8 @@ export async function fetchHeaderMenuServer(): Promise<
     }
 
     const transformed = transformHeaderMenuData(data.headerMenus);
-    console.log("Server - Transformed data:", JSON.stringify(transformed, null, 2));
-    
+    // console.log("Server - Transformed data:", JSON.stringify(transformed, null, 2));
+
     return transformed;
   } catch (error) {
     console.error("Error fetching header menu data on server:", error);
