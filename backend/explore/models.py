@@ -107,6 +107,15 @@ class Route(BasePage):
         help_text="Destination country for the route",
     )
 
+    flight_scope = models.CharField(
+        max_length=20,
+        choices=[
+            ("international route", "International Route"),
+            ("domestic route", "Domestic Route"),
+        ],
+        default="international route",
+    )
+
     departure_airport = models.CharField(
         max_length=255, blank=True, help_text="Departure airport for the route"
     )
@@ -126,6 +135,7 @@ class Route(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
+        FieldPanel("flight_scope", heading="Flight Scope"),
         FieldPanel("departure_airport", heading="Departure Airport"),
         FieldPanel("arrival_airport", heading="Arrival Airport"),
         FieldPanel("departure_airport_code", heading="Departure Airport Code"),
@@ -141,6 +151,7 @@ class Route(BasePage):
                 index.SearchField("country", partial_match=True),
             ],
         ),
+        index.SearchField("flight_scope", partial_match=True),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
@@ -154,6 +165,7 @@ class Route(BasePage):
         # GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
         GraphQLCollection(GraphQLForeignKey, "fares", "fares.Fare"),
         GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
+        GraphQLString("flight_scope", name="flightScope"),
     ]
 
     parent_page_types = ["explore.Destination"]
