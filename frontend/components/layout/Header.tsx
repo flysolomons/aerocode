@@ -166,12 +166,22 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
       ],
     },
   };
-
   // Use transformed data if available, otherwise use fallback
   const finalMegaMenuData =
     Object.keys(transformedMegaMenuData).length > 0
       ? transformedMegaMenuData
       : megaMenuData;
+
+  // Helper function to check if a mega menu has content
+  const hasMegaMenuContent = (key: string) => {
+    const menuData = finalMegaMenuData[key];
+    if (!menuData || !menuData.sections) return false;
+    
+    // Check if there are sections with items
+    return menuData.sections.some((section: any) => 
+      section.items && section.items.length > 0
+    );
+  };
 
   // console.log("Final mega menu data being used:", finalMegaMenuData);  // Transform header menu data into navigation items
   const navigationItems = headerMenus[0]?.menuItems?.map((menuItem: any) => ({
@@ -314,12 +324,16 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
             </Link>
           </div>{" "}
           <nav className="flex items-center space-x-8 justify-between font-sans relative">
-            {" "}
-            {navigationItems.map((item: any) => (
+            {" "}            {navigationItems.map((item: any) => (
               <div
                 key={item.name}
                 className="relative"
-                onMouseEnter={() => setActiveMegaMenu(item.key)}
+                onMouseEnter={() => {
+                  // Only activate mega menu if it has content
+                  if (hasMegaMenuContent(item.key)) {
+                    setActiveMegaMenu(item.key);
+                  }
+                }}
               >
                 {" "}
                 <Link
