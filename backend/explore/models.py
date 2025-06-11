@@ -20,16 +20,16 @@ from django import forms
 class ExploreIndexPage(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
     ]
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
     ]
     parent_page_types = ["home.HomePage"]
 
@@ -40,16 +40,16 @@ class ExploreIndexPage(BasePage):
 class DestinationIndexPage(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
     ]
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
     ]
     parent_page_types = ["explore.ExploreIndexPage"]
 
@@ -339,16 +339,16 @@ class SpecialRoute(models.Model):
 class SpecialsIndexPage(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
     ]
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
     ]
     parent_page_types = ["explore.ExploreIndexPage"]
 
@@ -359,11 +359,11 @@ class SpecialsIndexPage(BasePage):
 class WhereWeFly(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
 
     domestic_routes = models.ForeignKey(
         "wagtailimages.Image",
@@ -384,13 +384,13 @@ class WhereWeFly(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
         FieldPanel("domestic_routes", heading="Domestic Routes"),
         FieldPanel("international_routes", heading="International Routes"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
         GraphQLImage("domestic_routes", name="domesticRoutes"),
         GraphQLImage("international_routes", name="internationalRoutes"),
     ]
@@ -404,16 +404,16 @@ class WhereWeFly(BasePage):
 class FlightSchedule(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
     ]
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
     ]
     parent_page_types = ["explore.ExploreIndexPage"]
 

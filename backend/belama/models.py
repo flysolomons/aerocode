@@ -10,11 +10,11 @@ from grapple.models import GraphQLImage, GraphQLString, GraphQLStreamfield
 class BelamaIndexPage(BasePage):
     max_count = 1
 
-    description = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="A short description of the page.",
-    )
+    # description = models.CharField(
+    #     max_length=255,
+    #     blank=True,
+    #     help_text="A short description of the page.",
+    # )
 
     individual_memberships = StreamField(
         [
@@ -44,14 +44,14 @@ class BelamaIndexPage(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("description"),
+        # FieldPanel("description"),
         FieldPanel("individual_memberships"),
         FieldPanel("promo_image"),
         FieldPanel("group_memberships"),
     ]
 
-    graphql_fields = [
-        GraphQLString("description", name="description"),
+    graphql_fields = BasePage.graphql_fields + [
+        # GraphQLString("description", name="description"),
         GraphQLImage("promo_image", name="promoImage"),
         GraphQLStreamfield("individual_memberships", name="individualMemberships"),
         GraphQLStreamfield("group_memberships", name="groupMemberships"),
@@ -65,18 +65,18 @@ class BelamaIndexPage(BasePage):
 class BelamaSignUpPage(BasePage):
     max_count = 1
 
-    description = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="A short description of the page.",
-    )
+    # description = models.CharField(
+    #     max_length=255,
+    #     blank=True,
+    #     help_text="A short description of the page.",
+    # )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("description"),
+        # FieldPanel("description"),
     ]
 
     graphql_fields = [
-        GraphQLString("description", name="description"),
+        # GraphQLString("description", name="description"),
     ]
 
     parent_page_types = ["belama.BelamaIndexPage"]

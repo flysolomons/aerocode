@@ -37,13 +37,21 @@ class BasePage(Page):
         help_text="Image that will be displayed on this page's hero section",
     )
 
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="A short description of the page.",
+    )
+
     content_panels = Page.content_panels + [
         FieldPanel("hero_image", heading="Hero Image"),
+        FieldPanel("description", heading="Description"),
     ]
 
     graphql_fields = [
         GraphQLString("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
+        GraphQLString("description", name="description"),
     ]
 
     def clean(self):
