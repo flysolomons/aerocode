@@ -182,3 +182,56 @@ class FooterMenu(models.Model):
     class Meta:
         verbose_name = "Footer Menu"
         verbose_name_plural = "Footer Menu"
+
+
+# snippet currency
+
+# Name of the Contry
+# Name of the currency
+# Currency code
+# Currency symbol
+# Country flag
+
+
+@register_snippet
+@register_query_field("currency", "currencies")
+class Currency(models.Model):
+    country_name = models.CharField(max_length=100, help_text="Name of the country")
+    currency_name = models.CharField(max_length=100, help_text="Name of the currency")
+    currency_code = models.CharField(
+        max_length=10, help_text="Currency code (e.g., USD, EUR)"
+    )
+    currency_symbol = models.CharField(
+        max_length=10, help_text="Symbol for the currency (e.g., $, €)"
+    )
+    flag_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Flag icon for the country",
+    )
+
+    panels = [
+        FieldPanel("country_name"),
+        FieldPanel("currency_name"),
+        FieldPanel("currency_code"),
+        FieldPanel("currency_symbol"),
+        FieldPanel("flag_image"),
+    ]
+
+    graphql_fields = [
+        GraphQLString("country_name", name="countryName"),
+        GraphQLString("currency_name", name="currencyName"),
+        GraphQLString("currency_code", name="currencyCode"),
+        GraphQLString("currency_symbol", name="currencySymbol"),
+        GraphQLImage("flag_image", name="flagImage"),
+    ]
+
+    def __str__(self):
+        return f"{self.country_name} - {self.currency_name} ({self.currency_code})"
+
+    class Meta:
+        verbose_name = "Currency"
+        verbose_name_plural = "Currencies"
