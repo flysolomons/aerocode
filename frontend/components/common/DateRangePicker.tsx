@@ -50,9 +50,9 @@ export default function DateRangePicker({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0" align="start" side="bottom">
           <Calendar
-            initialFocus
+            // initialFocus
             mode="range"
             defaultMonth={date?.from}
             selected={date}
