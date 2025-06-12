@@ -1,7 +1,16 @@
 from wagtail.blocks import CharBlock, ChoiceBlock, ListBlock, RichTextBlock, StructBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.blocks import PageChooserBlock
 from grapple.helpers import register_streamfield_block
-from grapple.models import GraphQLImage, GraphQLString, GraphQLCollection
+from grapple.models import (
+    GraphQLImage,
+    GraphQLString,
+    GraphQLCollection,
+    GraphQLForeignKey,
+    GraphQLStreamfield,
+)
+
+from django.core.exceptions import ValidationError
 
 
 @register_streamfield_block
@@ -111,3 +120,53 @@ class HeadingTextBlock(StructBlock):
 
     class Meta:
         graphql_type = "HeadingTextBlock"
+
+
+# yourapp/blocks.py
+
+
+@register_streamfield_block
+class MegaMenuItemBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100, help_text="Item title")
+    link_page = PageChooserBlock(required=True, help_text="Select a page to link to.")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("link_page", name="linkPage"),
+    ]
+
+    class Meta:
+        graphql_type = "MegaMenuItemBlock"
+
+
+@register_streamfield_block
+class MegaMenuColumnBlock(StructBlock):
+    column_title = CharBlock(required=True, max_length=100, help_text="Column title")
+    items = ListBlock(MegaMenuItemBlock())
+
+    # can add an image here
+
+    graphql_fields = [
+        GraphQLString("column_title", name="columnTitle"),
+    ]
+
+    class Meta:
+        graphql_type = "MegaMenuColumnBlock"
+
+
+@register_streamfield_block
+class MegaMenuBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    link_page = PageChooserBlock(
+        required=False,
+        help_text="Select a page to link to.",
+    )
+    columns = ListBlock(MegaMenuColumnBlock())
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("link_page", name="linkPage"),
+    ]
+
+    class Meta:
+        graphql_type = "MegaMenuBlock"

@@ -7,16 +7,16 @@ from grapple.models import GraphQLString
 class ExperienceIndexPage(BasePage):
     max_count = 1
 
-    description = RichTextField(
-        features=["bold", "italic", "link"],
-        blank=True,
-        help_text="A short description of the page",
-    )
+    # description = RichTextField(
+    #     features=["bold", "italic", "link"],
+    #     blank=True,
+    #     help_text="A short description of the page",
+    # )
     content_panels = BasePage.content_panels + [
-        FieldPanel("description", heading="Description"),
+        # FieldPanel("description", heading="Description"),
     ]
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("description"),
+        # GraphQLString("description"),
     ]
     parent_page_types = ["home.HomePage"]
 

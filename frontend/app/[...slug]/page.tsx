@@ -127,7 +127,7 @@ export default async function Page({
   const resolvedParams = await params;
   const fullPath = resolvedParams.slug.join("/"); // Full path for urlPath comparison
   const slug = resolvedParams.slug[resolvedParams.slug.length - 1] || "";
-  console.log("Full Path:", fullPath);
+  // console.log("Full Path:", fullPath);
 
   try {
     // workaround just to ignore these unexpected routes
