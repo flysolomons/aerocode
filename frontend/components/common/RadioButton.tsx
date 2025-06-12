@@ -26,7 +26,7 @@ export default function RadioButton({
   return (
     <div className="flex bg-white justify-center border-gray-200 border min-w-[12.5rem] rounded-full shadow-md p-0.5">
       <button
-        className={`text-sm px-6 font-semibold py-2 min-w-[9.75rem] h-[2.5rem] rounded-full transition-colors ${
+        className={`text-xs px-3 font-semibold py-2 min-w-[8.25rem] h-[2rem] rounded-full transition-colors ${
           selected === "one" ? "bg-blue-500 text-white" : "bg-white text-black"
         }`}
         onClick={() => handleOptionClick("one")}
@@ -35,7 +35,7 @@ export default function RadioButton({
         {optionOne}
       </button>
       <button
-        className={`text-sm px-6 font-semibold py-2 min-w-[9.75rem] h-[2.5rem] rounded-full transition-colors ${
+        className={`text-xs px-3 font-semibold py-2 min-w-[8.25rem] h-[2rem] rounded-full transition-colors ${
           selected === "two" ? "bg-blue-500 text-white" : "bg-white text-black"
         }`}
         onClick={() => handleOptionClick("two")}
