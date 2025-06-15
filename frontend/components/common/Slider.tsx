@@ -31,7 +31,7 @@ export default function Slider() {
         autoplay={true}
         pagination={true}
         modules={[Pagination, Navigation, EffectCoverflow]}
-        className="horizionSwiper max-w-[2000px]"
+        className="horizionSwiper w-full max-w-[calc(100vw-2rem)]"
       >
         <SwiperSlide>
           <Image
