@@ -1,4 +1,4 @@
-import RadioButton from "./RadioButton";
+import RadioButton from "@/components/ui/buttons/RadioButton";
 
 export default function StrippedBookingWidget() {
   return (

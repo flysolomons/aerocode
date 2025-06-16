@@ -1,12 +1,12 @@
 // app/news/NewsIndexTemplate.tsx
 "use client";
 
-import SecondaryHero from "@/components/layout/SecondaryHero";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import SkeletonSecondaryHero from "@/components/layout/skeleton/SkeletonSecondaryHero";
-import Container from "@/components/common/Container";
-import NewsCard from "@/components/common/NewsCard";
+import Container from "@/components/layout/Container";
+import NewsCard from "@/components/ui/cards/NewsCard";
 import SkeletonNewsCard from "@/components/layout/skeleton/SkeletonNewsCard";
-import PrimaryButton from "@/components/common/PrimaryButton";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import { useQuery } from "@apollo/client";
 import client from "@/lib/apolloClient";
 import { stripHtmlTags } from "@/lib/utils";

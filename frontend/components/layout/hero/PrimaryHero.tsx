@@ -1,7 +1,7 @@
 // props: card title, image
 
-import BookingWidget from "../common/BookingWidget";
-import StrippedBookingWidget from "../common/StrippedBookingWidget";
+import BookingWidget from "../booking-widget/BookingWidget";
+import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
 
 interface PrimaryHeroProps {
   title: string;

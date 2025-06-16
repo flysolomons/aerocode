@@ -1,4 +1,4 @@
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 
 interface MembershipCardProps {
   title: string;

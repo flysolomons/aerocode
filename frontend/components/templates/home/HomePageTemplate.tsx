@@ -1,16 +1,16 @@
 "use client";
 
 import { HomePage } from "@/graphql/HomePageQuery";
-import Container from "@/components/common/Container";
-import PrimaryHero from "@/components/layout/PrimaryHero";
-import InfoCard from "@/components/common/InfoCard";
+import Container from "@/components/layout/Container";
+import PrimaryHero from "@/components/layout/hero/PrimaryHero";
+import InfoCard from "@/components/ui/cards/InfoCard";
 import Image from "next/image";
-import PrimaryButton from "@/components/common/PrimaryButton";
-import Slider from "@/components/common/Slider";
-import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import Slider from "@/components/layout/Slider";
+import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
 // import InViewWrapper
 //  from "@/components/common/InViewWrapper";
-import MainCarousel from "@/components/layout/MainCarousel";
+import MainCarousel from "@/components/layout/hero/MainCarousel";
 
 interface HomePageTemplateProps {
   initialPage: HomePage;

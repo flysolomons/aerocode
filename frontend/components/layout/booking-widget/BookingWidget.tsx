@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import RadioButton from "./RadioButton";
-import TravelerDropdown, { Travelers } from "./TravelerDropDown";
+import RadioButton from "@/components/ui/buttons/RadioButton";
+import TravelerDropdown from "./TravelerDropDown";
+import { Travelers } from "./TravelerDropDown";
 import {
   fetchDepartureDestinations,
   fetchArrivalDestinations,

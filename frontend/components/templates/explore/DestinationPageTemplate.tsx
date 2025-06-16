@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import Container from "@/components/common/Container";
-import PrimaryHero from "@/components/layout/PrimaryHero";
-import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
-import ReasonToVisitCard from "@/components/common/ReasonToVisit";
-import InfoCard from "@/components/common/InfoCard";
-import RouteCard from "@/components/common/RouteCard";
+import Container from "@/components/layout/Container";
+import PrimaryHero from "@/components/layout/hero/PrimaryHero";
+import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
+import ReasonToVisitCard from "@/components/layout/sections/ReasonToVisit";
+import InfoCard from "@/components/ui/cards/InfoCard";
+import RouteCard from "@/components/ui/cards/RouteCard";
 import {
   DestinationPage,
   DestinationSpecialRoute,
@@ -95,6 +95,8 @@ export default function DestinationTemplate({
                     <InfoCard
                       key={index}
                       title={requirement.title}
+                      svg={"<svg>...</svg> "}
+                      url="<url>"
                       description={requirement.description}
                     />
                   ))}

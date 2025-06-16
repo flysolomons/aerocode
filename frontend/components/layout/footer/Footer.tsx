@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TransformedFooterMenu } from "@/graphql/FooterQuery";
-import SignUP from "../common/SignUp";
+import SignUP from "./SignUp";
 
 interface FooterProps {
   footerMenus?: TransformedFooterMenu[];
@@ -85,7 +85,6 @@ function Footer({ footerMenus }: FooterProps) {
           ))}
         </div>
         {/*End of grid */}
-
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-10 border-b-2 border-indigo-900 pb-6">
           {/* Help Column */}
           <div>
@@ -168,12 +167,10 @@ function Footer({ footerMenus }: FooterProps) {
             </div>
           </div>
         </div>
-
         {/**Sign up for newsletter section */}
         <div className="w-full items-center justify-center">
           <SignUP></SignUP>
         </div>
-
         {/* Insert Logo here-- */}
         <div className="w-[500px] mt-12 m-auto flex flex-auto  items-center justify-items-end">
           <Image
@@ -191,7 +188,8 @@ function Footer({ footerMenus }: FooterProps) {
             height={40}
             className="h-12 w-full"
           />
-        </div>        <div className="mt-12 text-center text-xs border-t-2 border-indigo-900 pt-6">
+        </div>{" "}
+        <div className="mt-12 text-center text-xs border-t-2 border-indigo-900 pt-6">
           <p>All Rights Reserved. 2025</p>
         </div>
       </div>

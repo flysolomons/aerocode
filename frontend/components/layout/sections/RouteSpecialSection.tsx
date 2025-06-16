@@ -1,4 +1,4 @@
-import RouteSpecial from "../common/RouteSpecialCard";
+import RouteSpecial from "@/components/ui/cards/RouteSpecialCard";
 import { SpecialRoute } from "@/graphql/RoutePageQuery";
 import { DestinationSpecialRoute } from "@/graphql/DestinationPageQuery";
 

@@ -74,3 +74,8 @@ ALL GRIDS:
 
 
 for specials sections, maybe make it in a way such that the user can select which three specials to display. the possible ones that are displayed must be valid ones (relevant to that page)
+
+
+components/
+    ui/ --> basic building blocks
+    layout/ --> structure related

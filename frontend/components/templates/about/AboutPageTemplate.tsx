@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
 import Image from "next/image";
 import Link from "next/link";
 

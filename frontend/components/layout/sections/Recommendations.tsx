@@ -1,4 +1,4 @@
-import DestinationCard from "../common/DestinationCard";
+import DestinationCard from "@/components/ui/cards/DestinationCard";
 
 function Recommendations() {
   return (

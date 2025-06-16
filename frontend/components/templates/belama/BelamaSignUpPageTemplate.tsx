@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import PrimaryButton from "@/components/common/PrimaryButton";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 
 const membershipOptions = [
   { value: "business", label: "Belama Business" },

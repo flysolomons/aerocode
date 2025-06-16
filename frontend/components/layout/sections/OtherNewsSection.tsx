@@ -1,4 +1,4 @@
-import OtherNewsCard from "../common/OtherNewsCard";
+import OtherNewsCard from "@/components/ui/cards/OtherNewsCard";
 
 function OtherNewsSection() {
   return (

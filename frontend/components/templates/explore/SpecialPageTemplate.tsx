@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import RouteSpecialCard from "@/components/common/RouteSpecialCard";
-import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
-import Slider from "@/components/common/Slider";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import RouteSpecialCard from "@/components/ui/cards/RouteSpecialCard";
+import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
+import Slider from "@/components/layout/Slider";
 import { SpecialPage } from "@/graphql/SpecialPageQuery";
 import { stripHtmlTags } from "@/lib/utils";
 

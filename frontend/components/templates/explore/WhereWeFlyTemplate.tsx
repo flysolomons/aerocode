@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import Recommendations from "@/components/layout/Recommendations";
-import RadioButton from "@/components/common/RadioButton";
-import RouteCard from "@/components/common/RouteCard";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import Recommendations from "@/components/layout/sections/Recommendations";
+import RadioButton from "@/components/ui/buttons/RadioButton";
+import RouteCard from "@/components/ui/cards/RouteCard";
 import { WhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
 import {
   fetchRoutesByFlightScope,

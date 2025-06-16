@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import StrippedBookingWidget from "@/components/common/StrippedBookingWidget";
-import RouteSpecialSection from "@/components/layout/RouteSpecialSection";
-import RouteCard from "@/components/common/RouteCard";
-import FareCard from "@/components/common/FareCard";
-import FlightInfoCard from "@/components/common/FlightInfoCard";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
+import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
+import RouteCard from "@/components/ui/cards/RouteCard";
+import FareCard from "@/components/ui/cards/FareCard";
+import FlightInfoCard from "@/components/ui/cards/FlightInfoCard";
 import {
   RoutePage,
   RouteSearchResult,

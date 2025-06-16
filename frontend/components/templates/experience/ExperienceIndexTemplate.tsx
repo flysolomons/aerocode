@@ -1,6 +1,6 @@
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import GenericCard from "@/components/common/GenericCard";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import GenericCard from "@/components/ui/cards/GenericCard";
 import { ExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
 
 interface ExperienceProps {

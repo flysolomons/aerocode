@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import BookingWidget from "../common/BookingWidget";
+import BookingWidget from "@/components/layout/booking-widget/BookingWidget";
 // import { animate, svg, stagger } from "animejs";
 // import InViewWrapper from "../common/InViewWrapper";
 const MainCarousel = () => {

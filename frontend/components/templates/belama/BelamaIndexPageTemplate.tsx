@@ -1,6 +1,6 @@
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import MembershipCard from "@/components/common/MembershipCard";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import MembershipCard from "@/components/ui/cards/MembershipCard";
 import Image from "next/image";
 
 export default function BelamaIndexPageTemplate() {

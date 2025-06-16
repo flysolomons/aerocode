@@ -1,12 +1,12 @@
 "use client";
 
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import SectionBlock from "@/components/common/generic/SectionBlock";
-import TextBlock from "@/components/common/generic/TextBlock";
-import ImageBlock from "@/components/common/generic/ImageBlock";
-import HeadingTextBlock from "@/components/common/generic/HeadingTextBlock";
-import GridCardSectionBlock from "@/components/common/generic/GridCardSectionBlock";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import SectionBlock from "@/components/ui/blocks/SectionBlock";
+import TextBlock from "@/components/ui/blocks/TextBlock";
+import ImageBlock from "@/components/ui/blocks/ImageBlock";
+import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
+import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
 import { GenericPage } from "@/graphql/genericPageQuery";
 
 interface GenericPageTemplateProps {

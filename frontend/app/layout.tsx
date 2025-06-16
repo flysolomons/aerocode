@@ -1,16 +1,16 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
-import Header from "../components/layout/Header";
-import Footer from "../components/layout/Footer";
+import Header from "@/components/layout/header/Header";
+import Footer from "@/components/layout/footer/Footer";
 import {
   fetchHeaderMenuServer,
   fallbackHeaderMenu,
-} from "../graphql/HeaderQuery";
+} from "@/graphql/HeaderQuery";
 import {
   fetchFooterMenuServer,
   fallbackFooterMenu,
-} from "../graphql/FooterQuery";
+} from "@/graphql/FooterQuery";
 import "./globals.css";
 
 const inter = Inter({

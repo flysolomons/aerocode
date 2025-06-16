@@ -1,8 +1,8 @@
 "use client";
-import SecondaryHero from "@/components/layout/SecondaryHero";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import SkeletonSecondaryHero from "@/components/layout/skeleton/SkeletonSecondaryHero";
-import Container from "@/components/common/Container";
-import OtherNewsSection from "@/components/layout/OtherNewsSection";
+import Container from "@/components/layout/Container";
+import OtherNewsSection from "@/components/layout/sections/OtherNewsSection";
 import { NewsArticle } from "@/graphql/NewsPageQuery";
 
 interface NewsArticleProps {

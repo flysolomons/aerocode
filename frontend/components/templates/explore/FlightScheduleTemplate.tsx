@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import SecondaryHero from "@/components/layout/SecondaryHero";
-import Container from "@/components/common/Container";
-import RadioButton from "@/components/common/RadioButton";
-import Accordion from "@/components/common/Accordion";
+import SecondaryHero from "@/components/layout/hero/SecondaryHero";
+import Container from "@/components/layout/Container";
+import RadioButton from "@/components/ui/buttons/RadioButton";
+import Accordion from "@/components/ui/Accordion";
 import {
   ScheduleWithFlightData,
   Flight,
