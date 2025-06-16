@@ -24,16 +24,16 @@ export default function GridCardSectionBlock({
   return (
     <>
       {block.blockType === "GridCardSectionBlock" && (
-        <div>
+        <div className="w-full space-y-6 sm:space-y-8">
           {block.heading && (
-            <h2 className="text-3xl font-bold mb-6 text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 sm:mb-6 lg:mb-6 text-center">
               {block.heading}
             </h2>
           )}
           {block.blocks?.map((listBlock, listIndex) => (
             <div
               key={listIndex}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4"
+              className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-6 mt-2 sm:mt-4 lg:mt-4"
             >
               {listBlock.items?.map(
                 (item, itemIndex) =>

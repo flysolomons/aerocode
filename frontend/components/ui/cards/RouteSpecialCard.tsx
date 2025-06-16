@@ -17,7 +17,7 @@ function RouteSpecialCard({
 }: RouteSpecialCardProps) {
   return (
     <>
-      <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl">
+      <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-3xl overflow-hidden w-full h-full shadow-xl min-h-64 sm:min-h-80 lg:min-h-96">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
         <Image
           src={image}
@@ -26,15 +26,17 @@ function RouteSpecialCard({
           height={500}
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-4 right-4 bg-yellow-400 px-2 py-2 rounded-full text-xs text-blue-500 font-semibold z-20">
-          {specialName}
+        {specialName && (
+          <div className="absolute top-2 sm:top-4 lg:top-4 right-2 sm:right-4 lg:right-4 bg-yellow-400 px-2 sm:px-3 lg:px-2 py-1 sm:py-2 lg:py-2 rounded-full text-xs sm:text-sm lg:text-xs text-blue-500 font-semibold z-20">
+            {specialName}
+          </div>
+        )}
+        <div className="absolute inset-0 flex items-center justify-center text-white z-20 px-4">
+          <h3 className="text-lg sm:text-xl lg:text-xl font-bold text-center break-words">{route}</h3>
         </div>
-        <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-          <h3 className="text-xl font-bold text-center">{route}</h3>
-        </div>
-        <div className="absolute bottom-4 left-4 text-white z-20">
-          <p className="text-sm">From</p>
-          <p className="text-2xl font-bold">{price}</p>
+        <div className="absolute bottom-2 sm:bottom-4 lg:bottom-4 left-2 sm:left-4 lg:left-4 text-white z-20">
+          <p className="text-xs sm:text-sm lg:text-sm">From</p>
+          <p className="text-xl sm:text-2xl lg:text-2xl font-bold break-words">{price}</p>
         </div>
       </div>
     </>

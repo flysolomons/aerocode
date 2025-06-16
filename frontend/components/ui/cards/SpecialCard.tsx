@@ -12,7 +12,7 @@ interface SpecialCardProps {
 function SpecialCard({ image, specialName, url }: SpecialCardProps) {
   return (
     <Link href={url} className="block hover:opacity-90 transition-opacity">
-      <div className="relative rounded-3xl overflow-hidden w-full h-full shadow-xl">
+      <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-3xl overflow-hidden w-full h-full shadow-xl min-h-48 sm:min-h-64 lg:min-h-80">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
         <Image
           src={image}
@@ -21,13 +21,10 @@ function SpecialCard({ image, specialName, url }: SpecialCardProps) {
           height={500}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 flex items-center justify-center text-white z-20">
-          <h3 className="text-xl font-bold text-center">{specialName}</h3>
+        <div className="absolute inset-0 flex items-center justify-center text-white z-20 px-4">
+          <h3 className="text-lg sm:text-xl lg:text-xl font-bold text-center break-words">{specialName}</h3>
         </div>
-        {/* <div className="absolute bottom-4 left-4 text-white z-20">
-          <p className="text-sm">From</p>
-          <p className="text-2xl font-bold">{price}</p>
-        </div> */}
+        {/* ...existing code... */}
       </div>
     </Link>
   );

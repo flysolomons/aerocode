@@ -10,20 +10,18 @@ export default function BelamaIndexPageTemplate() {
         title="Belama Club"
         image="/hero.jpg"
         breadcrumbs="Home > Belama"
-      />
-      <Container>
-        <div className="py-12 space-y-16">
+      />      <Container>
+        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description */}
-          <span className="block text-center">
+          <p className="block text-center text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed max-w-4xl mx-auto">
             We offer convenient flights between Australia, Fiji, Vanuatu, and
             Honiara, the vibrant capital of the Solomon Islands.
-          </span>
-          <div className="space-y-8">
-            {" "}
-            <h2 className="text-3xl text-center font-bold text-blue-500">
+          </p>
+          <div className="space-y-6 sm:space-y-8 lg:space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Individual Memberships
             </h2>
-            <div className="grid grid-cols-3 gap-4 h-[31rem]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
               <MembershipCard
                 title="Belama Me"
                 price="3,995.00"
@@ -46,15 +44,14 @@ export default function BelamaIndexPageTemplate() {
             alt="Where We Fly: International"
             width={4000}
             height={1000}
-            className="w-full h-[25rem] rounded-3xl object-cover"
+            className="w-full h-48 sm:h-64 lg:h-[25rem] rounded-2xl sm:rounded-3xl lg:rounded-3xl object-cover"
           />
 
-          <div className="space-y-8">
-            {" "}
-            <h2 className="text-3xl text-center font-bold text-blue-500">
+          <div className="space-y-6 sm:space-y-8 lg:space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Group Memberships
             </h2>
-            <div className="grid grid-cols-2 gap-4 h-[31rem]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
               <MembershipCard
                 title="Belama Family"
                 price="3,995.00"

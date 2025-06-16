@@ -12,26 +12,29 @@ function ReasonToVisitCard({
   image,
   description,
   imageOnLeft,
-}: ReasonToVisitCardProps) {
-  return (
+}: ReasonToVisitCardProps) {  return (
     <>
       <div
-        className={`flex w-full rounded-3xl overflow-hidden bg-white shadow-lg p-4 h-[24.5rem] ${
-          imageOnLeft ? "flex-row" : "flex-row-reverse"
-        } ${imageOnLeft ? "space-x-8" : "space-x-8 space-x-reverse"}`}
+        className={`flex flex-col lg:flex-row w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-lg min-h-[20rem] sm:min-h-[22rem] lg:h-[24.5rem] ${
+          imageOnLeft ? "lg:flex-row" : "lg:flex-row-reverse"
+        }`}
       >
-        <div className="w-1/3">
+        <div className="w-full lg:w-1/3">
           <Image
             src={image}
-            alt="reason"
+            alt={title}
             width={400}
             height={360}
-            className="w-full h-full object-cover rounded-3xl"
+            className="w-full h-48 sm:h-56 lg:h-full object-cover"
           />
         </div>
-        <div className="w-2/3 p-4">
-          <h2 className="text-2xl mb-2 text-gray-800 font-semibold">{title}</h2>
-          <p className="leading-relaxed">{description}</p>
+        <div className="w-full lg:w-2/3 p-4 sm:p-6 lg:p-8">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
+            {title}
+          </h2>
+          <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
+            {description}
+          </p>
         </div>
       </div>
     </>

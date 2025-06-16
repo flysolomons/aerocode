@@ -61,58 +61,56 @@ function Footer({ footerMenus }: FooterProps) {
   ];
 
   // Use footer menu data if available, otherwise use fallback
-  const columnsToRender = footerMenu?.columns || fallbackColumns;
-  return (
-    <footer className="h-screen bg-blue-600 text-white pt-8 flex flex-col">
-      <div className="container mx-auto px-4 max-w-[70.5rem] mt-20 flex-grow">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-b-2 border-indigo-900 pb-6">
-          {/* Dynamic Columns from FooterQuery */}
+  const columnsToRender = footerMenu?.columns || fallbackColumns;  return (
+    <footer className="min-h-screen bg-blue-600 text-white pt-4 sm:pt-6 lg:pt-8 flex flex-col">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[70.5rem] mt-8 sm:mt-12 lg:mt-20 flex-grow">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 border-b-2 border-indigo-900 pb-4 sm:pb-6">          {/* Dynamic Columns from FooterQuery */}
           {columnsToRender.map((column, index) => (
-            <div key={index}>
-              <h3 className="text-sm font-semibold mb-2">
+            <div key={index} className="mb-6 sm:mb-4 lg:mb-0">
+              <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">
                 {column.columnTitle}
               </h3>
-              <ul className="space-y-2 text-xs font-normal">
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm font-normal">
                 {column.items.map((item, itemIndex) => (
                   <li key={itemIndex}>
-                    <Link href={item.url || "#"} className="hover:underline">
+                    <Link href={item.url || "#"} className="hover:underline transition-colors duration-200">
                       {item.title}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-          ))}
-        </div>
+          ))}        </div>
         {/*End of grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-10 border-b-2 border-indigo-900 pb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8 lg:mt-10 border-b-2 border-indigo-900 pb-4 sm:pb-6">
           {/* Help Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Help</h3>
-            <ul className="space-y-2 text-xs font-normal">
+          <div className="mb-6 sm:mb-4 lg:mb-0">
+            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Help</h3>
+            <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm font-normal">
               <li>
-                <a href="/contact">Contact us</a>
+                <a href="/contact" className="hover:underline transition-colors duration-200">Contact us</a>
               </li>
               <li>
-                <a href="/alerts">Travel Alerts</a>
+                <a href="/alerts" className="hover:underline transition-colors duration-200">Travel Alerts</a>
               </li>
             </ul>
           </div>
 
           {/* Follow Us Column */}
-          <div>
-            <h3 className="text-sm font-semibold mb-2">Follow Us</h3>
-            <div className="grid grid-cols-5">
+          <div className="mb-6 sm:mb-4 lg:mb-0">
+            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Follow Us</h3>
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3">
               <a
                 href="https://facebook.com/solomonairlines"
                 aria-label="Facebook"
-                className="w-auto"
+                className="w-auto hover:opacity-80 transition-opacity duration-200"
               >
                 <span className="sr-only">Facebook</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
+                  className="sm:w-6 sm:h-6"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -122,12 +120,14 @@ function Footer({ footerMenus }: FooterProps) {
               <a
                 href="https://instagram.com/solomonairlines"
                 aria-label="Instagram"
+                className="hover:opacity-80 transition-opacity duration-200"
               >
                 <span className="sr-only">Instagram</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
+                  className="sm:w-6 sm:h-6"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -137,12 +137,14 @@ function Footer({ footerMenus }: FooterProps) {
               <a
                 href="https://www.linkedin.com/company/solomonairlines"
                 aria-label="LinkedIn"
+                className="hover:opacity-80 transition-opacity duration-200"
               >
                 <span className="sr-only">LinkedIn</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
+                  className="sm:w-6 sm:h-6"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -152,12 +154,14 @@ function Footer({ footerMenus }: FooterProps) {
               <a
                 href="https://youtube.com/@SolomonAirlinesOfficial"
                 aria-label="YouTube"
+                className="hover:opacity-80 transition-opacity duration-200"
               >
                 <span className="sr-only">YouTube</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
+                  className="sm:w-6 sm:h-6"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -165,31 +169,30 @@ function Footer({ footerMenus }: FooterProps) {
                 </svg>
               </a>
             </div>
-          </div>
-        </div>
+          </div>        </div>
         {/**Sign up for newsletter section */}
-        <div className="w-full items-center justify-center">
+        <div className="w-full flex items-center justify-center mt-6 sm:mt-8 lg:mt-10">
           <SignUP></SignUP>
         </div>
         {/* Insert Logo here-- */}
-        <div className="w-[500px] mt-12 m-auto flex flex-auto  items-center justify-items-end">
+        <div className="w-full max-w-[500px] mt-8 sm:mt-10 lg:mt-12 mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
           <Image
             src={"/logo-white.svg"}
             alt="Company Logo"
             width={0}
             height={40}
-            className="h-8 w-full"
+            className="h-6 sm:h-8 w-auto flex-shrink-0"
           />
 
           <Image
             src={"/tourism_logo.svg"}
-            alt="Company Logo"
+            alt="Tourism Logo"
             width={0}
             height={40}
-            className="h-12 w-full"
+            className="h-8 sm:h-10 lg:h-12 w-auto flex-shrink-0"
           />
-        </div>{" "}
-        <div className="mt-12 text-center text-xs border-t-2 border-indigo-900 pt-6">
+        </div>
+        <div className="mt-8 sm:mt-10 lg:mt-12 text-center text-xs sm:text-sm border-t-2 border-indigo-900 pt-4 sm:pt-6">
           <p>All Rights Reserved. 2025</p>
         </div>
       </div>

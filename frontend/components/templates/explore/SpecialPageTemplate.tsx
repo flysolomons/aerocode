@@ -35,14 +35,13 @@ export default function SpecialPageTemplate({
   loading = false,
 }: SpecialPageTemplateProps) {
   const [gradientStartColor, setGradientStartColor] = useState("transparent");
-
   // Handle loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-8 w-64 bg-gray-200 rounded mb-4"></div>
-          <div className="h-4 w-48 bg-gray-200 rounded"></div>
+          <div className="h-6 sm:h-8 w-48 sm:w-64 bg-gray-200 rounded mb-3 sm:mb-4"></div>
+          <div className="h-3 sm:h-4 w-32 sm:w-48 bg-gray-200 rounded"></div>
         </div>
       </div>
     );
@@ -51,12 +50,12 @@ export default function SpecialPageTemplate({
   // Handle null page data
   if (!initialPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-500 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-red-500 mb-2">
             Special not found
           </h2>
-          <p>The special offer you're looking for is not available.</p>
+          <p className="text-sm sm:text-base text-gray-600">The special offer you're looking for is not available.</p>
         </div>
       </div>
     );
@@ -85,19 +84,18 @@ export default function SpecialPageTemplate({
         image={heroImage?.url || "/hero.jpg"}
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
-      />
-      <Container>
-        <div className="my-12 space-y-16">
+      />      <Container>
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description with validity period */}
-          {/* <div className="space-y-4">
-            <span className="block text-center">
+          {/* <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
+            <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
               We offer convenient flights between Australia, Fiji, Vanuatu, and
               Honiara, the vibrant capital of the Solomon Islands. Discover the
               beauty and diversity of the Solomons with our extensive network of
               destinations.
-            </span>
+            </p>
             {validityPeriod && (
-              <p className="text-center font-medium text-blue-500">
+              <p className="text-center font-medium text-blue-500 text-sm sm:text-base lg:text-lg">
                 {validityPeriod}
               </p>
             )}
@@ -114,30 +112,28 @@ export default function SpecialPageTemplate({
 
           {/* Terms and conditions section
           {termsAndConditions && (
-            <div className="space-y-8">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
+            <div className="space-y-6 sm:space-y-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold text-blue-500">
                 Terms & Conditions
               </h2>
               <div
-                className="prose max-w-none mx-auto"
+                className="prose prose-sm sm:prose lg:prose-lg max-w-none mx-auto px-4"
                 dangerouslySetInnerHTML={{ __html: termsAndConditions }}
               />
             </div>
           )} */}
         </div>
-      </Container>
-
-      {/* Other specials section
-      <div className="my-16 bg-gray-50 py-12">
+      </Container>      {/* Other specials section
+      <div className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <Container>
-          <div className="space-y-8">
-            <h2 className="text-3xl text-center font-bold text-blue-500">
+          <div className="space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold text-blue-500">
               Other Specials
             </h2>
-            <p className="text-center">
+            <p className="text-center text-sm sm:text-base lg:text-lg text-gray-700 max-w-2xl mx-auto">
               Check out our other special offers available on various routes.
             </p>
-            <div className="mt-8">
+            <div className="mt-6 sm:mt-8">
               <Slider />
             </div>
           </div>

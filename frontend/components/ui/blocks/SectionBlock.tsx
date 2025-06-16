@@ -17,29 +17,35 @@ export default function SectionBlock({ block }: SectionBlockProps) {
 
   return (
     <div
-      className={`flex w-full rounded-3xl overflow-hidden bg-white shadow-lg p-4 h-[24.5rem] ${
-        imageOnLeft ? "flex-row" : "flex-row-reverse"
-      } ${imageOnLeft ? "space-x-8" : "space-x-8 space-x-reverse"}`}
+      className={`flex flex-col lg:flex-row w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-lg p-3 sm:p-4 lg:p-6 min-h-[20rem] sm:min-h-[22rem] lg:h-[24.5rem] ${
+        imageOnLeft ? "lg:flex-row" : "lg:flex-row-reverse"
+      }`}
     >
       {block.image && (
-        <div className="w-1/3">
+        <div className="w-full lg:w-1/3 mb-4 lg:mb-0">
           <Image
             src={block.image.url}
-            alt="Section Image"
+            alt={block.heading || "Section Image"}
             width={400}
             height={360}
-            className="w-full h-full object-cover rounded-3xl"
+            className="w-full h-48 sm:h-56 lg:h-full object-cover rounded-xl sm:rounded-2xl lg:rounded-3xl"
           />
         </div>
       )}
 
-      <div className={`${block.image ? "w-2/3" : "w-full"} p-4`}>
+      <div className={`${block.image ? "w-full lg:w-2/3" : "w-full"} p-2 sm:p-4 lg:p-6 ${
+        block.image ? (imageOnLeft ? "lg:ml-6 xl:ml-8" : "lg:mr-6 xl:mr-8") : ""
+      }`}>
         {block.heading && (
-          <h2 className="text-2xl mb-2 text-gray-800 font-semibold">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
             {block.heading}
           </h2>
         )}
-        {block.text && <p className="leading-relaxed">{block.text}</p>}
+        {block.text && (
+          <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
+            {block.text}
+          </p>
+        )}
       </div>
     </div>
   );

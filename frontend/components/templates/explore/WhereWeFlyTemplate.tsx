@@ -47,13 +47,15 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
-      />
+      />{" "}
       <Container>
-        <div className="py-12 space-y-16">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description */}
-          <span className="block text-center">
-            {initialPage.description}
-          </span>{" "}
+          <div className="max-w-4xl mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              {initialPage.description}
+            </p>
+          </div>{" "}
           {/* Toggle between International and Domestic routes */}
           <div className="flex justify-center">
             <RadioButton
@@ -78,21 +80,23 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               }`}
               width={1128}
               height={770}
-              className="rounded-3xl"
+              className="w-full h-auto rounded-2xl sm:rounded-3xl shadow-lg"
             />
-          </div>
+          </div>{" "}
           {/* Routes Display */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-blue-500 text-center">
+          <div className="space-y-6 sm:space-y-8">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-500 text-center">
               {showInternational ? "International" : "Domestic"} Routes
             </h2>
 
             {loading ? (
-              <div className="text-center py-8">
-                <p>Loading routes...</p>
+              <div className="text-center py-8 sm:py-12">
+                <p className="text-sm sm:text-base text-gray-600">
+                  Loading routes...
+                </p>
               </div>
             ) : routes.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 {routes.map((route, index) => (
                   <RouteCard
                     key={index}
@@ -103,8 +107,8 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <p>
+              <div className="text-center py-8 sm:py-12">
+                <p className="text-sm sm:text-base text-gray-600">
                   No routes found for{" "}
                   {showInternational ? "international" : "domestic"} flights.
                 </p>

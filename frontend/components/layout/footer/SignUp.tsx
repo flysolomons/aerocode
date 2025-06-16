@@ -1,36 +1,44 @@
 export default function SignUP() {
   return (
-    <div className="grid grid-rows-2 items-center justify-center m-16 mt-8">
-      <h2 className="row-auto text-center text-slate-200">Stay up to update</h2>
-      <p className="text-xs text-center text-indigo-300 m-2">
-        Sign up to our news lettter and stay in touch with our news
-      </p>
-      <div className="row-auto flex">
-        <div className="w-full flex justify-end items-center relative border-2 border-indigo-300 rounded-full pl-2 mr-2 text-indigo-200 transition duration-300 ease  focus:border-indigo-700 hover:border-cyan-100 shadow-sm focus:shadow ">
+    <div className="w-full max-w-2xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-6 py-6 sm:py-8 lg:py-12">
+      <div className="text-center space-y-2 sm:space-y-3">
+        <h2 className="text-base sm:text-lg lg:text-xl font-medium text-slate-200">
+          Stay up to date
+        </h2>
+        <p className="text-xs sm:text-sm text-indigo-300 leading-relaxed max-w-md mx-auto">
+          Sign up to our newsletter and stay in touch with our news
+        </p>
+      </div>
+      
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-lg mx-auto">
+        <div className="flex-1 flex items-center relative border-2 border-indigo-300 rounded-full pl-3 sm:pl-4 text-indigo-200 transition duration-300 ease focus-within:border-indigo-700 hover:border-cyan-100 shadow-sm focus-within:shadow">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="size-6 "
+            className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0"
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3"
+              d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
             />
           </svg>
           <input
-            className=" w-96 bg-transparent placeholder:text-indigo-200 text-indigo-300 text-sm  px-3 py-2 mr-3 focus:outline-none"
-            placeholder="type your email address..."
-          ></input>
+            className="flex-1 bg-transparent placeholder:text-indigo-200 text-indigo-300 text-sm sm:text-base px-3 py-2 sm:py-3 focus:outline-none min-w-0"
+            placeholder="Enter your email address..."
+            type="email"
+          />
         </div>
-        <button className="bg-indigo-900 rounded-full w-24 h-10 justify-items-center hover:bg-indigo-700 transition duration-500 active:bg-lime-500">
+          <button className="bg-indigo-900 rounded-full w-full sm:w-12 lg:w-14 h-10 sm:h-12 lg:h-14 flex items-center justify-center hover:bg-indigo-700 transition duration-500 active:bg-lime-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-blue-600">
+          <span className="text-sm font-medium text-white sm:hidden">Sign Up</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
+            width="20"
+            height="20"
+            className="hidden sm:block sm:w-6 sm:h-6 lg:w-7 lg:h-7"
             fill="#fafafa"
             viewBox="0 0 256 256"
           >

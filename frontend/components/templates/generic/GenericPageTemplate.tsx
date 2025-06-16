@@ -24,10 +24,9 @@ export default function GenericPageTemplate({
           image={initialPage.heroImage.url}
           breadcrumbs={initialPage.url}
         />
-      )}
-
+      )}{" "}
       <Container>
-        <div className="py-12 space-y-16">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {initialPage.content.map((block, index) => (
             <div key={index}>
               {/* if it's a section block then pass it on to the section block componennt */}

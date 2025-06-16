@@ -27,7 +27,7 @@ const rubik = Rubik({
 
 export const metadata: Metadata = {
   title: {
-    default: "Solomon Airlines",
+    default: "Book Flights | Solomon Airlines",
     template: "%s | Solomon Airlines",
   },
   description: "Solomon Airlines",

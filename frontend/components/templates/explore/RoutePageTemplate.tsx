@@ -52,12 +52,11 @@ export default function RoutePageTemplate({
         });
     }
   }, [initialPage]);
-
   // Handle loading state
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-sm sm:text-base text-gray-600">Loading...</div>
       </div>
     );
   }
@@ -65,8 +64,8 @@ export default function RoutePageTemplate({
   // Handle null page data
   if (!initialPage) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Route not found
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-sm sm:text-base text-gray-600">Route not found</div>
       </div>
     );
   }
@@ -90,27 +89,25 @@ export default function RoutePageTemplate({
         image={heroImage?.url || "/hero3.jpg"}
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
-      />
-      <Container>
-        <div className="py-12 space-y-16">
+      />      <Container>
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           <StrippedBookingWidget />{" "}
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
             specials={specialRoutes}
-          />
-          {fares && fares.length > 0 && (
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-3xl text-center font-bold text-blue-500">
+          />          {fares && fares.length > 0 && (
+            <div className="space-y-6 sm:space-y-8">
+              <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                   Year Round Fares
                 </h2>
-                <span className="block text-center">
+                <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
                   We offer convenient flights between destinations with
                   competitive fares. Prices may vary by season and availability.
-                </span>
+                </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {fares.map((fare, index) => (
                   <FareCard
                     key={index}
@@ -122,16 +119,15 @@ export default function RoutePageTemplate({
                 ))}
               </div>
             </div>
-          )}
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
+          )}          <div className="space-y-6 sm:space-y-8">
+            <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Flight Information
               </h2>
-              <span className="block text-center">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
                 Important details about your flight between {departureAirport}{" "}
                 and {arrivalAirport}.
-              </span>
+              </p>
             </div>
 
             <FlightInfoCard
@@ -140,21 +136,22 @@ export default function RoutePageTemplate({
               arrivalAirport={arrivalAirport}
               arrivalAirportCode={arrivalAirportCode}
             />
-          </div>{" "}
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl text-center font-bold text-blue-500">
+          </div>{" "}          <div className="space-y-6 sm:space-y-8">
+            <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Other Routes to {initialPage.arrivalAirport}
               </h2>
-              <span className="block text-center">
+              <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
                 Explore other popular flight routes that might interest you.
-              </span>
+              </p>
             </div>
 
             {loadingRelatedRoutes ? (
-              <div className="text-center py-8">Loading related routes...</div>
+              <div className="text-center py-8 sm:py-12">
+                <div className="text-sm sm:text-base text-gray-600">Loading related routes...</div>
+              </div>
             ) : relatedRoutes.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 {relatedRoutes.map((route, index) => (
                   <RouteCard
                     key={index}
@@ -165,9 +162,11 @@ export default function RoutePageTemplate({
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                No other routes to {initialPage.arrivalAirport} are currently
-                available.
+              <div className="text-center py-8 sm:py-12">
+                <div className="text-sm sm:text-base text-gray-600">
+                  No other routes to {initialPage.arrivalAirport} are currently
+                  available.
+                </div>
               </div>
             )}
           </div>
