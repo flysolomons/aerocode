@@ -30,6 +30,7 @@ export default function SpecialsIndexTemplate({
   const heroTitle = pageMetadata?.heroTitle || "Specials";
   const heroImage = pageMetadata?.heroImage?.url || "/hero.jpg";
   const breadcrumbs = pageMetadata?.url || "Home > Explore > Specials";
+  const pageDescription = pageMetadata?.description || "";
 
   return (
     <>
@@ -38,10 +39,11 @@ export default function SpecialsIndexTemplate({
         image={heroImage}
         breadcrumbs={breadcrumbs}
         onColorCalculated={setGradientStartColor}
-      />      <Container>
+      />{" "}
+      <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           <div className="space-y-6 sm:space-y-8">
-            <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+            {/* <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Latest Specials
               </h2>
@@ -49,7 +51,14 @@ export default function SpecialsIndexTemplate({
                 We offer convenient flights between Australia, Fiji, Vanuatu,
                 and Honiara, the vibrant capital of the Solomon Islands.
               </p>
-            </div>
+            </div> */}
+            {pageDescription && (
+              <div className="max-w-4xl mx-auto">
+                <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                  {pageDescription}
+                </p>
+              </div>
+            )}
             {specials && specials.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 {specials.map((special, index) => (

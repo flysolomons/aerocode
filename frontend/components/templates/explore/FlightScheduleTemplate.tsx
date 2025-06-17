@@ -81,7 +81,8 @@ export default function FlightScheduleTemplate({
     ];
 
     return days.map((day) => ({
-      title: day.label,      content: (
+      title: day.label,
+      content: (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-gray-50 rounded-[10px] overflow-hidden">
             <thead className="bg-gray-50">
@@ -159,14 +160,17 @@ export default function FlightScheduleTemplate({
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
-      />      <Container>
+      />{" "}
+      <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          {/* Description */}
-          <div className="max-w-4xl mx-auto">
-            <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
-              {initialPage.description}
-            </p>
-          </div>          {/* Schedule Date Filter Cards */}
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}{" "}
+          {/* Schedule Date Filter Cards */}
           {initialPage.schedules && initialPage.schedules.length > 0 && (
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
               {initialPage.schedules.map((schedule) => (
@@ -204,21 +208,25 @@ export default function FlightScheduleTemplate({
               }
             />
           </div>
-
           {/* Flight schedule accordion section */}
           <div>
             {hasSchedules && hasFilteredSchedule ? (
               <div>
                 {scheduleItems.length > 0 ? (
-                  <Accordion items={scheduleItems} defaultOpen={0} />                ) : (
+                  <Accordion items={scheduleItems} defaultOpen={0} />
+                ) : (
                   <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
-                    <p className="text-sm sm:text-base text-gray-600">No flights available for the selected filters.</p>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      No flights available for the selected filters.
+                    </p>
                   </div>
                 )}
               </div>
             ) : (
               <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
-                <p className="text-sm sm:text-base text-gray-600">Please select a schedule to view available flights.</p>
+                <p className="text-sm sm:text-base text-gray-600">
+                  Please select a schedule to view available flights.
+                </p>
               </div>
             )}
           </div>

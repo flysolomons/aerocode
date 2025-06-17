@@ -95,6 +95,13 @@ export default function RoutePageTemplate({
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           <StrippedBookingWidget />{" "}
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."

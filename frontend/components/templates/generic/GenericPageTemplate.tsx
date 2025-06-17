@@ -27,6 +27,13 @@ export default function GenericPageTemplate({
       )}{" "}
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}
           {initialPage.content.map((block, index) => (
             <div key={index}>
               {/* if it's a section block then pass it on to the section block componennt */}

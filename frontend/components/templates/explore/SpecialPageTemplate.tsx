@@ -55,7 +55,9 @@ export default function SpecialPageTemplate({
           <h2 className="text-xl sm:text-2xl font-bold text-red-500 mb-2">
             Special not found
           </h2>
-          <p className="text-sm sm:text-base text-gray-600">The special offer you're looking for is not available.</p>
+          <p className="text-sm sm:text-base text-gray-600">
+            The special offer you're looking for is not available.
+          </p>
         </div>
       </div>
     );
@@ -84,7 +86,8 @@ export default function SpecialPageTemplate({
         image={heroImage?.url || "/hero.jpg"}
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
-      />      <Container>
+      />{" "}
+      <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description with validity period */}
           {/* <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
@@ -100,6 +103,14 @@ export default function SpecialPageTemplate({
               </p>
             )}
           </div> */}
+
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}
 
           {/* Route specials section */}
           {specialRoutes && specialRoutes.length > 0 && (
@@ -123,7 +134,8 @@ export default function SpecialPageTemplate({
             </div>
           )} */}
         </div>
-      </Container>      {/* Other specials section
+      </Container>{" "}
+      {/* Other specials section
       <div className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <Container>
           <div className="space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-8">
