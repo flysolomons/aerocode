@@ -1,6 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from "@/components/ui/breadcrumb";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // props: card title, image
 
@@ -70,45 +85,129 @@ export default function SecondaryHero({
 
     calculateAverageColor();
   }, [image, onColorCalculated]);
-
   const renderBreadcrumbs = () => {
     if (!breadcrumbs) return null;
 
     const breadcrumbParts = breadcrumbs.split("/").filter(Boolean);
-    const breadcrumbLinks = breadcrumbParts.map((part, index) => {
+
+    // Helper function to format labels
+    const formatLabel = (part: string, index: number) => {
       const isAfterNews =
         breadcrumbParts.includes("news") &&
         index > breadcrumbParts.indexOf("news");
-      const href = "/" + breadcrumbParts.slice(0, index + 1).join("/");
-      const label = isAfterNews
+      return isAfterNews
         ? "Article"
         : part
             .replace(/-/g, " ")
             .replace(/\b\w/g, (char) => char.toUpperCase());
-
-      if (index === breadcrumbParts.length - 1) {
-        // Last part of the breadcrumb, not clickable
-        return <span key={index}> / {label}</span>;
-      }
-
+    }; // If we have 3 or fewer parts, show all
+    if (breadcrumbParts.length <= 3) {
       return (
-        <span key={index}>
-          {index > 0 && " / "}
-          <Link href={href} className="hover:underline">
-            {label}
-          </Link>
-        </span>
-      );
-    });
+        <Breadcrumb>
+          <BreadcrumbList className="text-white justify-center gap-1 sm:gap-1.5">
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="text-white hover:text-white/80">
+                  Home
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
 
+            {breadcrumbParts.map((part, index) => {
+              const href = "/" + breadcrumbParts.slice(0, index + 1).join("/");
+              const label = formatLabel(part, index);
+              const isLast = index === breadcrumbParts.length - 1;
+
+              return (
+                <React.Fragment key={index}>
+                  <BreadcrumbSeparator className="text-white/60" />
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <BreadcrumbPage className="text-white">
+                        {label}
+                      </BreadcrumbPage>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link
+                          href={href}
+                          className="text-white hover:text-white/80"
+                        >
+                          {label}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                </React.Fragment>
+              );
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
+      );
+    } // If we have more than 3 parts, show: Home / First / ... / Last
+    const firstPart = breadcrumbParts[0];
+    const lastPart = breadcrumbParts[breadcrumbParts.length - 1];
+
+    const firstHref = "/" + firstPart;
+    const firstLabel = formatLabel(firstPart, 0);
+    const lastLabel = formatLabel(lastPart, breadcrumbParts.length - 1);
+
+    // Get the middle parts for the dropdown
+    const middleParts = breadcrumbParts.slice(1, -1);
     return (
-      <div className="text-sm">
-        <Link href="/" className="hover:underline">
-          Home
-        </Link>
-        {breadcrumbParts.length > 1 && " / "}
-        {breadcrumbLinks}
-      </div>
+      <Breadcrumb>
+        <BreadcrumbList className="text-white justify-center gap-1 sm:gap-1.5">
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/" className="text-white hover:text-white/80">
+                Home
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+
+          <BreadcrumbSeparator className="text-white/60" />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href={firstHref} className="text-white hover:text-white/80">
+                {firstLabel}
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+
+          <BreadcrumbSeparator className="text-white/60" />
+          <BreadcrumbItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 text-white/60 hover:text-white/80">
+                <BreadcrumbEllipsis className="h-4 w-4" />
+                <span className="sr-only">Show more breadcrumbs</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="bg-white border">
+                {middleParts.map((part, index) => {
+                  const actualIndex = index + 1; // +1 because we're skipping the first part
+                  const href =
+                    "/" + breadcrumbParts.slice(0, actualIndex + 1).join("/");
+                  const label = formatLabel(part, actualIndex);
+
+                  return (
+                    <DropdownMenuItem key={index} asChild>
+                      <Link
+                        href={href}
+                        className="text-gray-900 hover:text-gray-700 cursor-pointer w-full"
+                      >
+                        {label}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </BreadcrumbItem>
+
+          <BreadcrumbSeparator className="text-white/60" />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="text-white">{lastLabel}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
     );
   };
   return (
