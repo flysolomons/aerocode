@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import Container from "@/components/layout/Container";
@@ -15,134 +15,6 @@ interface AboutPageTemplateProps {
 export default function AboutPageTemplate({
   initialPage,
 }: AboutPageTemplateProps) {
-  // State for animated stats counter
-  const [stats, setStats] = useState({
-    destinations: 0,
-    aircraft: 0,
-    experience: 0,
-    passengers: 0,
-  });
-
-  // State for animation triggers
-  const [inView, setInView] = useState({
-    missionSection: false,
-    statsSection: false,
-    teamSection: false,
-    timelineSection: false,
-  });
-
-  // Handle intersection observer for animations
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setInView((prev) => ({
-            ...prev,
-            [entry.target.id]: true,
-          }));
-
-          // Start counting animation for stats when in view
-          if (entry.target.id === "statsSection" && !inView.statsSection) {
-            animateStats();
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions
-    );
-
-    // Observe all sections
-    const sections = [
-      "missionSection",
-      "statsSection",
-      "teamSection",
-      "timelineSection",
-    ];
-    sections.forEach((section) => {
-      const element = document.getElementById(section);
-      if (element) observer.observe(element);
-    });
-
-    return () => {
-      sections.forEach((section) => {
-        const element = document.getElementById(section);
-        if (element) observer.unobserve(element);
-      });
-    };
-  }, [inView.statsSection]); // Animate the stats counters
-  const animateStats = () => {
-    const finalStats = {
-      destinations:
-        initialPage.stats.find((stat) =>
-          stat.title.toLowerCase().includes("destination")
-        )?.value || "35+",
-      aircraft:
-        initialPage.stats.find((stat) =>
-          stat.title.toLowerCase().includes("aircraft")
-        )?.value || "15",
-      experience:
-        initialPage.stats.find(
-          (stat) =>
-            stat.title.toLowerCase().includes("year") ||
-            stat.title.toLowerCase().includes("experience")
-        )?.value || "40+",
-      passengers:
-        initialPage.stats.find((stat) =>
-          stat.title.toLowerCase().includes("passenger")
-        )?.value || "2M+",
-    };
-
-    // Parse numbers from stats for animation
-    const parseStatValue = (value: string) => {
-      const num = parseFloat(value.replace(/[^0-9.]/g, ""));
-      return isNaN(num) ? 0 : num;
-    };
-
-    const finalNumbers = {
-      destinations: parseStatValue(finalStats.destinations),
-      aircraft: parseStatValue(finalStats.aircraft),
-      experience: parseStatValue(finalStats.experience),
-      passengers: parseStatValue(finalStats.passengers),
-    };
-
-    const duration = 1500; // 1.5 seconds
-    const frameRate = 30;
-    const totalFrames = duration / (1000 / frameRate);
-    let frame = 0;
-
-    const timer = setInterval(() => {
-      frame++;
-      const progress = Math.min(frame / totalFrames, 1);
-
-      if (frame >= totalFrames) {
-        clearInterval(timer);
-        setStats({
-          destinations: finalNumbers.destinations,
-          aircraft: finalNumbers.aircraft,
-          experience: finalNumbers.experience,
-          passengers: finalNumbers.passengers,
-        });
-        return;
-      }
-
-      setStats({
-        destinations: Math.floor(progress * finalNumbers.destinations),
-        aircraft: Math.floor(progress * finalNumbers.aircraft),
-        experience: Math.floor(progress * finalNumbers.experience),
-        passengers: parseFloat((progress * finalNumbers.passengers).toFixed(1)),
-      });
-    }, 1000 / frameRate);
-  };
-
   return (
     <div className="min-h-screen">
       {/* <SecondaryHero
@@ -155,16 +27,12 @@ export default function AboutPageTemplate({
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs="/about"
         showBookingWidget={false}
-      />
+      />{" "}
       {/* Mission & Vision Section */}
       <Container>
         <div
           id="missionSection"
-          className={`py-12 sm:py-16 lg:py-20 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-            inView.missionSection
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-10"
-          }`}
+          className="py-12 sm:py-16 lg:py-20 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8"
         >
           <div className="text-center mb-12 sm:mb-16 lg:mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
@@ -304,15 +172,9 @@ export default function AboutPageTemplate({
       </Container>{" "}
       {/* Key Stats - SpaceX inspired with counters */}
       <div className="bg-gray-100 py-12 sm:py-16 lg:py-20">
+        {" "}
         <Container>
-          <div
-            id="statsSection"
-            className={`px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-              inView.statsSection
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
+          <div id="statsSection" className="px-4 sm:px-6 lg:px-8">
             {" "}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8 text-center">
               {initialPage.stats && initialPage.stats.length > 0 ? (
@@ -329,36 +191,34 @@ export default function AboutPageTemplate({
               ) : (
                 // Fallback static stats if none provided from API
                 <>
+                  {" "}
                   <div className="p-4 sm:p-6 lg:p-6">
                     <div className="text-4xl sm:text-5xl lg:text-5xl font-bold text-blue-700 mb-2">
-                      {stats.destinations}+
+                      35+
                     </div>
                     <div className="text-lg sm:text-xl lg:text-xl text-gray-600">
                       Destinations
                     </div>
                   </div>
-
                   <div className="p-4 sm:p-6 lg:p-6">
                     <div className="text-4xl sm:text-5xl lg:text-5xl font-bold text-blue-700 mb-2">
-                      {stats.aircraft}
+                      15
                     </div>
                     <div className="text-lg sm:text-xl lg:text-xl text-gray-600">
                       Modern Aircraft
                     </div>
                   </div>
-
                   <div className="p-4 sm:p-6 lg:p-6">
                     <div className="text-4xl sm:text-5xl lg:text-5xl font-bold text-blue-700 mb-2">
-                      {stats.experience}+
+                      40+
                     </div>
                     <div className="text-lg sm:text-xl lg:text-xl text-gray-600">
                       Years Experience
                     </div>
                   </div>
-
                   <div className="p-4 sm:p-6 lg:p-6">
                     <div className="text-4xl sm:text-5xl lg:text-5xl font-bold text-blue-700 mb-2">
-                      {stats.passengers}M+
+                      2M+
                     </div>
                     <div className="text-lg sm:text-xl lg:text-xl text-gray-600">
                       Annual Passengers
@@ -372,15 +232,9 @@ export default function AboutPageTemplate({
       </div>
       {/* Timeline - History - SpaceX/Tesla inspired */}
       <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20">
+        {" "}
         <Container>
-          <div
-            id="timelineSection"
-            className={`px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-              inView.timelineSection
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
+          <div id="timelineSection" className="px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
                 Our Journey
