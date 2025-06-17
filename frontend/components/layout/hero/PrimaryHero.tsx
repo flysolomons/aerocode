@@ -1,7 +1,9 @@
 // props: card title, image
 
+import React from "react";
 import BookingWidget from "../booking-widget/BookingWidget";
 import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
+import BreadcrumbNav from "../BreadcrumbNav";
 
 interface PrimaryHeroProps {
   title: string;
@@ -30,10 +32,12 @@ export default function PrimaryHero({
           />
           <div className="absolute inset-0 bg-black/15"></div>
         </div>
-
         <div className="relative h-[calc(100vh)]">
-          <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center">
-            <h1 className="text-5xl font-bold mb-4">{title}</h1>
+          <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3">
+            <h1 className="text-5xl font-bold">{title}</h1>
+            <div className="text-xs sm:text-sm lg:text-base">
+              <BreadcrumbNav breadcrumbs={breadcrumbs} />
+            </div>
           </div>
           {showBookingWidget && (
             <>
