@@ -170,3 +170,49 @@ class MegaMenuBlock(StructBlock):
 
     class Meta:
         graphql_type = "MegaMenuBlock"
+
+
+@register_streamfield_block
+class ValueCardBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    description = TextBlock(required=True)
+    image = ImageChooserBlock(required=True)
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+        GraphQLImage("image", name="image"),
+    ]
+
+    class Meta:
+        graphql_type = "ValueCardBlock"
+
+
+@register_streamfield_block
+class StatBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    value = CharBlock(required=True, max_length=50)
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("value", name="value"),
+    ]
+
+    class Meta:
+        graphql_type = "StatBlock"
+
+
+@register_streamfield_block
+class JourneyItemBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    description = TextBlock(required=True)
+    year = CharBlock(required=True, max_length=4, help_text="Year of the journey item")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+        GraphQLString("year", name="year"),
+    ]
+
+    class Meta:
+        graphql_type = "JourneyItemBlock"
