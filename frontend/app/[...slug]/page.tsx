@@ -31,6 +31,7 @@ import { fetchFlightSchedulePage } from "@/graphql/FlightSchedulePageQuery";
 import { fetchSpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
 import { fetchSpecialPage } from "@/graphql/SpecialPageQuery";
 import { fetchAboutPage } from "@/graphql/AboutPageQuery";
+import { fetchBelamaPage } from "@/graphql/BelamaPageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
@@ -73,9 +74,7 @@ async function fetchPageData(slug: string, fullPath: string) {
     case "AboutIndexPage":
       return fetchAboutPage();
     case "BelamaIndexPage":
-      return {
-        __typename: "BelamaIndexPage",
-      };
+      return fetchBelamaPage();
     case "BelamaSignUpPage":
       return {
         __typename: "BelamaSignUpPage",
@@ -178,7 +177,7 @@ export default async function Page({
       case "AboutIndexPage":
         return <AboutPageTemplate initialPage={page} />;
       case "BelamaIndexPage":
-        return <BelamaIndexPageTemplate />;
+        return <BelamaIndexPageTemplate initialPage={page} />;
       case "BelamaSignUpPage":
         return <BelamaSignUpPageTemplate />;
       default:
