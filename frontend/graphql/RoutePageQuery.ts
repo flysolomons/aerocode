@@ -31,6 +31,7 @@ export interface RoutePage {
   };
   url: string;
   seoTitle: string;
+  description: string;
   name?: string;
   nameFull?: string;
   departureAirport: string;
@@ -69,6 +70,7 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         url
       }
       seoTitle
+      description
       url
       name
       nameFull
@@ -148,15 +150,14 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
 
     if (!data.route) {
       return null;
-    }
-
-    // Get the route data
+    } // Get the route data
     const route = data.route;
     return {
       heroTitle: route.heroTitle || "",
       heroImage: route.heroImage || { url: "/hero.jpg" },
       url: route.url || "",
       seoTitle: route.seoTitle || "",
+      description: route.description || "",
       name: route.name || "",
       nameFull: route.nameFull || "",
       departureAirport: route.departureAirport || "",

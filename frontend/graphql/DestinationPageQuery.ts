@@ -45,6 +45,7 @@ export interface DestinationPage {
   };
   url: string;
   seoTitle: string;
+  description: string;
   country: string;
   reasonsToVisit: SectionBlock[];
   travelRequirements: TravelRequirementBlock[];
@@ -61,6 +62,7 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       }
       url
       seoTitle
+      description
       country
       reasonsToVisit {
         ... on SectionBlock {
@@ -118,12 +120,12 @@ export async function fetchDestinationPage(
         arrivalAirport: route.arrivalAirport || "",
         specialRoutes: route.specialRoutes || [],
       })) || [];
-
     return {
       heroTitle: destination.heroTitle || "",
       heroImage: destination.heroImage || { url: "/hero.jpg" },
       url: destination.url || "",
       seoTitle: destination.seoTitle || "",
+      description: destination.description || "",
       country: destination.country || "",
       reasonsToVisit: destination.reasonsToVisit || [],
       travelRequirements: destination.travelRequirements || [],

@@ -7,6 +7,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
     genericPage(slug: $slug) {
       __typename
       seoTitle
+      description
       heroTitle
       heroImage {
         url
@@ -63,6 +64,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
 export interface GenericPage {
   __typename: string;
   seoTitle?: string;
+  description?: string;
   heroTitle?: string;
   heroImage?: {
     url: string;
@@ -110,6 +112,7 @@ export async function fetchGenericPage(
       data.genericPage || {
         __typename: "GenericPage",
         seoTitle: "Generic Page",
+        description: "",
         heroTitle: "",
         heroImage: { url: "/default-hero.jpg" },
         url: "",
@@ -121,6 +124,7 @@ export async function fetchGenericPage(
     return {
       __typename: "GenericPage",
       seoTitle: "Generic Page",
+      description: "",
       heroTitle: "",
       heroImage: { url: "/default-hero.jpg" },
       url: "",

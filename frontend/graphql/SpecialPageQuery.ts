@@ -29,6 +29,7 @@ export interface SpecialPage {
   };
   url: string;
   seoTitle: string;
+  description: string;
   name: string;
   startDate: string;
   endDate: string;
@@ -46,6 +47,7 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
       }
       url
       seoTitle
+      description
       name
       startDate
       endDate
@@ -77,15 +79,14 @@ export async function fetchSpecialPage(
 
     if (!data.special) {
       return null;
-    }
-
-    // Get the special data
+    } // Get the special data
     const special = data.special;
     return {
       heroTitle: special.heroTitle || "",
       heroImage: special.heroImage || { url: "/hero.jpg" },
       url: special.url || "",
       seoTitle: special.seoTitle || "",
+      description: special.description || "",
       name: special.name || "",
       startDate: special.startDate || "",
       endDate: special.endDate || "",

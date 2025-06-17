@@ -19,6 +19,7 @@ export interface PageMetadata {
   };
   url: string;
   seoTitle: string;
+  description: string;
   __typename?: string;
 }
 
@@ -39,6 +40,7 @@ export const GET_SPECIALS_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        description
       }
     }
     specials {
@@ -55,9 +57,7 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
   try {
     const { data } = await client.query({
       query: GET_SPECIALS_INDEX_PAGE_QUERY,
-    });
-
-    // Get the page metadata from the pages query
+    }); // Get the page metadata from the pages query
     const pageMetadata = data.pages?.find(
       (page: any) => page.__typename === "SpecialsIndexPage"
     ) || {
@@ -65,6 +65,7 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
       heroImage: { url: "/hero.jpg" },
       url: "/explores/specials",
       seoTitle: "Specials",
+      description: "",
       __typename: "SpecialsIndexPage",
     };
 
@@ -88,6 +89,7 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
         heroImage: { url: "/hero.jpg" },
         url: "/explores/specials",
         seoTitle: "Specials",
+        description: "",
         __typename: "SpecialsIndexPage",
       },
       specials: [],

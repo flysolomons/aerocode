@@ -6,6 +6,7 @@ export interface NewsIndexPage {
   heroImage: { url: string };
   url: string;
   seoTitle: string;
+  description: string;
 }
 
 const GET_NEWS_INDEX_PAGE_QUERY = gql`
@@ -18,6 +19,7 @@ const GET_NEWS_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        description
       }
     }
   }
@@ -62,6 +64,7 @@ export async function fetchNewsIndexPage() {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "News",
+      description: "",
     };
     return pageData;
   } catch (error) {
@@ -71,6 +74,7 @@ export async function fetchNewsIndexPage() {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "News",
+      description: "",
     };
   }
 }

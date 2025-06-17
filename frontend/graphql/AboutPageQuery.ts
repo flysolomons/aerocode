@@ -32,6 +32,7 @@ export interface AboutIndexPage {
   heroImage: ImageBlock;
   seoTitle: string;
   url: string;
+  description: string;
   missionStatement: string;
   visionStatement: string;
   values: ValueCardBlock[];
@@ -56,6 +57,7 @@ export const GET_ABOUT_PAGE_QUERY = gql`
         }
         seoTitle
         url
+        description
         missionStatement
         visionStatement
         values {
@@ -113,6 +115,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
         heroImage: { url: "/default-hero.jpg" },
         seoTitle: "About Us",
         url: "/about",
+        description: "Learn more about Solomon Airlines",
         missionStatement: "",
         visionStatement: "",
         values: [],
@@ -128,6 +131,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
       seoTitle: aboutPage.seoTitle || "About Us",
       url: aboutPage.url || "/about",
+      description: aboutPage.description || "Learn more about Solomon Airlines",
       missionStatement: aboutPage.missionStatement || "",
       visionStatement: aboutPage.visionStatement || "",
       values: aboutPage.values || [],
@@ -143,6 +147,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       heroImage: { url: "/default-hero.jpg" },
       seoTitle: "About Us",
       url: "/about",
+      description: "",
       missionStatement: "",
       visionStatement: "",
       values: [],
@@ -179,6 +184,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
         heroImage: { url: "/default-hero.jpg" },
         seoTitle: "About Us",
         url: "/about",
+        description: "",
         missionStatement: "",
         visionStatement: "",
         values: [],
@@ -194,6 +200,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
       seoTitle: aboutPage.seoTitle || "About Us",
       url: aboutPage.url || "/about",
+      description: aboutPage.description || "Learn more about Solomon Airlines",
       missionStatement: aboutPage.missionStatement || "",
       visionStatement: aboutPage.visionStatement || "",
       values: aboutPage.values || [],
@@ -209,6 +216,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       heroImage: { url: "/default-hero.jpg" },
       seoTitle: "About Us",
       url: "/about",
+      description: "Learn more about Solomon Airlines",
       missionStatement: "",
       visionStatement: "",
       values: [],
@@ -226,6 +234,7 @@ export const fallbackAboutPage: AboutIndexPage = {
   heroImage: { url: "/default-hero.jpg" },
   seoTitle: "About Us",
   url: "/about",
+  description: "Learn more about Solomon Airlines",
   missionStatement:
     "Our mission is to connect the Solomon Islands through reliable air transport.",
   visionStatement: "To be the leading airline in the Pacific region.",
