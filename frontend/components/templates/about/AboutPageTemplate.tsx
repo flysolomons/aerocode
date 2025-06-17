@@ -25,7 +25,7 @@ export default function AboutPageTemplate({
       <PrimaryHero
         title={initialPage.heroTitle || "Our Journey Above the Clouds"}
         image={initialPage.heroImage?.url || "/hero.jpg"}
-        breadcrumbs="/about"
+        breadcrumbs={initialPage.url}
         showBookingWidget={false}
       />
       {/* Mission & Vision Section */}
