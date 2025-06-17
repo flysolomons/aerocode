@@ -8,6 +8,7 @@ interface PrimaryHeroProps {
   image: string;
   breadcrumbs?: string;
   widget?: string;
+  showBookingWidget?: boolean;
 }
 
 export default function PrimaryHero({
@@ -15,6 +16,7 @@ export default function PrimaryHero({
   image,
   breadcrumbs,
   widget,
+  showBookingWidget = true,
 }: PrimaryHeroProps) {
   return (
     <main>
@@ -30,14 +32,18 @@ export default function PrimaryHero({
         </div>
 
         <div className="relative h-[calc(100vh)]">
+          {" "}
           <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center">
             <h1 className="text-5xl font-bold mb-4">{title}</h1>
           </div>
-
-          {widget === "stripped" ? (
-            <StrippedBookingWidget />
-          ) : (
-            <BookingWidget />
+          {showBookingWidget && (
+            <>
+              {widget === "stripped" ? (
+                <StrippedBookingWidget />
+              ) : (
+                <BookingWidget />
+              )}
+            </>
           )}
         </div>
       </div>

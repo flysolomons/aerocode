@@ -38,7 +38,7 @@ class BasePage(Page):
     )
 
     description = models.CharField(
-        max_length=255,
+        max_length=2000,
         blank=True,
         help_text="A short description of the page.",
     )
