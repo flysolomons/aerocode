@@ -17,7 +17,6 @@ function RouteSpecialCard({
 }: RouteSpecialCardProps) {
   return (
     <>
-      {" "}
       <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-3xl overflow-hidden w-full h-full shadow-xl min-h-48 sm:min-h-56 lg:min-h-64">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
         <Image

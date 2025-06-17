@@ -86,7 +86,7 @@ export default function SpecialPageTemplate({
         image={heroImage?.url || "/hero.jpg"}
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
-      />{" "}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description with validity period */}
@@ -134,7 +134,7 @@ export default function SpecialPageTemplate({
             </div>
           )} */}
         </div>
-      </Container>{" "}
+      </Container>
       {/* Other specials section
       <div className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <Container>

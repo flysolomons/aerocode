@@ -27,7 +27,7 @@ export default function AboutPageTemplate({
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs="/about"
         showBookingWidget={false}
-      />{" "}
+      />
       {/* Mission & Vision Section */}
       <Container>
         <div
@@ -169,13 +169,11 @@ export default function AboutPageTemplate({
             )}
           </div>
         </div>
-      </Container>{" "}
+      </Container>
       {/* Key Stats - SpaceX inspired with counters */}
       <div className="bg-gray-100 py-12 sm:py-16 lg:py-20">
-        {" "}
         <Container>
           <div id="statsSection" className="px-4 sm:px-6 lg:px-8">
-            {" "}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8 text-center">
               {initialPage.stats && initialPage.stats.length > 0 ? (
                 initialPage.stats.map((stat, index) => (
@@ -191,7 +189,6 @@ export default function AboutPageTemplate({
               ) : (
                 // Fallback static stats if none provided from API
                 <>
-                  {" "}
                   <div className="p-4 sm:p-6 lg:p-6">
                     <div className="text-4xl sm:text-5xl lg:text-5xl font-bold text-blue-700 mb-2">
                       35+
@@ -232,7 +229,6 @@ export default function AboutPageTemplate({
       </div>
       {/* Timeline - History - SpaceX/Tesla inspired */}
       <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20">
-        {" "}
         <Container>
           <div id="timelineSection" className="px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
@@ -243,7 +239,7 @@ export default function AboutPageTemplate({
                 From humble beginnings to becoming the Pacific's premier
                 airline.
               </p>
-            </div>{" "}
+            </div>
             <div className="space-y-12 sm:space-y-16 lg:space-y-16">
               {initialPage.journey && initialPage.journey.length > 0 ? (
                 initialPage.journey.map((journeyItem, index) => (
@@ -355,7 +351,7 @@ export default function AboutPageTemplate({
             </div>
           </div>
         </Container>
-      </div>{" "}
+      </div>
       {/* Call to Action - Tesla/SpaceX inspired with dramatic imagery */}
       <div
         className="relative h-[300px] sm:h-[400px] lg:h-[500px] bg-cover bg-center"

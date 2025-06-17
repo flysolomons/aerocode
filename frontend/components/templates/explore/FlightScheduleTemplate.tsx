@@ -160,7 +160,7 @@ export default function FlightScheduleTemplate({
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
-      />{" "}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {initialPage.description && (
@@ -169,7 +169,7 @@ export default function FlightScheduleTemplate({
                 {initialPage.description}
               </p>
             </div>
-          )}{" "}
+          )}
           {/* Schedule Date Filter Cards */}
           {initialPage.schedules && initialPage.schedules.length > 0 && (
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
@@ -184,7 +184,7 @@ export default function FlightScheduleTemplate({
                   }`}
                 >
                   <div className="font-medium">
-                    {"From"}{" "}
+                    {"From"}
                     <span className="font-semibold">
                       {formatDate(schedule.startDate)}
                     </span>

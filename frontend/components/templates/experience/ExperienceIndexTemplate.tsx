@@ -15,7 +15,7 @@ export default function ExperienceIndexTemplate({
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/default-hero.jpg"}
         breadcrumbs={initialPage.url}
-      />{" "}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
           {/* Description */}

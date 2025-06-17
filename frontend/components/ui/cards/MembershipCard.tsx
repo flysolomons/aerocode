@@ -29,10 +29,9 @@ function MembershipCard({
             </p>
           </div>
           <div className="space-y-3 sm:space-y-4 lg:space-y-4">
-            {" "}
             <p className="text-center text-xs sm:text-sm lg:text-sm font-light">
               This package includes...
-            </p>{" "}
+            </p>
             {features && features.trim() ? (
               <div
                 className="text-sm sm:text-base lg:text-base space-y-1 sm:space-y-0 lg:space-y-0"

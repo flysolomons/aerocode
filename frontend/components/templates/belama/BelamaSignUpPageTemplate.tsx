@@ -250,15 +250,15 @@ const BelamaSignUpTemplate = () => {
                 </div>
               )}
               {/* Special Requests Section */}
-              {membershipType === "business" && renderMemberPreferences(3)}{" "}
+              {membershipType === "business" && renderMemberPreferences(3)}
               {/* For Business */}
-              {membershipType === "family" && renderMemberPreferences(5)}{" "}
+              {membershipType === "family" && renderMemberPreferences(5)}
               {/* 2 Adults + 3 Children */}
-              {membershipType === "max" && renderMemberPreferences(1)}{" "}
+              {membershipType === "max" && renderMemberPreferences(1)}
               {/* 1 Member */}
-              {membershipType === "me" && renderMemberPreferences(2)}{" "}
+              {membershipType === "me" && renderMemberPreferences(2)}
               {/* 1 Member + 1 Guest */}
-              {membershipType === "plus" && renderMemberPreferences(2)}{" "}
+              {membershipType === "plus" && renderMemberPreferences(2)}
               {/* 1 Member + 1 Guest */}
             </>
           )}

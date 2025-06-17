@@ -60,7 +60,6 @@ export default function BookingWidget() {
   return (
     <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp">
       <div className="w-[70.5rem] bg-white rounded-[2rem] shadow-lg">
-        {" "}
         <div className="flex border-b">
           <div
             className={`flex px-4 py-3 h-12 w-[11rem] ${

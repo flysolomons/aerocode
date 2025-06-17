@@ -13,7 +13,6 @@ export default function BelamaIndexPageTemplate({
 }: BelamaIndexPageTemplateProps) {
   return (
     <>
-      {" "}
       <SecondaryHero
         title={initialPage.heroTitle}
         image={initialPage.heroImage.url}
@@ -21,7 +20,6 @@ export default function BelamaIndexPageTemplate({
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          {" "}
           {/* Description */}
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
@@ -33,7 +31,7 @@ export default function BelamaIndexPageTemplate({
           <div className="space-y-6 sm:space-y-8 lg:space-y-8">
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Individual Memberships
-            </h2>{" "}
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
               {initialPage.individualMemberships.map((membership, index) => (
                 <MembershipCard
@@ -45,7 +43,7 @@ export default function BelamaIndexPageTemplate({
                 />
               ))}
             </div>
-          </div>{" "}
+          </div>
           <Image
             src={initialPage.promoImage?.url || "/image.jpg"}
             alt="Where We Fly: International"
@@ -56,7 +54,7 @@ export default function BelamaIndexPageTemplate({
           <div className="space-y-6 sm:space-y-8 lg:space-y-8">
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Group Memberships
-            </h2>{" "}
+            </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
               {initialPage.groupMemberships.map((membership, index) => (
                 <MembershipCard

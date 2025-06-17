@@ -48,10 +48,9 @@ export default function DestinationTemplate({
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         widget="stripped"
-      />{" "}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          {" "}
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
               <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
@@ -81,7 +80,7 @@ export default function DestinationTemplate({
                 description={reason.text}
                 imageOnLeft={index % 2 !== 0}
               />
-            ))}{" "}
+            ))}
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
@@ -92,7 +91,7 @@ export default function DestinationTemplate({
                   </h2>
 
                   <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
-                    Important information for travelers planning a trip to{" "}
+                    Important information for travelers planning a trip to
                     {initialPage.country}.
                   </p>
                 </div>
@@ -109,7 +108,7 @@ export default function DestinationTemplate({
                   ))}
                 </div>
               </div>
-            )}{" "}
+            )}
           {/* Routes Section - Using dynamically fetched routes by country */}
           <div className="space-y-6 sm:space-y-8">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">

@@ -32,7 +32,6 @@ export default function PrimaryHero({
         </div>
 
         <div className="relative h-[calc(100vh)]">
-          {" "}
           <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center">
             <h1 className="text-5xl font-bold mb-4">{title}</h1>
           </div>
