@@ -7,6 +7,7 @@ import TextBlock from "@/components/ui/blocks/TextBlock";
 import ImageBlock from "@/components/ui/blocks/ImageBlock";
 import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
+import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import { GenericPage } from "@/graphql/genericPageQuery";
 
 interface GenericPageTemplateProps {
@@ -25,49 +26,72 @@ export default function GenericPageTemplate({
           breadcrumbs={initialPage.url}
         />
       )}
-      <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          {initialPage.description && (
+
+      {/* Description section with container */}
+      {initialPage.description && (
+        <Container>
+          <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
               <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>
-          )}
-          {initialPage.content.map((block, index) => (
-            <div key={index}>
-              {/* if it's a section block then pass it on to the section block componennt */}
-              {block.blockType === "SectionBlock" && (
-                <SectionBlock
-                  block={{
-                    ...block,
-                    imagePosition:
-                      block.imagePosition === "left" ||
-                      block.imagePosition === "right"
-                        ? block.imagePosition
-                        : undefined,
-                  }}
-                />
-              )}
+          </div>
+        </Container>
+      )}
 
-              {/* if it's a text block then pass it on to the text block componennt */}
-              {block.blockType === "TextBlock" && <TextBlock block={block} />}
+      {/* Content blocks */}
+      <div className="space-y-8 sm:space-y-12 lg:space-y-16">
+        {initialPage.content.map((block, index) => {
+          // Full width blocks don't need container
+          if (block.blockType === "FullWidthImageBlock") {
+            return (
+              <div key={index}>
+                <FullWidthImageBlock block={block} />
+              </div>
+            );
+          }
 
-              {/* if it's an image */}
-              {block.blockType === "ImageBlock" && <ImageBlock block={block} />}
+          // All other blocks get wrapped in container
+          return (
+            <Container key={index}>
+              <div className="px-4 sm:px-6 lg:px-8">
+                {/* Section block */}
+                {block.blockType === "SectionBlock" && (
+                  <SectionBlock
+                    block={{
+                      ...block,
+                      imagePosition:
+                        block.imagePosition === "left" ||
+                        block.imagePosition === "right"
+                          ? block.imagePosition
+                          : undefined,
+                    }}
+                  />
+                )}
 
-              {/* if it's a heading text block */}
-              {block.blockType === "HeadingTextBlock" && (
-                <HeadingTextBlock block={block} />
-              )}
+                {/* Text block */}
+                {block.blockType === "TextBlock" && <TextBlock block={block} />}
 
-              {block.blockType === "GridCardSectionBlock" && (
-                <GridCardSectionBlock block={block} />
-              )}
-            </div>
-          ))}
-        </div>
-      </Container>
+                {/* Image block */}
+                {block.blockType === "ImageBlock" && (
+                  <ImageBlock block={block} />
+                )}
+
+                {/* Heading text block */}
+                {block.blockType === "HeadingTextBlock" && (
+                  <HeadingTextBlock block={block} />
+                )}
+
+                {/* Grid card section block */}
+                {block.blockType === "GridCardSectionBlock" && (
+                  <GridCardSectionBlock block={block} />
+                )}
+              </div>
+            </Container>
+          );
+        })}
+      </div>
     </div>
   );
 }

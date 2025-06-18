@@ -11,6 +11,7 @@ from wagtail.fields import StreamField
 from .blocks import (
     TextBlock,
     ImageBlock,
+    FullWidthImageBlock,
     SectionBlock,
     GridCardSectionBlock,
     HeadingTextBlock,
@@ -35,6 +36,12 @@ class BasePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         help_text="Image that will be displayed on this page's hero section",
+    )
+
+    sub_title = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="A short subtitle for the page.",
     )
 
     description = models.CharField(
@@ -73,6 +80,7 @@ class GenericPage(BasePage):
         [
             ("text", TextBlock()),
             ("image", ImageBlock()),
+            ("full_width_image", FullWidthImageBlock()),
             ("section", SectionBlock()),
             ("grid_card_section", GridCardSectionBlock()),
             ("heading_text", HeadingTextBlock()),

@@ -22,6 +22,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
+          backgroundColor
         }
         ... on ImageBlock {
           blockType
@@ -29,6 +30,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
+          backgroundColor
         }
         ... on HeadingTextBlock {
           heading
@@ -36,6 +38,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         }
         ... on GridCardSectionBlock {
           heading
+          backgroundColor
           blocks {
             ... on ListBlock {
               items {
@@ -51,6 +54,11 @@ export const GET_GENERIC_PAGE_QUERY = gql`
             }
             blockType
             field
+          }
+        }
+        ... on FullWidthImageBlock {
+          image {
+            url
           }
         }
         ... on TextBlock {
@@ -73,29 +81,69 @@ export interface GenericPage {
   content: ContentBlock[];
 }
 
-interface ContentBlock {
+interface ImageType {
+  url: string;
+}
+
+interface GridCardBlock {
   blockType: string;
   heading?: string;
   text?: string;
-  imagePosition?: string;
-  image?: {
-    url: string;
-  };
-  caption?: string;
-  value?: string;
-  blocks?: {
-    blockType: string;
-    field?: string;
-    items?: {
-      blockType: string;
-      heading?: string;
-      text?: string;
-      image?: {
-        url: string;
-      };
-    }[];
-  }[];
+  image?: ImageType;
 }
+
+interface ListBlock {
+  blockType: string;
+  field?: string;
+  items?: GridCardBlock[];
+}
+
+interface SectionBlock {
+  blockType: "SectionBlock";
+  heading?: string;
+  text?: string;
+  imagePosition?: string;
+  image?: ImageType;
+  backgroundColor?: string;
+}
+
+interface ImageBlock {
+  blockType: "ImageBlock";
+  caption?: string;
+  image?: ImageType;
+  backgroundColor?: string;
+}
+
+interface HeadingTextBlock {
+  blockType: "HeadingTextBlock";
+  heading?: string;
+  text?: string;
+}
+
+interface GridCardSectionBlock {
+  blockType: "GridCardSectionBlock";
+  heading?: string;
+  backgroundColor?: string;
+  blocks?: ListBlock[];
+}
+
+interface FullWidthImageBlock {
+  blockType: "FullWidthImageBlock";
+  image?: ImageType;
+}
+
+interface TextBlock {
+  blockType: "TextBlock";
+  value?: string;
+}
+
+type ContentBlock =
+  | SectionBlock
+  | ImageBlock
+  | HeadingTextBlock
+  | GridCardSectionBlock
+  | FullWidthImageBlock
+  | TextBlock;
 
 // Fetch GenericPage data
 export async function fetchGenericPage(
@@ -108,27 +156,10 @@ export async function fetchGenericPage(
       query: GET_GENERIC_PAGE_QUERY,
       variables: { slug },
     });
-    return (
-      data.genericPage || {
-        __typename: "GenericPage",
-        seoTitle: "Generic Page",
-        description: "",
-        heroTitle: "",
-        heroImage: { url: "/default-hero.jpg" },
-        url: "",
-        content: [],
-      }
-    );
+
+    return data.genericPage || null;
   } catch (error) {
     console.error("Error fetching GenericPage data:", error);
-    return {
-      __typename: "GenericPage",
-      seoTitle: "Generic Page",
-      description: "",
-      heroTitle: "",
-      heroImage: { url: "/default-hero.jpg" },
-      url: "",
-      content: [],
-    };
+    return null;
   }
 }
