@@ -243,7 +243,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 </div>
               ))}
             </div>
-          </div>{" "}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -481,7 +481,6 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               : "none",
         }}
       >
-        {" "}
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-0 relative">
           <div className="flex items-center">
             <Link href="/">
