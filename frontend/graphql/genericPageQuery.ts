@@ -61,10 +61,9 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
-          backgroundColor
         }
         ... on TextBlock {
-          text
+          value
         }
       }
     }
@@ -127,12 +126,11 @@ interface FullWidthImageBlock {
   blockType: "FullWidthImageBlock";
   caption?: string;
   image?: ImageType;
-  backgroundColor?: string;
 }
 
 interface TextBlock {
   blockType: "TextBlock";
-  text?: string;
+  value?: string;
 }
 
 interface GridCardSectionBlock {
@@ -161,6 +159,8 @@ export async function fetchGenericPage(
       query: GET_GENERIC_PAGE_QUERY,
       variables: { slug },
     });
+
+    console.log("Fetched GenericPage data:", data.genericPage);
 
     return data.genericPage || null;
   } catch (error) {
