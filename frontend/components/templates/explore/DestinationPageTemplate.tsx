@@ -42,6 +42,8 @@ export default function DestinationTemplate({
     }
   }, [initialPage?.country]);
 
+  console.log("Initial Page Data:", initialPage);
+
   return (
     <>
       <PrimaryHero
