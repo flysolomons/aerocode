@@ -4,6 +4,7 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import SpecialCard from "@/components/ui/cards/SpecialCard";
 import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -48,8 +49,7 @@ export default function SpecialsIndexTemplate({
                 Latest Specials
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
-                We offer convenient flights between Australia, Fiji, Vanuatu,
-                and Honiara, the vibrant capital of the Solomon Islands.
+                {stripHtmlTags("We offer convenient flights between Australia, Fiji, Vanuatu, and Honiara, the vibrant capital of the Solomon Islands.")}
               </p>
             </div> */}
             {pageDescription && (

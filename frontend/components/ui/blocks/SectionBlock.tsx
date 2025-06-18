@@ -1,3 +1,4 @@
+import { stripHtmlTags } from "@/lib/utils";
 interface SectionBlockProps {
   block: {
     blockType: string;
@@ -43,7 +44,7 @@ export default function SectionBlock({ block }: SectionBlockProps) {
         )}
         {block.text && (
           <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
-            {block.text}
+            {stripHtmlTags(block.text)}
           </p>
         )}
       </div>
