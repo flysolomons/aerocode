@@ -218,7 +218,6 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
-                    {" "}
                     {section.items.map((item: any, itemIndex: number) => (
                       <li key={itemIndex}>
                         <Link
@@ -244,7 +243,8 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 </div>
               ))}
             </div>
-          </div>        </motion.div>
+          </div>{" "}
+        </motion.div>
       )}
     </AnimatePresence>
   );
@@ -304,32 +304,39 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   >
                     {item.name}
                   </Link>
-                  
+
                   {/* Mobile mega menu sections */}
-                  {hasMegaMenuContent(item.key) && finalMegaMenuData[item.key] && (
-                    <div className="mt-3 ml-4 space-y-4">
-                      {finalMegaMenuData[item.key].sections?.map((section: any, sectionIndex: number) => (
-                        <div key={sectionIndex}>
-                          <h4 className="text-sm font-semibold text-blue-600 mb-2">
-                            {section.title}
-                          </h4>
-                          <ul className="space-y-1">
-                            {section.items?.map((subItem: any, subItemIndex: number) => (
-                              <li key={subItemIndex}>
-                                <Link
-                                  href={subItem.href || "#"}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block text-sm text-gray-600 hover:text-blue-600 transition-colors py-1"
-                                >
-                                  {subItem.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {hasMegaMenuContent(item.key) &&
+                    finalMegaMenuData[item.key] && (
+                      <div className="mt-3 ml-4 space-y-4">
+                        {finalMegaMenuData[item.key].sections?.map(
+                          (section: any, sectionIndex: number) => (
+                            <div key={sectionIndex}>
+                              <h4 className="text-sm font-semibold text-blue-600 mb-2">
+                                {section.title}
+                              </h4>
+                              <ul className="space-y-1">
+                                {section.items?.map(
+                                  (subItem: any, subItemIndex: number) => (
+                                    <li key={subItemIndex}>
+                                      <Link
+                                        href={subItem.href || "#"}
+                                        onClick={() =>
+                                          setIsMobileMenuOpen(false)
+                                        }
+                                        className="block text-sm text-gray-600 hover:text-blue-600 transition-colors py-1"
+                                      >
+                                        {subItem.name}
+                                      </Link>
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )}
                 </div>
               ))}
             </nav>
@@ -418,14 +425,16 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
       }
 
       setLastScrollY(currentScrollY);
-    };    window.addEventListener("scroll", handleScroll, { passive: true });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, isScrollingUp]);
 
   // Handle window resize to close mobile menu on desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) { // lg breakpoint
+      if (window.innerWidth >= 1024) {
+        // lg breakpoint
         setIsMobileMenuOpen(false);
         setActiveMegaMenu(null);
       }
@@ -471,7 +480,9 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
               : "none",
         }}
-      >        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-0 relative">
+      >
+        {" "}
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-0 relative">
           <div className="flex items-center">
             <Link href="/">
               <motion.div
@@ -500,9 +511,13 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
             {navigationItems.map((item: any) => (
               <div
                 key={item.name}
-                className="relative"                onMouseEnter={() => {
+                className="relative"
+                onMouseEnter={() => {
                   // Only activate mega menu if it has content and on desktop
-                  if (hasMegaMenuContent(item.key) && window.innerWidth >= 1024) {
+                  if (
+                    hasMegaMenuContent(item.key) &&
+                    window.innerWidth >= 1024
+                  ) {
                     setActiveMegaMenu(item.key);
                   }
                 }}
@@ -620,7 +635,10 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
               }}
               whileHover={{
-                backgroundColor: isHovered || activeMegaMenu ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
+                backgroundColor:
+                  isHovered || activeMegaMenu
+                    ? "rgba(0,0,0,0.1)"
+                    : "rgba(255,255,255,0.1)",
               }}
               transition={{ duration: 0.2 }}
               aria-label="Open menu"
@@ -640,7 +658,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               </svg>
             </motion.button>
           </div>
-        </div>{" "}
+        </div>
         {/* Mega Menu */}
         {activeMegaMenu &&
           finalMegaMenuData[
@@ -652,9 +670,9 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   activeMegaMenu as keyof typeof finalMegaMenuData
                 ]
               }
-              isVisible={true}            />
+              isVisible={true}
+            />
           )}
-
         {/* Mobile Menu */}
         <MobileMenu />
       </motion.header>
@@ -663,7 +681,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
   // White header that appears when scrolling up
   return (
     <>
-      {/* Transparent Header */}{" "}
+      {/* Transparent Header */}
       {/* <motion.header
         className="w-full absolute top-0 z-50 bg-transparent"
         animate={{
@@ -675,7 +693,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
         }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
-          {" "}
+          
           <div className="flex items-center">
             <Link href="/">
               <Image
@@ -703,7 +721,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 {item.name}
               </Link>
             ))}
-          </nav>{" "}
+          </nav>
           <div className="flex items-center justify-end gap-3 w-36">
             <button
               className={`transition-colors ${
@@ -761,11 +779,11 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   strokeWidth={2}
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
                 />
-              </svg>{" "}
+              </svg>
             </button>
           </div>
         </div>
-      </motion.header>{" "} */}
+      </motion.header> */}
       {/* White Header */}
       {/* <motion.header
         className="w-full fixed top-0 z-50"
@@ -786,7 +804,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
         }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
-          {" "}
+          
           <div className="flex items-center">
             <Link href="/">
               <Image
@@ -812,7 +830,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 {item.name}
               </Link>
             ))}
-          </nav>{" "}
+          </nav>
           <div className="flex items-center justify-end gap-3 w-36">
             <button
               className="text-blue-500 hover:text-blue-700 transition-colors"
@@ -864,7 +882,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   strokeWidth={2}
                   d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
                 />
-              </svg>{" "}
+              </svg>
             </button>
           </div>
         </div>      </motion.header> */}

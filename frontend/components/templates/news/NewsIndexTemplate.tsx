@@ -85,6 +85,13 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
       )}
       <Container>
         <div className="py-12 space-y-16">
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}
           <div className="grid grid-cols-3 gap-x-4 gap-y-8">
             {newsArticles.map((article: any, index: number) =>
               article ? (

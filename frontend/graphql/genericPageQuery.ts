@@ -7,6 +7,8 @@ export const GET_GENERIC_PAGE_QUERY = gql`
     genericPage(slug: $slug) {
       __typename
       seoTitle
+      subTitle
+      description
       heroTitle
       heroImage {
         url
@@ -21,6 +23,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
+          backgroundColor
         }
         ... on ImageBlock {
           blockType
@@ -28,6 +31,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
+          backgroundColor
         }
         ... on HeadingTextBlock {
           heading
@@ -35,6 +39,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         }
         ... on GridCardSectionBlock {
           heading
+          backgroundColor
           blocks {
             ... on ListBlock {
               items {
@@ -48,12 +53,18 @@ export const GET_GENERIC_PAGE_QUERY = gql`
                 }
               }
             }
-            blockType
-            field
           }
         }
+        ... on FullWidthImageBlock {
+          blockType
+          caption
+          image {
+            url
+          }
+          backgroundColor
+        }
         ... on TextBlock {
-          value
+          text
         }
       }
     }
@@ -63,6 +74,8 @@ export const GET_GENERIC_PAGE_QUERY = gql`
 export interface GenericPage {
   __typename: string;
   seoTitle?: string;
+  subTitle?: string;
+  description?: string;
   heroTitle?: string;
   heroImage?: {
     url: string;
@@ -71,29 +84,71 @@ export interface GenericPage {
   content: ContentBlock[];
 }
 
-interface ContentBlock {
+interface ImageType {
+  url: string;
+}
+
+interface GridCardBlock {
   blockType: string;
   heading?: string;
   text?: string;
-  imagePosition?: string;
-  image?: {
-    url: string;
-  };
-  caption?: string;
-  value?: string;
-  blocks?: {
-    blockType: string;
-    field?: string;
-    items?: {
-      blockType: string;
-      heading?: string;
-      text?: string;
-      image?: {
-        url: string;
-      };
-    }[];
-  }[];
+  image?: ImageType;
 }
+
+interface ListBlock {
+  blockType: string;
+  field?: string;
+  items?: GridCardBlock[];
+}
+
+interface SectionBlock {
+  blockType: "SectionBlock";
+  heading?: string;
+  text?: string;
+  imagePosition?: string;
+  image?: ImageType;
+  backgroundColor?: string;
+}
+
+interface ImageBlock {
+  blockType: "ImageBlock";
+  caption?: string;
+  image?: ImageType;
+  backgroundColor?: string;
+}
+
+interface HeadingTextBlock {
+  blockType: "HeadingTextBlock";
+  heading?: string;
+  text?: string;
+}
+
+interface FullWidthImageBlock {
+  blockType: "FullWidthImageBlock";
+  caption?: string;
+  image?: ImageType;
+  backgroundColor?: string;
+}
+
+interface TextBlock {
+  blockType: "TextBlock";
+  text?: string;
+}
+
+interface GridCardSectionBlock {
+  blockType: "GridCardSectionBlock";
+  heading?: string;
+  backgroundColor?: string;
+  blocks?: ListBlock[];
+}
+
+type ContentBlock =
+  | SectionBlock
+  | ImageBlock
+  | HeadingTextBlock
+  | FullWidthImageBlock
+  | TextBlock
+  | GridCardSectionBlock;
 
 // Fetch GenericPage data
 export async function fetchGenericPage(
@@ -106,25 +161,10 @@ export async function fetchGenericPage(
       query: GET_GENERIC_PAGE_QUERY,
       variables: { slug },
     });
-    return (
-      data.genericPage || {
-        __typename: "GenericPage",
-        seoTitle: "Generic Page",
-        heroTitle: "",
-        heroImage: { url: "/default-hero.jpg" },
-        url: "",
-        content: [],
-      }
-    );
+
+    return data.genericPage || null;
   } catch (error) {
     console.error("Error fetching GenericPage data:", error);
-    return {
-      __typename: "GenericPage",
-      seoTitle: "Generic Page",
-      heroTitle: "",
-      heroImage: { url: "/default-hero.jpg" },
-      url: "",
-      content: [],
-    };
+    return null;
   }
 }

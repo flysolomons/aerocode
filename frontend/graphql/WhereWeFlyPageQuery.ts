@@ -9,6 +9,7 @@ export interface WhereWeFlyPage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   domesticRoutes: {
     url: string;
@@ -29,6 +30,7 @@ export const GET_WHERE_WE_FLY_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        subTitle
         description
         domesticRoutes {
           url
@@ -53,6 +55,7 @@ export async function fetchWhereWeFlyPage(): Promise<WhereWeFlyPage> {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Where We Fly",
+      subTitle: "",
       description: "",
       domesticRoutes: { url: "/hero2.jpg" },
       internationalRoutes: { url: "/image.jpg" },
@@ -66,6 +69,7 @@ export async function fetchWhereWeFlyPage(): Promise<WhereWeFlyPage> {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Where We Fly",
+      subTitle: "",
       description: "",
       domesticRoutes: { url: "/hero2.jpg" },
       internationalRoutes: { url: "/image.jpg" },

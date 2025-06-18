@@ -11,6 +11,7 @@ from wagtail.fields import StreamField
 from .blocks import (
     TextBlock,
     ImageBlock,
+    FullWidthImageBlock,
     SectionBlock,
     GridCardSectionBlock,
     HeadingTextBlock,
@@ -37,8 +38,14 @@ class BasePage(Page):
         help_text="Image that will be displayed on this page's hero section",
     )
 
+    sub_title = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="A short subtitle for the page.",
+    )
+
     description = models.CharField(
-        max_length=255,
+        max_length=2000,
         blank=True,
         help_text="A short description of the page.",
     )
@@ -46,12 +53,14 @@ class BasePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("hero_image", heading="Hero Image"),
         FieldPanel("description", heading="Description"),
+        FieldPanel("sub_title", heading="Subtitle"),
     ]
 
     graphql_fields = [
         GraphQLString("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
         GraphQLString("description", name="description"),
+        GraphQLString("sub_title", name="subTitle"),
     ]
 
     def clean(self):
@@ -73,6 +82,7 @@ class GenericPage(BasePage):
         [
             ("text", TextBlock()),
             ("image", ImageBlock()),
+            ("full_width_image", FullWidthImageBlock()),
             ("section", SectionBlock()),
             ("grid_card_section", GridCardSectionBlock()),
             ("heading_text", HeadingTextBlock()),

@@ -9,6 +9,7 @@ export interface DestinationIndexPage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   __typename?: string;
   children?: ChildPage[];
@@ -34,6 +35,7 @@ export const GET_DESTINATION_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        subTitle
         description
       }
       children {
@@ -63,6 +65,7 @@ export async function fetchDestinationIndexPage(): Promise<DestinationIndexPage>
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Explore",
+      subTitle: "",
       description: "",
       children: [],
     };
@@ -75,6 +78,7 @@ export async function fetchDestinationIndexPage(): Promise<DestinationIndexPage>
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Explore",
+      subTitle: "",
       description: "",
       children: [],
     };

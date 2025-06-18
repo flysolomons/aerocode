@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import BreadcrumbNav from "../BreadcrumbNav";
 
 // props: card title, image
 
@@ -70,46 +70,8 @@ export default function SecondaryHero({
 
     calculateAverageColor();
   }, [image, onColorCalculated]);
-
   const renderBreadcrumbs = () => {
-    if (!breadcrumbs) return null;
-
-    const breadcrumbParts = breadcrumbs.split("/").filter(Boolean);
-    const breadcrumbLinks = breadcrumbParts.map((part, index) => {
-      const isAfterNews =
-        breadcrumbParts.includes("news") &&
-        index > breadcrumbParts.indexOf("news");
-      const href = "/" + breadcrumbParts.slice(0, index + 1).join("/");
-      const label = isAfterNews
-        ? "Article"
-        : part
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (char) => char.toUpperCase());
-
-      if (index === breadcrumbParts.length - 1) {
-        // Last part of the breadcrumb, not clickable
-        return <span key={index}> / {label}</span>;
-      }
-
-      return (
-        <span key={index}>
-          {index > 0 && " / "}
-          <Link href={href} className="hover:underline">
-            {label}
-          </Link>
-        </span>
-      );
-    });
-
-    return (
-      <div className="text-sm">
-        <Link href="/" className="hover:underline">
-          Home
-        </Link>
-        {breadcrumbParts.length > 1 && " / "}
-        {breadcrumbLinks}
-      </div>
-    );
+    return <BreadcrumbNav breadcrumbs={breadcrumbs} />;
   };
   return (
     <div

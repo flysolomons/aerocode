@@ -49,15 +49,18 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
         title={initialPage.heroTitle}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
-      />{" "}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          {/* Description */}
-          <div className="max-w-4xl mx-auto">
-            <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
-              {stripHtmlTags(initialPage.description)}
-            </p>
-          </div>{" "}
+
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {stripHtmlTags(initialPage.description)}
+              </p>
+            </div>
+          )}
+
           {/* Toggle between International and Domestic routes */}
           <div className="flex justify-center">
             <RadioButton
@@ -68,7 +71,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
                 setShowInternational(option === "one")
               }
             />
-          </div>{" "}
+          </div>
           {/* Map image showing routes */}
           <div className="w-full relative">
             <Image
@@ -84,7 +87,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               height={770}
               className="w-full h-auto rounded-2xl sm:rounded-3xl shadow-lg"
             />
-          </div>{" "}
+          </div>
           {/* Routes Display */}
           <div className="space-y-6 sm:space-y-8">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-500 text-center">
@@ -111,7 +114,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
             ) : (
               <div className="text-center py-8 sm:py-12">
                 <p className="text-sm sm:text-base text-gray-600">
-                  No routes found for{" "}
+                  No routes found for
                   {showInternational ? "international" : "domestic"} flights.
                 </p>
               </div>

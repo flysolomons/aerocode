@@ -65,7 +65,9 @@ export default function RoutePageTemplate({
   if (!initialPage) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-sm sm:text-base text-gray-600">Route not found</div>
+        <div className="text-sm sm:text-base text-gray-600">
+          Route not found
+        </div>
       </div>
     );
   }
@@ -89,14 +91,23 @@ export default function RoutePageTemplate({
         image={heroImage?.url || "/hero3.jpg"}
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
-      />      <Container>
+      />
+      <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-          <StrippedBookingWidget />{" "}
+          <StrippedBookingWidget />
+          {initialPage.description && (
+            <div className="max-w-4xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {initialPage.description}
+              </p>
+            </div>
+          )}
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
             specials={specialRoutes}
-          />          {fares && fares.length > 0 && (
+          />
+          {fares && fares.length > 0 && (
             <div className="space-y-6 sm:space-y-8">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
@@ -119,13 +130,14 @@ export default function RoutePageTemplate({
                 ))}
               </div>
             </div>
-          )}          <div className="space-y-6 sm:space-y-8">
+          )}
+          <div className="space-y-6 sm:space-y-8">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Flight Information
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
-                Important details about your flight between {departureAirport}{" "}
+                Important details about your flight between {departureAirport}
                 and {arrivalAirport}.
               </p>
             </div>
@@ -136,7 +148,8 @@ export default function RoutePageTemplate({
               arrivalAirport={arrivalAirport}
               arrivalAirportCode={arrivalAirportCode}
             />
-          </div>{" "}          <div className="space-y-6 sm:space-y-8">
+          </div>
+          <div className="space-y-6 sm:space-y-8">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Other Routes to {initialPage.arrivalAirport}
@@ -148,7 +161,9 @@ export default function RoutePageTemplate({
 
             {loadingRelatedRoutes ? (
               <div className="text-center py-8 sm:py-12">
-                <div className="text-sm sm:text-base text-gray-600">Loading related routes...</div>
+                <div className="text-sm sm:text-base text-gray-600">
+                  Loading related routes...
+                </div>
               </div>
             ) : relatedRoutes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">

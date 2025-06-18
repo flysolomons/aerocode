@@ -9,6 +9,7 @@ from grapple.models import (
     GraphQLForeignKey,
     GraphQLStreamfield,
 )
+from wagtail_color_panel.blocks import NativeColorBlock
 
 from django.core.exceptions import ValidationError
 
@@ -23,6 +24,22 @@ class TextBlock(RichTextBlock):
 class ImageBlock(StructBlock):
     image = ImageChooserBlock(required=True)
     caption = CharBlock(required=False, max_length=200)
+    background_color = NativeColorBlock(required=False)
+
+    graphql_fields = [
+        GraphQLImage("image", name="image"),
+        GraphQLString("caption", name="caption"),
+        GraphQLString("background_color", name="backgroundColor"),
+    ]
+
+    class Meta:
+        graphql_type = "ImageBlock"
+
+
+@register_streamfield_block
+class FullWidthImageBlock(StructBlock):
+    image = ImageChooserBlock(required=True)
+    caption = CharBlock(required=False, max_length=200)
 
     graphql_fields = [
         GraphQLImage("image", name="image"),
@@ -30,7 +47,7 @@ class ImageBlock(StructBlock):
     ]
 
     class Meta:
-        graphql_type = "ImageBlock"
+        graphql_type = "FullWidthImageBlock"
 
 
 @register_streamfield_block
@@ -41,12 +58,14 @@ class SectionBlock(StructBlock):
     image_position = ChoiceBlock(
         choices=[("left", "Left"), ("right", "Right")], default="right"
     )
+    background_color = NativeColorBlock(required=False)
 
     graphql_fields = [
         GraphQLString("heading", name="heading"),
         GraphQLString("text", name="text"),
         GraphQLImage("image", name="image"),
         GraphQLString("image_position", name="imagePosition"),
+        GraphQLString("background_color", name="backgroundColor"),
     ]
 
     class Meta:
@@ -94,14 +113,11 @@ class TravelRequirementBlock(StructBlock):
 class GridCardSectionBlock(StructBlock):
     heading = CharBlock(required=True, max_length=100)
     grid_cards = ListBlock(GridCardBlock())
+    background_color = NativeColorBlock(required=False)
 
     graphql_fields = [
         GraphQLString("heading", name="heading"),
-        # GraphQLCollection(
-        #     GraphQLString,  # Use GraphQLString as the type handler
-        #     "grid_cards",
-        #     name="gridCards",
-        # ),
+        GraphQLString("background_color", name="backgroundColor"),
     ]
 
     class Meta:
@@ -170,3 +186,49 @@ class MegaMenuBlock(StructBlock):
 
     class Meta:
         graphql_type = "MegaMenuBlock"
+
+
+@register_streamfield_block
+class ValueCardBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    description = TextBlock(required=True)
+    image = ImageChooserBlock(required=True)
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+        GraphQLImage("image", name="image"),
+    ]
+
+    class Meta:
+        graphql_type = "ValueCardBlock"
+
+
+@register_streamfield_block
+class StatBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    value = CharBlock(required=True, max_length=50)
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("value", name="value"),
+    ]
+
+    class Meta:
+        graphql_type = "StatBlock"
+
+
+@register_streamfield_block
+class JourneyItemBlock(StructBlock):
+    title = CharBlock(required=True, max_length=100)
+    description = TextBlock(required=True)
+    year = CharBlock(required=True, max_length=4, help_text="Year of the journey item")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+        GraphQLString("year", name="year"),
+    ]
+
+    class Meta:
+        graphql_type = "JourneyItemBlock"

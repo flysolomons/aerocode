@@ -21,19 +21,17 @@ export interface DestinationSpecialRoute {
   special: {
     name: string;
   };
-  route?: {
-    nameFull: string;
-    heroImage?: {
-      url: string;
-    };
-  };
-  startingPrice?: string;
+  startingPrice: string;
 }
 
 // Interface for the Route
 export interface Route {
-  departureAirport: string;
-  arrivalAirport: string;
+  name: string;
+  nameFull: string;
+  url: string;
+  heroImage?: {
+    url: string;
+  };
   specialRoutes?: DestinationSpecialRoute[];
 }
 
@@ -45,6 +43,8 @@ export interface DestinationPage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
+  description: string;
   country: string;
   reasonsToVisit: SectionBlock[];
   travelRequirements: TravelRequirementBlock[];
@@ -61,6 +61,8 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       }
       url
       seoTitle
+      subTitle
+      description
       country
       reasonsToVisit {
         ... on SectionBlock {
@@ -78,17 +80,15 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
         }
       }
       routes {
-        departureAirport
-        arrivalAirport
+        name
+        nameFull
+        url
+        heroImage {
+          url
+        }
         specialRoutes {
           special {
             name
-          }
-          route {
-            nameFull
-            heroImage {
-              url
-            }
           }
           startingPrice
         }
@@ -108,26 +108,19 @@ export async function fetchDestinationPage(
 
     if (!data.destination) {
       return null;
-    } // Get the destination data
-    const destination = data.destination;
-
-    // Process routes data to ensure specialRoutes is properly included
-    const routes =
-      destination.routes?.map((route: any) => ({
-        departureAirport: route.departureAirport || "",
-        arrivalAirport: route.arrivalAirport || "",
-        specialRoutes: route.specialRoutes || [],
-      })) || [];
+    }
 
     return {
-      heroTitle: destination.heroTitle || "",
-      heroImage: destination.heroImage || { url: "/hero.jpg" },
-      url: destination.url || "",
-      seoTitle: destination.seoTitle || "",
-      country: destination.country || "",
-      reasonsToVisit: destination.reasonsToVisit || [],
-      travelRequirements: destination.travelRequirements || [],
-      routes: routes,
+      heroTitle: data.destination.heroTitle || "",
+      heroImage: data.destination.heroImage || { url: "/hero.jpg" },
+      url: data.destination.url || "",
+      seoTitle: data.destination.seoTitle || "",
+      subTitle: data.destination.subTitle || "",
+      description: data.destination.description || "",
+      country: data.destination.country || "",
+      reasonsToVisit: data.destination.reasonsToVisit || [],
+      travelRequirements: data.destination.travelRequirements || [],
+      routes: data.destination.routes || [],
       __typename: "Destination",
     };
   } catch (error) {
