@@ -9,6 +9,7 @@ export interface FlightSchedulePage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   __typename?: string;
 }
@@ -33,19 +34,29 @@ export interface Flight {
   flightScope: string;
 }
 
+export interface ScheduleWithFlightData extends FlightSchedulePage {
+  schedules: Schedule[];
+}
+
 export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
-  query GetFlightSchedules {
+  query GetFlightSchedulePage {
     pages(contentType: "explore.FlightSchedule") {
       ... on FlightSchedule {
         heroTitle
         heroImage {
           url
         }
-        description
-        seoTitle
         url
+        seoTitle
+        subTitle
+        description
       }
     }
+  }
+`;
+
+export const GET_SCHEDULES_QUERY = gql`
+  query GetSchedules {
     schedules {
       id
       startDate
@@ -66,42 +77,42 @@ export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
   }
 `;
 
-export interface ScheduleWithFlightData extends FlightSchedulePage {
-  schedules: Schedule[];
-}
-
 export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData> {
   try {
-    const { data } = await client.query({
-      query: GET_FLIGHT_SCHEDULE_PAGE_QUERY,
-    });
+    const [pageResult, schedulesResult] = await Promise.all([
+      client.query({
+        query: GET_FLIGHT_SCHEDULE_PAGE_QUERY,
+      }),
+      client.query({
+        query: GET_SCHEDULES_QUERY,
+      }),
+    ]);
 
-    // Extract the schedule data from the query response
-    const schedules = data.schedules || [];
-
-    // Extract page data if available (from the first matching page)
-    const pageData = data.pages && data.pages.length > 0 ? data.pages[0] : null;
-
-    // Combine page data with schedules
-    const result: ScheduleWithFlightData = {
-      heroTitle: pageData?.heroTitle || "Flight Schedules",
-      heroImage: pageData?.heroImage || { url: "/hero.jpg" },
-      url: pageData?.url || "/explore/flight-schedules/",
-      seoTitle: pageData?.seoTitle || "Flight Schedules",
-      description: pageData?.description,
-      schedules: schedules,
-      __typename: pageData?.__typename || "FlightSchedule",
+    const pageData = pageResult.data.pages.find(
+      (page: any) => page.__typename === "FlightSchedule"
+    ) || {
+      heroTitle: "",
+      heroImage: { url: "/default-hero.jpg" },
+      url: "",
+      seoTitle: "Flight Schedule",
+      subTitle: "",
+      description: "",
     };
-    return result;
+
+    return {
+      ...pageData,
+      schedules: schedulesResult.data.schedules || [],
+      __typename: "FlightSchedule",
+    };
   } catch (error) {
     console.error("Error fetching Flight Schedule page data:", error);
     return {
-      heroTitle: "Flight Schedules",
-      heroImage: { url: "/hero.jpg" },
-      url: "/explore/flight-schedules/",
-      seoTitle: "Flight Schedules",
-      description:
-        "Explore our weekly flight schedules for both international and domestic routes.",
+      heroTitle: "",
+      heroImage: { url: "/default-hero.jpg" },
+      url: "",
+      seoTitle: "Flight Schedule",
+      subTitle: "",
+      description: "",
       schedules: [],
       __typename: "FlightSchedule",
     };

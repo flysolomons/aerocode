@@ -9,6 +9,7 @@ export interface ExploreIndexPage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   __typename?: string;
   children?: ChildPage[];
@@ -33,6 +34,7 @@ export const GET_EXPLORE_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        subTitle
         description
       }
       children {
@@ -74,13 +76,14 @@ export async function fetchExploreIndexPage(): Promise<ExploreIndexPage> {
       query: GET_EXPLORE_INDEX_PAGE_QUERY,
     });
 
-    const pageData = data.pages.find(
+    const pageData = (data.pages.find(
       (page: any) => page.__typename === "ExploreIndexPage"
-    ) || {
+    ) as ExploreIndexPage) || {
       heroTitle: "",
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Explore",
+      subTitle: "",
       description: "",
       children: [],
     };
@@ -93,6 +96,7 @@ export async function fetchExploreIndexPage(): Promise<ExploreIndexPage> {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Explore",
+      subTitle: "",
       description: "",
       children: [],
     };

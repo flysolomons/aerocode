@@ -31,6 +31,7 @@ export interface AboutIndexPage {
   heroTitle: string;
   heroImage: ImageBlock;
   seoTitle: string;
+  subTitle: string;
   url: string;
   description: string;
   missionStatement: string;
@@ -56,6 +57,7 @@ export const GET_ABOUT_PAGE_QUERY = gql`
           url
         }
         seoTitle
+        subTitle
         url
         description
         missionStatement
@@ -114,6 +116,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
         heroTitle: "About Us",
         heroImage: { url: "/default-hero.jpg" },
         seoTitle: "About Us",
+        subTitle: "",
         url: "/about",
         description: "Learn more about Solomon Airlines",
         missionStatement: "",
@@ -130,6 +133,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       heroTitle: aboutPage.heroTitle || "About Us",
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
       seoTitle: aboutPage.seoTitle || "About Us",
+      subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
       description: aboutPage.description || "Learn more about Solomon Airlines",
       missionStatement: aboutPage.missionStatement || "",
@@ -146,6 +150,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       heroTitle: "About Us",
       heroImage: { url: "/default-hero.jpg" },
       seoTitle: "About Us",
+      subTitle: "",
       url: "/about",
       description: "",
       missionStatement: "",
@@ -183,6 +188,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
         heroTitle: "About Us",
         heroImage: { url: "/default-hero.jpg" },
         seoTitle: "About Us",
+        subTitle: "",
         url: "/about",
         description: "",
         missionStatement: "",
@@ -199,6 +205,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       heroTitle: aboutPage.heroTitle || "About Us",
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
       seoTitle: aboutPage.seoTitle || "About Us",
+      subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
       description: aboutPage.description || "Learn more about Solomon Airlines",
       missionStatement: aboutPage.missionStatement || "",
@@ -215,6 +222,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       heroTitle: "About Us",
       heroImage: { url: "/default-hero.jpg" },
       seoTitle: "About Us",
+      subTitle: "",
       url: "/about",
       description: "Learn more about Solomon Airlines",
       missionStatement: "",
@@ -233,6 +241,7 @@ export const fallbackAboutPage: AboutIndexPage = {
   heroTitle: "About Us",
   heroImage: { url: "/default-hero.jpg" },
   seoTitle: "About Us",
+  subTitle: "",
   url: "/about",
   description: "Learn more about Solomon Airlines",
   missionStatement:

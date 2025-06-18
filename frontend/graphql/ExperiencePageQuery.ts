@@ -9,6 +9,7 @@ export interface ExperienceIndexPage {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   __typename?: string;
   children?: ChildPage[];
@@ -33,6 +34,7 @@ export const GET_EXPERIENCE_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        subTitle
         description
       }
       children {
@@ -54,13 +56,14 @@ export async function fetchExperienceIndexPage(): Promise<ExperienceIndexPage> {
       query: GET_EXPERIENCE_INDEX_PAGE_QUERY,
     });
 
-    const pageData = data.pages.find(
+    const pageData = (data.pages.find(
       (page: any) => page.__typename === "ExperienceIndexPage"
-    ) || {
+    ) as ExperienceIndexPage) || {
       heroTitle: "",
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Experience",
+      subTitle: "",
       description: "",
       children: [],
     };
@@ -73,6 +76,7 @@ export async function fetchExperienceIndexPage(): Promise<ExperienceIndexPage> {
       heroImage: { url: "/default-hero.jpg" },
       url: "",
       seoTitle: "Experience",
+      subTitle: "",
       description: "",
       children: [],
     };

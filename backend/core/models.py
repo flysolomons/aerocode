@@ -53,12 +53,14 @@ class BasePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("hero_image", heading="Hero Image"),
         FieldPanel("description", heading="Description"),
+        FieldPanel("sub_title", heading="Subtitle"),
     ]
 
     graphql_fields = [
         GraphQLString("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
         GraphQLString("description", name="description"),
+        GraphQLString("sub_title", name="subTitle"),
     ]
 
     def clean(self):

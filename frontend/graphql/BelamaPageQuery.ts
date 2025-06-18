@@ -18,6 +18,7 @@ export interface BelamaIndexPage {
   heroTitle: string;
   heroImage: ImageBlock;
   seoTitle: string;
+  subTitle: string;
   url: string;
   description: string;
   individualMemberships: MembershipBlock[];
@@ -40,6 +41,7 @@ export const GET_BELAMA_PAGE_QUERY = gql`
           url
         }
         seoTitle
+        subTitle
         url
         description
         individualMemberships {
@@ -80,13 +82,15 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
     // Find the BelamaIndexPage from the pages array
     const belamaPage = data.pages.find(
       (page: any) => page.__typename === "BelamaIndexPage"
-    );    if (!belamaPage) {
+    );
+    if (!belamaPage) {
       console.warn("No Belama page found");
       // Return default data structure
       return {
         heroTitle: "Belama",
         heroImage: { url: "/default-hero.jpg" },
         seoTitle: "Belama",
+        subTitle: "",
         url: "/belama",
         description: "",
         individualMemberships: [],
@@ -94,10 +98,12 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
         groupMemberships: [],
         __typename: "BelamaIndexPage",
       };
-    }    return {
+    }
+    return {
       heroTitle: belamaPage.heroTitle || "Belama",
       heroImage: belamaPage.heroImage || { url: "/default-hero.jpg" },
       seoTitle: belamaPage.seoTitle || "Belama",
+      subTitle: belamaPage.subTitle || "",
       url: belamaPage.url || "/belama",
       description: belamaPage.description || "",
       individualMemberships: belamaPage.individualMemberships || [],
@@ -105,12 +111,14 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
       groupMemberships: belamaPage.groupMemberships || [],
       __typename: "BelamaIndexPage",
     };
-  } catch (error) {    console.error("Error fetching Belama page data:", error);
+  } catch (error) {
+    console.error("Error fetching Belama page data:", error);
     // Return fallback data instead of throwing to prevent page from breaking
     return {
       heroTitle: "Belama",
       heroImage: { url: "/default-hero.jpg" },
       seoTitle: "Belama",
+      subTitle: "",
       url: "/belama",
       description: "",
       individualMemberships: [],
@@ -126,9 +134,6 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
  * You can expand this to use React Query or SWR for better state management
  */
 export function useBelamaPage() {
-  // This is a basic implementation - you might want to use React Query or SWR
-  // for better caching, loading states, and error handling
-  return {
-    fetchBelamaPage,
-  };
+  // Implementation would go here for client-side data fetching
+  // This is a placeholder for future enhancement
 }

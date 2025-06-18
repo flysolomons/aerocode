@@ -19,6 +19,7 @@ export interface PageMetadata {
   };
   url: string;
   seoTitle: string;
+  subTitle: string;
   description: string;
   __typename?: string;
 }
@@ -40,6 +41,7 @@ export const GET_SPECIALS_INDEX_PAGE_QUERY = gql`
         }
         url
         seoTitle
+        subTitle
         description
       }
     }
@@ -65,6 +67,7 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
       heroImage: { url: "/hero.jpg" },
       url: "/explores/specials",
       seoTitle: "Specials",
+      subTitle: "",
       description: "",
       __typename: "SpecialsIndexPage",
     };
@@ -89,6 +92,7 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
         heroImage: { url: "/hero.jpg" },
         url: "/explores/specials",
         seoTitle: "Specials",
+        subTitle: "",
         description: "",
         __typename: "SpecialsIndexPage",
       },
