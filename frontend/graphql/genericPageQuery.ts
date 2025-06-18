@@ -160,8 +160,6 @@ export async function fetchGenericPage(
       variables: { slug },
     });
 
-    console.log("Fetched GenericPage data:", data.genericPage);
-
     return data.genericPage || null;
   } catch (error) {
     console.error("Error fetching GenericPage data:", error);
