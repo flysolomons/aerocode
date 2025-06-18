@@ -12,7 +12,8 @@ function ReasonToVisitCard({
   image,
   description,
   imageOnLeft,
-}: ReasonToVisitCardProps) {  return (
+}: ReasonToVisitCardProps) {
+  return (
     <>
       <div
         className={`flex flex-col lg:flex-row w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-lg min-h-[20rem] sm:min-h-[22rem] lg:h-[24.5rem] ${
@@ -29,7 +30,7 @@ function ReasonToVisitCard({
           />
         </div>
         <div className="w-full lg:w-2/3 p-4 sm:p-6 lg:p-8">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
+          <h2 className="text-xl sm:text-2xl lg:text-2xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
             {title}
           </h2>
           <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">

@@ -89,7 +89,7 @@ export default function DestinationTemplate({
             initialPage.travelRequirements.length > 0 && (
               <div className="space-y-6 sm:space-y-8">
                 <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+                  <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                     {initialPage.country} Travel Requirements
                   </h2>
 
@@ -115,7 +115,7 @@ export default function DestinationTemplate({
           {/* Routes Section - Using dynamically fetched routes by country */}
           <div className="space-y-6 sm:space-y-8">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+              <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                 Our {initialPage.country} Routes
               </h2>
 

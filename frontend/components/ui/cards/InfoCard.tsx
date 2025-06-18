@@ -5,54 +5,48 @@ import { motion, AnimatePresence } from "framer-motion";
 interface InfoCardProps {
   title: string;
   description: string;
-  svg: string;
+  svg: string; // Now represents the src path to an SVG file
   url: string;
 }
 
 function InfoCard({ title, description, svg, url }: InfoCardProps) {
   return (
-    <div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-300 transition-transform hover:scale-105">
-      <div className="flex items-start gap-3">
-        <div dangerouslySetInnerHTML={{ __html: svg }} />
-        {/* <div className="flex-shrink-0">
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-            <svg
-              className="w-5 h-5 text-blue-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
+    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-gray-300 transition-transform hover:scale-105">
+      <div className="flex-1 space-y-3 sm:space-y-4 w-full">
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <img
+              src={svg}
+              alt={`${title} icon`}
+              className="w-8 h-8 sm:w-10 sm:h-10"
+            />
           </div>
-        </div> */}
-
-        <div className="flex-1 space-y-4">
-          <h3 className="text-xl font-semibold text-blue-500">{title}</h3>
-          <p className="mt-1">{stripHtmlTags(description)}</p>
+          <h3 className="text-lg sm:text-xl font-semibold text-blue-500 text-left">
+            {title}
+          </h3>
+        </div>
+        <p className="text-sm sm:text-base text-gray-700 text-left">
+          {stripHtmlTags(description)}
+        </p>{" "}
+        <div className="flex justify-start">
           <motion.a
             href={url}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onHoverStart={() => console.log("find out more is hovered!")}
-            className="mt-2 flex text-slate-200 text-sm hover:text-slate-300 bg-blue-500 px-4 py-2 rounded-full w-1/2 hover:bg-blue-400 transition duration-300"
+            className="inline-flex items-center gap-2 text-slate-200 text-xs sm:text-sm hover:text-slate-300 bg-blue-500 px-3 py-2 sm:px-4 sm:py-2 rounded-full hover:bg-blue-400 transition duration-300 whitespace-nowrap"
           >
             Find out more
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="16"
+              height="16"
+              className="sm:w-5 sm:h-5"
               fill="#e0e0e0"
               viewBox="0 0 256 256"
             >
               <path d="M128,136v64a8,8,0,0,1-16,0V155.32L45.66,221.66a8,8,0,0,1-11.32-11.32L100.68,144H56a8,8,0,0,1,0-16h64A8,8,0,0,1,128,136ZM208,32H80A16,16,0,0,0,64,48V96a8,8,0,0,0,16,0V48H208V176H160a8,8,0,0,0,0,16h48a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Z"></path>
-            </svg>
+            </svg>{" "}
           </motion.a>
         </div>
       </div>
