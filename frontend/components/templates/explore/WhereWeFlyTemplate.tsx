@@ -7,6 +7,8 @@ import Recommendations from "@/components/layout/sections/Recommendations";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import { WhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
+import { stripHtmlTags } from "@/lib/utils";
+
 import {
   fetchRoutesByFlightScope,
   RouteSearchResult,
@@ -53,7 +55,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
           {/* Description */}
           <div className="max-w-4xl mx-auto">
             <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
-              {initialPage.description}
+              {stripHtmlTags(initialPage.description)}
             </p>
           </div>{" "}
           {/* Toggle between International and Domestic routes */}

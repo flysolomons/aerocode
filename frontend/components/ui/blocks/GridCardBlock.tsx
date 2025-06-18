@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface GridCardBlockProps {
   item: {
@@ -32,7 +33,7 @@ export default function GridCardBlock({ item }: GridCardBlockProps) {
         )}
         {item.text && (
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed break-words">
-            {item.text}
+            {stripHtmlTags(item.text)}
           </p>
         )}
       </div>

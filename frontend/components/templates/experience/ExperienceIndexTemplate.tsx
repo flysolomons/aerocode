@@ -2,6 +2,7 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import GenericCard from "@/components/ui/cards/GenericCard";
 import { ExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface ExperienceProps {
   initialPage: ExperienceIndexPage;
@@ -20,7 +21,7 @@ export default function ExperienceIndexTemplate({
           {/* Description */}
           <div className="max-w-4xl mx-auto">
             <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
-              {initialPage.description}
+              {stripHtmlTags(initialPage.description)}
             </p>
           </div>
 

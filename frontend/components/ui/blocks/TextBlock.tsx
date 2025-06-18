@@ -1,3 +1,4 @@
+import { stripHtmlTags } from "@/lib/utils";
 interface TextBlockProps {
   block: {
     blockType: string;
@@ -12,7 +13,7 @@ export default function TextBlock({ block }: TextBlockProps) {
         <div className="text-center w-full">
           {block.value && (
             <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed px-4 sm:px-6 lg:px-0 max-w-4xl mx-auto">
-              {block.value}
+              {stripHtmlTags(block.value)}
             </p>
           )}
         </div>
