@@ -82,7 +82,7 @@ export default function SecondaryHero({
     >
       <div className="flex items-center justify-center h-full text-white bg-black bg-opacity-20 rounded-lg px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-2 sm:space-y-3 lg:space-y-4 max-w-[70.5rem] w-full">
-          <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold font-sans leading-tight">
+          <div className="text-3xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold font-sans leading-tight">
             {title}
           </div>
           <div className="text-xs sm:text-sm lg:text-base">

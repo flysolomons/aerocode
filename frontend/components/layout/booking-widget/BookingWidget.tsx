@@ -1,118 +1,156 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookATripForm from "./BookATripForm";
-
-// Placeholder component for Manage Booking functionality
-function ManageBookingForm() {
-  return (
-    <div className="px-4 py-3 flex flex-col items-center space-y-4">
-      <br />
-      {/* Search form */}
-      <div className="flex w-full items-center border border-gray-200 rounded-full px-2 shadow-md">
-        <div className="flex-1 px-6 py-3">
-          <label className="block text-xs text-black font-semibold">
-            Booking Reference
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your booking reference"
-            className="w-full text-sm outline-none text-black"
-          />
-        </div>
-
-        <div className="w-[1px] h-10 bg-gray-200"></div>
-
-        <div className="flex-1 px-6 py-3">
-          <label className="block text-xs text-black font-semibold">
-            Last Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your last name"
-            className="w-full text-sm outline-none text-black"
-          />
-        </div>
-
-        <div className="flex items-center justify-end">
-          <button className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+import ManageBookingForm from "./ManageBookingForm";
 
 export default function BookingWidget() {
   const [activeTab, setActiveTab] = useState(0);
+  const [showMobileForm, setShowMobileForm] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Prevent body scroll when mobile modal is open
+  useEffect(() => {
+    if (showMobileForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showMobileForm]);
+
+  const handleTabClick = (tabIndex: number) => {
+    setActiveTab(tabIndex);
+    // On mobile, show the full-screen form
+    if (isMobile) {
+      setShowMobileForm(true);
+    }
+  };
+
+  const closeMobileForm = () => {
+    setShowMobileForm(false);
+  };
 
   return (
-    <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp">
-      <div className="w-[70.5rem] bg-white rounded-[2rem] shadow-lg">
-        <div className="flex border-b">
-          <div
-            className={`flex px-4 py-3 h-12 w-[11rem] ${
-              activeTab === 0 ? "border-b-2 border-b-blue-500" : ""
-            }`}
-          >
-            <button
-              className={`text-sm font-semibold w-[11rem] text-center ${
+    <>
+      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp">
+        <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
+          <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem]">
+            <div
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
                 activeTab === 0
-                  ? "text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
+                  : "border border-gray-200 md:border-0"
               }`}
-              onClick={() => setActiveTab(0)}
             >
-              Book a Trip
-            </button>
-          </div>
-          <div
-            className={`flex px-4 py-3 h-12 w-[11rem] ${
-              activeTab === 1 ? "border-b-2 border-b-blue-500" : ""
-            }`}
-          >
-            <button
-              className={`text-sm font-semibold w-[11rem] text-center ${
+              <button
+                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                  activeTab === 0
+                    ? "text-blue-500"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handleTabClick(0)}
+              >
+                Book a Trip
+              </button>
+            </div>
+            <div
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
                 activeTab === 1
-                  ? "text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
+                  : "border border-gray-200 md:border-0"
               }`}
-              onClick={() => setActiveTab(1)}
             >
-              Manage Booking
-            </button>
-          </div>
-          <div
-            className={`flex px-4 py-3 h-12 w-[11rem] ${
-              activeTab === 2 ? "border-b-2 border-b-blue-500" : ""
-            }`}
-          >
-            <button
-              className={`text-sm font-semibold w-[11rem] text-center ${
+              <button
+                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                  activeTab === 1
+                    ? "text-blue-500"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handleTabClick(1)}
+              >
+                Manage Booking
+              </button>
+            </div>
+            <div
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
                 activeTab === 2
-                  ? "text-blue-500"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
+                  : "border border-gray-200 md:border-0"
               }`}
-              onClick={() => setActiveTab(2)}
             >
-              Flight Upgrade
-            </button>
+              <button
+                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                  activeTab === 2
+                    ? "text-blue-500"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+                onClick={() => handleTabClick(2)}
+              >
+                Flight Upgrade
+              </button>
+            </div>
+          </div>
+          {/* Desktop content */}
+          <div className="hidden md:block">
+            {activeTab === 0 && <BookATripForm />}
+            {activeTab === 1 && <ManageBookingForm />}
           </div>
         </div>
-        {activeTab === 0 && <BookATripForm />}
-        {activeTab === 1 && <ManageBookingForm />}
       </div>
-    </div>
+      {/* Mobile full-screen form overlay */}
+      {showMobileForm && (
+        <div className="fixed inset-0 z-50 bg-white md:hidden flex flex-col">
+          {/* Header with logo and close button */}
+          <div className="flex justify-between items-center p-4 flex-shrink-0">
+            {/* Logo */}
+            <div className="flex items-center">
+              <img src="/logo.svg" alt="FlySolomons" className="h-5 w-auto" />
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={closeMobileForm}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Close form"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          {/* Form content */}
+          <div className="flex-1 overflow-y-auto px-4 pb-4">
+            {activeTab === 0 && <BookATripForm />}
+            {activeTab === 1 && <ManageBookingForm />}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

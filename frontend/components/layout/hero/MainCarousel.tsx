@@ -27,7 +27,6 @@ const MainCarousel = () => {
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
   };
-
   return (
     <div className="relative w-full h-[calc(100vh)] overflow-hidden">
       {/* Carousel Slides */}
@@ -58,27 +57,31 @@ const MainCarousel = () => {
       ))}
 
       {/* Navigation Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-3">
         {slides.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full ${
-              currentSlide === index ? "bg-white" : "bg-gray-400"
+            className={`w-4 h-4 md:w-3 md:h-3 rounded-full transition-all duration-200 ${
+              currentSlide === index
+                ? "bg-white"
+                : "bg-gray-400 hover:bg-gray-300"
             }`}
             onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
           ></button>
         ))}
       </div>
 
-      <div className="mt-80">
-        <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center">
-          {/* <InViewWrapper className="text-5xl font-bold mb-4 animate__animated animate__fadeInUp w-full"> */}
-          <h2 className="flex justify-center text-5xl font-bold font-sans mb-4">
+      {/* Content Overlay - Responsive positioning */}
+      <div className="absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-center md:justify-end md:pb-32 lg:pb-40">
+        <div className="relative flex flex-col items-center justify-center text-white text-center px-4 md:px-8">
+          <h2 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-sans mb-6 md:mb-8 leading-tight max-w-4xl">
             Connecting the Hapi Isles
           </h2>
-          {/* </InViewWrapper> */}
+          <div className="w-full max-w-6xl">
+            <BookingWidget />
+          </div>
         </div>
-        <BookingWidget />
       </div>
     </div>
   );

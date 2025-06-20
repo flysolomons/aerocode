@@ -21,7 +21,13 @@ export interface DestinationSpecialRoute {
   special: {
     name: string;
   };
-  startingPrice: string;
+  route?: {
+    nameFull: string;
+    heroImage?: {
+      url: string;
+    };
+  };
+  startingPrice?: string;
 }
 
 // Interface for the Route
@@ -61,7 +67,6 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       }
       url
       seoTitle
-      subTitle
       description
       country
       reasonsToVisit {
@@ -80,15 +85,17 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
         }
       }
       routes {
-        name
-        nameFull
-        url
-        heroImage {
-          url
-        }
+        departureAirport
+        arrivalAirport
         specialRoutes {
           special {
             name
+          }
+          route {
+            nameFull
+            heroImage {
+              url
+            }
           }
           startingPrice
         }

@@ -12,6 +12,7 @@ export default function RouteSpecialSection({
   description,
   specials = [],
 }: RouteSpecialSectionProps) {
+  console.log(specials);
   return (
     <>
       {specials && specials.length > 0 && (
@@ -26,7 +27,7 @@ export default function RouteSpecialSection({
               </p>
             </>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4 min-h-64 sm:min-h-72 lg:h-64">
             {specials &&
               specials.length > 0 &&
               specials.map((special, index) => (

@@ -46,11 +46,8 @@ async function fetchPageData(slug: string, fullPath: string) {
     return null;
   }
 
-  console.log("Page Type:", pageType.__typename, "Slug:", slug);
-
   switch (pageType.__typename) {
     case "GenericPage":
-      console.log("Fetching GenericPage for slug:", slug);
       return fetchGenericPage(slug);
     case "NewsIndexPage":
       return fetchNewsIndexPage();
