@@ -27,6 +27,7 @@ const MainCarousel = () => {
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
   };
+
   return (
     <div className="relative w-full h-[calc(100vh)] overflow-hidden">
       {/* Carousel Slides */}
@@ -54,10 +55,9 @@ const MainCarousel = () => {
             />
           )}
         </div>
-      ))}
-
+      ))}{" "}
       {/* Navigation Dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-3">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
@@ -69,18 +69,19 @@ const MainCarousel = () => {
             onClick={() => goToSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
           ></button>
-        ))}
+        ))}{" "}
       </div>
-
-      {/* Content Overlay - Responsive positioning */}
-      <div className="absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-center md:justify-end md:pb-32 lg:pb-40">
-        <div className="relative flex flex-col items-center justify-center text-white text-center px-4 md:px-8">
-          <h2 className="text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-sans mb-6 md:mb-8 leading-tight max-w-4xl">
+      {/* Content positioned absolutely for centering on mobile, original positioning on desktop */}
+      <div className="absolute inset-0 flex flex-col justify-center items-center md:relative md:mt-80 md:justify-start">
+        <div className="relative flex flex-col items-center justify-center text-white text-center mb-6 md:mb-0 md:h-1/2">
+          {/* <InViewWrapper className="text-5xl font-bold mb-4 animate__animated animate__fadeInUp w-full"> */}
+          <h2 className="flex justify-center text-3xl sm:text-3xl md:text-5xl font-bold font-sans mb-4 px-4 leading-tight">
             Connecting the Hapi Isles
           </h2>
-          <div className="w-full max-w-6xl">
-            <BookingWidget />
-          </div>
+          {/* </InViewWrapper> */}
+        </div>
+        <div className="px-4 md:px-0 w-full">
+          <BookingWidget />
         </div>
       </div>
     </div>
