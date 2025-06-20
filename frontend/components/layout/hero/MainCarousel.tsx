@@ -10,7 +10,7 @@ const MainCarousel = () => {
   const slides = [
     {
       type: "video",
-      src: "https://videos.pexels.com/video-files/3326928/3326928-hd_1920_1080_24fps.mp4",
+      src: "https://videos.pexels.com/video-files/30391497/13024573_1920_1080_25fps.mp4",
     },
   ];
 
@@ -55,7 +55,7 @@ const MainCarousel = () => {
             />
           )}
         </div>
-      ))}{" "}
+      ))}
       {/* Navigation Dots */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 md:space-x-2">
         {slides.map((_, index) => (
@@ -69,7 +69,7 @@ const MainCarousel = () => {
             onClick={() => goToSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
           ></button>
-        ))}{" "}
+        ))}
       </div>
       {/* Content positioned absolutely for centering on mobile, original positioning on desktop */}
       <div className="absolute inset-0 flex flex-col justify-center items-center md:relative md:mt-80 md:justify-start">
