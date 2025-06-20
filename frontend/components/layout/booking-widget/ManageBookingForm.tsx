@@ -27,7 +27,7 @@ export default function ManageBookingForm() {
         {/* Search form */}
         <div className="flex w-full items-center border border-gray-200 rounded-full px-2 shadow-md">
           <div className="flex-1 px-6 py-3">
-            <label className="block text-xs text-black font-semibold">
+            <label className="block text-left text-xs text-black font-semibold">
               Booking Reference
             </label>
             <input
@@ -42,7 +42,7 @@ export default function ManageBookingForm() {
           <div className="w-[1px] h-10 bg-gray-200"></div>
 
           <div className="flex-1 px-6 py-3">
-            <label className="block text-xs text-black font-semibold">
+            <label className="block text-left text-xs text-black font-semibold">
               Last Name
             </label>
             <input
@@ -80,7 +80,7 @@ export default function ManageBookingForm() {
       <div className="block md:hidden w-full space-y-4">
         {/* Booking Reference Input Card */}
         <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300">
-          <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+          <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
             Booking Reference
           </label>
           <input
@@ -94,7 +94,7 @@ export default function ManageBookingForm() {
 
         {/* Last Name Input Card */}
         <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300">
-          <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+          <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
             Last Name
           </label>
           <input

@@ -194,7 +194,7 @@ export default function BookATripForm() {
             >
               <PopoverTrigger asChild className="w-full">
                 <div className="cursor-pointer px-6 py-3">
-                  <label className="block text-xs text-black font-semibold cursor-pointer">
+                  <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                     Flying from?
                   </label>
                   <input
@@ -248,10 +248,10 @@ export default function BookATripForm() {
           {/* Mobile: Use inline dropdown that pushes content */}
           <div className="block md:hidden">
             <div
-              className="cursor-pointer border-2 border-gray-400 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300"
+              className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300"
               onClick={() => setIsDeparturePopoverOpen(!isDeparturePopoverOpen)}
             >
-              <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
                 Flying from?
               </label>
               <input
@@ -268,7 +268,7 @@ export default function BookATripForm() {
             </div>
             {/* Mobile dropdown that pushes content down */}
             {isDeparturePopoverOpen && (
-              <div className="w-full bg-white border-2 border-gray-400 rounded-xl shadow-lg mt-2 max-h-48 overflow-y-auto transition-all duration-400 ease-in-out transform animate-in slide-in-from-top-1 fade-in-0 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top-1 data-[state=closed]:fade-out-0">
+              <div className="w-full bg-white border-2 border-gray-300 rounded-xl shadow-lg mt-2 max-h-48 overflow-y-auto transition-all duration-400 ease-in-out transform animate-in slide-in-from-top-1 fade-in-0 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top-1 data-[state=closed]:fade-out-0">
                 {isLoading ? (
                   <div className="text-gray-500 p-3">
                     Loading destinations...
@@ -305,7 +305,7 @@ export default function BookATripForm() {
             >
               <PopoverTrigger asChild className="w-full">
                 <div className="cursor-pointer px-6 py-3">
-                  <label className="block text-xs text-black font-semibold cursor-pointer">
+                  <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                     Flying to?
                   </label>
                   <input
@@ -362,7 +362,7 @@ export default function BookATripForm() {
               className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300"
               onClick={() => setIsArrivalPopoverOpen(!isArrivalPopoverOpen)}
             >
-              <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
                 Flying to?
               </label>
               <input
@@ -414,7 +414,7 @@ export default function BookATripForm() {
               <div className="flex-1 cursor-pointer">
                 <PopoverTrigger asChild>
                   <div className="w-full">
-                    <label className="block text-xs text-black font-semibold cursor-pointer">
+                    <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                       Departure
                     </label>
                     <input
@@ -442,7 +442,7 @@ export default function BookATripForm() {
                       isOneWay ? "opacity-50 pointer-events-none" : ""
                     }`}
                   >
-                    <label className="block text-xs text-black font-semibold cursor-pointer">
+                    <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                       Return
                     </label>
                     <input
@@ -496,7 +496,7 @@ export default function BookATripForm() {
               className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300"
               onClick={() => setIsDepartureDateOpen(!isDepartureDateOpen)}
             >
-              <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
                 Departure
               </label>
               <input
@@ -542,7 +542,7 @@ export default function BookATripForm() {
                   !isOneWay && setIsReturnDateOpen(!isReturnDateOpen)
                 }
               >
-                <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
                   Return
                 </label>
                 <input
@@ -592,7 +592,7 @@ export default function BookATripForm() {
                 className="w-full px-4 py-3 md:px-6 md:py-3"
               >
                 <div className="w-full h-full text-left">
-                  <label className="block text-xs text-black font-semibold cursor-pointer">
+                  <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                     Travelling with?
                   </label>
                   <input
@@ -710,7 +710,7 @@ export default function BookATripForm() {
             className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300"
             onClick={() => setIsTravelersMobileOpen(!isTravelersMobileOpen)}
           >
-            <label className="block text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
               Travelling with?
             </label>
             <input
