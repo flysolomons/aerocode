@@ -58,9 +58,7 @@ export default function HomePageTemplate({
           </div>
 
           {/* <InViewWrapper className="animate__animated animate__fadeInUp "> */}
-          <div className="h-auto">
-            <Slider />
-          </div>
+          <div className="h-auto">{/* <Slider /> */}</div>
           {/* </InViewWrapper> */}
 
           {/* <InViewWrapper
@@ -103,7 +101,7 @@ export default function HomePageTemplate({
       {/* </InViewWrapper> */}
 
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover"> */}
-      <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
+      {/* <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
         <Container>
           <div className="h-screen flex items-center justify-center ">
             <div className="space-y-12">
@@ -157,7 +155,7 @@ export default function HomePageTemplate({
             </div>
           </div>
         </Container>
-      </div>
+      </div> */}
 
       {/* </InViewWrapper> */}
     </>
