@@ -4,11 +4,13 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import Accordion from "@/components/ui/Accordion";
+
 import {
   ScheduleWithFlightData,
   Flight,
   Schedule,
 } from "@/graphql/FlightSchedulePageQuery";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface FlightScheduleProps {
   initialPage: ScheduleWithFlightData;
@@ -166,7 +168,7 @@ export default function FlightScheduleTemplate({
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
               <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
+                {stripHtmlTags(initialPage.description)}
               </p>
             </div>
           )}

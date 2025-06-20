@@ -38,6 +38,7 @@ export default function ExperienceIndexTemplate({
                 <GenericCard
                   key={index}
                   title={child.title}
+                  subTitle={child.subTitle}
                   image={child.heroImage?.url || "/image.jpg"}
                   url={child.url}
                 />
