@@ -18,6 +18,7 @@ export interface ExploreIndexPage {
 export interface ChildPage {
   url: string;
   title: string;
+  subTitle: string;
   heroImage?: {
     url: string;
   };
@@ -36,31 +37,36 @@ export const GET_EXPLORE_INDEX_PAGE_QUERY = gql`
         seoTitle
         subTitle
         description
-      }
+      } 
       children {
         url
         title
-        ... on SpecialsIndexPage {
+        ... on SpecialsIndexPage {   
+          subTitle
           heroImage {
             url
           }
         }
         ... on DestinationIndexPage {
+          subTitle
           heroImage {
             url
           }
         }
         ... on WhereWeFly {
+          subTitle
           heroImage {
             url
           }
         }
         ... on FlightSchedule {
+          subTitle
           heroImage {
             url
           }
         }
         ... on GenericPage {
+          subTitle
           heroImage {
             url
           }

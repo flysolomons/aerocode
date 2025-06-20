@@ -35,6 +35,7 @@ export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
                 <GenericCard
                   key={index}
                   title={child.title}
+                  subTitle={child.subTitle}
                   image={child.heroImage?.url || "/image.jpg"}
                   url={child.url}
                 />

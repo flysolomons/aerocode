@@ -6,6 +6,7 @@ import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSectio
 import ReasonToVisitCard from "@/components/layout/sections/ReasonToVisit";
 import InfoCard from "@/components/ui/cards/InfoCard";
 import RouteCard from "@/components/ui/cards/RouteCard";
+import Recommendations from "@/components/layout/sections/Recommendations";
 import {
   DestinationPage,
   DestinationSpecialRoute,
@@ -148,7 +149,12 @@ export default function DestinationTemplate({
               </div>
             )}
           </div>
+
+          {/* Recommendation Section */}
+        <Recommendations></Recommendations>
+        
         </div>
+        
       </Container>
     </>
   );

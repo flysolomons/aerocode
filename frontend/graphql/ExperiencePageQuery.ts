@@ -18,6 +18,7 @@ export interface ExperienceIndexPage {
 export interface ChildPage {
   url: string;
   title: string;
+  subTitle: string;
   heroImage?: {
     url: string;
   };
@@ -39,8 +40,9 @@ export const GET_EXPERIENCE_INDEX_PAGE_QUERY = gql`
       }
       children {
         url
-        title
+        title 
         ... on GenericPage {
+          subTitle
           heroImage {
             url
           }

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const membershipOptions = [
   { value: "business", label: "Belama Business" },
@@ -16,7 +17,7 @@ const membershipOptions = [
 const BelamaSignUpTemplate = () => {
   const [membershipType, setMembershipType] = useState("");
   const [formData, setFormData] = useState({});
-
+  const [isMembershipTypeOpen, setIsMembershipTypeOpen] = useState(false);
   const handleMembershipChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
@@ -64,6 +65,32 @@ const BelamaSignUpTemplate = () => {
       />
       <Container>
         <div className="py-12 space-y-8">
+
+          <h3>Membership</h3>
+          <Popover
+            open={true}
+            onOpenChange={setIsMembershipTypeOpen}
+          >
+            <PopoverTrigger asChild className="w-full px-6 py-3">
+              <div className="w-full h-full text-left">
+                <label className="block text-xs text-black font-semibold cursor-pointer">
+                        select membership
+                </label>
+                
+              </div>
+            </PopoverTrigger>
+            <PopoverContent
+              className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto" align="start"
+            >
+              <select>
+                <option>one</option>
+                <option>one</option>
+                <option>one</option>
+              </select>
+            </PopoverContent>
+          </Popover>
+
+
           <select
             className="border rounded p-2 w-full"
             onChange={handleMembershipChange}
