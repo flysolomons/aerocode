@@ -262,13 +262,12 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
         >
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-              <Image
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>              <Image
                 src="/logo.svg"
                 alt="Solomon Airlines Logo"
                 width={120}
                 height={32}
-                className="h-5 w-auto"
+                className="h-6 w-auto"
               />
             </Link>
             <button
@@ -499,7 +498,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   alt="Solomon Airlines Logo"
                   width={150}
                   height={40}
-                  className="h-5 sm:h-6 w-auto"
+                  className="h-6 w-auto"
                 />
               </motion.div>
             </Link>

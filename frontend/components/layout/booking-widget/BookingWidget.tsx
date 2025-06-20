@@ -116,10 +116,9 @@ export default function BookingWidget() {
       {showMobileForm && (
         <div className="fixed inset-0 z-50 bg-white md:hidden flex flex-col">
           {/* Header with logo and close button */}
-          <div className="flex justify-between items-center p-4 flex-shrink-0">
-            {/* Logo */}
+          <div className="flex justify-between items-center p-4 flex-shrink-0">            {/* Logo */}
             <div className="flex items-center">
-              <img src="/logo.svg" alt="FlySolomons" className="h-5 w-auto" />
+              <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
             </div>
 
             {/* Close button */}

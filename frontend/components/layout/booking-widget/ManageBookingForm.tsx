@@ -20,7 +20,6 @@ export default function ManageBookingForm() {
       <h2 className="block md:hidden text-xl font-bold text-blue-500 mb-2">
         Manage Booking
       </h2>
-
       {/* Desktop version - original styling */}
       <div className="hidden md:block w-full">
         <br />
@@ -74,47 +73,47 @@ export default function ManageBookingForm() {
             </button>
           </div>
         </div>
-      </div>
-
+      </div>{" "}
       {/* Mobile version - matching BookATripForm styling */}
-      <div className="block md:hidden w-full space-y-4">
-        {/* Booking Reference Input Card */}
-        <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300">
-          <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-            Booking Reference
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your booking reference"
-            className="w-full text-sm outline-none text-gray-800 placeholder-gray-400"
-            value={bookingReference}
-            onChange={(e) => setBookingReference(e.target.value)}
-          />
+      <div className="block md:hidden w-full">
+        <div className="space-y-4">
+          {/* Booking Reference Input Card */}
+          <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
+            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+              Booking Reference
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your booking reference"
+              className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 px-2 sm:px-0"
+              value={bookingReference}
+              onChange={(e) => setBookingReference(e.target.value)}
+            />
+          </div>
+          {/* Last Name Input Card */}
+          <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
+            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+              Last Name
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your last name"
+              className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 px-2 sm:px-0"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />{" "}
+          </div>{" "}
         </div>
 
-        {/* Last Name Input Card */}
-        <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-4 py-3 hover:border-blue-300">
-          <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-            Last Name
-          </label>
-          <input
-            type="text"
-            placeholder="Enter your last name"
-            className="w-full text-sm outline-none text-gray-800 placeholder-gray-400"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+        {/* Mobile: Search button always under form */}
+        <div className="mt-2 pt-6 bg-white border-t border-gray-300 px-0 py-4">
+          <button
+            className="w-full bg-blue-500 text-white py-4 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
+            onClick={handleSearch}
+          >
+            Retrieve Booking
+          </button>
         </div>
-      </div>
-
-      {/* Mobile: Fixed bottom search button */}
-      <div className="fixed md:hidden bottom-0 left-0 right-0 bg-white border-t border-gray-300 px-6 py-4 z-50">
-        <button
-          className="w-full bg-blue-500 text-white py-4 rounded-full hover:bg-blue-600 transition-colors font-semibold"
-          onClick={handleSearch}
-        >
-          Retrieve Booking
-        </button>
       </div>
     </div>
   );
