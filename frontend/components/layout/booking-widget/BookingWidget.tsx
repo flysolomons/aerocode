@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import BookATripForm from "./BookATripForm";
 import ManageBookingForm from "./ManageBookingForm";
+import FlightUpgradeForm from "./FlightUpgradeForm";
 
 export default function BookingWidget() {
   const [activeTab, setActiveTab] = useState(0);
@@ -51,7 +53,7 @@ export default function BookingWidget() {
         <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
           <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem]">
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-[2rem] md:rounded-tr-none md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
                 activeTab === 0
                   ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
                   : "border border-gray-200 md:border-0"
@@ -87,7 +89,7 @@ export default function BookingWidget() {
               </button>
             </div>
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-none md:rounded-tr-[2rem] md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
                 activeTab === 2
                   ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
                   : "border border-gray-200 md:border-0"
@@ -104,52 +106,62 @@ export default function BookingWidget() {
                 Flight Upgrade
               </button>
             </div>
-          </div>
+          </div>{" "}
           {/* Desktop content */}
           <div className="hidden md:block">
             {activeTab === 0 && <BookATripForm />}
             {activeTab === 1 && <ManageBookingForm />}
+            {activeTab === 2 && <FlightUpgradeForm />}
           </div>
         </div>
-      </div>
+      </div>{" "}
       {/* Mobile full-screen form overlay */}
-      {showMobileForm && (
-        <div className="fixed inset-0 z-50 bg-white md:hidden flex flex-col">
-          {/* Header with logo and close button */}
-          <div className="flex justify-between items-center p-4 flex-shrink-0">            {/* Logo */}
-            <div className="flex items-center">
-              <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
-            </div>
-
-            {/* Close button */}
-            <button
-              onClick={closeMobileForm}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Close form"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+      <AnimatePresence>
+        {showMobileForm && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed inset-0 z-50 bg-white md:hidden flex flex-col"
+          >
+            {/* Header with logo and close button */}
+            <div className="flex justify-between items-center p-4 flex-shrink-0">
+              {/* Logo */}
+              <div className="flex items-center">
+                <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
+              </div>
+              {/* Close button */}
+              <button
+                onClick={closeMobileForm}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close form"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          {/* Form content */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4">
-            {activeTab === 0 && <BookATripForm />}
-            {activeTab === 1 && <ManageBookingForm />}
-          </div>
-        </div>
-      )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>{" "}
+            {/* Form content */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              {activeTab === 0 && <BookATripForm />}
+              {activeTab === 1 && <ManageBookingForm />}
+              {activeTab === 2 && <FlightUpgradeForm />}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

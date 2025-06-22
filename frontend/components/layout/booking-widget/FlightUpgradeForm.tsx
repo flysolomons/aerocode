@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
 
-export default function ManageBookingForm() {
+export default function FlightUpgradeForm() {
   const [bookingReference, setBookingReference] = useState("");
   const [lastName, setLastName] = useState("");
 
-  const handleSearch = () => {
+  const handleUpgrade = () => {
     if (bookingReference && lastName) {
-      console.log("Searching for booking:", { bookingReference, lastName });
-      // Implement manage booking search functionality here
+      console.log("Upgrading flight for booking:", {
+        bookingReference,
+        lastName,
+      });
+      // Implement flight upgrade functionality here
     } else {
       alert("Please enter both booking reference and last name");
     }
@@ -18,7 +21,7 @@ export default function ManageBookingForm() {
     <div className="px-4 py-3 flex flex-col items-center space-y-4">
       {/* Mobile: Heading */}
       <h2 className="block md:hidden text-lg font-bold text-blue-500 mb-2">
-        Manage Booking
+        Upgrade Flight
       </h2>
       {/* Desktop version - original styling */}
       <div className="hidden md:block w-full">
@@ -56,7 +59,7 @@ export default function ManageBookingForm() {
           <div className="flex items-center justify-end">
             <button
               className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors"
-              onClick={handleSearch}
+              onClick={handleUpgrade}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -105,13 +108,13 @@ export default function ManageBookingForm() {
           </div>
         </div>
 
-        {/* Mobile: Search button always under form */}
+        {/* Mobile: Upgrade button always under form */}
         <div className="mt-2 pt-6 bg-white border-t border-gray-300 px-0 py-4">
           <button
             className="w-full bg-blue-500 text-white py-4 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
-            onClick={handleSearch}
+            onClick={handleUpgrade}
           >
-            Retrieve Booking
+            Upgrade Flight
           </button>
         </div>
       </div>

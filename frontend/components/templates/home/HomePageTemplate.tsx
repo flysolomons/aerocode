@@ -20,17 +20,11 @@ export default function HomePageTemplate({
   initialPage,
 }: HomePageTemplateProps) {
   const homePage = initialPage;
-
   // console.log(data);
   return (
     <>
-      <MainCarousel />
-
-      {/*<PrimaryHero
-        title={data.pages[0].heroTitle}
-        image={data.pages[0].heroImage.src}
-      />*/}
-
+      {/* <MainCarousel /> */}
+      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
       <Container>
         <div className="pt-12 space-y-16">
           <RouteSpecialSection
@@ -39,7 +33,6 @@ export default function HomePageTemplate({
           />
         </div>
       </Container>
-
       <div className="h-[calc(90vh)] flex items-center justify-center">
         <div className="space-y-8">
           <div className="space-y-2">
@@ -67,7 +60,6 @@ export default function HomePageTemplate({
           {/* </InViewWrapper> */}
         </div>
       </div>
-
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp"> */}
       <div
         className="h-screen space-y-16 bg-cover bg-center pt-1 pb-2 bg-blue-700 bg-blend-lighten md:bg-blend-soft-light flex items-center justify-center"
@@ -97,9 +89,7 @@ export default function HomePageTemplate({
           </div>*/}
         </div>
       </div>
-
       {/* </InViewWrapper> */}
-
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover"> */}
       {/* <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
         <Container>
@@ -156,7 +146,6 @@ export default function HomePageTemplate({
           </div>
         </Container>
       </div> */}
-
       {/* </InViewWrapper> */}
     </>
   );
