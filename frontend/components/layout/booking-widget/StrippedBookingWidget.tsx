@@ -59,16 +59,16 @@ export default function StrippedBookingWidget() {
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="fixed inset-0 z-[9999] bg-white md:hidden flex flex-col"
           style={{
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            width: '100vw',
-            height: '100vh',
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            zIndex: 9999
+            width: "100vw",
+            height: "100vh",
+            maxWidth: "100vw",
+            maxHeight: "100vh",
+            zIndex: 9999,
           }}
         >
           {/* Header with logo and close button */}
@@ -127,13 +127,13 @@ export default function StrippedBookingWidget() {
           <div className="hidden md:block">
             <BookATripForm />
           </div>
-        </div>      </div>
+        </div>{" "}
+      </div>
 
       {/* Mobile full-screen form overlay - using portal to ensure it covers everything */}
-      {mounted && typeof window !== 'undefined' && createPortal(
-        mobileFormModal,
-        document.body
-      )}
+      {mounted &&
+        typeof window !== "undefined" &&
+        createPortal(mobileFormModal, document.body)}
     </>
   );
 }
