@@ -46,10 +46,9 @@ export default function BookingWidget() {
   const closeMobileForm = () => {
     setShowMobileForm(false);
   };
-
   return (
     <>
-      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp">
+      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
         <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
           <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem]">
             <div
@@ -106,7 +105,7 @@ export default function BookingWidget() {
                 Flight Upgrade
               </button>
             </div>
-          </div>{" "}
+          </div>
           {/* Desktop content */}
           <div className="hidden md:block">
             {activeTab === 0 && <BookATripForm />}
@@ -114,14 +113,14 @@ export default function BookingWidget() {
             {activeTab === 2 && <FlightUpgradeForm />}
           </div>
         </div>
-      </div>{" "}
+      </div>
       {/* Mobile full-screen form overlay */}
       <AnimatePresence>
         {showMobileForm && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            exit={{ opacity: 0, scale: 1, y: 20 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed inset-0 z-50 bg-white md:hidden flex flex-col"
           >
@@ -152,7 +151,7 @@ export default function BookingWidget() {
                   />
                 </svg>
               </button>
-            </div>{" "}
+            </div>
             {/* Form content */}
             <div className="flex-1 overflow-y-auto px-4 pb-4">
               {activeTab === 0 && <BookATripForm />}

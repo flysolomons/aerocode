@@ -9,7 +9,7 @@ export default function SignUP() {
           Sign up to our newsletter and stay in touch with our news
         </p>
       </div>
-      
+
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-lg mx-auto">
         <div className="flex-1 flex items-center relative border-2 border-indigo-300 rounded-full pl-3 sm:pl-4 text-indigo-200 transition duration-300 ease focus-within:border-indigo-700 hover:border-cyan-100 shadow-sm focus-within:shadow">
           <svg
@@ -32,8 +32,10 @@ export default function SignUP() {
             type="email"
           />
         </div>
-          <button className="bg-indigo-900 rounded-full w-full sm:w-12 lg:w-14 h-10 sm:h-12 lg:h-14 flex items-center justify-center hover:bg-indigo-700 transition duration-500 active:bg-lime-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-blue-600">
-          <span className="text-sm font-medium text-white sm:hidden">Sign Up</span>
+        <button className="bg-indigo-900 rounded-full w-full sm:w-12 lg:w-14 h-10 sm:h-12 lg:h-14 flex items-center justify-center hover:bg-indigo-700 transition duration-500 active:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-blue-600">
+          <span className="text-sm font-medium text-white sm:hidden">
+            Sign Up
+          </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"

@@ -1,93 +1,115 @@
-import RadioButton from "@/components/ui/buttons/RadioButton";
+"use client";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import BookATripForm from "./BookATripForm";
 
 export default function StrippedBookingWidget() {
-  return (
-    <div className="relative flex flex-col items-center h-1/2 text-white">
-      <div className="w-[70.5rem] rounded-[2rem]">
-        <div className="px-4 py-3 flex flex-col items-center space-y-4">
-          <RadioButton optionOne="Round Trip" optionTwo="One Way" />
+  const [showMobileForm, setShowMobileForm] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-          {/* search form */}
-          <div className="flex items-center border border-gray-200 rounded-full px-2 shadow-md bg-white">
-            <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-black font-semibold">
-                Flying from?
-              </label>
-              <input
-                type="text"
-                placeholder="Search destination"
-                className="w-full text-sm outline-none text-black"
-              />
-            </div>
-            <div className="w-[1px] h-10 bg-gray-200"></div>
-            <div className="flex-1 px-6 py-3">
-              <label className="block text-xs text-black font-semibold">
-                Flying to?
-              </label>
-              <input
-                type="text"
-                placeholder="Search destination"
-                className="w-full text-sm outline-none text-black"
-              />
-            </div>
-            <div className="w-[1px] h-10 bg-gray-200"></div>
-            <div className="flex-1 px-6 py-3">
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="block text-xs text-black font-semibold">
-                    Departure
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Add date"
-                    className="w-full text-sm outline-none text-black"
-                  />
-                </div>
-                <div className="w-[1px] h-10 bg-gray-200"></div>
-                <div className="flex-1">
-                  <label className="block text-xs text-black font-semibold">
-                    Return
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="11 Dec '25"
-                    className="w-full text-sm outline-none text-black"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="w-[1px] h-10 bg-gray-200"></div>
-            <div className="flex-1 flex">
-              <div className="px-6 py-3">
-                <label className="block text-xs text-black font-semibold">
-                  Travelling with?
-                </label>
-                <input
-                  type="text"
-                  placeholder="1 Adult, 1 Child, 1 Infant"
-                  className="w-full text-sm outline-none text-black"
-                />
-              </div>
-              <div className="flex items-center justify-center">
-                <button className="bg-blue-500 text-white p-4 rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Prevent body scroll when mobile modal is open
+  useEffect(() => {
+    if (showMobileForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup function to restore scroll when component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showMobileForm]);
+
+  const handleFormClick = () => {
+    // On mobile, show the full-screen form
+    if (isMobile) {
+      setShowMobileForm(true);
+    }
+  };
+
+  const closeMobileForm = () => {
+    setShowMobileForm(false);
+  };
+  return (
+    <>
+      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
+        {" "}
+        <div className="w-full md:w-[70.5rem]">
+          {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
+          <div
+            className="flex px-4 py-3 h-12 w-full rounded-[2rem] bg-white shadow-md border-2 border-blue-500 cursor-pointer md:hidden"
+            onClick={handleFormClick}
+          >
+            <button className="text-sm font-semibold w-full text-center text-blue-500">
+              Book a Trip
+            </button>
+          </div>
+
+          {/* Desktop content - direct form without background wrapper */}
+          <div className="hidden md:block">
+            <BookATripForm />
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Mobile full-screen form overlay */}
+      <AnimatePresence>
+        {showMobileForm && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 1, y: 20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed inset-0 z-50 bg-white md:hidden flex flex-col"
+          >
+            {/* Header with logo and close button */}
+            <div className="flex justify-between items-center p-4 flex-shrink-0">
+              {/* Logo */}
+              <div className="flex items-center">
+                <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
+              </div>
+              {/* Close button */}
+              <button
+                onClick={closeMobileForm}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label="Close form"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Form content */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              <BookATripForm />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

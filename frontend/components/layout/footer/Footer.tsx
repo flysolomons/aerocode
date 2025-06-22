@@ -61,10 +61,12 @@ function Footer({ footerMenus }: FooterProps) {
   ];
 
   // Use footer menu data if available, otherwise use fallback
-  const columnsToRender = footerMenu?.columns || fallbackColumns;  return (
+  const columnsToRender = footerMenu?.columns || fallbackColumns;
+  return (
     <footer className="min-h-screen bg-blue-600 text-white pt-4 sm:pt-6 lg:pt-8 flex flex-col">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[70.5rem] mt-8 sm:mt-12 lg:mt-20 flex-grow">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 border-b-2 border-indigo-900 pb-4 sm:pb-6">          {/* Dynamic Columns from FooterQuery */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 border-b-2 border-indigo-900 pb-4 sm:pb-6">
+          {/* Dynamic Columns from FooterQuery */}
           {columnsToRender.map((column, index) => (
             <div key={index} className="mb-6 sm:mb-4 lg:mb-0">
               <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">
@@ -73,32 +75,49 @@ function Footer({ footerMenus }: FooterProps) {
               <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm font-normal">
                 {column.items.map((item, itemIndex) => (
                   <li key={itemIndex}>
-                    <Link href={item.url || "#"} className="hover:underline transition-colors duration-200">
+                    <Link
+                      href={item.url || "#"}
+                      className="hover:underline transition-colors duration-200"
+                    >
                       {item.title}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-          ))}        </div>
+          ))}
+        </div>
         {/*End of grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8 lg:mt-10 border-b-2 border-indigo-900 pb-4 sm:pb-6">
           {/* Help Column */}
           <div className="mb-6 sm:mb-4 lg:mb-0">
-            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Help</h3>
+            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">
+              Help
+            </h3>
             <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm font-normal">
               <li>
-                <a href="/contact" className="hover:underline transition-colors duration-200">Contact us</a>
+                <a
+                  href="/contact"
+                  className="hover:underline transition-colors duration-200"
+                >
+                  Contact us
+                </a>
               </li>
               <li>
-                <a href="/alerts" className="hover:underline transition-colors duration-200">Travel Alerts</a>
+                <a
+                  href="/alerts"
+                  className="hover:underline transition-colors duration-200"
+                >
+                  Travel Alerts
+                </a>
               </li>
             </ul>
           </div>
-
           {/* Follow Us Column */}
           <div className="mb-6 sm:mb-4 lg:mb-0">
-            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Follow Us</h3>
+            <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">
+              Follow Us
+            </h3>
             <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3">
               <a
                 href="https://facebook.com/solomonairlines"
@@ -169,7 +188,8 @@ function Footer({ footerMenus }: FooterProps) {
                 </svg>
               </a>
             </div>
-          </div>        </div>
+          </div>
+        </div>
         {/**Sign up for newsletter section */}
         <div className="w-full flex items-center justify-center mt-6 sm:mt-8 lg:mt-10">
           <SignUP></SignUP>

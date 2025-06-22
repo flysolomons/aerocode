@@ -185,7 +185,7 @@ export default function BookATripForm() {
           }}
         />
         {/* search form */}
-        <div className="flex flex-col md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
+        <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
           <div className="w-full md:flex-1">
             {/* Desktop: Use Popover */}
             <div className="hidden md:block">

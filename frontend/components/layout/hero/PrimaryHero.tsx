@@ -31,7 +31,7 @@ export default function PrimaryHero({
             }}
           />
           <div className="absolute inset-0 bg-black/15"></div>
-        </div>{" "}
+        </div>
         <div className="relative h-[calc(100vh)]">
           <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-0">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-sans">
@@ -51,6 +51,29 @@ export default function PrimaryHero({
                 )}
               </>
             )}
+          </div>
+          {/* Animated scroll down indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+            <svg
+              className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              onClick={() => {
+                window.scrollTo({
+                  top: window.innerHeight,
+                  behavior: "smooth",
+                });
+              }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
           </div>
         </div>
       </div>
