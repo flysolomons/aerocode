@@ -24,25 +24,28 @@ export default function HomePageTemplate({
   return (
     <>
       {/* <MainCarousel /> */}
-      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
+      <PrimaryHero
+        title={homePage.heroTitle}
+        image={homePage.heroImage.url}
+      />{" "}
       <Container>
-        <div className="pt-12 space-y-16">
+        <div className="pt-8 md:pt-12 space-y-8 md:space-y-16">
           <RouteSpecialSection
             heading="Our Specials"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
           />
         </div>
-      </Container>
-      <div className="h-[calc(90vh)] flex items-center justify-center">
-        <div className="space-y-8">
+      </Container>{" "}
+      <div className="min-h-[60vh] md:h-[calc(90vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
+        <div className="space-y-6 md:space-y-8 w-full max-w-6xl">
           <div className="space-y-2">
             {/* <InViewWrapper
               className="animate__animated animate__fadeInUp"> */}
-            <h2 className="discover-title text-3xl text-center font-bold text-blue-500">
+            <h2 className="discover-title text-2xl md:text-3xl text-center font-bold text-blue-500">
               Discover New Horizons
             </h2>
 
-            <span className="block text-center">
+            <span className="block text-center text-sm md:text-base px-4 md:px-0">
               Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua
             </span>
@@ -51,33 +54,39 @@ export default function HomePageTemplate({
           </div>
 
           {/* <InViewWrapper className="animate__animated animate__fadeInUp "> */}
-          <div className="h-auto">{/* <Slider /> */}</div>
+          <div className="h-auto">
+            <Slider />
+          </div>
           {/* </InViewWrapper> */}
 
           {/* <InViewWrapper
               className="animate__animated animate__fadeInUp"> */}
-          <PrimaryButton text="Explore" />
+          <div className="flex justify-center">
+            <PrimaryButton text="Explore" />
+          </div>
           {/* </InViewWrapper> */}
         </div>
-      </div>
+      </div>{" "}
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp"> */}
       <div
-        className="h-screen space-y-16 bg-cover bg-center pt-1 pb-2 bg-blue-700 bg-blend-lighten md:bg-blend-soft-light flex items-center justify-center"
+        className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-blend-lighten md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
         style={{
           backgroundImage: `url(/belama-lounge.png)`,
         }}
       >
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8 w-full max-w-4xl">
           <div className="space-y-2">
-            <h2 className="text-3xl text-center font-bold text-white pt-2">
+            <h2 className="text-2xl md:text-3xl text-center font-bold text-white pt-2">
               Join Belama
             </h2>
-            <span className="block text-center text-white">
+            <span className="block text-center text-white text-sm md:text-base px-4 md:px-0">
               Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua
             </span>
           </div>
-          <PrimaryButton href="/belama" text="Join Now" />
+          <div className="flex justify-center">
+            <PrimaryButton href="/belama" text="Join Now" />
+          </div>
           {/*<div className="relative w-full h-[30rem] mb-6">
             <Image
               src="/image.jpg"
@@ -89,22 +98,22 @@ export default function HomePageTemplate({
           </div>*/}
         </div>
       </div>
-      {/* </InViewWrapper> */}
+      {/* </InViewWrapper> */}{" "}
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover"> */}
-      {/* <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
+      <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
         <Container>
-          <div className="h-screen flex items-center justify-center ">
-            <div className="space-y-12">
+          <div className="min-h-screen md:h-screen flex items-center justify-center py-8 md:py-0">
+            <div className="space-y-8 md:space-y-12 w-full">
               <div className="space-y-2">
-                <h2 className="text-3xl text-center font-bold text-blue-500">
+                <h2 className="text-2xl md:text-3xl text-center font-bold text-blue-500">
                   All You Need
                 </h2>
-                <span className="block text-center">
+                <span className="block text-center text-sm md:text-base px-4 md:px-0">
                   Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-4 text-slate-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 text-slate-500 px-4 md:px-0">
                 <InfoCard
                   title="Travel Alerts"
                   description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
@@ -145,7 +154,7 @@ export default function HomePageTemplate({
             </div>
           </div>
         </Container>
-      </div> */}
+      </div>
       {/* </InViewWrapper> */}
     </>
   );
