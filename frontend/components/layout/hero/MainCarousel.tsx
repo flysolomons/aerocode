@@ -8,9 +8,21 @@ const MainCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
+    // {
+    //   type: "video",
+    //   src: "https://videos.pexels.com/video-files/30391497/13024573_1920_1080_25fps.mp4",
+    // },
     {
-      type: "video",
-      src: "https://videos.pexels.com/video-files/30391497/13024573_1920_1080_25fps.mp4",
+      type: "image",
+      src: "./hero3.jpg",
+    },
+    {
+      type: "image",
+      src: "./image.jpg", // Replace with your image path
+    },
+    {
+      type: "image",
+      src: "./hero.jpg",
     },
   ];
 
@@ -18,7 +30,7 @@ const MainCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 15000); // Change slide every 5 seconds
 
     return () => clearInterval(interval); // Clean up interval on unmount
   }, [slides.length]);
@@ -71,15 +83,14 @@ const MainCarousel = () => {
           ></button>
         ))}
       </div>
+      {/* Heading positioned absolutely at the top */}
+      <div className="absolute top-40 md:top-48 left-1/2 transform -translate-x-1/2 z-10 w-full px-4">
+        <h2 className="text-3xl sm:text-3xl md:text-5xl font-bold font-sans text-white text-center leading-tight">
+          Connecting the Hapi Isles
+        </h2>
+      </div>
       {/* Content positioned absolutely for centering on mobile, original positioning on desktop */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center md:relative md:mt-80 md:justify-start">
-        <div className="relative flex flex-col items-center justify-center text-white text-center mb-6 md:mb-0 md:h-1/2">
-          {/* <InViewWrapper className="text-5xl font-bold mb-4 animate__animated animate__fadeInUp w-full"> */}
-          <h2 className="flex justify-center text-3xl sm:text-3xl md:text-5xl font-bold font-sans mb-4 px-4 leading-tight">
-            Connecting the Hapi Isles
-          </h2>
-          {/* </InViewWrapper> */}
-        </div>
+      <div className="absolute inset-0 flex flex-col justify-center items-center md:relative md:mt-[26rem] md:justify-start">
         <div className="px-4 md:px-0 w-full">
           <BookingWidget />
         </div>
