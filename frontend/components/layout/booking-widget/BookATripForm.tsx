@@ -10,8 +10,6 @@ import {
   ArrivalAirport,
 } from "@/graphql/BookingWidgetQuery";
 
-import { Calendar } from "@/components/ui/calendar";
-
 import {
   Popover,
   PopoverContent,
@@ -25,7 +23,6 @@ export default function BookATripForm() {
     children: 0,
     infants: 0,
   });
-
   //Oneway or return
   const [isOneWay, setIsOneWay] = useState<boolean>(false);
 
@@ -37,10 +34,6 @@ export default function BookATripForm() {
     from: undefined,
     to: undefined,
   });
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-  const [isDepartureDateOpen, setIsDepartureDateOpen] =
-    useState<boolean>(false);
-  const [isReturnDateOpen, setIsReturnDateOpen] = useState<boolean>(false);
 
   // State for departure and arrival airports
   const [departureAirports, setDepartureAirports] = useState<
@@ -176,13 +169,20 @@ export default function BookATripForm() {
     <div className="px-4 py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0">
       <div className="flex-1 flex flex-col items-center space-y-4">
         {/* Mobile: Heading */}
-        <h2 className="block md:hidden text-xl font-bold text-blue-500 mb-2">
-          Book A Trip
+        <h2 className="block md:hidden text-lg font-bold text-blue-500 mb-2">
+          Book a Trip
         </h2>
         <RadioButton
           optionOne="Round Trip"
           optionTwo="One Way"
-          onOptionChange={(value: string) => setIsOneWay(value === "One Way")}
+          onOptionChange={(option) => {
+            const isNowOneWay = option === "two"; // "two" corresponds to "One Way"
+            setIsOneWay(isNowOneWay);
+            // Clear return date when switching to one way
+            if (isNowOneWay) {
+              setDateRange((prev) => ({ ...prev, to: undefined }));
+            }
+          }}
         />
         {/* search form */}
         <div className="flex flex-col md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
@@ -420,13 +420,33 @@ export default function BookATripForm() {
           <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
           {/* Desktop: Combined date picker */}
           <div className="hidden md:flex w-full md:flex-1 border border-gray-200 rounded-3xl shadow-md px-4 py-3 md:border-0 md:rounded-none md:shadow-none md:px-6 md:py-3 bg-white md:bg-transparent">
-            <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
-              <div className="flex flex-col md:flex-row gap-2 md:gap-4">
-                <div className="flex-1 cursor-pointer">
-                  <PopoverTrigger asChild>
+            <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+              <div className="flex-1 cursor-pointer">
+                <div className="w-full">
+                  <label className="block text-left text-xs text-black font-semibold cursor-pointer">
+                    Departure
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Pick a date"
+                    className="w-full text-sm outline-none text-black cursor-pointer"
+                    readOnly
+                    value={
+                      dateRange.from
+                        ? format(dateRange.from, "dd MMM, yyyy")
+                        : ""
+                    }
+                  />
+                </div>
+              </div>
+              {!isOneWay && (
+                <>
+                  <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
+
+                  <div className="flex-1 cursor-pointer">
                     <div className="w-full">
                       <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Departure
+                        Return
                       </label>
                       <input
                         type="text"
@@ -434,165 +454,51 @@ export default function BookATripForm() {
                         className="w-full text-sm outline-none text-black cursor-pointer"
                         readOnly
                         value={
-                          dateRange.from
-                            ? format(dateRange.from, "dd MMM, yyyy")
-                            : ""
-                        }
-                        onClick={() => setIsDatePickerOpen(true)}
-                      />
-                    </div>
-                  </PopoverTrigger>
-                </div>
-
-                <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
-
-                <div className="flex-1 cursor-pointer">
-                  <PopoverTrigger asChild>
-                    <div
-                      className={`w-full ${
-                        isOneWay ? "opacity-50 pointer-events-none" : ""
-                      }`}
-                    >
-                      <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Return
-                      </label>
-                      <input
-                        type="text"
-                        placeholder={
-                          isOneWay ? "One way flight" : "Pick a date"
-                        }
-                        className="w-full text-sm outline-none text-black cursor-pointer"
-                        readOnly
-                        disabled={isOneWay}
-                        value={
-                          !isOneWay && dateRange.to
+                          dateRange.to
                             ? format(dateRange.to, "dd MMM, yyyy")
                             : ""
                         }
-                        onClick={() => setIsDatePickerOpen(true)}
                       />
                     </div>
-                  </PopoverTrigger>
-                </div>
-
-                <PopoverContent
-                  className="w-auto mt-4 p-0 bg-white border border-gray-200 rounded-md shadow-lg"
-                  align="center"
-                >
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={dateRange.from}
-                    selected={dateRange}
-                    onSelect={(range) => {
-                      if (range) {
-                        setDateRange(range);
-                        if (range.to) {
-                          setIsDatePickerOpen(false);
-                        }
-                      }
-                    }}
-                    numberOfMonths={2}
-                    disabled={{ before: new Date() }}
-                  />
-                </PopoverContent>
-              </div>
-            </Popover>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
           {/* Mobile: Separate departure date card */}
           <div className="block md:hidden w-full">
-            <Popover
-              open={isDepartureDateOpen}
-              onOpenChange={setIsDepartureDateOpen}
-            >
-              <div
-                className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
-                onClick={() => setIsDepartureDateOpen(!isDepartureDateOpen)}
-              >
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-                  Departure
-                </label>
-                <input
-                  type="text"
-                  placeholder="Pick departure date"
-                  className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
-                  readOnly
-                  value={
-                    dateRange.from ? format(dateRange.from, "dd MMM, yyyy") : ""
-                  }
-                />
-              </div>
-              <PopoverContent
-                className="w-auto mt-4 p-0 bg-white border-2 border-gray-300 rounded-xl shadow-lg"
-                align="center"
-              >
-                <Calendar
-                  initialFocus
-                  mode="single"
-                  defaultMonth={dateRange.from}
-                  selected={dateRange.from}
-                  onSelect={(date) => {
-                    if (date) {
-                      setDateRange({ ...dateRange, from: date });
-                      setIsDepartureDateOpen(false);
-                    }
-                  }}
-                  numberOfMonths={1}
-                  disabled={{ before: new Date() }}
-                />
-              </PopoverContent>
-            </Popover>
+            <div className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+                Departure
+              </label>
+              <input
+                type="text"
+                placeholder="Pick departure date"
+                className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
+                readOnly
+                value={
+                  dateRange.from ? format(dateRange.from, "dd MMM, yyyy") : ""
+                }
+              />
+            </div>
           </div>
           {/* Mobile: Separate return date card */}
           {!isOneWay && (
             <div className="block md:hidden w-full">
-              <Popover
-                open={isReturnDateOpen}
-                onOpenChange={setIsReturnDateOpen}
-              >
-                <div
-                  className={`cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300 ${
-                    isOneWay ? "opacity-50 pointer-events-none" : ""
-                  }`}
-                  onClick={() =>
-                    !isOneWay && setIsReturnDateOpen(!isReturnDateOpen)
+              <div className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+                  Return
+                </label>
+                <input
+                  type="text"
+                  placeholder="Pick return date"
+                  className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
+                  readOnly
+                  value={
+                    dateRange.to ? format(dateRange.to, "dd MMM, yyyy") : ""
                   }
-                >
-                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-                    Return
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Pick return date"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
-                    readOnly
-                    disabled={isOneWay}
-                    value={
-                      !isOneWay && dateRange.to
-                        ? format(dateRange.to, "dd MMM, yyyy")
-                        : ""
-                    }
-                  />
-                </div>
-                <PopoverContent
-                  className="w-auto mt-4 p-0 bg-white border-2 border-gray-300 rounded-xl shadow-lg"
-                  align="center"
-                >
-                  <Calendar
-                    initialFocus
-                    mode="single"
-                    defaultMonth={dateRange.to || dateRange.from}
-                    onSelect={(date) => {
-                      if (date) {
-                        setDateRange({ ...dateRange, to: date });
-                        setIsReturnDateOpen(false);
-                      }
-                    }}
-                    numberOfMonths={1}
-                    disabled={{ before: dateRange.from || new Date() }}
-                  />
-                </PopoverContent>
-              </Popover>
+                />
+              </div>
             </div>
           )}
           <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
@@ -856,10 +762,10 @@ export default function BookATripForm() {
                   d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                   clipRule="evenodd"
                 />
-              </svg>{" "}
+              </svg>
             </button>
           </div>
-        </div>{" "}
+        </div>
       </div>
 
       {/* Mobile: Search button always under form */}

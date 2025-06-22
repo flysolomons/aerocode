@@ -17,7 +17,7 @@ export default function ManageBookingForm() {
   return (
     <div className="px-4 py-3 flex flex-col items-center space-y-4">
       {/* Mobile: Heading */}
-      <h2 className="block md:hidden text-xl font-bold text-blue-500 mb-2">
+      <h2 className="block md:hidden text-lg font-bold text-blue-500 mb-2">
         Manage Booking
       </h2>
       {/* Desktop version - original styling */}
@@ -73,7 +73,7 @@ export default function ManageBookingForm() {
             </button>
           </div>
         </div>
-      </div>{" "}
+      </div>
       {/* Mobile version - matching BookATripForm styling */}
       <div className="block md:hidden w-full">
         <div className="space-y-4">
@@ -101,8 +101,8 @@ export default function ManageBookingForm() {
               className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 px-2 sm:px-0"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-            />{" "}
-          </div>{" "}
+            />
+          </div>
         </div>
 
         {/* Mobile: Search button always under form */}

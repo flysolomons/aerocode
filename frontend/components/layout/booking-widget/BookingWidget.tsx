@@ -51,7 +51,7 @@ export default function BookingWidget() {
         <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
           <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem]">
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-[2rem] md:rounded-tr-none md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
                 activeTab === 0
                   ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
                   : "border border-gray-200 md:border-0"
@@ -87,7 +87,7 @@ export default function BookingWidget() {
               </button>
             </div>
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-none md:rounded-tr-[2rem] md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
                 activeTab === 2
                   ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
                   : "border border-gray-200 md:border-0"
@@ -116,11 +116,11 @@ export default function BookingWidget() {
       {showMobileForm && (
         <div className="fixed inset-0 z-50 bg-white md:hidden flex flex-col">
           {/* Header with logo and close button */}
-          <div className="flex justify-between items-center p-4 flex-shrink-0">            {/* Logo */}
+          <div className="flex justify-between items-center p-4 flex-shrink-0">
+            {/* Logo */}
             <div className="flex items-center">
               <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
             </div>
-
             {/* Close button */}
             <button
               onClick={closeMobileForm}
