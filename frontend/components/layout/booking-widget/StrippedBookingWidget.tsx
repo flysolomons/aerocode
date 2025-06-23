@@ -111,7 +111,6 @@ export default function StrippedBookingWidget() {
   return (
     <>
       <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
-        {" "}
         <div className="w-full md:w-[70.5rem]">
           {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
           <div
@@ -127,7 +126,7 @@ export default function StrippedBookingWidget() {
           <div className="hidden md:block">
             <BookATripForm />
           </div>
-        </div>{" "}
+        </div>
       </div>
 
       {/* Mobile full-screen form overlay - using portal to ensure it covers everything */}

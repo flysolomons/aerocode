@@ -25,10 +25,7 @@ export default function HomePageTemplate({
   return (
     <>
       {/* <MainCarousel /> */}
-      <PrimaryHero
-        title={homePage.heroTitle}
-        image={homePage.heroImage.url}
-      />{" "}
+      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
       <Container>
         <div className="pt-8 md:pt-12 space-y-8 md:space-y-16">
           <RouteSpecialSection
@@ -74,7 +71,7 @@ export default function HomePageTemplate({
             ]}
           />
         </div>
-      </Container>{" "}
+      </Container>
       <div className="min-h-[60vh] md:h-[calc(90vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
         <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[85%]">
           <div className="space-y-2">
@@ -90,10 +87,10 @@ export default function HomePageTemplate({
             </span>
 
             {/* </InViewWrapper> */}
-          </div>{" "}
+          </div>
           {/* <InViewWrapper className="animate__animated animate__fadeInUp "> */}
           <div className="h-auto">
-            {/* <Slider /> */}{" "}
+            {/* <Slider /> */}
             <EmblaCarousel
               slides={[
                 {
@@ -137,7 +134,7 @@ export default function HomePageTemplate({
           </div> */}
           {/* </InViewWrapper> */}
         </div>
-      </div>{" "}
+      </div>
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp"> */}
       <div
         className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-blend-lighten md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
@@ -169,7 +166,7 @@ export default function HomePageTemplate({
           </div>*/}
         </div>
       </div>
-      {/* </InViewWrapper> */}{" "}
+      {/* </InViewWrapper> */}
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover"> */}
       <div className="bg-[url('/traditional_ring.png')] bg-no-repeat bg-opacity-50 bg-cover">
         <Container>

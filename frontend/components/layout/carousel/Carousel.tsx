@@ -31,9 +31,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
     <section className="embla">
-      {" "}
       <div className="embla__viewport" ref={emblaRef}>
-        {" "}
         <div className="embla__container">
           {slides.map((slide, index) => (
             <div className="embla__slide" key={index}>
@@ -43,7 +41,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                   alt={`${slide.country} - Slide ${index + 1}`}
                   fill
                   className="object-cover rounded-lg"
-                />{" "}
+                />
                 <div className="absolute bottom-4 left-4 bg-black bg-opacity-70 text-white px-4 py-3 rounded-lg">
                   <div className="text-xl md:text-2xl font-bold font-sans">
                     {slide.country}
