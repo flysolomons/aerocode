@@ -11,36 +11,36 @@ interface InfoCardProps {
 
 function InfoCard({ title, description, svg, url }: InfoCardProps) {
   return (
-    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-gray-300 transition-transform hover:scale-105">
-      <div className="flex-1 space-y-3 sm:space-y-4 w-full">
-        <div className="flex items-center gap-3">
+    <div className="bg-white rounded-3xl p-3 sm:p-6 shadow-sm border border-gray-300 transition-transform hover:scale-105 h-40 sm:h-auto">
+      <div className="flex-1 space-y-2 sm:space-y-4 w-full h-full flex flex-col">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex-shrink-0">
             <img
               src={svg}
               alt={`${title} icon`}
-              className="w-8 h-8 sm:w-10 sm:h-10"
+              className="w-6 h-6 sm:w-10 sm:h-10"
             />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-blue-500 text-left">
+          <h3 className="text-base sm:text-xl font-semibold text-blue-500 text-left">
             {title}
           </h3>
         </div>
-        <p className="text-sm sm:text-base text-gray-700 text-left">
+        <p className="text-xs sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
           {stripHtmlTags(description)}
         </p>
-        <div className="flex justify-start">
+        <div className="flex justify-start mt-auto">
           <motion.a
             href={url}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onHoverStart={() => console.log("find out more is hovered!")}
-            className="inline-flex items-center gap-2 text-slate-200 text-xs sm:text-sm hover:text-slate-300 bg-blue-500 px-3 py-2 sm:px-4 sm:py-2 rounded-full hover:bg-blue-400 transition duration-300 whitespace-nowrap"
+            className="inline-flex items-center gap-1 sm:gap-2 text-slate-200 text-xs sm:text-sm hover:text-slate-300 bg-blue-500 px-2 py-1 sm:px-4 sm:py-2 rounded-full hover:bg-blue-400 transition duration-300 whitespace-nowrap"
           >
             Find out more
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="12"
+              height="12"
               className="sm:w-5 sm:h-5"
               fill="#e0e0e0"
               viewBox="0 0 256 256"

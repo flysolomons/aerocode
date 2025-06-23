@@ -34,11 +34,49 @@ export default function HomePageTemplate({
           <RouteSpecialSection
             heading="Our Specials"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+            specials={[
+              {
+                special: {
+                  name: "Island Explorer",
+                },
+                route: {
+                  nameFull: "Honiara to Brisbane",
+                  heroImage: {
+                    url: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop",
+                  },
+                },
+                startingPrice: "$899",
+              },
+              {
+                special: {
+                  name: "Pacific Paradise",
+                },
+                route: {
+                  nameFull: "Honiara to Nadi",
+                  heroImage: {
+                    url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
+                  },
+                },
+                startingPrice: "$749",
+              },
+              {
+                special: {
+                  name: "Vanuatu Adventure",
+                },
+                route: {
+                  nameFull: "Honiara to Port Vila",
+                  heroImage: {
+                    url: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=300&fit=crop",
+                  },
+                },
+                startingPrice: "$649",
+              },
+            ]}
           />
         </div>
       </Container>{" "}
       <div className="min-h-[60vh] md:h-[calc(90vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
-        <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[80%]">
+        <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[85%]">
           <div className="space-y-2">
             {/* <InViewWrapper
               className="animate__animated animate__fadeInUp"> */}

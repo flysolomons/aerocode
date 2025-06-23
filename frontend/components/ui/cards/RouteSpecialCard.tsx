@@ -16,15 +16,13 @@ function RouteSpecialCard({
   specialName,
 }: RouteSpecialCardProps) {
   return (
-    <>
-      <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-3xl overflow-hidden w-full h-full shadow-xl min-h-48 sm:min-h-56 lg:min-h-64">
+    <>      <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-3xl overflow-hidden w-full shadow-xl h-36 sm:h-56 lg:h-64">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
         <Image
           src={image}
           alt={route}
-          width={500}
-          height={500}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
         {specialName && (
           <div className="absolute top-2 sm:top-4 lg:top-4 right-2 sm:right-4 lg:right-4 bg-yellow-400 px-2 sm:px-3 lg:px-2 py-1 sm:py-2 lg:py-2 rounded-full text-xs sm:text-sm lg:text-xs text-blue-500 font-semibold z-20">
