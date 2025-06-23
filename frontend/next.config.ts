@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "nginx",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
 
       // add CDN here
     ],

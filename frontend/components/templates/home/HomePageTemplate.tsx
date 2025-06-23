@@ -7,6 +7,7 @@ import InfoCard from "@/components/ui/cards/InfoCard";
 import Image from "next/image";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import Slider from "@/components/layout/Slider";
+import EmblaCarousel from "@/components/layout/carousel/Carousel";
 import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
 // import InViewWrapper
 //  from "@/components/common/InViewWrapper";
@@ -37,7 +38,7 @@ export default function HomePageTemplate({
         </div>
       </Container>{" "}
       <div className="min-h-[60vh] md:h-[calc(90vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
-        <div className="space-y-6 md:space-y-8 w-full max-w-6xl">
+        <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[80%]">
           <div className="space-y-2">
             {/* <InViewWrapper
               className="animate__animated animate__fadeInUp"> */}
@@ -51,19 +52,51 @@ export default function HomePageTemplate({
             </span>
 
             {/* </InViewWrapper> */}
-          </div>
-
+          </div>{" "}
           {/* <InViewWrapper className="animate__animated animate__fadeInUp "> */}
           <div className="h-auto">
-            <Slider />
+            {/* <Slider /> */}{" "}
+            <EmblaCarousel
+              slides={[
+                {
+                  imageUrl:
+                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+                  country: "Maldives",
+                  subtitle: "Insert Subtitle here",
+                },
+                {
+                  imageUrl:
+                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
+                  country: "Fiji",
+                  subtitle: "Insert Subtitle here",
+                },
+                {
+                  imageUrl:
+                    "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=600&fit=crop",
+                  country: "Solomon Islands",
+                  subtitle: "Insert Subtitle here",
+                },
+                {
+                  imageUrl:
+                    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
+                  country: "New Zealand",
+                  subtitle: "Insert Subtitle here",
+                },
+                {
+                  imageUrl:
+                    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop",
+                  country: "Australia",
+                  subtitle: "Insert Subtitle here",
+                },
+              ]}
+            />
           </div>
           {/* </InViewWrapper> */}
-
           {/* <InViewWrapper
               className="animate__animated animate__fadeInUp"> */}
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
             <PrimaryButton text="Explore" />
-          </div>
+          </div> */}
           {/* </InViewWrapper> */}
         </div>
       </div>{" "}
