@@ -55,30 +55,33 @@ export default function BookATripForm() {
   const [isTravelersPopoverOpen, setIsTravelersPopoverOpen] =
     useState<boolean>(false);
   const [isTravelersMobileOpen, setIsTravelersMobileOpen] =
-    useState<boolean>(false);  // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
+    useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
   const travelersMobileRef = useRef<HTMLDivElement>(null);
   const travelersInputRef = useRef<HTMLDivElement>(null);
-  
+
   // Refs for form inputs to handle scrolling
   const departureInputRef = useRef<HTMLDivElement>(null);
-  const arrivalInputRef = useRef<HTMLDivElement>(null);  // Function to scroll input into better view when dropdown opens
-  const scrollInputIntoView = (inputRef: React.RefObject<HTMLDivElement | null>) => {
-    if (inputRef.current && window.innerWidth < 768) { // Only on mobile
+  const arrivalInputRef = useRef<HTMLDivElement>(null); // Function to scroll input into better view when dropdown opens
+  const scrollInputIntoView = (
+    inputRef: React.RefObject<HTMLDivElement | null>
+  ) => {
+    if (inputRef.current && window.innerWidth < 768) {
+      // Only on mobile
       const element = inputRef.current;
       const rect = element.getBoundingClientRect();
       const viewport = window.innerHeight;
-      
+
       // Check if dropdown would extend below viewport or if input is in bottom half
       const dropdownHeight = 200; // Estimated dropdown height
       const spaceBelow = viewport - rect.bottom;
       const isInBottomHalf = rect.top > viewport / 2;
-      
+
       if (spaceBelow < dropdownHeight || isInBottomHalf) {
         // Use scrollIntoView with block: 'start' to position element at top of viewport
         element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest'
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
         });
       }
     }
@@ -271,7 +274,8 @@ export default function BookATripForm() {
                   )}
                 </PopoverContent>
               </Popover>
-            </div>            {/* Mobile: Use inline dropdown that pushes content */}
+            </div>
+            {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={departureInputRef}>
               <div
                 className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
@@ -397,7 +401,8 @@ export default function BookATripForm() {
                   )}
                 </PopoverContent>
               </Popover>
-            </div>            {/* Mobile: Use inline dropdown that pushes content */}
+            </div>
+            {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={arrivalInputRef}>
               <div
                 className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
@@ -673,7 +678,8 @@ export default function BookATripForm() {
                 </PopoverContent>
               </Popover>
             </div>
-          </div>          {/* Mobile: Use inline dropdown that pushes content */}
+          </div>
+          {/* Mobile: Use inline dropdown that pushes content */}
           <div className="block md:hidden" ref={travelersMobileRef}>
             <div
               className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"

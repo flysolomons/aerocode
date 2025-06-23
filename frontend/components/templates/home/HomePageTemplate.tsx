@@ -72,7 +72,7 @@ export default function HomePageTemplate({
           />
         </div>
       </Container>
-      <div className="min-h-[60vh] md:h-[calc(90vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
+      <div className="min-h-[100vh] md:h-[calc(100vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
         <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[85%]">
           <div className="space-y-2">
             {/* <InViewWrapper
@@ -96,7 +96,7 @@ export default function HomePageTemplate({
                 {
                   imageUrl:
                     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-                  country: "Maldives",
+                  country: "Papua New Guinea",
                   subtitle: "Insert Subtitle here",
                 },
                 {
@@ -137,7 +137,7 @@ export default function HomePageTemplate({
       </div>
       {/* <InViewWrapper  className="animate__animated animate__fadeInUp"> */}
       <div
-        className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-blend-lighten md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
+        className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
         style={{
           backgroundImage: `url(/belama-lounge.png)`,
         }}
@@ -145,7 +145,7 @@ export default function HomePageTemplate({
         <div className="space-y-6 md:space-y-8 w-full max-w-4xl">
           <div className="space-y-2">
             <h2 className="text-2xl md:text-3xl text-center font-bold text-white pt-2">
-              Join Belama
+              Belama
             </h2>
             <span className="block text-center text-white text-sm md:text-base px-4 md:px-0">
               Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
