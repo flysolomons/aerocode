@@ -9,6 +9,7 @@ export default function BookingWidget() {
   const [activeTab, setActiveTab] = useState(0);
   const [showMobileForm, setShowMobileForm] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isDesktopModalActive, setIsDesktopModalActive] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -42,15 +43,24 @@ export default function BookingWidget() {
       setShowMobileForm(true);
     }
   };
-
   const closeMobileForm = () => {
     setShowMobileForm(false);
+  };
+
+  const handleDesktopModalStateChange = (isActive: boolean) => {
+    setIsDesktopModalActive(isActive);
   };
   return (
     <>
       <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
         <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
-          <div className="flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem]">
+          <div
+            className={`flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem] transition-opacity duration-500 ease-in-out ${
+              isDesktopModalActive
+                ? "md:opacity-0 md:pointer-events-none"
+                : "md:opacity-100"
+            }`}
+          >
             <div
               className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-[2rem] md:rounded-tr-none md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
                 activeTab === 0
@@ -108,7 +118,11 @@ export default function BookingWidget() {
           </div>
           {/* Desktop content */}
           <div className="hidden md:block">
-            {activeTab === 0 && <BookATripForm />}
+            {activeTab === 0 && (
+              <BookATripForm
+                onModalStateChange={handleDesktopModalStateChange}
+              />
+            )}
             {activeTab === 1 && <ManageBookingForm />}
             {activeTab === 2 && <FlightUpgradeForm />}
           </div>
