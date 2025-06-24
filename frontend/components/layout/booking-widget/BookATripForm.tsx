@@ -228,18 +228,18 @@ export default function BookATripForm({
     <>
       {/* Desktop Overlay */}
       {isDesktopModalActive && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-40 transition-opacity duration-300 ease-in-out hidden md:block" />
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-[60] transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
         className={`px-4 py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
-          isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-50" : ""
+          isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-[70]" : ""
         }`}
       >
         {/* Desktop Close Button */}
         {isDesktopModalActive && (
           <button
             onClick={closeDesktopModal}
-            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-50"
+            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-[80]"
           >
             <svg
               className="w-5 h-5"
@@ -309,7 +309,7 @@ export default function BookATripForm({
                     </div>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto"
+                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                     style={{
                       maxHeight:
                         departureAirports.length > 3 ? "12rem" : "auto",
@@ -442,7 +442,7 @@ export default function BookATripForm({
                     </div>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto"
+                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                     style={{
                       maxHeight: arrivalAirports.length > 3 ? "12rem" : "auto",
                     }}
@@ -600,7 +600,7 @@ export default function BookATripForm({
                     </div>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto"
+                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                     align="start"
                   >
                     <div className=" bg-white border border-gray-200 rounded-lg shadow-lg p-4">

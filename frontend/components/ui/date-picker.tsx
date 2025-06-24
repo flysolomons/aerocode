@@ -80,7 +80,7 @@ export function DatePicker({
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent className="w-auto p-0 z-[75]" align="start">
           <Calendar
             mode="single"
             selected={date}
@@ -182,9 +182,11 @@ export function DateRangePicker({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto p-0"
+          className="w-auto p-0 z-[75]"
           align={mode === "range" ? "center" : "start"}
           sideOffset={sideOffset}
+          side="bottom"
+          avoidCollisions={false}
         >
           {mode === "single" ? (
             <Calendar
