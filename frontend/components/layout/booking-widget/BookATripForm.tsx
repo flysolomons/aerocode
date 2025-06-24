@@ -226,21 +226,20 @@ export default function BookATripForm({
   };
   return (
     <>
-      {" "}
       {/* Desktop Overlay */}
       {isDesktopModalActive && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-40 transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
         className={`px-4 py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
-          isDesktopModalActive ? "md:-mt-80 md:relative md:z-50" : ""
+          isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-50" : ""
         }`}
       >
         {/* Desktop Close Button */}
         {isDesktopModalActive && (
           <button
             onClick={closeDesktopModal}
-            className="hidden md:flex absolute -right-12 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-50"
+            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-50"
           >
             <svg
               className="w-5 h-5"
@@ -279,9 +278,8 @@ export default function BookATripForm({
           {/* search form */}
           <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
             <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}{" "}
+              {/* Desktop: Use Popover */}
               <div className="hidden md:block">
-                {" "}
                 <Popover
                   open={isDeparturePopoverOpen}
                   onOpenChange={(open) => {
@@ -413,9 +411,8 @@ export default function BookATripForm({
             </div>
             <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
             <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}{" "}
+              {/* Desktop: Use Popover */}
               <div className="hidden md:block">
-                {" "}
                 <Popover
                   open={isArrivalPopoverOpen}
                   onOpenChange={(open) => {
@@ -544,7 +541,7 @@ export default function BookATripForm({
                 )}
               </div>
             </div>
-            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>{" "}
+            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
             {/* Desktop: Combined date picker */}
             <div className="hidden md:flex w-full md:flex-1">
               <DateRangePicker
@@ -575,7 +572,6 @@ export default function BookATripForm({
             {/* Desktop: Use Popover */}
             <div className="hidden md:flex w-full md:flex-1 flex border border-gray-200 rounded-3xl shadow-md md:border-0 md:rounded-none md:shadow-none bg-white md:bg-transparent">
               <div className="flex-1 cursor-pointer">
-                {" "}
                 <Popover
                   open={isTravelersPopoverOpen}
                   onOpenChange={(open) => {

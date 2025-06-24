@@ -5,7 +5,13 @@ import BookATripForm from "./BookATripForm";
 import ManageBookingForm from "./ManageBookingForm";
 import FlightUpgradeForm from "./FlightUpgradeForm";
 
-export default function BookingWidget() {
+interface BookingWidgetProps {
+  onModalStateChange?: (isActive: boolean) => void;
+}
+
+export default function BookingWidget({
+  onModalStateChange,
+}: BookingWidgetProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [showMobileForm, setShowMobileForm] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,9 +52,9 @@ export default function BookingWidget() {
   const closeMobileForm = () => {
     setShowMobileForm(false);
   };
-
   const handleDesktopModalStateChange = (isActive: boolean) => {
     setIsDesktopModalActive(isActive);
+    onModalStateChange?.(isActive);
   };
   return (
     <>

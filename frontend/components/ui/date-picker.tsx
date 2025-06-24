@@ -125,11 +125,12 @@ export function DateRangePicker({
   onClick,
   sideOffset = 4,
 }: DateRangePickerProps) {
+  const [open, setOpen] = React.useState(false);
   const isMobile = variant === "mobile";
 
   return (
     <div className={cn("w-full", className)}>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -177,12 +178,12 @@ export function DateRangePicker({
                   </span>
                 )}
               </div>
-            </div>{" "}
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent
           className="w-auto p-0"
-          align="start"
+          align={mode === "range" ? "center" : "start"}
           sideOffset={sideOffset}
         >
           {mode === "single" ? (
@@ -193,8 +194,14 @@ export function DateRangePicker({
               selected={dateRange?.from}
               onSelect={(date: Date | undefined) => {
                 onSelect?.(date ? { from: date, to: undefined } : undefined);
+                if (date && mode === "single") {
+                  setOpen(false);
+                }
               }}
               disabled={(date) => date < new Date()}
+              classNames={{
+                day: "h-12 w-12 p-0 font-normal aria-selected:opacity-100",
+              }}
             />
           ) : (
             <Calendar
@@ -211,6 +218,9 @@ export function DateRangePicker({
               }}
               numberOfMonths={2}
               disabled={(date) => date < new Date()}
+              classNames={{
+                day: "h-12 w-12 p-0 font-normal aria-selected:opacity-100",
+              }}
             />
           )}
         </PopoverContent>

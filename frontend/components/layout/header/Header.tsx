@@ -1,8 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TransformedHeaderMenu } from "@/graphql/HeaderQuery";
 
@@ -262,7 +261,8 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
         >
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>              <Image
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+              <Image
                 src="/logo.svg"
                 alt="Solomon Airlines Logo"
                 width={120}

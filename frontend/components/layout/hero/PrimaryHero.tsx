@@ -1,6 +1,6 @@
 // props: card title, image
 
-import React from "react";
+import React, { useState } from "react";
 import BookingWidget from "../booking-widget/BookingWidget";
 import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
 import BreadcrumbNav from "../BreadcrumbNav";
@@ -20,6 +20,7 @@ export default function PrimaryHero({
   widget,
   showBookingWidget = true,
 }: PrimaryHeroProps) {
+  const [isBookingModalActive, setIsBookingModalActive] = useState(false);
   return (
     <main>
       <div className="relative">
@@ -33,7 +34,11 @@ export default function PrimaryHero({
           <div className="absolute inset-0 bg-black/15"></div>
         </div>
         <div className="relative h-[calc(100vh)]">
-          <div className="relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-0">
+          <div
+            className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-0 transition-opacity duration-300 ${
+              isBookingModalActive ? "md:opacity-0" : "opacity-100"
+            }`}
+          >
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-sans">
               {title}
             </h1>
@@ -47,7 +52,7 @@ export default function PrimaryHero({
                 {widget === "stripped" ? (
                   <StrippedBookingWidget />
                 ) : (
-                  <BookingWidget />
+                  <BookingWidget onModalStateChange={setIsBookingModalActive} />
                 )}
               </>
             )}
