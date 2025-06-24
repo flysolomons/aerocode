@@ -153,18 +153,26 @@ export default function BookATripForm({
       return newTravelers;
     });
   };
-
   // Function to handle desktop modal activation
   const handleDesktopInputClick = () => {
     if (window.innerWidth >= 768) {
       // Only on desktop
+      // Close all open dropdowns before activating modal
+      setIsDeparturePopoverOpen(false);
+      setIsArrivalPopoverOpen(false);
+      setIsTravelersPopoverOpen(false);
+
       setIsDesktopModalActive(true);
       onModalStateChange?.(true);
     }
   };
-
   // Function to close desktop modal
   const closeDesktopModal = () => {
+    // Close all open dropdowns when closing modal
+    setIsDeparturePopoverOpen(false);
+    setIsArrivalPopoverOpen(false);
+    setIsTravelersPopoverOpen(false);
+
     setIsDesktopModalActive(false);
     onModalStateChange?.(false);
   };
@@ -218,9 +226,10 @@ export default function BookATripForm({
   };
   return (
     <>
-      {/* Desktop Overlay */}{" "}
+      {" "}
+      {/* Desktop Overlay */}
       {isDesktopModalActive && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 z-40 transition-opacity duration-300 ease-in-out hidden md:block" />
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-40 transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
         className={`px-4 py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
@@ -266,25 +275,25 @@ export default function BookATripForm({
                 }
               }}
             />
-            <div
-              onClick={handleDesktopInputClick}
-              className="hidden md:block absolute inset-0 cursor-pointer z-10"
-            ></div>
           </div>
           {/* search form */}
           <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
             <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}
+              {/* Desktop: Use Popover */}{" "}
               <div className="hidden md:block">
+                {" "}
                 <Popover
                   open={isDeparturePopoverOpen}
-                  onOpenChange={setIsDeparturePopoverOpen}
+                  onOpenChange={(open) => {
+                    if (open && !isDesktopModalActive) {
+                      // Only trigger modal if we're not already in modal state
+                      handleDesktopInputClick();
+                    }
+                    setIsDeparturePopoverOpen(open);
+                  }}
                 >
                   <PopoverTrigger asChild className="w-full">
-                    <div
-                      className="cursor-pointer px-6 py-3"
-                      onClick={handleDesktopInputClick}
-                    >
+                    <div className="cursor-pointer px-6 py-3">
                       <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                         Flying from?
                       </label>
@@ -404,17 +413,21 @@ export default function BookATripForm({
             </div>
             <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
             <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}
+              {/* Desktop: Use Popover */}{" "}
               <div className="hidden md:block">
+                {" "}
                 <Popover
                   open={isArrivalPopoverOpen}
-                  onOpenChange={setIsArrivalPopoverOpen}
+                  onOpenChange={(open) => {
+                    if (open && !isDesktopModalActive) {
+                      // Only trigger modal if we're not already in modal state
+                      handleDesktopInputClick();
+                    }
+                    setIsArrivalPopoverOpen(open);
+                  }}
                 >
                   <PopoverTrigger asChild className="w-full">
-                    <div
-                      className="cursor-pointer px-6 py-3"
-                      onClick={handleDesktopInputClick}
-                    >
+                    <div className="cursor-pointer px-6 py-3">
                       <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                         Flying to?
                       </label>
@@ -531,7 +544,7 @@ export default function BookATripForm({
                 )}
               </div>
             </div>
-            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
+            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>{" "}
             {/* Desktop: Combined date picker */}
             <div className="hidden md:flex w-full md:flex-1">
               <DateRangePicker
@@ -543,6 +556,7 @@ export default function BookATripForm({
                 variant="desktop"
                 mode={isOneWay ? "single" : "range"}
                 onClick={handleDesktopInputClick}
+                sideOffset={8}
               />
             </div>
             {/* Mobile: Combined date picker */}
@@ -561,18 +575,22 @@ export default function BookATripForm({
             {/* Desktop: Use Popover */}
             <div className="hidden md:flex w-full md:flex-1 flex border border-gray-200 rounded-3xl shadow-md md:border-0 md:rounded-none md:shadow-none bg-white md:bg-transparent">
               <div className="flex-1 cursor-pointer">
+                {" "}
                 <Popover
                   open={isTravelersPopoverOpen}
-                  onOpenChange={setIsTravelersPopoverOpen}
+                  onOpenChange={(open) => {
+                    if (open && !isDesktopModalActive) {
+                      // Only trigger modal if we're not already in modal state
+                      handleDesktopInputClick();
+                    }
+                    setIsTravelersPopoverOpen(open);
+                  }}
                 >
                   <PopoverTrigger
                     asChild
                     className="w-full px-4 py-3 md:px-6 md:py-3"
                   >
-                    <div
-                      className="w-full h-full text-left"
-                      onClick={handleDesktopInputClick}
-                    >
+                    <div className="w-full h-full text-left cursor-pointer">
                       <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                         Travelling with?
                       </label>

@@ -77,7 +77,7 @@ export function DatePicker({
                   <span className="text-gray-400 text-sm">{placeholder}</span>
                 )}
               </div>
-            </div>{" "}
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
@@ -108,6 +108,7 @@ interface DateRangePickerProps {
   variant?: "mobile" | "desktop";
   mode?: "single" | "range";
   onClick?: () => void;
+  sideOffset?: number;
 }
 
 export function DateRangePicker({
@@ -122,6 +123,7 @@ export function DateRangePicker({
   variant = "mobile",
   mode = "range",
   onClick,
+  sideOffset = 4,
 }: DateRangePickerProps) {
   const isMobile = variant === "mobile";
 
@@ -178,7 +180,11 @@ export function DateRangePicker({
             </div>{" "}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent
+          className="w-auto p-0"
+          align="start"
+          sideOffset={sideOffset}
+        >
           {mode === "single" ? (
             <Calendar
               initialFocus
