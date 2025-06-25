@@ -3,14 +3,22 @@ import Container from "@/components/layout/Container";
 import MembershipCard from "@/components/ui/cards/MembershipCard";
 import Image from "next/image";
 import { BelamaIndexPage } from "@/graphql/BelamaPageQuery";
+import { create}  from 'zustand';
+import { get } from "http";
 
 interface BelamaIndexPageTemplateProps {
   initialPage: BelamaIndexPage;
 }
 
+
+
 export default function BelamaIndexPageTemplate({
   initialPage,
 }: BelamaIndexPageTemplateProps) {
+
+  
+
+  
   return (
     <>
       <SecondaryHero
@@ -19,7 +27,7 @@ export default function BelamaIndexPageTemplate({
         breadcrumbs={initialPage.url}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-12 px-4 sm:px-6 lg:px-8">
           {/* Description */}
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
@@ -36,21 +44,29 @@ export default function BelamaIndexPageTemplate({
               {initialPage.individualMemberships.map((membership, index) => (
                 <MembershipCard
                   key={index}
+                  index={index}
                   title={membership.title}
                   price={membership.price}
                   features={membership.features}
                   signUpUrl="/belama/sign-up"
+                  isPopular={true}
                 />
               ))}
             </div>
           </div>
-          <Image
+          </div>
+        </Container>
+        {/* Promo Image section */}
+        <Image
             src={initialPage.promoImage?.url || "/image.jpg"}
             alt="Where We Fly: International"
             width={4000}
             height={1000}
-            className="w-full h-48 sm:h-64 lg:h-[25rem] rounded-2xl sm:rounded-3xl lg:rounded-3xl object-cover"
-          />
+            className="w-full h-48 sm:h-64 lg:h-[30rem] object-cover"
+        />
+        <Container>
+        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8 ">
+          {/* Group memebership section */}
           <div className="space-y-6 sm:space-y-8 lg:space-y-8">
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Group Memberships
@@ -59,10 +75,12 @@ export default function BelamaIndexPageTemplate({
               {initialPage.groupMemberships.map((membership, index) => (
                 <MembershipCard
                   key={index}
+                  index={index}
                   title={membership.title}
                   price={membership.price}
                   features={membership.features}
                   signUpUrl="/belama/sign-up"
+                  isPopular={false}
                 />
               ))}
             </div>

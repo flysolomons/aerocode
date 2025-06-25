@@ -75,7 +75,7 @@ class BelamaSignUpPage(BasePage):
         # FieldPanel("description"),
     ]
 
-    graphql_fields = [
+    graphql_fields = BasePage.graphql_fields + [
         # GraphQLString("description", name="description"),
     ]
 
