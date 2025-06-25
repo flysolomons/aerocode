@@ -31,7 +31,10 @@ import { fetchFlightSchedulePage } from "@/graphql/FlightSchedulePageQuery";
 import { fetchSpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
 import { fetchSpecialPage } from "@/graphql/SpecialPageQuery";
 import { fetchAboutPage } from "@/graphql/AboutPageQuery";
-import { fetchBelamaPage, fetchBelamaSignUpPage } from "@/graphql/BelamaPageQuery";
+import {
+  fetchBelamaPage,
+  fetchBelamaSignUpPage,
+} from "@/graphql/BelamaPageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {

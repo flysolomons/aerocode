@@ -3,9 +3,20 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { TransformedHeaderMenu } from "@/graphql/HeaderQuery";
+import { TransformedHeaderMenu, Currency } from "@/graphql/HeaderQuery";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
+function Header({
+  headerMenus,
+  currencies = [],
+}: {
+  headerMenus: TransformedHeaderMenu[];
+  currencies?: Currency[];
+}) {
   const [isWhiteHeader, setIsWhiteHeader] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -13,6 +24,10 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
   const [isHovered, setIsHovered] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
+    currencies.length > 0 ? currencies[0] : null
+  );
 
   // Debug: Log the passed header menus
   // console.log("Header Menus received:", headerMenus);
@@ -195,7 +210,113 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
     { name: "Belama", path: "/belama", key: "belama" },
   ];
 
-  // console.log("Navigation items:", navigationItems); // Mega Menu Component
+  // console.log("Navigation items:", navigationItems);
+
+  // Currency Dropdown Component
+  const CurrencyDropdown = ({ isDesktop = true }: { isDesktop?: boolean }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    if (isDesktop) {
+      // Desktop: Use existing Popover
+      return (
+        <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <motion.button
+              className="cursor-pointer p-1 flex items-center"
+              animate={{
+                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              }}
+              whileHover={{
+                color: "#1d4ed8",
+              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              aria-label="Select Currency"
+            >
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                animate={{
+                  fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                viewBox="0 0 256 256"
+              >
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
+              </motion.svg>
+              {/* Display selected currency code next to icon for desktop */}
+              {selectedCurrency && (
+                <motion.span
+                  className="ml-2 text-sm font-medium"
+                  animate={{
+                    color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                  }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  {selectedCurrency.currencyCode}
+                </motion.span>
+              )}
+            </motion.button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-64 p-2"
+            align="end"
+            side="bottom"
+            sideOffset={16}
+          >
+            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
+              Select Currency
+            </div>
+            <div className="max-h-48 overflow-y-auto">
+              {currencies.map((currency) => (
+                <button
+                  key={currency.currencyCode}
+                  onClick={() => {
+                    setSelectedCurrency(currency);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-md hover:bg-yellow-50 transition-colors ${
+                    selectedCurrency?.currencyCode === currency.currencyCode
+                      ? "bg-yellow-200 text-yellow-900"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-sm">
+                        {currency.currencyCode} - {currency.currencySymbol}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {currency.countryName}
+                      </div>
+                    </div>
+                    {selectedCurrency?.currencyCode ===
+                      currency.currencyCode && (
+                      <svg
+                        className="w-4 h-4 text-yellow-900"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </PopoverContent>
+        </Popover>
+      );
+    }
+
+    // Mobile: No currency dropdown for mobile
+    return null;
+  };
+
+  // Mega Menu Component
   const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
     <AnimatePresence>
       {isVisible && (
@@ -203,8 +324,11 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden lg:block"
+          transition={{
+            duration: 0.2,
+            ease: "easeOut",
+          }}
+          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden xl:block"
         >
           <div className="max-w-[70.5rem] mx-auto py-6 px-4 sm:px-6 lg:px-0">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
@@ -253,11 +377,11 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
     <AnimatePresence>
       {isMobileMenuOpen && (
         <motion.div
-          initial={{ opacity: 0, x: "100%" }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: "100%" }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 bg-white lg:hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          className="fixed inset-0 z-50 bg-white xl:hidden"
         >
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -338,8 +462,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                     )}
                 </div>
               ))}
-            </nav>
-
+            </nav>{" "}
             {/* Mobile action buttons */}
             <div className="mt-8 pt-6 border-t border-gray-200">
               <div className="flex items-center justify-center space-x-6">
@@ -360,19 +483,6 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                       strokeWidth={2}
                       d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
-                  </svg>
-                </button>
-                <button
-                  className="p-3 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                  aria-label="Language"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
                   </svg>
                 </button>
                 <button
@@ -428,12 +538,11 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, isScrollingUp]);
-
   // Handle window resize to close mobile menu on desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        // lg breakpoint
+      if (window.innerWidth >= 1280) {
+        // xl breakpoint
         setIsMobileMenuOpen(false);
         setActiveMegaMenu(null);
       }
@@ -443,6 +552,12 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Update selected currency when currencies prop changes
+  useEffect(() => {
+    if (currencies.length > 0 && !selectedCurrency) {
+      setSelectedCurrency(currencies[0]);
+    }
+  }, [currencies, selectedCurrency]);
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -503,9 +618,8 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               </motion.div>
             </Link>
           </div>
-
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 justify-between font-sans relative">
+          <nav className="hidden xl:flex items-center space-x-8 justify-between font-sans relative">
             {navigationItems.map((item: any) => (
               <div
                 key={item.name}
@@ -514,7 +628,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                   // Only activate mega menu if it has content and on desktop
                   if (
                     hasMegaMenuContent(item.key) &&
-                    window.innerWidth >= 1024
+                    window.innerWidth >= 1280
                   ) {
                     setActiveMegaMenu(item.key);
                   }
@@ -544,9 +658,17 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               </div>
             ))}
           </nav>
-
           {/* Desktop Action Buttons */}
-          <div className="hidden lg:flex items-center justify-end gap-3 w-36">
+          <div
+            className="hidden xl:flex items-center justify-end gap-3 w-36"
+            onMouseEnter={() => {
+              // Add a slight delay before hiding mega menu for smoother transition
+              setTimeout(() => {
+                setActiveMegaMenu(null);
+              }, 100);
+            }}
+          >
+            {" "}
             <motion.button
               className="cursor-pointer"
               animate={{
@@ -573,29 +695,7 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
                 />
               </svg>
             </motion.button>
-            <motion.button
-              className="cursor-pointer"
-              animate={{
-                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-              }}
-              whileHover={{
-                color: "#1d4ed8",
-              }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              aria-label="Language"
-            >
-              <motion.svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                animate={{
-                  fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-                }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                viewBox="0 0 256 256"
-              >
-                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
-              </motion.svg>
-            </motion.button>
+            <CurrencyDropdown isDesktop={true} />
             <motion.button
               className="cursor-pointer"
               animate={{
@@ -623,11 +723,12 @@ function Header({ headerMenus }: { headerMenus: TransformedHeaderMenu[] }) {
               </svg>
             </motion.button>
           </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="lg:hidden flex items-center">
+          {/* Mobile Menu Toggle */}{" "}
+          <div className="xl:hidden flex items-center">
             <motion.button
-              onClick={() => setIsMobileMenuOpen(true)}
+              onClick={() => {
+                setIsMobileMenuOpen(true);
+              }}
               className="p-2 rounded-lg hover:bg-black/10 transition-colors"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",

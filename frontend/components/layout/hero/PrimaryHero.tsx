@@ -35,18 +35,18 @@ export default function PrimaryHero({
         </div>
         <div className="relative h-[calc(100vh)]">
           <div
-            className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-0 transition-opacity duration-300 ${
-              isBookingModalActive ? "md:opacity-0" : "opacity-100"
+            className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-8 lg:px-0 transition-opacity duration-300 ${
+              isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-sans">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-sans max-w-4xl">
               {title}
             </h1>
-            <div className="text-xs sm:text-sm lg:text-base">
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg">
               <BreadcrumbNav breadcrumbs={breadcrumbs} />
             </div>
           </div>
-          <div className="md:-mt-12 px-4 sm:px-6 md:px-0">
+          <div className="md:-mt-8 lg:-mt-12 px-4 sm:px-6 md:px-8 lg:px-0">
             {showBookingWidget && (
               <>
                 {widget === "stripped" ? (
@@ -58,9 +58,9 @@ export default function PrimaryHero({
             )}
           </div>
           {/* Animated scroll down indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+          <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
             <svg
-              className="w-6 h-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+              className="w-5 h-5 md:w-6 md:h-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

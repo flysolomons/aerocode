@@ -19,7 +19,7 @@ export default function BookingWidget({
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1280);
     };
 
     checkMobile();
@@ -58,24 +58,24 @@ export default function BookingWidget({
   };
   return (
     <>
-      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
-        <div className="w-full md:w-[70.5rem] md:bg-white md:rounded-[2rem] md:shadow-lg">
+      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0">
+        <div className="w-full xl:w-[70.5rem] xl:bg-white xl:rounded-[2rem] xl:shadow-lg">
           <div
-            className={`flex flex-col space-y-2 md:space-y-0 md:flex-row md:border-b md:bg-white md:rounded-[2rem] transition-opacity duration-500 ease-in-out ${
+            className={`flex flex-col space-y-2 xl:space-y-0 xl:flex-row xl:border-b xl:bg-white xl:rounded-[2rem] transition-opacity duration-500 ease-in-out ${
               isDesktopModalActive
-                ? "md:opacity-0 md:pointer-events-none"
-                : "md:opacity-100"
+                ? "xl:opacity-0 xl:pointer-events-none"
+                : "xl:opacity-100"
             }`}
           >
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-[2rem] md:rounded-tr-none md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-tl-[2rem] xl:rounded-tr-none xl:rounded-bl-none xl:rounded-br-none bg-white shadow-md xl:shadow-none ${
                 activeTab === 0
-                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
-                  : "border border-gray-200 md:border-0"
+                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
+                  : "border border-gray-200 xl:border-0"
               }`}
             >
               <button
-                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
                   activeTab === 0
                     ? "text-blue-500"
                     : "text-gray-500 hover:text-gray-700"
@@ -86,14 +86,14 @@ export default function BookingWidget({
               </button>
             </div>
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-none bg-white shadow-md xl:shadow-none ${
                 activeTab === 1
-                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
-                  : "border border-gray-200 md:border-0"
+                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
+                  : "border border-gray-200 xl:border-0"
               }`}
             >
               <button
-                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
                   activeTab === 1
                     ? "text-blue-500"
                     : "text-gray-500 hover:text-gray-700"
@@ -104,14 +104,14 @@ export default function BookingWidget({
               </button>
             </div>
             <div
-              className={`flex px-4 py-3 h-12 w-full md:w-[11rem] rounded-[2rem] md:rounded-tl-none md:rounded-tr-[2rem] md:rounded-bl-none md:rounded-br-none bg-white shadow-md md:shadow-none ${
+              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-tl-none xl:rounded-tr-[2rem] xl:rounded-bl-none xl:rounded-br-none bg-white shadow-md xl:shadow-none ${
                 activeTab === 2
-                  ? "border-2 border-blue-500 md:border-0 md:border-b-2 md:border-b-blue-500"
-                  : "border border-gray-200 md:border-0"
+                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
+                  : "border border-gray-200 xl:border-0"
               }`}
             >
               <button
-                className={`text-sm font-semibold w-full md:w-[11rem] text-center ${
+                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
                   activeTab === 2
                     ? "text-blue-500"
                     : "text-gray-500 hover:text-gray-700"
@@ -123,7 +123,7 @@ export default function BookingWidget({
             </div>
           </div>
           {/* Desktop content */}
-          <div className="hidden md:block">
+          <div className="hidden xl:block">
             {activeTab === 0 && (
               <BookATripForm
                 onModalStateChange={handleDesktopModalStateChange}
@@ -138,11 +138,11 @@ export default function BookingWidget({
       <AnimatePresence>
         {showMobileForm && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 1, y: 20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed inset-0 z-50 bg-white md:hidden flex flex-col"
+            className="fixed inset-0 z-50 bg-white xl:hidden flex flex-col"
           >
             {/* Header with logo and close button */}
             <div className="flex justify-between items-center p-4 flex-shrink-0">
