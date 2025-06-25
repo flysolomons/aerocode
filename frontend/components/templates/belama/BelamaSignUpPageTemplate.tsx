@@ -152,7 +152,7 @@ export default function BelamaSignUpTemplate({
                 onOpenChange={setIsSeatSelectionPopOveOpen}
               >
                 <PopoverTrigger asChild className="w-full">
-                  <div className="cursor-pointer px-6 py-3 border-2 rounded-md border-gray-100">
+                  <div className="cursor-pointer px-6 py-3 border-2 rounded-md border-gray-100 ">
                   
                    <label className="block text-left text-xs text-gray-400 font-semibold cursor-pointer">
                     Seat
@@ -587,7 +587,7 @@ export default function BelamaSignUpTemplate({
             <h3 className="text-md font-semibold">Contact Details</h3>
             <div className="grid gap-4 mb-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
               {/* Address Input */}
-              <div className="px-6 py-3 border-2 rounded-md border-gray-100">
+              <div className="px-6 py-3 border-2 rounded-md border-gray-100 ">
                   <label className="block text-left text-xs text-gray-400 font-semibold">
                     Address
                   </label>
@@ -595,7 +595,7 @@ export default function BelamaSignUpTemplate({
                     type="text"
                     name="address"
                     placeholder="Residential/Company Address"
-                    className="w-full text-sm outline-none text-gray-700 -500"
+                    className="w-full text-sm outline-none text-gray-700"
                     onChange={handleInputChange}
                   />
                   {/* Icon */}
