@@ -7,7 +7,7 @@ from grapple.models import (
     GraphQLString,
 )
 from grapple.helpers import register_query_field
-from wagtail.fields import StreamField
+from wagtail.fields import StreamField, RichTextField
 from .blocks import (
     TextBlock,
     ImageBlock,
@@ -44,8 +44,8 @@ class BasePage(Page):
         help_text="A short subtitle for the page.",
     )
 
-    description = models.CharField(
-        max_length=2000,
+    description = RichTextField(
+        features=["bold", "italic"],
         blank=True,
         help_text="A short description of the page.",
     )
