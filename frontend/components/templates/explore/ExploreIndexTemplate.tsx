@@ -8,7 +8,7 @@ interface ExploreProps {
   initialPage: ExploreIndexPage;
 }
 export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
-  console.log("Explore index children", initialPage);
+  // console.log("Explore index children", initialPage);
   return (
     <>
       <SecondaryHero
