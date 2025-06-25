@@ -31,7 +31,7 @@ export default function FullWidthImageBlock({
             </div>
           )}
           {block.caption && (
-            <div className="py-4 px-4 sm:px-6 lg:px-8">
+            <div className="py-4 px-4 sm:px-6">
               <p className="text-sm sm:text-base text-center text-gray-600 max-w-4xl mx-auto">
                 {block.caption}
               </p>

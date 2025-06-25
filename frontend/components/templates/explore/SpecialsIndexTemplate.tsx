@@ -42,19 +42,19 @@ export default function SpecialsIndexTemplate({
         onColorCalculated={setGradientStartColor}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           <div className="space-y-6 sm:space-y-8">
             {/* <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
                 Latest Specials
               </h2>
-              <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                 {stripHtmlTags("We offer convenient flights between Australia, Fiji, Vanuatu, and Honiara, the vibrant capital of the Solomon Islands.")}
               </p>
             </div> */}
             {pageDescription && (
               <div className="max-w-4xl mx-auto">
-                <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                   {pageDescription}
                 </p>
               </div>

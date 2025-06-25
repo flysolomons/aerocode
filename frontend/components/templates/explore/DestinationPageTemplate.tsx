@@ -54,10 +54,10 @@ export default function DestinationTemplate({
         breadcrumbs={initialPage.url}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>
@@ -94,7 +94,7 @@ export default function DestinationTemplate({
                     {initialPage.country} Travel Requirements
                   </h2>
 
-                  <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
+                  <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                     Important information for travelers planning a trip to
                     {initialPage.country}.
                   </p>
@@ -120,7 +120,7 @@ export default function DestinationTemplate({
                 Our {initialPage.country} Routes
               </h2>
 
-              <p className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                 We offer convenient flights to {initialPage.country} from
                 various locations.
               </p>
@@ -153,10 +153,8 @@ export default function DestinationTemplate({
           </div>
 
           {/* Recommendation Section */}
-        <Recommendations></Recommendations>
-        
+          <Recommendations></Recommendations>
         </div>
-        
       </Container>
     </>
   );

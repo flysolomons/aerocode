@@ -51,11 +51,10 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
         breadcrumbs={initialPage.url}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
-
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {stripHtmlTags(initialPage.description)}
               </p>
             </div>
@@ -121,7 +120,6 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
             )}
           </div>
           {/* Additional content could go here */}
-          
         </div>
       </Container>
     </>

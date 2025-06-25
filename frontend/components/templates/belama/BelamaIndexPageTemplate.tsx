@@ -13,16 +13,16 @@ export default function BelamaIndexPageTemplate({
   return (
     <>
       <SecondaryHero
-        title={initialPage.heroTitle || 'Belama Membership'}
-        image={initialPage.heroImage.url || ''}
-        breadcrumbs={initialPage.url || '> Belama'}
+        title={initialPage.heroTitle || "Belama Membership"}
+        image={initialPage.heroImage.url || ""}
+        breadcrumbs={initialPage.url || "> Belama"}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-12 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-12 px-4 sm:px-6">
           {/* Description */}
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>
@@ -45,18 +45,18 @@ export default function BelamaIndexPageTemplate({
               ))}
             </div>
           </div>
-          </div>
-        </Container>
-        {/* Promo Image section */}
-        <Image
-            src={initialPage.promoImage?.url || "/image.jpg"}
-            alt="Where We Fly: International"
-            width={4000}
-            height={1000}
-            className="w-full h-48 sm:h-64 lg:h-[30rem] object-cover"
-        />
-        <Container>
-        <div className=" py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8 ">
+        </div>
+      </Container>
+      {/* Promo Image section */}
+      <Image
+        src={initialPage.promoImage?.url || "/image.jpg"}
+        alt="Where We Fly: International"
+        width={4000}
+        height={1000}
+        className="w-full h-48 sm:h-64 lg:h-[30rem] object-cover"
+      />
+      <Container>
+        <div className=" py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 ">
           {/* Group memebership section */}
           <div className="space-y-6 sm:space-y-8 lg:space-y-8">
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">

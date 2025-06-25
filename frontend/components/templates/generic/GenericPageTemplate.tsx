@@ -30,9 +30,9 @@ export default function GenericPageTemplate({
       {/* Description section with container */}
       {initialPage.description && (
         <Container>
-          <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+          <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>
@@ -55,7 +55,7 @@ export default function GenericPageTemplate({
           // All other blocks get wrapped in container
           return (
             <Container key={index}>
-              <div className="px-4 sm:px-6 lg:px-8">
+              <div className="px-4 sm:px-6">
                 {/* Section block */}
                 {block.blockType === "SectionBlock" && (
                   <SectionBlock

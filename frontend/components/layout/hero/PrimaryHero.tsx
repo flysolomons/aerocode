@@ -42,7 +42,7 @@ export default function PrimaryHero({
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold font-sans max-w-4xl">
               {title}
             </h1>
-            <div className="text-xs sm:text-sm md:text-base lg:text-lg">
+            <div className="text-xs sm:text-sm md:text-base lg:text-base">
               <BreadcrumbNav breadcrumbs={breadcrumbs} />
             </div>
           </div>

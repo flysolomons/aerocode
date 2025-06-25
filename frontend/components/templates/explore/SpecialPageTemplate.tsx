@@ -88,17 +88,17 @@ export default function SpecialPageTemplate({
         onColorCalculated={setGradientStartColor}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6 lg:px-8">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {/* Description with validity period */}
           {/* <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
-            <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
               We offer convenient flights between Australia, Fiji, Vanuatu, and
               Honiara, the vibrant capital of the Solomon Islands. Discover the
               beauty and diversity of the Solomons with our extensive network of
               destinations.
             </p>
             {validityPeriod && (
-              <p className="text-center font-medium text-blue-500 text-sm sm:text-base lg:text-lg">
+              <p className="text-center font-medium text-blue-500 text-sm sm:text-base lg:text-base">
                 {validityPeriod}
               </p>
             )}
@@ -106,7 +106,7 @@ export default function SpecialPageTemplate({
 
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>
@@ -138,11 +138,11 @@ export default function SpecialPageTemplate({
       {/* Other specials section
       <div className="py-8 sm:py-12 lg:py-16 bg-gray-50">
         <Container>
-          <div className="space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6 sm:space-y-8 px-4 sm:px-6">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl text-center font-bold text-blue-500">
               Other Specials
             </h2>
-            <p className="text-center text-sm sm:text-base lg:text-lg text-gray-700 max-w-2xl mx-auto">
+            <p className="text-center text-sm sm:text-base lg:text-base text-gray-700 max-w-2xl mx-auto">
               Check out our other special offers available on various routes.
             </p>
             <div className="mt-6 sm:mt-8">

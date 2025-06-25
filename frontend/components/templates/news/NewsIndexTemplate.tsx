@@ -87,7 +87,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
         <div className="py-12 space-y-16">
           {initialPage.description && (
             <div className="max-w-4xl mx-auto">
-              <p className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>
             </div>

@@ -32,7 +32,7 @@ export default function AboutPageTemplate({
       <Container>
         <div
           id="missionSection"
-          className="py-12 sm:py-16 lg:py-20 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8"
+          className="py-12 sm:py-16 lg:py-20 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6"
         >
           <div className="text-center mb-12 sm:mb-16 lg:mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
@@ -50,7 +50,7 @@ export default function AboutPageTemplate({
               <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 text-blue-700">
                 Our Mission
               </h3>
-              <p className="text-gray-600 text-base sm:text-lg lg:text-lg leading-relaxed">
+              <p className="text-gray-600 text-base sm:text-lg lg:text-base leading-relaxed">
                 {initialPage.missionStatement ||
                   "Connecting the Solomon Islands through safe, reliable, and exceptional air transport services."}
               </p>
@@ -61,7 +61,7 @@ export default function AboutPageTemplate({
               <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 text-blue-700">
                 Our Vision
               </h3>
-              <p className="text-gray-600 text-base sm:text-lg lg:text-lg leading-relaxed">
+              <p className="text-gray-600 text-base sm:text-lg lg:text-base leading-relaxed">
                 {initialPage.visionStatement ||
                   "To be the Pacific region's premier airline, setting the standard for safety, service, and sustainability."}
               </p>
@@ -173,7 +173,7 @@ export default function AboutPageTemplate({
       {/* Key Stats - SpaceX inspired with counters */}
       <div className="bg-gray-100 py-12 sm:py-16 lg:py-20">
         <Container>
-          <div id="statsSection" className="px-4 sm:px-6 lg:px-8">
+          <div id="statsSection" className="px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8 text-center">
               {initialPage.stats && initialPage.stats.length > 0 ? (
                 initialPage.stats.map((stat, index) => (
@@ -230,7 +230,7 @@ export default function AboutPageTemplate({
       {/* Timeline - History - SpaceX/Tesla inspired */}
       <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20">
         <Container>
-          <div id="timelineSection" className="px-4 sm:px-6 lg:px-8">
+          <div id="timelineSection" className="px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
                 Our Journey
