@@ -8,6 +8,7 @@ interface ExploreProps {
   initialPage: ExploreIndexPage;
 }
 export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
+  console.log("Explore index children", initialPage.children);
   return (
     <>
       <SecondaryHero
@@ -20,7 +21,7 @@ export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
           {/* Description */}
 
           {initialPage.description && (
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto w-full">
               <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {stripHtmlTags(initialPage.description)}
               </p>

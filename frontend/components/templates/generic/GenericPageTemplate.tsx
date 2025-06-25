@@ -31,7 +31,7 @@ export default function GenericPageTemplate({
       {initialPage.description && (
         <Container>
           <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
-            <div className="max-w-4xl mx-auto">
+            <div className="mx-auto w-full">
               <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
                 {initialPage.description}
               </p>

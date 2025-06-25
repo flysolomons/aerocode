@@ -12,7 +12,6 @@ export default function RouteSpecialSection({
   description,
   specials = [],
 }: RouteSpecialSectionProps) {
-  console.log(specials);
   return (
     <>
       {specials && specials.length > 0 && (
