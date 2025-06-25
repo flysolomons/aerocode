@@ -328,7 +328,7 @@ function Header({
             duration: 0.2,
             ease: "easeOut",
           }}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden lg:block"
+          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden xl:block"
         >
           <div className="max-w-[70.5rem] mx-auto py-6 px-4 sm:px-6 lg:px-0">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
@@ -381,7 +381,7 @@ function Header({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 bg-white lg:hidden"
+          className="fixed inset-0 z-50 bg-white xl:hidden"
         >
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -541,8 +541,8 @@ function Header({
   // Handle window resize to close mobile menu on desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        // lg breakpoint
+      if (window.innerWidth >= 1280) {
+        // xl breakpoint
         setIsMobileMenuOpen(false);
         setActiveMegaMenu(null);
       }
@@ -619,7 +619,7 @@ function Header({
             </Link>
           </div>
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 justify-between font-sans relative">
+          <nav className="hidden xl:flex items-center space-x-8 justify-between font-sans relative">
             {navigationItems.map((item: any) => (
               <div
                 key={item.name}
@@ -628,7 +628,7 @@ function Header({
                   // Only activate mega menu if it has content and on desktop
                   if (
                     hasMegaMenuContent(item.key) &&
-                    window.innerWidth >= 1024
+                    window.innerWidth >= 1280
                   ) {
                     setActiveMegaMenu(item.key);
                   }
@@ -660,7 +660,7 @@ function Header({
           </nav>
           {/* Desktop Action Buttons */}
           <div
-            className="hidden lg:flex items-center justify-end gap-3 w-36"
+            className="hidden xl:flex items-center justify-end gap-3 w-36"
             onMouseEnter={() => {
               // Add a slight delay before hiding mega menu for smoother transition
               setTimeout(() => {
@@ -724,7 +724,7 @@ function Header({
             </motion.button>
           </div>
           {/* Mobile Menu Toggle */}{" "}
-          <div className="lg:hidden flex items-center">
+          <div className="xl:hidden flex items-center">
             <motion.button
               onClick={() => {
                 setIsMobileMenuOpen(true);
