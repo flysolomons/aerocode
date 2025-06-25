@@ -22,6 +22,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "http",
+        hostname: "solair.com.sb",
+      },
+      {
+        protocol: "http",
+        hostname: "20.188.237.9", // replace with your CDN hostname
+      },
 
       // add CDN here
     ],
