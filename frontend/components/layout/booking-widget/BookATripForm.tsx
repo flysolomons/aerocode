@@ -356,10 +356,6 @@ export default function BookATripForm({
                       // Close other dropdowns
                       setIsArrivalPopoverOpen(false);
                       setIsTravelersMobileOpen(false);
-                      // Scroll into view after state update
-                      setTimeout(() => {
-                        scrollInputIntoView(departureInputRef);
-                      }, 150);
                     }
                   }}
                 >
@@ -378,34 +374,82 @@ export default function BookATripForm({
                     }
                   />
                 </div>
-                {/* Mobile dropdown that pushes content down */}
+                {/* Mobile bottom overlay */}
                 {isDeparturePopoverOpen && (
-                  <div className="w-full bg-white border-2 border-gray-300 rounded-xl shadow-lg mt-2 max-h-48 overflow-y-auto transition-all duration-400 ease-in-out transform animate-in slide-in-from-top-1 fade-in-0 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top-1 data-[state=closed]:fade-out-0">
-                    {isLoading ? (
-                      <div className="text-gray-500 p-3">
-                        Loading destinations...
+                  <>
+                    {/* Backdrop with blur effect */}
+                    <div
+                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
+                      style={{
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        margin: 0,
+                        padding: 0,
+                      }}
+                      onClick={() => setIsDeparturePopoverOpen(false)}
+                    />
+                    {/* Bottom sheet */}
+                    <div
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                      style={{ height: "80vh" }}
+                    >
+                      {/* Handle bar */}
+                      <div className="flex justify-center pt-3 pb-2">
+                        <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
                       </div>
-                    ) : departureAirports.length > 0 ? (
-                      departureAirports.map((airport, index) => (
-                        <div
-                          key={index}
-                          className="hover:bg-gray-100 cursor-pointer p-3 border-b border-gray-100 last:border-b-0"
-                          onClick={() => {
-                            setSelectedDeparture(airport);
-                            setIsDeparturePopoverOpen(false);
-                          }}
-                        >
-                          <div className="text-black text-sm">
-                            {airport.departureAirport}
+                      {/* Header */}
+                      <div className="px-6 py-4">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          Flying from?
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Select your departure destination
+                        </p>
+                        {/* Horizontal line after header text */}
+                        <div className="w-full h-px bg-gray-200 mt-4"></div>
+                      </div>
+                      {/* Content */}
+                      <div className="flex-1 overflow-y-auto">
+                        {isLoading ? (
+                          <div className="flex items-center justify-center h-32">
+                            <div className="text-gray-500">
+                              Loading destinations...
+                            </div>
                           </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-gray-500 p-3">
-                        No destinations found
+                        ) : departureAirports.length > 0 ? (
+                          <div className="divide-y divide-gray-100">
+                            {departureAirports.map((airport, index) => (
+                              <div
+                                key={index}
+                                className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                onClick={() => {
+                                  setSelectedDeparture(airport);
+                                  setIsDeparturePopoverOpen(false);
+                                }}
+                              >
+                                <div className="text-gray-900 font-medium">
+                                  {airport.departureAirport}
+                                </div>
+                                <div className="text-sm text-gray-500 mt-1">
+                                  {airport.departureAirportCode}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center h-32">
+                            <div className="text-gray-500">
+                              No destinations found
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -476,7 +520,7 @@ export default function BookATripForm({
                     )}
                   </PopoverContent>
                 </Popover>
-              </div>
+              </div>{" "}
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={arrivalInputRef}>
                 <div
@@ -488,10 +532,6 @@ export default function BookATripForm({
                       // Close other dropdowns
                       setIsDeparturePopoverOpen(false);
                       setIsTravelersMobileOpen(false);
-                      // Scroll into view after state update
-                      setTimeout(() => {
-                        scrollInputIntoView(arrivalInputRef);
-                      }, 150);
                     }
                   }}
                 >
@@ -510,34 +550,86 @@ export default function BookATripForm({
                     }
                   />
                 </div>
-                {/* Mobile dropdown that pushes content down */}
+
+                {/* Mobile bottom overlay */}
                 {isArrivalPopoverOpen && (
-                  <div className="w-full bg-white border-2 border-gray-300 rounded-xl shadow-lg mt-2 max-h-48 overflow-y-auto transition-all duration-400 ease-in-out transform animate-in slide-in-from-top-1 fade-in-0 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top-1 data-[state=closed]:fade-out-0">
-                    {isLoading ? (
-                      <div className="text-gray-500 p-3">
-                        Loading destinations...
+                  <>
+                    {/* Backdrop with blur effect */}
+                    <div
+                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
+                      style={{
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        margin: 0,
+                        padding: 0,
+                      }}
+                      onClick={() => setIsArrivalPopoverOpen(false)}
+                    />
+
+                    {/* Bottom sheet */}
+                    <div
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                      style={{ height: "80vh" }}
+                    >
+                      {/* Handle bar */}
+                      <div className="flex justify-center pt-3 pb-2">
+                        <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
                       </div>
-                    ) : arrivalAirports.length > 0 ? (
-                      arrivalAirports.map((airport, index) => (
-                        <div
-                          key={index}
-                          className="hover:bg-gray-100 cursor-pointer p-3 border-b border-gray-100 last:border-b-0"
-                          onClick={() => {
-                            setSelectedArrival(airport);
-                            setIsArrivalPopoverOpen(false);
-                          }}
-                        >
-                          <div className="text-black text-sm">
-                            {airport.arrivalAirport}
+
+                      {/* Header */}
+                      <div className="px-6 py-4">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          Flying to?
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Select your arrival destination
+                        </p>
+                        {/* Horizontal line after header text */}
+                        <div className="w-full h-px bg-gray-200 mt-4"></div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 overflow-y-auto">
+                        {isLoading ? (
+                          <div className="flex items-center justify-center h-32">
+                            <div className="text-gray-500">
+                              Loading destinations...
+                            </div>
                           </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-gray-500 p-3">
-                        No destinations found
+                        ) : arrivalAirports.length > 0 ? (
+                          <div className="divide-y divide-gray-100">
+                            {arrivalAirports.map((airport, index) => (
+                              <div
+                                key={index}
+                                className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                onClick={() => {
+                                  setSelectedArrival(airport);
+                                  setIsArrivalPopoverOpen(false);
+                                }}
+                              >
+                                <div className="text-gray-900 font-medium">
+                                  {airport.arrivalAirport}
+                                </div>
+                                <div className="text-sm text-gray-500 mt-1">
+                                  {airport.arrivalAirportCode}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center h-32">
+                            <div className="text-gray-500">
+                              No destinations found
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -706,7 +798,7 @@ export default function BookATripForm({
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>
+            </div>{" "}
             {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={travelersMobileRef}>
               <div
@@ -718,10 +810,6 @@ export default function BookATripForm({
                     // Close other dropdowns
                     setIsDeparturePopoverOpen(false);
                     setIsArrivalPopoverOpen(false);
-                    // Scroll into view after state update
-                    setTimeout(() => {
-                      scrollInputIntoView(travelersMobileRef);
-                    }, 150);
                   }
                 }}
               >
@@ -736,106 +824,158 @@ export default function BookATripForm({
                   value={formatTravelers()}
                 />
               </div>
-              {/* Mobile dropdown that pushes content down */}
+
+              {/* Mobile bottom overlay */}
               {isTravelersMobileOpen && (
-                <div className="w-full bg-white border-2 border-gray-300 rounded-xl shadow-lg mt-2 transition-all duration-400 ease-in-out transform animate-in slide-in-from-top-1 fade-in-0 data-[state=closed]:animate-out data-[state=closed]:slide-out-to-top-1 data-[state=closed]:fade-out-0">
-                  <div className="p-4">
-                    {/* Adults */}
-                    <div className="flex justify-between items-center mb-4">
-                      <div>
-                        <p className="text-sm font-semibold text-black">
-                          Adults
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Ages 13 or above
-                        </p>
+                <>
+                  {/* Backdrop with blur effect */}
+                  <div
+                    className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
+                    style={{
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      margin: 0,
+                      padding: 0,
+                    }}
+                    onClick={() => setIsTravelersMobileOpen(false)}
+                  />
+
+                  {/* Bottom sheet */}
+                  <div
+                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                    style={{ height: "70vh" }}
+                  >
+                    {/* Handle bar */}
+                    <div className="flex justify-center pt-3 pb-2">
+                      <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+                    </div>{" "}
+                    {/* Header */}
+                    <div className="px-6 py-4">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Travelling with?
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Select number of travelers
+                      </p>
+                      {/* Horizontal line after header text */}
+                      <div className="w-full h-px bg-gray-200 mt-4"></div>
+                    </div>
+                    {/* Content */}
+                    <div className="flex-1 overflow-y-auto px-6 py-2">
+                      {/* Adults */}
+                      <div className="flex justify-between items-center mb-6">
+                        <div>
+                          <p className="text-base font-semibold text-black">
+                            Adults
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Ages 13 or above
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleChange("adults", "decrement")}
+                            disabled={travelers.adults <= 1}
+                            aria-label="Decrease adults"
+                          >
+                            -
+                          </button>
+                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                            {travelers.adults}
+                          </span>
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleChange("adults", "increment")}
+                            disabled={travelers.adults >= 9}
+                            aria-label="Increase adults"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("adults", "decrement")}
-                          disabled={travelers.adults <= 1}
-                          aria-label="Decrease adults"
-                        >
-                          -
-                        </button>
-                        <span className="text-sm text-black">
-                          {travelers.adults}
-                        </span>
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("adults", "increment")}
-                          disabled={travelers.adults >= 9}
-                          aria-label="Increase adults"
-                        >
-                          +
-                        </button>
+
+                      {/* Children */}
+                      <div className="flex justify-between items-center mb-6">
+                        <div>
+                          <p className="text-base font-semibold text-black">
+                            Children
+                          </p>
+                          <p className="text-sm text-gray-500">Ages 2–12</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              handleChange("children", "decrement")
+                            }
+                            disabled={travelers.children <= 0}
+                            aria-label="Decrease children"
+                          >
+                            -
+                          </button>
+                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                            {travelers.children}
+                          </span>
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() =>
+                              handleChange("children", "increment")
+                            }
+                            disabled={travelers.children >= 9}
+                            aria-label="Increase children"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Infants */}
+                      <div className="flex justify-between items-center mb-4">
+                        <div>
+                          <p className="text-base font-semibold text-black">
+                            Infants
+                          </p>
+                          <p className="text-sm text-gray-500">Under 2</p>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleChange("infants", "decrement")}
+                            disabled={travelers.infants <= 0}
+                            aria-label="Decrease infants"
+                          >
+                            -
+                          </button>
+                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                            {travelers.infants}
+                          </span>
+                          <button
+                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                            onClick={() => handleChange("infants", "increment")}
+                            disabled={travelers.infants >= 9}
+                            aria-label="Increase infants"
+                          >
+                            +
+                          </button>{" "}
+                        </div>
                       </div>
                     </div>
-
-                    {/* Children */}
-                    <div className="flex justify-between items-center mb-4">
-                      <div>
-                        <p className="text-sm font-semibold text-black">
-                          Children
-                        </p>
-                        <p className="text-xs text-gray-500">Ages 2–12</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("children", "decrement")}
-                          disabled={travelers.children <= 0}
-                          aria-label="Decrease children"
-                        >
-                          -
-                        </button>
-                        <span className="text-sm text-black">
-                          {travelers.children}
-                        </span>
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("children", "increment")}
-                          disabled={travelers.children >= 9}
-                          aria-label="Increase children"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Infants */}
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-sm font-semibold text-black">
-                          Infants
-                        </p>
-                        <p className="text-xs text-gray-500">Under 2</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("infants", "decrement")}
-                          disabled={travelers.infants <= 0}
-                          aria-label="Decrease infants"
-                        >
-                          -
-                        </button>
-                        <span className="text-sm text-black">
-                          {travelers.infants}
-                        </span>
-                        <button
-                          className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                          onClick={() => handleChange("infants", "increment")}
-                          disabled={travelers.infants >= 9}
-                          aria-label="Increase infants"
-                        >
-                          +
-                        </button>
-                      </div>
+                    {/* Continue button */}
+                    <div className="px-6 py-4 border-t border-gray-200">
+                      <button
+                        onClick={() => setIsTravelersMobileOpen(false)}
+                        className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
+                      >
+                        Continue
+                      </button>
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
             {/* Desktop: Original button */}
