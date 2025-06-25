@@ -104,9 +104,6 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
   try {
     const { data } = await client.query<BelamaPageData>({
       query: GET_BELAMA_PAGE_QUERY,
-      // Cache for better performance since belama page content is relatively static
-      fetchPolicy: "cache-first",
-      errorPolicy: "all",
     });
 
     // Find the BelamaIndexPage from the pages array

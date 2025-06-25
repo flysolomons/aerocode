@@ -3,28 +3,19 @@ import Container from "@/components/layout/Container";
 import MembershipCard from "@/components/ui/cards/MembershipCard";
 import Image from "next/image";
 import { BelamaIndexPage } from "@/graphql/BelamaPageQuery";
-import { create}  from 'zustand';
-import { get } from "http";
 
 interface BelamaIndexPageTemplateProps {
   initialPage: BelamaIndexPage;
 }
-
-
-
 export default function BelamaIndexPageTemplate({
   initialPage,
 }: BelamaIndexPageTemplateProps) {
-
-  
-
-  
   return (
     <>
       <SecondaryHero
-        title={initialPage.heroTitle}
-        image={initialPage.heroImage.url}
-        breadcrumbs={initialPage.url}
+        title={initialPage.heroTitle || 'Belama Membership'}
+        image={initialPage.heroImage.url || ''}
+        breadcrumbs={initialPage.url || '> Belama'}
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-12 px-4 sm:px-6 lg:px-8">
@@ -36,11 +27,11 @@ export default function BelamaIndexPageTemplate({
               </p>
             </div>
           )}
-          <div className="space-y-6 sm:space-y-8 lg:space-y-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
+          <div className="space-y-4 sm:space-y-8 lg:space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500 space-y-0">
               Individual Memberships
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[35rem]">
               {initialPage.individualMemberships.map((membership, index) => (
                 <MembershipCard
                   key={index}
@@ -65,13 +56,13 @@ export default function BelamaIndexPageTemplate({
             className="w-full h-48 sm:h-64 lg:h-[30rem] object-cover"
         />
         <Container>
-        <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8 ">
+        <div className=" py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 lg:px-8 ">
           {/* Group memebership section */}
           <div className="space-y-6 sm:space-y-8 lg:space-y-8">
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Group Memberships
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[31rem]">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-4 min-h-[28rem] sm:min-h-[30rem] lg:h-[35rem]">
               {initialPage.groupMemberships.map((membership, index) => (
                 <MembershipCard
                   key={index}
