@@ -138,9 +138,9 @@ export default function BookingWidget({
       <AnimatePresence>
         {showMobileForm && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 1, y: 20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed inset-0 z-50 bg-white md:hidden flex flex-col"
           >

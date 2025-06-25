@@ -394,7 +394,7 @@ export default function BookATripForm({
                     />
                     {/* Bottom sheet */}
                     <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
                       style={{ height: "80vh" }}
                     >
                       {/* Handle bar */}
@@ -572,7 +572,7 @@ export default function BookATripForm({
 
                     {/* Bottom sheet */}
                     <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
                       style={{ height: "80vh" }}
                     >
                       {/* Handle bar */}
@@ -846,7 +846,7 @@ export default function BookATripForm({
 
                   {/* Bottom sheet */}
                   <div
-                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
+                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
                     style={{ height: "70vh" }}
                   >
                     {/* Handle bar */}

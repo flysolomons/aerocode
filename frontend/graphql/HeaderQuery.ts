@@ -42,9 +42,18 @@ export interface HeaderMenu {
   menuItems: MegaMenuBlock[];
 }
 
+// Interface for currency data
+export interface Currency {
+  countryName: string;
+  currencyName: string;
+  currencyCode: string;
+  currencySymbol: string;
+}
+
 // Interface for the header query response
 export interface HeaderData {
   headerMenus: HeaderMenu[];
+  currencies: Currency[];
 }
 
 export const GET_HEADER_MENU = gql`
@@ -87,6 +96,12 @@ export const GET_HEADER_MENU = gql`
         }
       }
     }
+    currencies {
+      countryName
+      currencyName
+      currencyCode
+      currencySymbol
+    }
   }
 `;
 
@@ -110,6 +125,12 @@ export interface TransformedMegaMenuBlock {
 export interface TransformedHeaderMenu {
   name: string;
   menuItems: TransformedMegaMenuBlock[];
+}
+
+// Interface for the complete header data including currencies
+export interface TransformedHeaderData {
+  headerMenus: TransformedHeaderMenu[];
+  currencies: Currency[];
 }
 
 /**
@@ -220,6 +241,41 @@ export async function fetchHeaderMenu(): Promise<TransformedHeaderMenu[]> {
 }
 
 /**
+ * Fetch complete header data including menus and currencies
+ * @returns Promise with TransformedHeaderData object
+ */
+export async function fetchHeaderData(): Promise<TransformedHeaderData> {
+  try {
+    const { data } = await client.query<HeaderData>({
+      query: GET_HEADER_MENU,
+      // Cache for better performance since header menus are relatively static
+      fetchPolicy: "cache-first",
+      errorPolicy: "all",
+    });
+
+    // console.log("Raw GraphQL data:", JSON.stringify(data, null, 2));
+
+    const headerMenus = data.headerMenus && data.headerMenus.length > 0 
+      ? transformHeaderMenuData(data.headerMenus)
+      : [];
+
+    const currencies = data.currencies || [];
+
+    return {
+      headerMenus,
+      currencies,
+    };
+  } catch (error) {
+    console.error("Error fetching header data:", error);
+    // Return empty data instead of throwing to prevent header from breaking
+    return {
+      headerMenus: [],
+      currencies: [],
+    };
+  }
+}
+
+/**
  * Server-side function to fetch header menu data
  * Use this in getStaticProps, getServerSideProps, or server components
  * @returns Promise with an array of TransformedHeaderMenu objects
@@ -248,6 +304,40 @@ export async function fetchHeaderMenuServer(): Promise<
   } catch (error) {
     console.error("Error fetching header menu data on server:", error);
     return [];
+  }
+}
+
+/**
+ * Server-side function to fetch complete header data including menus and currencies
+ * Use this in getStaticProps, getServerSideProps, or server components
+ * @returns Promise with TransformedHeaderData object
+ */
+export async function fetchHeaderDataServer(): Promise<TransformedHeaderData> {
+  try {
+    const { data } = await client.query<HeaderData>({
+      query: GET_HEADER_MENU,
+      fetchPolicy: "network-only", // Always fetch fresh data on server
+      errorPolicy: "all",
+    });
+
+    // console.log("Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
+
+    const headerMenus = data.headerMenus && data.headerMenus.length > 0 
+      ? transformHeaderMenuData(data.headerMenus)
+      : [];
+
+    const currencies = data.currencies || [];
+
+    return {
+      headerMenus,
+      currencies,
+    };
+  } catch (error) {
+    console.error("Error fetching header data on server:", error);
+    return {
+      headerMenus: [],
+      currencies: [],
+    };
   }
 }
 
@@ -282,3 +372,25 @@ export const fallbackHeaderMenu: TransformedHeaderMenu[] = [
     ],
   },
 ];
+
+// Static fallback currencies data
+export const fallbackCurrencies: Currency[] = [
+  {
+    countryName: "Solomon Islands",
+    currencyName: "Solomon Islands Dollar",
+    currencyCode: "SBD",
+    currencySymbol: "$",
+  },
+  {
+    countryName: "Australia", 
+    currencyName: "Australian Dollar",
+    currencyCode: "AUD",
+    currencySymbol: "A$",
+  },
+];
+
+// Complete fallback header data
+export const fallbackHeaderData: TransformedHeaderData = {
+  headerMenus: fallbackHeaderMenu,
+  currencies: fallbackCurrencies,
+};

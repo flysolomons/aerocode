@@ -4,8 +4,8 @@ import { Inter, Rubik } from "next/font/google";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import {
-  fetchHeaderMenuServer,
-  fallbackHeaderMenu,
+  fetchHeaderDataServer,
+  fallbackHeaderData,
 } from "@/graphql/HeaderQuery";
 import {
   fetchFooterMenuServer,
@@ -38,14 +38,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch header menu data server-side
-  let headerMenus = fallbackHeaderMenu;
+  // Fetch header data server-side (including menus and currencies)
+  let headerData = fallbackHeaderData;
 
   try {
-    headerMenus = await fetchHeaderMenuServer();
+    headerData = await fetchHeaderDataServer();
   } catch (error) {
     console.error(
-      "Failed to fetch header menu in layout, using fallback:",
+      "Failed to fetch header data in layout, using fallback:",
       error
     );
   }
@@ -65,7 +65,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${rubik.variable} antialiased`}>
-        <Header headerMenus={headerMenus} />
+        <Header
+          headerMenus={headerData.headerMenus}
+          currencies={headerData.currencies}
+        />
         {children}
         <Footer footerMenus={footerMenus} />
       </body>
