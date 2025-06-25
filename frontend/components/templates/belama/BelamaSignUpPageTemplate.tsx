@@ -15,11 +15,11 @@ interface BelamaSignUpTemplateProps {
 }
 // Map store title to membershipType value
 const titleToMembershipType: { [key: string]: string } = {
-  'Belama Business': 'business',
-  'Belama Family': 'family',
-  'Belama Max': 'max',
-  'Belama Me': 'me',
-  'Belama Plus': 'plus',
+  'belama business': 'business',
+  'belama family': 'family',
+  'belama max': 'max',
+  'belama me': 'me',
+  'belama plus': 'plus',
 };
 
 // Payment methods array
@@ -49,8 +49,8 @@ export default function BelamaSignUpTemplate({
   
   // Set membershipType based on title when component mounts
   useEffect(() => {
-    if (title && titleToMembershipType[title]) {
-      setMembershipType(titleToMembershipType[title]);
+    if (title && titleToMembershipType[title.toLowerCase()]) {
+      setMembershipType(titleToMembershipType[title.toLocaleLowerCase()]);
     }
   }, [title]); // Run when title changes
 
