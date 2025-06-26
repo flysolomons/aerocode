@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import Container from "@/components/layout/Container";
 import Image from "next/image";
 import Link from "next/link";
 import { AboutIndexPage } from "@/graphql/AboutPageQuery";
+import { stripHtmlTags } from "@/lib/utils";
 
 interface AboutPageTemplateProps {
   initialPage: AboutIndexPage;
@@ -17,88 +17,120 @@ export default function AboutPageTemplate({
 }: AboutPageTemplateProps) {
   return (
     <div className="min-h-screen">
-      {/* <SecondaryHero
-        title={initialPage.heroTitle || "Our Journey Above the Clouds"}
-        image={initialPage.heroImage?.url || "/hero.jpg"}
-        breadcrumbs="/about"
-      /> */}
+      
       <PrimaryHero
         title={initialPage.heroTitle || "Our Journey Above the Clouds"}
+        subtitle={initialPage.subTitle || "We are awsome"}
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
         showBookingWidget={false}
       />
+      {/* Introduction Section */}
+      
+        <div id="introductionSection" className="py-12 md:py-16 lg:py-24 space-y-6 md:space-y-6 lg:space-y-4 px-4 md:px-6 justify-center">
+          <Container>
+            <div className="text-center p-6 md:p-2 lg:p-0 justify-items-center">
+              <Image
+                alt="Award Icon"
+                src="/ic_award.png"
+                width="64"
+                height="64"
+                className="mb-3"
+                
+              />
+              <h2 className="font-semibold text-3xl text-center text-gray-700">60+ Years of Innovation and Excellence in Global Aviation</h2>
+              <p className="text-gray-800 text-center">{stripHtmlTags(initialPage.description) || 'Founded in 1962, Solomon Airlines has consistently contributed to the global aviation landscape. With 28 routes covering 6 countries, we have demonstrated resilience and innovation in a dynamic industry. Our fleet, comprising 6 modern aircraft, is equipped to meet evolving passenger expectations. Our team of dedicated professionals, currently numbering 250 strong, forms the backbone of our operational excellence.'}</p>
+            </div>
+            
+          </Container>
+          
+        </div>
+      
       {/* Mission & Vision Section */}
+      <div className="bg-blue-900">
       <Container>
+       
         <div
           id="missionSection"
-          className="py-12 sm:py-16 lg:py-20 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6"
+          className="py-12 md:py-16 lg:py-24 space-y-12 md:space-y-16 lg:space-y-16 px-4 md:px-6"
         >
-          <div className="text-center mb-12 sm:mb-16 lg:mb-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
+
+          <div className="text-center mb-12 md:mb-16 lg:mb-16">
+            <h2 className="text-blue-50 text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
               Our Mission & Vision
             </h2>
-            <p className="text-lg sm:text-xl lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
               Guiding principles that drive everything we do as we connect the
               Pacific.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 mb-16">
+          <div className="grid mb-16 grid-cols-1 gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-2 lg:gap-16">
             {/* Mission */}
-            <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 lg:p-8">
-              <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 text-blue-700">
+            <div className=" rounded-xl border-2 border-blue-100 shadow-lg p-6 sm:p-8 lg:p-8">
+              <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 text-blue-50">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#E4E4F6" className="inline-block mr-2" viewBox="0 0 256 256"><path d="M176,216a8,8,0,0,1-8,8H24a8,8,0,0,1,0-16H168A8,8,0,0,1,176,216ZM247.86,93.15a8,8,0,0,1-3.76,5.39l-147.41,88a40.18,40.18,0,0,1-20.26,5.52,39.78,39.78,0,0,1-27.28-10.87l-.12-.12L13,145.8a16,16,0,0,1,4.49-26.21l3-1.47a8,8,0,0,1,6.08-.4l28.26,9.54L75,115.06,53.17,93.87A16,16,0,0,1,57.7,67.4l.32-.13,7.15-2.71a8,8,0,0,1,5.59,0L124.7,84.38,176.27,53.6a39.82,39.82,0,0,1,51.28,9.12l.12.15,18.64,23.89A8,8,0,0,1,247.86,93.15Zm-19.74-3.7-13-16.67a23.88,23.88,0,0,0-30.68-5.42l-54.8,32.72a8.06,8.06,0,0,1-6.87.64L68,80.58l-4,1.53.21.2L93.57,110.8a8,8,0,0,1-1.43,12.58L59.93,142.87a8,8,0,0,1-6.7.73l-28.67-9.67-.19.1-.37.17a.71.71,0,0,1,.13.12l36,35.26a23.85,23.85,0,0,0,28.42,3.18Z"></path></svg>
                 Our Mission
               </h3>
-              <p className="text-gray-600 text-base sm:text-lg lg:text-base leading-relaxed">
-                {initialPage.missionStatement ||
+              <p className="text-gray-100 text-base sm:text-lg lg:text-base leading-relaxed">
+                {stripHtmlTags(initialPage.missionStatement) ||
                   "Connecting the Solomon Islands through safe, reliable, and exceptional air transport services."}
               </p>
             </div>
 
             {/* Vision */}
             <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 lg:p-8">
-              <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 text-blue-700">
+              
+              <h3 className="text-2xl md:text-3xl lg:text-3xl font-bold mb-4 text-blue-900">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#070601" className="inline-block mr-2" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z"></path></svg>
                 Our Vision
               </h3>
-              <p className="text-gray-600 text-base sm:text-lg lg:text-base leading-relaxed">
-                {initialPage.visionStatement ||
+              <p className="text-blue-600 text-base sm:text-lg lg:text-base leading-relaxed">
+                {stripHtmlTags(initialPage.visionStatement) ||
                   "To be the Pacific region's premier airline, setting the standard for safety, service, and sustainability."}
               </p>
             </div>
           </div>
+        </div>
+      </Container>
 
-          {/* Values Section */}
-          <div className="text-center mb-12">
-            <h3 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4">
+      </div>
+      {/* End of Mission & Vision Section */}
+      
+      {/* Values Section */}
+      <div className="bg-white mt-12 mb-12">
+      <Container>
+      <div className="text-center mb-12 space-y-3">
+            <h3 className="text-3xl lg:text-4xl font-bold mb-4">
               What We Value
             </h3>
             <p className="text-lg sm:text-xl lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               The core principles that guide our commitment to excellence.
             </p>
-          </div>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-8">
             {initialPage.values && initialPage.values.length > 0 ? (
               initialPage.values.map((value, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300"
+                  className="bg-white rounded-xl  overflow-hidden hover:shadow-2xl transition-shadow duration-300"
                 >
                   <div className="h-36 sm:h-44 lg:h-48 relative overflow-hidden">
                     <Image
                       src={value.image?.url || "/images/default-value.jpg"}
                       alt={value.title}
                       layout="fill"
-                      objectFit="cover"
+                      objectFit="contain"
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
-                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2">
+                    <h4 className="text-2xl md:text-xl lg:text-2xl font-bold mb-2 text-center">
                       {value.title}
                     </h4>
-                    <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                      {value.description}
+                    <p className="text-gray-600 text-center text-sm sm:text-base lg:text-base leading-relaxed">
+                      {stripHtmlTags(value.description)}
                     </p>
                   </div>
                 </div>
@@ -167,11 +199,16 @@ export default function AboutPageTemplate({
                 </div>
               </>
             )}
-          </div>
         </div>
+
       </Container>
+        
+        
+      </div>
+      {/* End of Values Section */}
+
       {/* Key Stats - SpaceX inspired with counters */}
-      <div className="bg-gray-100 py-12 sm:py-16 lg:py-20">
+      <div className="bg-blue-50 py-12 sm:py-16 lg:py-20">
         <Container>
           <div id="statsSection" className="px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8 text-center">
@@ -228,40 +265,49 @@ export default function AboutPageTemplate({
         </Container>
       </div>
       {/* Timeline - History - SpaceX/Tesla inspired */}
-      <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20">
+      <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)]  bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover">
         <Container>
           <div id="timelineSection" className="px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
-              <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold mb-3 sm:mb-4 lg:mb-4">
+              <h2 className="text-blue-100 text-3xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 lg:mb-4">
                 Our Journey
               </h2>
-              <p className="text-lg sm:text-xl lg:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
                 From humble beginnings to becoming the Pacific's premier
                 airline.
               </p>
             </div>
-            <div className="space-y-12 sm:space-y-16 lg:space-y-16">
+            <div className="space-y-12 sm:space-y-16 lg:space-y-0">
               {initialPage.journey && initialPage.journey.length > 0 ? (
                 initialPage.journey.map((journeyItem, index) => (
                   <div
                     key={index}
-                    className="flex flex-col lg:flex-row items-center"
+                    className="flex flex-col lg:flex-row"
                   >
-                    <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10">
-                      <div className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-400">
+                    <div className="lg:w-1/3 text-center lg:text-right mt-1 mb-6 lg:mb-0 lg:pr-10">
+                      <div className="text-2xl p-0 md:text-3xl lg:text-3xl font-bold text-blue-200">
                         {journeyItem.year}
                       </div>
                     </div>
-                    <div className="lg:w-2/3 lg:border-l-4 border-blue-500 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
-                      <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-500 -ml-2.5 mt-2"></div>
-                      <h3 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2">
+                    <div className="lg:w-2/3 lg:border-l-4 border-blue-200 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
+                      <div className="hidden md:hidden md:absolute md:-ml-3 md:mt-3 lg:block lg:-ml-3 lg:mt-3 lg:absolute lg:left-0 lg:top-0 w-5 h-5 rounded-full bg-blue-200 "></div>
+                      <h3 className="text-blue-100 text-xl md:text-2xl lg:text-2xl font-bold mb-2">
                         {journeyItem.title}
                       </h3>
-                      <p className="text-gray-300 text-sm sm:text-base lg:text-base leading-relaxed">
-                        {journeyItem.description}
+                      <p className="text-blue-100 text-sm sm:text-base lg:text-base leading-relaxed">
+                        {stripHtmlTags(journeyItem.description)}
                       </p>
+                      {
+                        index < initialPage.journey.length - 1 && (
+                          <div className="absolute left-1/2 -ml-0.5 lg:hidden">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="62" height="62" className="-ml-8 mt-4" fill="#8D8CD9" viewBox="0 0 256 256"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                          </div>
+                        )
+                      }
                     </div>
+                   
                   </div>
+                  
                 ))
               ) : (
                 // Fallback timeline if none provided from API

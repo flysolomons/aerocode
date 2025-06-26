@@ -7,6 +7,7 @@ import BreadcrumbNav from "../BreadcrumbNav";
 
 interface PrimaryHeroProps {
   title: string;
+  subtitle: string;
   image: string;
   breadcrumbs?: string;
   widget?: string;
@@ -15,6 +16,7 @@ interface PrimaryHeroProps {
 
 export default function PrimaryHero({
   title,
+  subtitle,
   image,
   breadcrumbs,
   widget,
@@ -45,6 +47,12 @@ export default function PrimaryHero({
             <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg">
               <BreadcrumbNav breadcrumbs={breadcrumbs} />
             </div>
+            
+          </div>
+          <div className="items-center justify-items-center">
+            <h2 className="font-semibold text-3xl w-3/4 text-white  lg:text-4xl lg:w-2/4 text-center">
+              {subtitle}
+            </h2>
           </div>
           <div className="md:-mt-8 lg:-mt-10 xl:-mt-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0">
             {showBookingWidget && (
