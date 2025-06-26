@@ -15,7 +15,7 @@ export default function StrippedBookingWidget() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1280);
     };
 
     checkMobile();
@@ -57,7 +57,7 @@ export default function StrippedBookingWidget() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1, y: 20 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed inset-0 z-[9999] bg-white md:hidden flex flex-col"
+          className="fixed inset-0 z-[9999] bg-white xl:hidden flex flex-col"
           style={{
             position: "fixed",
             top: 0,
@@ -110,11 +110,11 @@ export default function StrippedBookingWidget() {
   );
   return (
     <>
-      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 md:mt-0">
-        <div className="w-full md:w-[70.5rem]">
+      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0">
+        <div className="w-full xl:w-[70.5rem]">
           {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
           <div
-            className="flex px-4 py-3 h-12 w-full rounded-[2rem] bg-white shadow-md border-2 border-blue-500 cursor-pointer md:hidden my-2"
+            className="flex px-4 py-3 h-12 w-full rounded-[2rem] bg-white shadow-md border-2 border-blue-500 cursor-pointer xl:hidden my-2"
             onClick={handleFormClick}
           >
             <button className="text-sm font-semibold w-full text-center text-blue-500">
@@ -123,7 +123,7 @@ export default function StrippedBookingWidget() {
           </div>
 
           {/* Desktop content - direct form without background wrapper */}
-          <div className="hidden md:block">
+          <div className="hidden xl:block">
             <BookATripForm />
           </div>
         </div>

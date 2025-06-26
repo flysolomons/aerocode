@@ -222,7 +222,7 @@ function Header({
         <Popover open={isOpen} onOpenChange={setIsOpen}>
           <PopoverTrigger asChild>
             <motion.button
-              className="cursor-pointer p-1 flex items-center"
+              className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
               }}
@@ -234,7 +234,7 @@ function Header({
             >
               <motion.svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
                 animate={{
                   fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
                 }}
@@ -246,7 +246,7 @@ function Header({
               {/* Display selected currency code next to icon for desktop */}
               {selectedCurrency && (
                 <motion.span
-                  className="ml-2 text-sm font-medium"
+                  className="ml-2 text-xs lg:text-sm xl:text-sm font-medium"
                   animate={{
                     color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
                   }}
@@ -330,7 +330,7 @@ function Header({
           }}
           className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden xl:block"
         >
-          <div className="max-w-[70.5rem] mx-auto py-6 px-4 sm:px-6 lg:px-0">
+          <div className="max-w-[70.5rem] mx-auto py-6 px-4 sm:px-6 lg:px-8 xl:px-0">
             <h3 className="text-xl font-bold text-gray-800 mb-4">
               {data.title}
             </h3>
@@ -595,7 +595,7 @@ function Header({
               : "none",
         }}
       >
-        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-0 relative">
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8 xl:px-0 relative">
           <div className="flex items-center">
             <Link href="/">
               <motion.div
@@ -619,7 +619,7 @@ function Header({
             </Link>
           </div>
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center space-x-8 justify-between font-sans relative">
+          <nav className="hidden xl:flex items-center space-x-6 lg:space-x-8 xl:space-x-8 justify-between font-sans relative">
             {navigationItems.map((item: any) => (
               <div
                 key={item.name}
@@ -642,7 +642,7 @@ function Header({
                   }}
                 >
                   <motion.span
-                    className="text-sm font-bold cursor-pointer"
+                    className="text-sm lg:text-base xl:text-sm font-bold cursor-pointer"
                     animate={{
                       color:
                         isHovered || activeMegaMenu ? "#212061" : "#ffffff",
@@ -660,7 +660,7 @@ function Header({
           </nav>
           {/* Desktop Action Buttons */}
           <div
-            className="hidden xl:flex items-center justify-end gap-3 w-36"
+            className="hidden xl:flex items-center justify-end gap-3 lg:gap-4 xl:gap-3 w-36 lg:w-40 xl:w-36"
             onMouseEnter={() => {
               // Add a slight delay before hiding mega menu for smoother transition
               setTimeout(() => {
@@ -670,7 +670,7 @@ function Header({
           >
             {" "}
             <motion.button
-              className="cursor-pointer"
+              className="cursor-pointer p-1 lg:p-2 xl:p-1"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
               }}
@@ -682,7 +682,7 @@ function Header({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -697,7 +697,7 @@ function Header({
             </motion.button>
             <CurrencyDropdown isDesktop={true} />
             <motion.button
-              className="cursor-pointer"
+              className="cursor-pointer p-1 lg:p-2 xl:p-1"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
               }}
@@ -709,7 +709,7 @@ function Header({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -729,7 +729,7 @@ function Header({
               onClick={() => {
                 setIsMobileMenuOpen(true);
               }}
-              className="p-2 rounded-lg hover:bg-black/10 transition-colors"
+              className="p-2 lg:p-3 xl:p-2 rounded-lg hover:bg-black/10 transition-colors"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
               }}
@@ -743,7 +743,7 @@ function Header({
               aria-label="Open menu"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 lg:w-6 lg:h-6 xl:w-6 xl:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
