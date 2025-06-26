@@ -101,7 +101,6 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
     const { data } = await client.query<AboutPageData>({
       query: GET_ABOUT_PAGE_QUERY,
       // Cache for better performance since about page content is relatively static
-      fetchPolicy: "cache-first",
       errorPolicy: "all",
     });
 
