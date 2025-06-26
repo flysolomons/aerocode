@@ -390,6 +390,77 @@ function Header({
     );
   };
 
+  // Desktop General Dropdown Component
+  const GeneralDropdown = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <motion.button
+            className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
+            animate={{
+              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+            }}
+            whileHover={{
+              color: "#1d4ed8",
+            }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            aria-label="General"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {/* Removed the word 'General' for desktop */}
+          </motion.button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-48 p-2"
+          align="end"
+          side="bottom"
+          sideOffset={16}
+        >
+          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
+            General
+          </div>
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/about"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              About
+            </Link>
+            <Link
+              href="/news"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              News
+            </Link>
+            <Link
+              href="/travel-alerts"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Travel Alerts
+            </Link>
+          </div>
+        </PopoverContent>
+      </Popover>
+    );
+  };
+
   // Mega Menu Component
   const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
     <AnimatePresence>
@@ -419,13 +490,13 @@ function Header({
                       <li key={itemIndex}>
                         <Link
                           href={item.href || "#"}
-                          className="group block p-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                          className="group block p-1.5 rounded-lg hover:bg-yellow-50 transition-colors"
                           onClick={() => {
                             setActiveMegaMenu(null);
                             setIsHovered(false);
                           }}
                         >
-                          <div className="text-sm font-medium text-gray-800 group-hover:text-blue-600">
+                          <div className="text-sm text-gray-800 group-hover:text-blue-600">
                             {item.name}
                           </div>
                           {item.description && (
@@ -461,7 +532,10 @@ function Header({
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4">
             {/* Back button - show when not on main page or in General/Currency submenu */}
-            {mobileMenuPage !== "main" || mobileMenuColumn || mobileGeneralPage || mobileCurrencyPage ? (
+            {mobileMenuPage !== "main" ||
+            mobileMenuColumn ||
+            mobileGeneralPage ||
+            mobileCurrencyPage ? (
               <button
                 onClick={() => {
                   if (mobileGeneralPage) {
@@ -574,7 +648,7 @@ function Header({
                           <Link
                             href={item.path}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors py-2"
+                            className="block text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2"
                           >
                             {item.name}
                           </Link>
@@ -645,8 +719,12 @@ function Header({
                         <span className="ml-3 flex flex-col items-start text-base font-medium font-sans text-gray-700">
                           {selectedCurrency ? (
                             <>
-                              <span className="leading-tight">{selectedCurrency.countryName}</span>
-                              <span className="text-xs text-gray-500 leading-tight">{selectedCurrency.currencyCode}</span>
+                              <span className="leading-tight">
+                                {selectedCurrency.countryName}
+                              </span>
+                              <span className="text-xs text-gray-500 leading-tight">
+                                {selectedCurrency.currencyCode}
+                              </span>
                             </>
                           ) : (
                             <span>Currency</span>
@@ -704,21 +782,21 @@ function Header({
                   <Link
                     href="/about"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg hover:bg-blue-50"
+                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
                   >
                     About
                   </Link>
                   <Link
                     href="/news"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg hover:bg-blue-50"
+                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
                   >
                     News
                   </Link>
                   <Link
                     href="/travel-alerts"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg hover:bg-blue-50"
+                    className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
                   >
                     Travel Alerts
                   </Link>
@@ -755,7 +833,8 @@ function Header({
                             {currency.countryName}
                           </div>
                         </div>
-                        {selectedCurrency?.currencyCode === currency.currencyCode && (
+                        {selectedCurrency?.currencyCode ===
+                          currency.currencyCode && (
                           <svg
                             className="w-4 h-4 text-yellow-900"
                             fill="currentColor"
@@ -790,7 +869,7 @@ function Header({
                             <Link
                               href={section.items[0].href || "#"}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className="block w-full text-base text-gray-800 hover:text-blue-600 transition-colors py-2 rounded-lg hover:bg-blue-50"
+                              className="block w-full text-base text-gray-800 hover:text-blue-600 transition-colors py-2 rounded-lg"
                             >
                               <div>{section.items[0].name}</div>
                               {section.items[0].description && (
@@ -837,7 +916,7 @@ function Header({
                         <Link
                           href={subItem.href || "#"}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="block text-gray-900 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg hover:bg-blue-50"
+                          className="block text-gray-900 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
                         >
                           <div>{subItem.name}</div>
                           {subItem.description && (
@@ -1014,8 +1093,8 @@ function Header({
               }, 100);
             }}
           >
-            {" "}
-            <motion.button
+            <GeneralDropdown />
+            {/* <motion.button
               className="cursor-pointer p-1 lg:p-2 xl:p-1"
               animate={{
                 color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
@@ -1040,7 +1119,7 @@ function Header({
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-            </motion.button>
+            </motion.button> */}
             <CurrencyDropdown isDesktop={true} />
             <motion.button
               className="cursor-pointer p-1 lg:p-2 xl:p-1"
