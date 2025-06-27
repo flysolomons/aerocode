@@ -92,7 +92,7 @@ function Calendar({
           isMobileOverlay && "text-center py-2",
           defaultClassNames.weekday
         ),
-        week: cn("grid grid-cols-7 gap-0", defaultClassNames.week),
+        week: cn("grid grid-cols-7 gap-0 mb-1", defaultClassNames.week),
         week_number_header: cn(
           "w-[--cell-size] select-none",
           defaultClassNames.week_number_header
