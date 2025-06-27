@@ -648,7 +648,7 @@ function Header({
                           <Link
                             href={item.path}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="block text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2"
+                            className="block text-base font-sans font-medium text-gray-800 hover:text-blue-600 transition-colors py-2"
                           >
                             {item.name}
                           </Link>
