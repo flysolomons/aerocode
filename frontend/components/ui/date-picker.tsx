@@ -154,7 +154,7 @@ export function DateRangePicker({
               <span className="text-gray-400 text-sm">
                 {mode === "single"
                   ? "Select departure date"
-                  : "Select departure and return dates"}
+                  : "Pick your travel dates"}
               </span>
             )}
           </div>
@@ -304,7 +304,7 @@ export function DateRangePicker({
                   <span className="text-gray-400 text-sm">
                     {mode === "single"
                       ? "Select departure date"
-                      : "Select departure and return dates"}
+                      : "Pick your travel dates"}
                   </span>
                 )}
               </div>
