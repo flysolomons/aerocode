@@ -181,15 +181,15 @@ export function DateRangePicker({
 
             {/* Bottom sheet */}
             <div
-              className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
-              style={{ height: "80vh", overflowY: "auto" }}
+              className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out flex flex-col"
+              style={{ height: "75vh" }}
             >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
                 <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
               </div>
-              {/* Header */}
-              <div className="px-6 py-4">
+              {/* Sticky Header */}
+              <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {mode === "single" ? "Travel Date" : "Travel Dates"}
                 </h3>

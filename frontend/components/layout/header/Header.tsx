@@ -482,7 +482,7 @@ function Header({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.sections.map((section: any, index: number) => (
                 <div key={index} className="space-y-3">
-                  <h4 className="text-base font-semibold text-blue-600">
+                  <h4 className="text-sm font-semibold uppercase text-blue-600">
                     {section.title}
                   </h4>
                   <ul className="space-y-2">
@@ -496,7 +496,7 @@ function Header({
                             setIsHovered(false);
                           }}
                         >
-                          <div className="text-sm text-gray-800 group-hover:text-blue-600">
+                          <div className="text-sm font-medium text-gray-800 group-hover:text-blue-600">
                             {item.name}
                           </div>
                           {item.description && (
