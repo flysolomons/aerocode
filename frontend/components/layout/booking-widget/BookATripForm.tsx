@@ -395,7 +395,7 @@ export default function BookATripForm({
                     {/* Bottom sheet */}
                     <div
                       className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
-                      style={{ height: "80vh" }}
+                      style={{ height: "80vh", overflowY: "auto" }}
                     >
                       {/* Handle bar */}
                       <div className="flex justify-center pt-3 pb-2">
@@ -520,7 +520,7 @@ export default function BookATripForm({
                     )}
                   </PopoverContent>
                 </Popover>
-              </div>{" "}
+              </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={arrivalInputRef}>
                 <div
@@ -573,7 +573,7 @@ export default function BookATripForm({
                     {/* Bottom sheet */}
                     <div
                       className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
-                      style={{ height: "80vh" }}
+                      style={{ height: "80vh", overflowY: "auto" }}
                     >
                       {/* Handle bar */}
                       <div className="flex justify-center pt-3 pb-2">
@@ -798,7 +798,7 @@ export default function BookATripForm({
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>{" "}
+            </div>
             {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={travelersMobileRef}>
               <div
@@ -847,12 +847,12 @@ export default function BookATripForm({
                   {/* Bottom sheet */}
                   <div
                     className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out"
-                    style={{ height: "70vh" }}
+                    style={{ height: "80vh", overflowY: "auto" }}
                   >
                     {/* Handle bar */}
                     <div className="flex justify-center pt-3 pb-2">
                       <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-                    </div>{" "}
+                    </div>
                     {/* Header */}
                     <div className="px-6 py-4">
                       <h3 className="text-lg font-semibold text-gray-900">
@@ -885,7 +885,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                             {travelers.adults}
                           </span>
                           <button
@@ -918,7 +918,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                             {travelers.children}
                           </span>
                           <button
@@ -951,7 +951,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-xl text-black font-medium min-w-[2rem] text-center">
+                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                             {travelers.infants}
                           </span>
                           <button
@@ -961,7 +961,7 @@ export default function BookATripForm({
                             aria-label="Increase infants"
                           >
                             +
-                          </button>{" "}
+                          </button>
                         </div>
                       </div>
                     </div>

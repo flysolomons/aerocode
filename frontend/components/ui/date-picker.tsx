@@ -142,7 +142,7 @@ export function DateRangePicker({
             {dateRange?.from ? (
               mode === "range" && dateRange.to ? (
                 <span className="text-gray-800 text-sm">
-                  {format(dateRange.from, "dd MMM, yyyy")} -{" "}
+                  {format(dateRange.from, "dd MMM, yyyy")} -
                   {format(dateRange.to, "dd MMM, yyyy")}
                 </span>
               ) : (
@@ -182,17 +182,17 @@ export function DateRangePicker({
             {/* Bottom sheet */}
             <div
               className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out"
-              style={{ height: "85vh" }}
+              style={{ height: "80vh", overflowY: "auto" }}
             >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
                 <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
               </div>
-              {/* Header */}{" "}
+              {/* Header */}
               <div className="px-6 py-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {mode === "single" ? "Travel Date" : "Travel Dates"}
-                </h3>{" "}
+                </h3>
                 <p className="text-sm text-gray-500 mt-1">
                   {mode === "single"
                     ? "Pick your departure date"
@@ -201,7 +201,7 @@ export function DateRangePicker({
                 {/* Horizontal line after header text */}
                 <div className="w-full h-px bg-gray-200 mt-4"></div>
               </div>
-              {/* Content */}{" "}
+              {/* Content */}
               <div className="flex-1 overflow-y-auto px-6 py-2">
                 {mode === "single" ? (
                   <Calendar
