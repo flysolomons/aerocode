@@ -5,6 +5,8 @@ import Container from "@/components/layout/Container";
 import SpecialCard from "@/components/ui/cards/SpecialCard";
 import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
 import { stripHtmlTags } from "@/lib/utils";
+import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
+import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarousel";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -43,15 +45,8 @@ export default function SpecialsIndexTemplate({
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          <div className="space-y-6 sm:space-y-8">
-            {/* <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
-                Latest Specials
-              </h2>
-              <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                {stripHtmlTags("We offer convenient flights between Australia, Fiji, Vanuatu, and Honiara, the vibrant capital of the Solomon Islands.")}
-              </p>
-            </div> */}
+          <StrippedBookingWidget />
+          <div className="space-y-8">
             {pageDescription && (
               <div className="mx-auto w-full">
                 <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
@@ -80,6 +75,89 @@ export default function SpecialsIndexTemplate({
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Find great deals section, now spaced by parent space-y-6/sm:space-y-8 */}
+          <div className="w-full mx-auto text-center space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
+              Browse Special Fares
+            </h2>
+            <ThumbnailCarousel
+              slides={[
+                {
+                  specialName: "Island Explorer",
+                  image:
+                    "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop",
+                  price: "$899",
+                  url: "/specials/island-explorer",
+                  route: "Honiara to Brisbane",
+                },
+                {
+                  specialName: "Pacific Paradise",
+                  image:
+                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
+                  price: "$749",
+                  url: "/specials/pacific-paradise",
+                  route: "Honiara to Nadi",
+                },
+                {
+                  specialName: "Vanuatu Adventure",
+                  image:
+                    "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=300&fit=crop",
+                  price: "$649",
+                  url: "/specials/vanuatu-adventure",
+                  route: "Honiara to Port Vila",
+                },
+                {
+                  specialName: "Sydney Saver",
+                  image:
+                    "https://images.unsplash.com/photo-1465156799763-2c087c332922?w=400&h=300&fit=crop",
+                  price: "$999",
+                  url: "/specials/sydney-saver",
+                  route: "Honiara to Sydney",
+                },
+                {
+                  specialName: "Melbourne Magic",
+                  image:
+                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
+                  price: "$1050",
+                  url: "/specials/melbourne-magic",
+                  route: "Honiara to Melbourne",
+                },
+                {
+                  specialName: "Guadalcanal Getaway",
+                  image:
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop",
+                  price: "$799",
+                  url: "/specials/guadalcanal-getaway",
+                  route: "Honiara to Guadalcanal",
+                },
+                {
+                  specialName: "Fiji Flyer",
+                  image:
+                    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop",
+                  price: "$720",
+                  url: "/specials/fiji-flyer",
+                  route: "Honiara to Suva",
+                },
+                {
+                  specialName: "Solomon Escape",
+                  image:
+                    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=400&h=300&fit=crop",
+                  price: "$880",
+                  url: "/specials/solomon-escape",
+                  route: "Brisbane to Honiara",
+                },
+                {
+                  specialName: "Coral Coast Special",
+                  image:
+                    "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=400&h=300&fit=crop",
+                  price: "$970",
+                  url: "/specials/coral-coast-special",
+                  route: "Nadi to Honiara",
+                },
+              ]}
+            />
           </div>
         </div>
       </Container>

@@ -43,11 +43,11 @@ function SpecialCard({
             <p className="text-sm sm:text-sm text-gray-600 line-clamp-3">
               insert subtitle or description here
             </p>
-            <span className="mt-4 bg-yellow-200 text-blue-900 text-xs px-3 py-1 rounded-full shadow-sm">
+            <span className="mt-4 bg-orange-300 text-orange-900 font-medium text-xs px-3 py-1 rounded-full shadow-sm">
               Expires {expires}
             </span>
           </div>
-          <span className="text-gray-800 hover:underline text-sm mt-2">
+          <span className="text-gray-800 hover:underline text-xs mt-2">
             Learn more about this special
           </span>
         </div>
