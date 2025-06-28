@@ -43,7 +43,7 @@ function SpecialCard({
             <p className="text-sm sm:text-sm text-gray-600 line-clamp-3">
               {description || "insert subtitle or description here"}
             </p>
-            <span className="mt-4 bg-orange-300 text-orange-900 font-medium text-xs px-3 py-1 rounded-full shadow-sm">
+            <span className="mt-4 bg-red-100 text-red-800 font-medium text-xs px-3 py-1 rounded-full shadow-sm">
               Expires {expires}
             </span>
           </div>

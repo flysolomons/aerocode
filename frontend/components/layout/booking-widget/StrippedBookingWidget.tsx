@@ -4,7 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import BookATripForm from "./BookATripForm";
 
-export default function StrippedBookingWidget() {
+// Accept id as a prop with type
+interface StrippedBookingWidgetProps {
+  id?: string;
+}
+
+export default function StrippedBookingWidget({ id }: StrippedBookingWidgetProps) {
   const [showMobileForm, setShowMobileForm] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -110,7 +115,10 @@ export default function StrippedBookingWidget() {
   );
   return (
     <>
-      <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0">
+      <div
+        id={id}
+        className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0"
+      >
         <div className="w-full xl:w-[70.5rem]">
           {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
           <div
