@@ -49,9 +49,9 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
   return (
     <section className="embla">
       <div className="relative">
-        {/* Hide prev/next arrows on mobile (below 640px) */}
+        {/* Show prev/next arrows on desktop only (hidden on mobile, flex on sm+) */}
         <button
-          className="hidden sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 sm:z-10 sm:bg-white sm:rounded-full sm:shadow sm:p-2 sm:text-gray-700 sm:hover:bg-yellow-300 sm:disabled:opacity-40 sm:disabled:cursor-not-allowed"
+          className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 text-gray-700 hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={scrollPrev}
           disabled={!prevBtnEnabled}
           aria-label="Previous"
@@ -86,7 +86,7 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
           </div>
         </div>
         <button
-          className="hidden sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2 sm:z-10 sm:bg-white sm:rounded-full sm:shadow sm:p-2 sm:text-gray-700 sm:hover:bg-yellow-300 sm:disabled:opacity-40 sm:disabled:cursor-not-allowed"
+          className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 text-gray-700 hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={scrollNext}
           disabled={!nextBtnEnabled}
           aria-label="Next"
