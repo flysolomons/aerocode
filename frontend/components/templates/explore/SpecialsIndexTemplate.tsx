@@ -44,7 +44,7 @@ export default function SpecialsIndexTemplate({
         onColorCalculated={setGradientStartColor}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-10 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           <StrippedBookingWidget />
           <div className="space-y-8">
             {pageDescription && (

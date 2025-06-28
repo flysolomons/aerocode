@@ -49,8 +49,9 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
   return (
     <section className="embla">
       <div className="relative">
+        {/* Hide prev/next arrows on mobile (below 640px) */}
         <button
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 text-gray-700 hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="hidden sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 sm:z-10 sm:bg-white sm:rounded-full sm:shadow sm:p-2 sm:text-gray-700 sm:hover:bg-yellow-300 sm:disabled:opacity-40 sm:disabled:cursor-not-allowed"
           onClick={scrollPrev}
           disabled={!prevBtnEnabled}
           aria-label="Previous"
@@ -85,7 +86,7 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
           </div>
         </div>
         <button
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 text-gray-700 hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="hidden sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2 sm:z-10 sm:bg-white sm:rounded-full sm:shadow sm:p-2 sm:text-gray-700 sm:hover:bg-yellow-300 sm:disabled:opacity-40 sm:disabled:cursor-not-allowed"
           onClick={scrollNext}
           disabled={!nextBtnEnabled}
           aria-label="Next"
@@ -123,11 +124,20 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
           gap: 1rem;
         }
         .embla__slide {
-          flex: 0 0 30.5%;
           min-width: 0;
           margin-left: 0 !important;
           background: transparent !important;
           border: none !important;
+        }
+        @media (min-width: 640px) {
+          .embla__slide {
+            flex: 0 0 35%;
+          }
+        }
+        @media (min-width: 1024px) {
+          .embla__slide {
+            flex: 0 0 30.5%;
+          }
         }
       `}</style>
     </section>
