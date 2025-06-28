@@ -164,6 +164,8 @@ export default function BookATripForm({
 
       setIsDesktopModalActive(true);
       onModalStateChange?.(true);
+      // Scroll to top when modal is activated
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
   // Function to close desktop modal
