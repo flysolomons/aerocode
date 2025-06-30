@@ -34,6 +34,7 @@ export async function fetchHomePage(): Promise<HomePage> {
       query: GET_HOMEPAGE,
     });
 
+    console.log("graphql url", (client.link as any).options.uri);
     // Since we know there is only one homepage, we can assume the first item
     // exists and is the homepage we want
     if (!data.pages[0]) {

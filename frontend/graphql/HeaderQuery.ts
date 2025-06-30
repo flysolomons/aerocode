@@ -255,9 +255,10 @@ export async function fetchHeaderData(): Promise<TransformedHeaderData> {
 
     // console.log("Raw GraphQL data:", JSON.stringify(data, null, 2));
 
-    const headerMenus = data.headerMenus && data.headerMenus.length > 0 
-      ? transformHeaderMenuData(data.headerMenus)
-      : [];
+    const headerMenus =
+      data.headerMenus && data.headerMenus.length > 0
+        ? transformHeaderMenuData(data.headerMenus)
+        : [];
 
     const currencies = data.currencies || [];
 
@@ -322,9 +323,10 @@ export async function fetchHeaderDataServer(): Promise<TransformedHeaderData> {
 
     // console.log("Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
 
-    const headerMenus = data.headerMenus && data.headerMenus.length > 0 
-      ? transformHeaderMenuData(data.headerMenus)
-      : [];
+    const headerMenus =
+      data.headerMenus && data.headerMenus.length > 0
+        ? transformHeaderMenuData(data.headerMenus)
+        : [];
 
     const currencies = data.currencies || [];
 
@@ -382,7 +384,7 @@ export const fallbackCurrencies: Currency[] = [
     currencySymbol: "$",
   },
   {
-    countryName: "Australia", 
+    countryName: "Australia",
     currencyName: "Australian Dollar",
     currencyCode: "AUD",
     currencySymbol: "A$",
