@@ -6,6 +6,10 @@ FROM node:20-slim AS builder
 # Set working directory
 WORKDIR /app
 
+# Accept build-time argument for NEXT_PUBLIC_GRAPHQL_URL
+ARG NEXT_PUBLIC_GRAPHQL_URL
+ENV NEXT_PUBLIC_GRAPHQL_URL=$NEXT_PUBLIC_GRAPHQL_URL
+
 # Copy package files for dependency installation
 COPY package.json package-lock.json* ./
 
@@ -20,7 +24,6 @@ ENV NODE_ENV=production
 
 # Build the Next.js app
 RUN npm run build
-
 
 # Stage 2: Setup production image
 FROM node:20-slim
