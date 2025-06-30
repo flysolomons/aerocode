@@ -59,3 +59,4 @@ jobs:
             ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.NEXT_PUBLIC_GRAPHQL_URL }}
+            GRAPHQL_URL=${{ secrets.GRAPHQL_URL }}

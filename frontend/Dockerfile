@@ -10,6 +10,9 @@ WORKDIR /app
 ARG NEXT_PUBLIC_GRAPHQL_URL
 ENV NEXT_PUBLIC_GRAPHQL_URL=$NEXT_PUBLIC_GRAPHQL_URL
 
+ARG GRAPHQL_URL
+ENV GRAPHQL_URL=$GRAPHQL_URL
+
 # Copy package files for dependency installation
 COPY package.json package-lock.json* ./
 
