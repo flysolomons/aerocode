@@ -128,18 +128,14 @@ export default async function Page({
   const slug = resolvedParams.slug[resolvedParams.slug.length - 1] || "";
   // console.log("Full Path:", fullPath);
 
+  // workaround just to ignore these unexpected routes
+  if (
+    fullPath.startsWith(".well-known") ||
+    fullPath.includes("com.chrome.devtools.json")
+  ) {
+    return;
+  }
   try {
-    // workaround just to ignore these unexpected routes
-    // if (
-    //   !fullPath ||
-    //   fullPath === "graphql" ||
-    //   fullPath.startsWith("_next") ||
-    //   fullPath.startsWith(".well-known")
-    // ) {
-    //   console.log("Ignoring path:", fullPath);
-    //   return;
-    // }
-
     const page = await fetchPageData(slug, fullPath);
 
     // Trigger 404 if page is not found
