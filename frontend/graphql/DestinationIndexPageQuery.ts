@@ -25,6 +25,15 @@ export interface ChildPage {
   __typename?: string;
 }
 
+export interface Destination {
+  country: string;
+  heroImage: {
+    url: string;
+  };
+  url: string;
+  heroTitle: string;
+}
+
 export const GET_DESTINATION_INDEX_PAGE_QUERY = gql`
   query GetDestinationIndexPage {
     pages(contentType: "explore.DestinationIndexPage") {
@@ -48,6 +57,19 @@ export const GET_DESTINATION_INDEX_PAGE_QUERY = gql`
           country
         }
       }
+    }
+  }
+`;
+
+export const GET_ALL_DESTINATIONS_QUERY = gql`
+  query Destinations {
+    destinations {
+      country
+      heroImage {
+        url
+      }
+      heroTitle
+      url
     }
   }
 `;
@@ -82,5 +104,17 @@ export async function fetchDestinationIndexPage(): Promise<DestinationIndexPage>
       description: "",
       children: [],
     };
+  }
+}
+
+export async function fetchAllDestinations(): Promise<Destination[]> {
+  try {
+    const { data } = await client.query({
+      query: GET_ALL_DESTINATIONS_QUERY,
+    });
+    return data.destinations || [];
+  } catch (error) {
+    console.error("Error fetching all destinations:", error);
+    return [];
   }
 }

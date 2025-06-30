@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
-import Recommendations from "@/components/layout/sections/Recommendations";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import { WhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
@@ -114,12 +113,11 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               <div className="text-center py-8 sm:py-12">
                 <p className="text-sm sm:text-base text-gray-600">
                   No routes found for
-                  {showInternational ? "international" : "domestic"} flights.
+                  {showInternational ? " international" : " domestic"} flights.
                 </p>
               </div>
             )}
           </div>
-          {/* Additional content could go here */}
         </div>
       </Container>
     </>

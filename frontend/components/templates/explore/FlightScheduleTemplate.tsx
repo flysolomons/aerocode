@@ -4,6 +4,7 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import Accordion from "@/components/ui/Accordion";
+import Recommendations from "@/components/layout/sections/Recommendations";
 
 import {
   ScheduleWithFlightData,
@@ -232,6 +233,8 @@ export default function FlightScheduleTemplate({
               </div>
             )}
           </div>
+          {/* Recommendation Section */}
+          <Recommendations heading="Explore our destinations" />
         </div>
       </Container>
     </>

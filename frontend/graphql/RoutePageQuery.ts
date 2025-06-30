@@ -41,6 +41,9 @@ export interface RoutePage {
   arrivalAirportCode: string;
   fares?: Fare[];
   specialRoutes?: SpecialRoute[];
+  parent?: {
+    country?: string;
+  };
   __typename?: string;
 }
 
@@ -93,6 +96,11 @@ export const GET_ROUTE_PAGE_QUERY = gql`
           }
         }
         startingPrice
+      }
+      parent {
+        ... on Destination {
+          country
+        }
       }
     }
   }
@@ -169,6 +177,7 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       arrivalAirportCode: route.arrivalAirportCode || "",
       fares: route.fares || [],
       specialRoutes: route.specialRoutes || [],
+      parent: route.parent ? { country: route.parent.country } : undefined,
       __typename: "Route",
     };
   } catch (error) {

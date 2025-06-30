@@ -153,7 +153,10 @@ export default function DestinationTemplate({
           </div>
 
           {/* Recommendation Section */}
-          <Recommendations></Recommendations>
+          <Recommendations
+            excludeCountry={initialPage.country}
+            heading="Explore more destinations"
+          />
         </div>
       </Container>
     </>

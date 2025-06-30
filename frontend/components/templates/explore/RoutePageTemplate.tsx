@@ -13,6 +13,7 @@ import {
   fetchRoutesByDestination,
   SpecialRoute,
 } from "@/graphql/RoutePageQuery";
+import Recommendations from "@/components/layout/sections/Recommendations";
 
 interface RoutePageTemplateProps {
   initialPage: RoutePage | null;
@@ -185,6 +186,11 @@ export default function RoutePageTemplate({
               </div>
             )}
           </div>
+          {/* Recommendation Section */}
+          <Recommendations
+            excludeCountry={initialPage.parent?.country}
+            heading="Explore other destinations"
+          />
         </div>
       </Container>
     </>
