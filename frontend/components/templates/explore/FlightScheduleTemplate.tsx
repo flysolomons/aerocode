@@ -87,7 +87,7 @@ export default function FlightScheduleTemplate({
       content: (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-gray-50 rounded-[10px] overflow-hidden">
-            <thead className="hidden sm:table-header-group bg-gray-50">
+            <thead className="bg-gray-50">
               <tr>
                 <th className="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm font-medium text-gray-600">
                   Flight
@@ -108,23 +108,20 @@ export default function FlightScheduleTemplate({
             </thead>
             <tbody className="divide-y divide-gray-100 bg-gray-50">
               {flightsByDay[day.key]?.map((flight, idx) => (
-                <tr
-                  key={idx}
-                  className="flex flex-col sm:table-row mb-4 sm:mb-0 bg-white sm:bg-inherit rounded-lg sm:rounded-none shadow-sm sm:shadow-none overflow-hidden border border-gray-100 sm:border-0"
-                >
-                  <td className="px-4 py-2 text-xs sm:text-sm text-gray-600 text-left sm:text-center font-medium flex-1 sm:table-cell before:block before:font-semibold before:text-gray-500 before:mb-1 sm:before:hidden before:content-['Flight']">
+                <tr key={idx}>
+                  <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600 text-center font-medium">
                     {flight.flightNumber}
                   </td>
-                  <td className="px-4 py-2 text-xs sm:text-sm text-gray-600 text-left sm:text-center flex-1 sm:table-cell before:block before:font-semibold before:text-gray-500 before:mb-1 sm:before:hidden before:content-['Departing_from']">
+                  <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600 text-center">
                     {flight.departurePort}
                   </td>
-                  <td className="px-4 py-2 text-xs sm:text-sm text-gray-600 text-left sm:text-center flex-1 sm:table-cell before:block before:font-semibold before:text-gray-500 before:mb-1 sm:before:hidden before:content-['Arriving_to']">
+                  <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600 text-center">
                     {flight.arrivalPort}
                   </td>
-                  <td className="px-4 py-2 text-xs sm:text-sm text-gray-600 text-left sm:text-center flex-1 sm:table-cell before:block before:font-semibold before:text-gray-500 before:mb-1 sm:before:hidden before:content-['Departure_Time']">
+                  <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600 text-center">
                     {flight.departureTime}
                   </td>
-                  <td className="px-4 py-2 text-xs sm:text-sm text-gray-600 text-left sm:text-center flex-1 sm:table-cell before:block before:font-semibold before:text-gray-500 before:mb-1 sm:before:hidden before:content-['Arrival_Time']">
+                  <td className="px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600 text-center">
                     {flight.arrivalTime}
                   </td>
                 </tr>
@@ -176,44 +173,42 @@ export default function FlightScheduleTemplate({
             </div>
           )}
           {/* Schedule Date Filter Cards */}
-          <div className="space-y-6">
-            {initialPage.schedules && initialPage.schedules.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
-                {initialPage.schedules.map((schedule) => (
-                  <button
-                    key={schedule.id}
-                    onClick={() => setSelectedScheduleId(schedule.id)}
-                    className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-md transition-all text-xs sm:text-sm ${
-                      selectedScheduleId === schedule.id
-                        ? "bg-yellow-300 text-black"
-                        : "bg-white hover:bg-gray-100"
-                    }`}
-                  >
-                    <div className="font-medium">
-                      {"From "}
-                      <span className="font-semibold">
-                        {formatDate(schedule.startDate)}
-                      </span>
-                      {" to "}
-                      <span className="font-semibold">
-                        {formatDate(schedule.endDate)}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-            {/* Toggle between International and Domestic routes */}
-            <div className="flex justify-center">
-              <RadioButton
-                optionOne="International"
-                optionTwo="Domestic"
-                initialSelected="one"
-                onOptionChange={(option) =>
-                  setShowInternational(option === "one")
-                }
-              />
+          {initialPage.schedules && initialPage.schedules.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4 sm:mt-6">
+              {initialPage.schedules.map((schedule) => (
+                <button
+                  key={schedule.id}
+                  onClick={() => setSelectedScheduleId(schedule.id)}
+                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full shadow-md transition-all text-xs sm:text-sm ${
+                    selectedScheduleId === schedule.id
+                      ? "bg-yellow-300 text-black"
+                      : "bg-white hover:bg-gray-100"
+                  }`}
+                >
+                  <div className="font-medium">
+                    {"From"}
+                    <span className="font-semibold">
+                      {formatDate(schedule.startDate)}
+                    </span>
+                    {" to "}
+                    <span className="font-semibold">
+                      {formatDate(schedule.endDate)}
+                    </span>
+                  </div>
+                </button>
+              ))}
             </div>
+          )}
+          {/* Toggle between International and Domestic routes */}
+          <div className="flex justify-center">
+            <RadioButton
+              optionOne="International"
+              optionTwo="Domestic"
+              initialSelected="one"
+              onOptionChange={(option) =>
+                setShowInternational(option === "one")
+              }
+            />
           </div>
           {/* Flight schedule accordion section */}
           <div>
