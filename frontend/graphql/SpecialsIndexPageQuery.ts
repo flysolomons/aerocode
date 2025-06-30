@@ -1,13 +1,30 @@
 import { gql } from "@apollo/client";
 import client from "../lib/apolloClient";
 
+// Interface for SpecialRoute inside a special
+export interface SpecialRouteSummary {
+  route: {
+    nameFull: string;
+    heroImage?: {
+      url: string;
+    };
+  };
+  startingPrice: string;
+  special: {
+    name: string;
+  };
+}
+
 // Interface for Special
 export interface Special {
   name: string;
   heroImage: {
     url: string;
   };
-  url: string; // URL is required, not optional
+  url: string;
+  subTitle?: string;
+  endDate?: string;
+  specialRoutes?: SpecialRouteSummary[];
   __typename?: string;
 }
 
@@ -51,6 +68,20 @@ export const GET_SPECIALS_INDEX_PAGE_QUERY = gql`
         url
       }
       url
+      subTitle
+      endDate
+      specialRoutes {
+        route {
+          nameFull
+          heroImage {
+            url
+          }
+        }
+        startingPrice
+        special {
+          name
+        }
+      }
     }
   }
 `;
@@ -80,6 +111,21 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
           name: special.name || "",
           heroImage: special.heroImage || { url: "/default-special.jpg" },
           url: special.url || "",
+          subTitle: special.subTitle || "",
+          endDate: special.endDate || "",
+          specialRoutes:
+            special.specialRoutes?.map((route: any) => ({
+              route: {
+                nameFull: route.route?.nameFull || "",
+                heroImage: route.route?.heroImage || {
+                  url: "/default-special.jpg",
+                },
+              },
+              startingPrice: route.startingPrice || "",
+              special: {
+                name: route.special?.name || "",
+              },
+            })) || [],
           __typename: "Special",
         })) || [],
       __typename: "SpecialsIndexPage",

@@ -15,6 +15,7 @@ from grapple.helpers import register_query_field
 from django.db import models
 from django.core.exceptions import ValidationError
 from django import forms
+from .blocks import PeriodBlock
 
 
 class ExploreIndexPage(BasePage):
@@ -229,6 +230,43 @@ class Special(BasePage):
         null=True, blank=False, help_text="End date of the flight special"
     )
 
+    travel_periods = StreamField(
+        [
+            ("travel_period", PeriodBlock()),
+        ],
+        blank=True,
+        help_text="Periods during which this special is valid. Specify start and end dates.",
+        use_json_field=True,
+    )
+
+    discount = models.CharField(max_length=20, null=True, blank=False)
+
+    booking_class = models.CharField(
+        max_length=20,
+        null=True,
+        blank=False,
+        help_text="Class of booking for this flight special",
+    )
+
+    trip_type = models.CharField(
+        max_length=20,
+        choices=[
+            ("one way", "One Way"),
+            ("return", "Return"),
+        ],
+        default="Return",
+        help_text="Type of trip for this special (One Way or Return)",
+    )
+
+    flight_scope = models.CharField(
+        max_length=20,
+        choices=[
+            ("international routes", "International Routes"),
+            ("domestic routes", "Domestic Routes"),
+        ],
+        default="international routes",
+    )
+
     special_code = models.CharField(
         max_length=50,
         null=True,
@@ -250,6 +288,11 @@ class Special(BasePage):
                 FieldPanel("special_code", heading="Special ID"),
                 FieldPanel("start_date", heading="Start Date"),
                 FieldPanel("end_date", heading="End Date"),
+                FieldPanel("travel_periods", heading="Travel Periods"),
+                FieldPanel("booking_class", heading="Booking Class"),
+                FieldPanel("trip_type", heading="Trip Type"),
+                FieldPanel("flight_scope", heading="Flight Scope"),
+                FieldPanel("discount", heading="Discount"),
                 FieldPanel("terms_and_conditions", heading="Terms and Conditions"),
             ],
             heading="Special Details",
@@ -269,6 +312,11 @@ class Special(BasePage):
     graphql_fields = BasePage.graphql_fields + [
         GraphQLString("start_date", name="startDate"),
         GraphQLString("end_date", name="endDate"),
+        GraphQLStreamfield("travel_periods", name="travelPeriods"),
+        GraphQLString("discount"),
+        GraphQLString("trip_type", name="tripType"),
+        GraphQLString("booking_class", name="bookingClass"),
+        GraphQLString("flight_scope", name="flightScope"),
         GraphQLString("terms_and_conditions", name="termsAndConditions"),
         GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
         GraphQLString("name", name="specialName"),
@@ -302,6 +350,8 @@ class SpecialRoute(models.Model):
         decimal_places=2,
         help_text="Starting price for this special on this route",
     )
+
+    # add currency field here and connect it to the
 
     trip_type = models.CharField(
         max_length=20,

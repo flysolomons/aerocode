@@ -21,6 +21,12 @@ export interface SpecialRoute {
   startingPrice: string;
 }
 
+// Interface for TravelPeriod in SpecialPage
+export interface TravelPeriod {
+  startDate: string;
+  endDate: string;
+}
+
 // Interface for the Special page
 export interface SpecialPage {
   heroTitle: string;
@@ -34,9 +40,26 @@ export interface SpecialPage {
   name: string;
   startDate: string;
   endDate: string;
+  bookingClass?: string;
+  discount?: string;
+  tripType?: string;
+  flightScope?: string;
+  travelPeriods?: TravelPeriod[];
   termsAndConditions: string;
   specialRoutes: SpecialRoute[];
+  specials: SpecialSummary[]; // Add specials to SpecialPage
   __typename?: string;
+}
+
+// Interface for summary specials (used in specials array)
+export interface SpecialSummary {
+  name: string;
+  endDate: string;
+  subTitle: string;
+  heroImage: {
+    url: string;
+  };
+  url: string;
 }
 
 export const GET_SPECIAL_PAGE_QUERY = gql`
@@ -53,6 +76,16 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
       name
       startDate
       endDate
+      bookingClass
+      discount
+      tripType
+      flightScope
+      travelPeriods {
+        ... on PeriodBlock {
+          endDate
+          startDate
+        }
+      }
       termsAndConditions
       specialRoutes {
         route {
@@ -66,6 +99,15 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
         }
         startingPrice
       }
+    }
+    specials {
+      name
+      endDate
+      subTitle
+      heroImage {
+        url
+      }
+      url
     }
   }
 `;
@@ -83,6 +125,14 @@ export async function fetchSpecialPage(
       return null;
     } // Get the special data
     const special = data.special;
+    // Get the specials array
+    const specials: SpecialSummary[] = (data.specials || []).map((s: any) => ({
+      name: s.name || "",
+      endDate: s.endDate || "",
+      subTitle: s.subTitle || "",
+      heroImage: s.heroImage || { url: "/hero.jpg" },
+      url: s.url || "",
+    }));
     return {
       heroTitle: special.heroTitle || "",
       heroImage: special.heroImage || { url: "/hero.jpg" },
@@ -93,6 +143,15 @@ export async function fetchSpecialPage(
       name: special.name || "",
       startDate: special.startDate || "",
       endDate: special.endDate || "",
+      bookingClass: special.bookingClass || "",
+      discount: special.discount || "",
+      tripType: special.tripType || "",
+      flightScope: special.flightScope || "",
+      travelPeriods:
+        special.travelPeriods?.map((period: any) => ({
+          startDate: period.startDate || "",
+          endDate: period.endDate || "",
+        })) || [],
       termsAndConditions: special.termsAndConditions || "",
       specialRoutes:
         special.specialRoutes?.map((route: any) => ({
@@ -105,6 +164,7 @@ export async function fetchSpecialPage(
           },
           startingPrice: route.startingPrice || "0",
         })) || [],
+      specials,
       __typename: "Special",
     };
   } catch (error) {

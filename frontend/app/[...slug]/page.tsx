@@ -135,6 +135,7 @@ export default async function Page({
   ) {
     return;
   }
+
   try {
     const page = await fetchPageData(slug, fullPath);
 

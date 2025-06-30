@@ -11,12 +11,26 @@ interface SpecialCardProps {
   expires?: string; // New prop for expiry date
 }
 
+function formatDate(dateString?: string): string {
+  if (!dateString) return "-";
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return dateString || "-";
+  }
+}
+
 function SpecialCard({
   image,
   specialName,
   description,
   url,
-  expires = "31/12/2025", // Example default
+  expires,
 }: SpecialCardProps) {
   return (
     <Link href={url} className="block hover:opacity-90 transition-opacity">
@@ -41,10 +55,10 @@ function SpecialCard({
               {specialName}
             </h3>
             <p className="text-sm sm:text-sm text-gray-600 line-clamp-3">
-              {description || "insert subtitle or description here"}
+              {description}
             </p>
             <span className="mt-4 bg-red-100 text-red-800 font-medium text-xs px-3 py-1 rounded-full shadow-sm">
-              Expires {expires}
+              Expires {formatDate(expires)}
             </span>
           </div>
           <span className="text-gray-800 hover:underline text-xs mt-2">

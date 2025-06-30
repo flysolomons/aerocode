@@ -6,7 +6,7 @@ import SpecialCard from "@/components/ui/cards/SpecialCard";
 import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
 import { stripHtmlTags } from "@/lib/utils";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
-import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarousel";
+import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -35,6 +35,8 @@ export default function SpecialsIndexTemplate({
   const breadcrumbs = pageMetadata?.url || "Home > Explore > Specials";
   const pageDescription = pageMetadata?.description || "";
 
+  console.log("Initial Page Data:", initialPage);
+
   return (
     <>
       <SecondaryHero
@@ -60,8 +62,10 @@ export default function SpecialsIndexTemplate({
                   <SpecialCard
                     key={index}
                     specialName={special.name}
-                    image={special.heroImage?.url || "/image.jpg"}
+                    image={special.heroImage?.url}
                     url={special.url}
+                    description={special.subTitle}
+                    expires={special.endDate}
                   />
                 ))}
               </div>
@@ -83,80 +87,17 @@ export default function SpecialsIndexTemplate({
               Browse Special Fares
             </h2>
             <ThumbnailCarousel
-              slides={[
-                {
-                  specialName: "Island Explorer",
-                  image:
-                    "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop",
-                  price: "$899",
-                  url: "/specials/island-explorer",
-                  route: "Honiara to Brisbane",
-                },
-                {
-                  specialName: "Pacific Paradise",
-                  image:
-                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
-                  price: "$749",
-                  url: "/specials/pacific-paradise",
-                  route: "Honiara to Nadi",
-                },
-                {
-                  specialName: "Vanuatu Adventure",
-                  image:
-                    "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=300&fit=crop",
-                  price: "$649",
-                  url: "/specials/vanuatu-adventure",
-                  route: "Honiara to Port Vila",
-                },
-                {
-                  specialName: "Sydney Saver",
-                  image:
-                    "https://images.unsplash.com/photo-1465156799763-2c087c332922?w=400&h=300&fit=crop",
-                  price: "$999",
-                  url: "/specials/sydney-saver",
-                  route: "Honiara to Sydney",
-                },
-                {
-                  specialName: "Melbourne Magic",
-                  image:
-                    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop",
-                  price: "$1050",
-                  url: "/specials/melbourne-magic",
-                  route: "Honiara to Melbourne",
-                },
-                {
-                  specialName: "Guadalcanal Getaway",
-                  image:
-                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop",
-                  price: "$799",
-                  url: "/specials/guadalcanal-getaway",
-                  route: "Honiara to Guadalcanal",
-                },
-                {
-                  specialName: "Fiji Flyer",
-                  image:
-                    "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=400&h=300&fit=crop",
-                  price: "$720",
-                  url: "/specials/fiji-flyer",
-                  route: "Honiara to Suva",
-                },
-                {
-                  specialName: "Solomon Escape",
-                  image:
-                    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=400&h=300&fit=crop",
-                  price: "$880",
-                  url: "/specials/solomon-escape",
-                  route: "Brisbane to Honiara",
-                },
-                {
-                  specialName: "Coral Coast Special",
-                  image:
-                    "https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=400&h=300&fit=crop",
-                  price: "$970",
-                  url: "/specials/coral-coast-special",
-                  route: "Nadi to Honiara",
-                },
-              ]}
+              slides={specials
+                .flatMap((special) =>
+                  (special.specialRoutes || []).map((route) => ({
+                    specialName: route.special?.name || special.name,
+                    image: route.route?.heroImage?.url || "",
+                    price: route.startingPrice || "",
+                    url: special.url,
+                    route: route.route?.nameFull || "",
+                  }))
+                )
+                .filter((slide) => slide.route && slide.image && slide.url)}
             />
           </div>
         </div>
