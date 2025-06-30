@@ -76,7 +76,7 @@ function MembershipCard({
               minHeight: "40px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "flex-start", // align left
+              justifyContent: "flex-end", // align right
             }}
           >
             {isPopularBool ? (
@@ -87,9 +87,7 @@ function MembershipCard({
               <span
                 style={{ visibility: "hidden" }}
                 className="bg-yellow-300 px-4 py-2 rounded-full text-sm"
-              >
-                placeholder
-              </span>
+              ></span>
             )}
           </div>
           <div className="space-y-2 sm:space-y-6 lg:space-y-2 text-center">
