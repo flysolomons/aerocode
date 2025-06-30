@@ -3,6 +3,7 @@ import Container from "@/components/layout/Container";
 import MembershipCard from "@/components/ui/cards/MembershipCard";
 import Image from "next/image";
 import { BelamaIndexPage } from "@/graphql/BelamaPageQuery";
+import parse from "html-react-parser";
 
 interface BelamaIndexPageTemplateProps {
   initialPage: BelamaIndexPage;
@@ -22,9 +23,9 @@ export default function BelamaIndexPageTemplate({
           {/* Description */}
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
-              </p>
+              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                {parse(initialPage.description)}
+              </div>
             </div>
           )}
           <div className="space-y-4 sm:space-y-8 lg:space-y-8">
@@ -40,7 +41,7 @@ export default function BelamaIndexPageTemplate({
                   price={membership.price}
                   features={membership.features}
                   signUpUrl="/belama/sign-up"
-                  isPopular={true}
+                  isPopular={membership.mostPopular}
                 />
               ))}
             </div>
@@ -71,7 +72,7 @@ export default function BelamaIndexPageTemplate({
                   price={membership.price}
                   features={membership.features}
                   signUpUrl="/belama/sign-up"
-                  isPopular={false}
+                  isPopular={membership.mostPopular}
                 />
               ))}
             </div>

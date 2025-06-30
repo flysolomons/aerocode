@@ -65,19 +65,9 @@ class BelamaIndexPage(BasePage):
 class BelamaSignUpPage(BasePage):
     max_count = 1
 
-    # description = models.CharField(
-    #     max_length=255,
-    #     blank=True,
-    #     help_text="A short description of the page.",
-    # )
+    content_panels = BasePage.content_panels
 
-    content_panels = BasePage.content_panels + [
-        # FieldPanel("description"),
-    ]
-
-    graphql_fields = BasePage.graphql_fields + [
-        # GraphQLString("description", name="description"),
-    ]
+    graphql_fields = BasePage.graphql_fields
 
     parent_page_types = ["belama.BelamaIndexPage"]
 

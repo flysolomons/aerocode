@@ -1,4 +1,4 @@
-from wagtail.blocks import StructBlock, CharBlock, RichTextBlock
+from wagtail.blocks import StructBlock, CharBlock, RichTextBlock, BooleanBlock
 from grapple.helpers import register_streamfield_block
 from grapple.models import GraphQLString
 
@@ -7,6 +7,11 @@ from grapple.models import GraphQLString
 class MembershipBlock(StructBlock):
     title = CharBlock(required=True, max_length=100)
     price = CharBlock(required=True, max_length=100)
+    most_popular = BooleanBlock(
+        required=False,
+        default=False,
+        help_text="Check this box if this is the most popular membership",
+    )
     features = RichTextBlock(
         features=["ol", "ul"],
         blank=True,
@@ -18,6 +23,7 @@ class MembershipBlock(StructBlock):
         GraphQLString("title", name="title"),
         GraphQLString("price", name="price"),
         GraphQLString("features", name="features"),
+        GraphQLString("most_popular", name="mostPopular"),
     ]
 
     class Meta:

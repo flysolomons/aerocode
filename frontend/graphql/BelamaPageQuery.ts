@@ -10,7 +10,8 @@ export interface ImageBlock {
 export interface MembershipBlock {
   title: string;
   price: string;
-  features: string; // This is HTML content from RichTextBlock, not an array
+  features: string;
+  mostPopular: string; // Optional field for most popular membership
 }
 
 // Interface for the BelamaIndexPage
@@ -27,7 +28,7 @@ export interface BelamaIndexPage {
   __typename?: string;
 }
 
-export interface BelamaSignUpPage{
+export interface BelamaSignUpPage {
   heroTitle: string;
   heroImage: ImageBlock;
   seoTitle: string;
@@ -42,7 +43,7 @@ export interface BelamaPageData {
   pages: BelamaIndexPage[];
 }
 
-export interface BelamaSignUpPageData{
+export interface BelamaSignUpPageData {
   pages: BelamaSignUpPage[];
 }
 
@@ -63,6 +64,7 @@ export const GET_BELAMA_PAGE_QUERY = gql`
             title
             price
             features
+            mostPopular
           }
         }
         promoImage {
@@ -73,6 +75,7 @@ export const GET_BELAMA_PAGE_QUERY = gql`
             title
             price
             features
+            mostPopular
           }
         }
       }
@@ -81,10 +84,10 @@ export const GET_BELAMA_PAGE_QUERY = gql`
 `;
 
 export const GET_BELAMA_SIGN_UP_PAGE_QUERY = gql`
-query Pages {
-  pages(contentType: "belama.BelamaSignUpPage") {
-    ... on BelamaSignUpPage {
-      heroTitle
+  query Pages {
+    pages(contentType: "belama.BelamaSignUpPage") {
+      ... on BelamaSignUpPage {
+        heroTitle
         heroImage {
           url
         }
@@ -92,9 +95,9 @@ query Pages {
         subTitle
         url
         description
+      }
     }
   }
-}
 `;
 /**
  * Fetch Belama page data
@@ -156,7 +159,6 @@ export async function fetchBelamaPage(): Promise<BelamaIndexPage> {
   }
 }
 
-
 export async function fetchBelamaSignUpPage(): Promise<BelamaSignUpPage> {
   try {
     const { data } = await client.query<BelamaSignUpPageData>({
@@ -180,7 +182,6 @@ export async function fetchBelamaSignUpPage(): Promise<BelamaSignUpPage> {
         subTitle: "",
         url: "/belama/sign-up",
         description: "",
-        
       };
     }
     return {
