@@ -1,5 +1,5 @@
 import React from "react";
-import { stripHtmlTags } from "@/lib/utils";
+import parse from "html-react-parser";
 
 interface HeadingTextBlockProps {
   block: {
@@ -18,9 +18,9 @@ export default function HeadingTextBlock({ block }: HeadingTextBlockProps) {
         </h2>
       )}
       {block.text && (
-        <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed px-4 sm:px-6 lg:px-0 max-w-4xl mx-auto">
-          {stripHtmlTags(block.text)}
-        </p>
+        <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed px-4 sm:px-6 lg:px-0 max-w-4xl mx-auto">
+          {parse(block.text)}
+        </div>
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import { stripHtmlTags } from "@/lib/utils";
+import parse from "html-react-parser";
 interface SectionBlockProps {
   block: {
     blockType: string;
@@ -34,18 +34,26 @@ export default function SectionBlock({ block }: SectionBlockProps) {
         </div>
       )}
 
-      <div className={`${block.image ? "w-full lg:w-2/3" : "w-full"} p-2 sm:p-4 lg:p-6 ${
-        block.image ? (imageOnLeft ? "lg:ml-6 xl:ml-8" : "lg:mr-6 xl:mr-8") : ""
-      }`}>
+      <div
+        className={`${
+          block.image ? "w-full lg:w-2/3" : "w-full"
+        } p-2 sm:p-4 lg:p-6 ${
+          block.image
+            ? imageOnLeft
+              ? "lg:ml-6 xl:ml-8"
+              : "lg:mr-6 xl:mr-8"
+            : ""
+        }`}
+      >
         {block.heading && (
           <h2 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
             {block.heading}
           </h2>
         )}
         {block.text && (
-          <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
-            {stripHtmlTags(block.text)}
-          </p>
+          <div className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
+            {parse(block.text)}
+          </div>
         )}
       </div>
     </div>

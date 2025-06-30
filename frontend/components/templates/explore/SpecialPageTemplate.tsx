@@ -6,8 +6,7 @@ import RouteSpecialCard from "@/components/ui/cards/RouteSpecialCard";
 import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
 import Slider from "@/components/layout/Slider";
 import { SpecialPage } from "@/graphql/SpecialPageQuery";
-import { stripHtmlTags } from "@/lib/utils";
-import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
+import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import FlightSpecialInformation from "@/components/layout/sections/FlightSpecialInformation";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
@@ -104,9 +103,9 @@ export default function SpecialPageTemplate({
           {/* Description with validity period */}
           <div className="w-full mx-auto space-y-8 sm:space-y-8">
             {description && (
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {description}
-              </p>
+              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                {parse(description)}
+              </div>
             )}
             <FlightSpecialInformation
               bookingClass={bookingClass}
@@ -150,9 +149,7 @@ export default function SpecialPageTemplate({
                   </span>
                 </summary>
                 <div className="prose prose-sm sm:prose lg:prose-lg max-w-none w-full px-6 pb-6 pt-2 text-left">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: termsAndConditions }}
-                  />
+                  <div>{parse(termsAndConditions)}</div>
                 </div>
               </details>
             </div>

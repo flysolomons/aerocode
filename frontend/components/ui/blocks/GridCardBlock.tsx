@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { stripHtmlTags } from "@/lib/utils";
+import parse from "html-react-parser";
 
 interface GridCardBlockProps {
   item: {
@@ -32,9 +32,9 @@ export default function GridCardBlock({ item }: GridCardBlockProps) {
           </h3>
         )}
         {item.text && (
-          <p className="text-sm sm:text-base text-gray-600 leading-relaxed break-words">
-            {stripHtmlTags(item.text)}
-          </p>
+          <div className="text-sm sm:text-base text-gray-600 leading-relaxed break-words">
+            {parse(item.text)}
+          </div>
         )}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import parse from "html-react-parser";
 
 interface NewsCardProps {
   headline: string;
@@ -21,12 +22,16 @@ function NewsCard({ headline, image, date, description }: NewsCardProps) {
             <Image src={image} alt={headline} fill className="object-cover" />
           </div>
 
-          <div className="text-xs sm:text-sm lg:text-sm text-gray-500">{formattedDate}</div>
+          <div className="text-xs sm:text-sm lg:text-sm text-gray-500">
+            {formattedDate}
+          </div>
         </div>
         <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight">
           {headline}
         </h2>
-        <p className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed break-words overflow-hidden">{description}</p>
+        <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed break-words overflow-hidden">
+          {parse(description)}
+        </div>
       </div>
     </>
   );

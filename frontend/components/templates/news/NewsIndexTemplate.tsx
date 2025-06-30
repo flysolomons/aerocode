@@ -9,7 +9,6 @@ import SkeletonNewsCard from "@/components/layout/skeleton/SkeletonNewsCard";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import { useQuery } from "@apollo/client";
 import client from "@/lib/apolloClient";
-import { stripHtmlTags } from "@/lib/utils";
 import { useState } from "react";
 import {
   Article,
@@ -100,9 +99,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
                     headline={article.articleTitle}
                     image={article.heroImage.url}
                     date={article.firstPublishedAt}
-                    description={
-                      stripHtmlTags(article.body)?.substring(0, 200) + "..."
-                    }
+                    description={article.body}
                   />
                 </a>
               ) : (

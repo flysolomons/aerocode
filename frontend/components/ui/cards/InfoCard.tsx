@@ -1,5 +1,5 @@
 import React from "react";
-import { stripHtmlTags } from "@/lib/utils";
+import parse from "html-react-parser";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface InfoCardProps {
@@ -25,9 +25,9 @@ function InfoCard({ title, description, svg, url }: InfoCardProps) {
             {title}
           </h3>
         </div>
-        <p className="text-xs sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
-          {stripHtmlTags(description)}
-        </p>
+        <div className="text-xs sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
+          {parse(description)}
+        </div>
         <div className="flex justify-start mt-auto">
           <motion.a
             href={url}

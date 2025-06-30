@@ -4,7 +4,7 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import SpecialCard from "@/components/ui/cards/SpecialCard";
 import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
-import { stripHtmlTags } from "@/lib/utils";
+import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
 
@@ -51,9 +51,9 @@ export default function SpecialsIndexTemplate({
           <div className="space-y-8">
             {pageDescription && (
               <div className="mx-auto w-full">
-                <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                  {pageDescription}
-                </p>
+                <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                  {parse(pageDescription)}
+                </div>
               </div>
             )}
             {specials && specials.length > 0 ? (

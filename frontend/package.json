@@ -19,6 +19,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.16.0",
     "graphql": "^16.10.0",
+    "html-react-parser": "^5.2.5",
     "izitoast": "^1.4.0",
     "lottie-web": "^5.13.0",
     "lucide-react": "^0.512.0",
