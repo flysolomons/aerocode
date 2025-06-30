@@ -717,7 +717,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-sm text-black">
+                          <span className="text-sm text-black font-medium">
                             {travelers.adults}
                           </span>
                           <button
@@ -750,7 +750,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-sm text-black">
+                          <span className="text-sm text-black font-medium">
                             {travelers.children}
                           </span>
                           <button
@@ -783,7 +783,7 @@ export default function BookATripForm({
                           >
                             -
                           </button>
-                          <span className="text-sm text-black">
+                          <span className="text-sm text-black font-medium">
                             {travelers.infants}
                           </span>
                           <button
