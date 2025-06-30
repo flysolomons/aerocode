@@ -57,6 +57,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   },
 });
 
-// console.log("Apollo Client URL:", getGraphQLUrl());
+console.log("Apollo Client URL:", getGraphQLUrl());
 
 export default client;
