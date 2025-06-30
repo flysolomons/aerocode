@@ -320,7 +320,7 @@ export async function fetchHeaderDataServer(): Promise<TransformedHeaderData> {
       fetchPolicy: "network-only", // Always fetch fresh data on server
       errorPolicy: "all",
     });
-
+    console.log("graphql url1", (client.link as any).options.uri);
     // console.log("Server - Raw GraphQL data:", JSON.stringify(data, null, 2));
 
     const headerMenus =
