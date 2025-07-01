@@ -8,6 +8,7 @@ import pandas as pd
 import logging
 from django.db import IntegrityError
 from .models import SpecialRoute, Special, Route
+from core.models import Currency
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,13 @@ class SpecialRouteUploadView(View):
             logger.info(f"Excel file columns: {df.columns.tolist()}")
             logger.info(f"Excel file data:\n{df.to_string()}")
 
-            expected_columns = ["Special ID", "Route", "Starting Price", "Trip Type"]
+            expected_columns = [
+                "Special ID",
+                "Route",
+                "Starting Price",
+                "Trip Type",
+                "Currency",
+            ]
             if not all(col in df.columns for col in expected_columns):
                 missing_cols = [
                     col for col in expected_columns if col not in df.columns
@@ -55,6 +62,8 @@ class SpecialRouteUploadView(View):
                     "return",
                 ]:
                     invalid_fields.append("Trip Type")
+                if pd.isna(row["Currency"]):
+                    invalid_fields.append("Currency")
 
                 if invalid_fields:
                     skipped_rows.append(index)
@@ -84,6 +93,16 @@ class SpecialRouteUploadView(View):
                         skipped_rows.append(index)
                         continue
 
+                    # Find the Currency by currency_code
+                    try:
+                        currency_obj = Currency.objects.get(
+                            currency_code=row["Currency"]
+                        )
+                    except Currency.DoesNotExist:
+                        logger.error(f"Currency code {row['Currency']} does not exist")
+                        skipped_rows.append(index)
+                        continue
+
                     # Check if a special fare with this special and route already exists
                     existing_special_route = SpecialRoute.objects.filter(
                         special=special_obj, route=route_obj
@@ -103,6 +122,7 @@ class SpecialRouteUploadView(View):
                         route=route_obj,
                         starting_price=row["Starting Price"],
                         trip_type=row["Trip Type"].lower(),
+                        currency=currency_obj,
                     )
                     created_special_routes += 1
                     logger.info(
