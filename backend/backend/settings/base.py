@@ -278,3 +278,6 @@ CORS_ALLOW_HEADERS = [
 
 # Default primary key field type for all models
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+WAGTAILIMAGES_EXTENSIONS = ["avif", "gif", "jpg", "jpeg", "png", "webp", "svg"]

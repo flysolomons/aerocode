@@ -28,6 +28,44 @@ export const GET_HOMEPAGE = gql`
   }
 `;
 
+/*
+query Pages {
+    pages(contentType: "home.HomePage") {
+        ... on HomePage {
+            heroTitle
+            heroImage {
+                url
+            }
+            seoTitle
+            belamaImage {
+                url
+            }
+            specialRouteItems {
+                specialRoute {
+                    route {
+                        nameFull
+                    }
+                    startingPrice
+                    special {
+                        name
+                    }
+                }
+            }
+            allYouNeedItems {
+                pageDescription
+                pageUrl
+                pageHeroTitle
+                pageSvgIcon {
+                    url
+                }
+            }
+        }
+    }
+}
+
+
+*/
+
 export async function fetchHomePage(): Promise<HomePage> {
   try {
     const { data } = await client.query<HomePageData>({

@@ -47,7 +47,7 @@ class AllYouNeedPage(models.Model):
         GraphQLString("page_description", name="pageDescription"),
         GraphQLString("page_url", name="pageUrl"),
         GraphQLString("page_hero_title", name="pageHeroTitle"),
-        GraphQLString("page_svg_icon", name="pageSvgIcon"),
+        GraphQLImage("page_svg_icon", name="pageSvgIcon"),
     ]
 
     class Meta:

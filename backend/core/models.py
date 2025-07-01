@@ -1,6 +1,6 @@
 from django.db import models
 from wagtail.models import Page
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, FieldRowPanel
 from grapple.models import (
     GraphQLImage,
     GraphQLStreamfield,
@@ -60,10 +60,18 @@ class BasePage(Page):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel("hero_image", heading="Hero Image"),
-        FieldPanel("svg_icon", heading="SVG Icon"),
-        FieldPanel("description", heading="Description"),
-        FieldPanel("sub_title", heading="Subtitle"),
+        FieldRowPanel(
+            [
+                FieldPanel("hero_image", heading="Hero Image"),
+                FieldPanel("svg_icon", heading="SVG Icon"),
+            ]
+        ),
+        FieldRowPanel(
+            [
+                FieldPanel("description", heading="Description"),
+                FieldPanel("sub_title", heading="Subtitle"),
+            ]
+        ),
     ]
 
     graphql_fields = [
