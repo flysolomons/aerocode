@@ -28,7 +28,7 @@ export default function HomePageTemplate({
       <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
       {homePage.specialRouteItems && homePage.specialRouteItems.length > 0 && (
         <Container>
-          <div className="pt-8 md:pt-12 space-y-8 md:space-y-16">
+          <div className="py-24 space-y-8 md:space-y-16">
             <RouteSpecialSectionHomepage
               heading="Flight Specials"
               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
@@ -53,13 +53,12 @@ export default function HomePageTemplate({
         </Container>
       )}
       {destinations && destinations.length > 0 && (
-        <div className="min-h-[100vh] md:h-[calc(100vh)] flex items-center justify-center px-4 md:px-0 py-8 md:py-0">
+        <div className="w-full flex items-center justify-center px-4 md:px-0 py-12 md:py-20 lg:py-24">
           <div className="space-y-6 md:space-y-8 w-full max-w-none md:max-w-[85%]">
             <div className="space-y-2">
               <h2 className="discover-title text-2xl md:text-3xl text-center font-bold text-blue-500">
                 Discover New Horizons
               </h2>
-
               <span className="block text-center text-sm md:text-base px-4 md:px-0">
                 Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua
@@ -80,7 +79,7 @@ export default function HomePageTemplate({
       )}
       {homePage.belamaImage && homePage.belamaImage.url && (
         <div
-          className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
+          className="min-h-screen md:h-screen mt-24 space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
           style={{
             backgroundImage: `url(${homePage.belamaImage.url})`,
           }}

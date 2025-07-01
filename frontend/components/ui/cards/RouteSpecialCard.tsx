@@ -35,8 +35,15 @@ function RouteSpecialCard({
         </div>
         <div className="absolute bottom-2 sm:bottom-4 lg:bottom-4 left-2 sm:left-4 lg:left-4 text-white z-20 flex flex-col items-start">
           <p className="text-xs sm:text-sm lg:text-sm text-left">From</p>
-          <p className="text-xl sm:text-2xl lg:text-2xl font-bold text-left">
-            {currency ? `${currency} ${price}` : price}
+          <p className="text-xl sm:text-2xl lg:text-2xl text-left">
+            {currency ? (
+              <>
+                <span className="font-bold">{currency}</span>
+                <span className="font-medium"> {price}</span>
+              </>
+            ) : (
+              <span className="font-medium">{price}</span>
+            )}
           </p>
         </div>
       </div>

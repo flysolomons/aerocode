@@ -22,9 +22,9 @@ export default function RouteSpecialSectionHomepage({
           <div className="space-y-3 md:space-y-4 px-4 md:px-6 lg:px-0">
             <>
               <h2 className="text-2xl md:text-3xl lg:text-3xl text-center font-bold text-blue-500">
-                {heading} home
+                {heading}
               </h2>
-              <p className="block text-center text-sm md:text-base lg:text-base text-gray-700 leading-relaxed max-w-2xl md:max-w-4xl mx-auto px-2 md:px-0">
+              <p className="block text-center text-sm md:text-base lg:text-base text-gray-700 leading-relaxed mx-auto px-2 md:px-0">
                 {description}
               </p>
             </>
