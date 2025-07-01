@@ -42,6 +42,12 @@ export default function HomePageTemplate({
                 heroImage: { url: item.specialRoute.route.heroImage?.url },
               },
               startingPrice: String(item.specialRoute.startingPrice),
+              currency: item.specialRoute.currency
+                ? {
+                    currencyCode: item.specialRoute.currency.currencyCode,
+                    currencySymbol: item.specialRoute.currency.currencySymbol,
+                  }
+                : undefined,
             }))}
           />
         </div>

@@ -106,7 +106,10 @@ export default function RoutePageTemplate({
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
-            specials={specialRoutes}
+            specials={specialRoutes.map((special) => ({
+              ...special,
+              currency: special.currency,
+            }))}
           />
           {fares && fares.length > 0 && (
             <div className="space-y-6 sm:space-y-8">

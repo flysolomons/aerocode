@@ -23,6 +23,10 @@ export interface HomePage {
       special: {
         name: string;
       };
+      currency?: {
+        currencyCode: string;
+        currencySymbol: string;
+      };
     };
   }>;
   allYouNeedItems: Array<{
@@ -74,6 +78,10 @@ export const GET_HOMEPAGE = gql`
             startingPrice
             special {
               name
+            }
+            currency {
+              currencyCode
+              currencySymbol
             }
           }
         }

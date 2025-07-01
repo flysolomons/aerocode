@@ -28,6 +28,10 @@ export interface DestinationSpecialRoute {
     };
   };
   startingPrice?: string;
+  currency?: {
+    currencyCode: string;
+    currencySymbol: string;
+  };
 }
 
 // Interface for the Route
@@ -98,6 +102,10 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
             }
           }
           startingPrice
+          currency {
+            currencyCode
+            currencySymbol
+          }
         }
       }
     }
@@ -127,7 +135,27 @@ export async function fetchDestinationPage(
       country: data.destination.country || "",
       reasonsToVisit: data.destination.reasonsToVisit || [],
       travelRequirements: data.destination.travelRequirements || [],
-      routes: data.destination.routes || [],
+      routes: (data.destination.routes || []).map((route: any) => ({
+        ...route,
+        specialRoutes: (route.specialRoutes || []).map((sr: any) => ({
+          special: {
+            name: sr.special?.name || "",
+          },
+          route: sr.route
+            ? {
+                nameFull: sr.route.nameFull || "",
+                heroImage: sr.route.heroImage || { url: "/image.jpg" },
+              }
+            : undefined,
+          startingPrice: sr.startingPrice || "",
+          currency: sr.currency
+            ? {
+                currencyCode: sr.currency.currencyCode || "",
+                currencySymbol: sr.currency.currencySymbol || "",
+              }
+            : undefined,
+        })),
+      })),
       __typename: "Destination",
     };
   } catch (error) {

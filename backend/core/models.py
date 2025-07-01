@@ -56,7 +56,7 @@ class BasePage(Page):
     description = RichTextField(
         features=["bold", "italic"],
         blank=True,
-        help_text="A short description of the page.",
+        help_text="A description of the page.",
     )
 
     content_panels = Page.content_panels + [
@@ -66,12 +66,8 @@ class BasePage(Page):
                 FieldPanel("svg_icon", heading="SVG Icon"),
             ]
         ),
-        FieldRowPanel(
-            [
-                FieldPanel("description", heading="Description"),
-                FieldPanel("sub_title", heading="Subtitle"),
-            ]
-        ),
+        FieldPanel("description", heading="Description"),
+        FieldPanel("sub_title", heading="Subtitle"),
     ]
 
     graphql_fields = [

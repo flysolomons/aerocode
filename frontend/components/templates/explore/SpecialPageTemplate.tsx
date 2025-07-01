@@ -123,7 +123,10 @@ export default function SpecialPageTemplate({
             <RouteSpecialSection
               heading={`Associated Routes`}
               description="Take advantage of our special fares on these popular routes."
-              specials={specialRoutes}
+              specials={specialRoutes.map((special) => ({
+                ...special,
+                currency: special.currency,
+              }))}
             />
           )}
 

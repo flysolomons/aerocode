@@ -95,6 +95,7 @@ export default function SpecialsIndexTemplate({
                     price: route.startingPrice || "",
                     url: special.url,
                     route: route.route?.nameFull || "",
+                    currency: route.currency,
                   }))
                 )
                 .filter((slide) => slide.route && slide.image && slide.url)}

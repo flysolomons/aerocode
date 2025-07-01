@@ -12,6 +12,7 @@ export type RouteSpecial = {
   price?: string;
   url: string;
   route: string; // Added route property
+  currency?: { currencyCode: string; currencySymbol?: string };
 };
 
 type PropType = {
@@ -80,6 +81,7 @@ const ThumbnailCarousel: React.FC<PropType> = (props) => {
                   price={slide.price || ""}
                   image={slide.image}
                   specialName={slide.specialName}
+                  currency={slide.currency?.currencyCode}
                 />
               </div>
             ))}

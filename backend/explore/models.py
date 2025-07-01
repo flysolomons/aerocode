@@ -322,8 +322,9 @@ class Special(BasePage):
             label="Associated Routes and their Starting Prices",
             panels=[
                 FieldPanel("route", widget=forms.Select),
-                FieldPanel("starting_price"),
                 FieldPanel("trip_type"),
+                FieldPanel("starting_price"),
+                FieldPanel("currency", widget=forms.Select),
             ],
             help_text="Specify starting prices for routes associated with this special.",
         ),
@@ -371,8 +372,6 @@ class SpecialRoute(models.Model):
         help_text="Starting price for this special on this route",
     )
 
-    # add currency field here and connect it to the
-
     trip_type = models.CharField(
         max_length=20,
         choices=[
@@ -382,9 +381,19 @@ class SpecialRoute(models.Model):
         default="one way",
     )
 
+    currency = models.ForeignKey(
+        "core.Currency",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="special_routes",
+        help_text="Currency for the starting price",
+    )
+
     panels = [
         FieldPanel("route", widget=forms.Select),
         FieldPanel("starting_price"),
+        FieldPanel("currency", widget=forms.Select),
         FieldPanel("trip_type"),
     ]
 
@@ -396,6 +405,7 @@ class SpecialRoute(models.Model):
 
     graphql_fields = [
         GraphQLString("starting_price", name="startingPrice"),
+        GraphQLForeignKey("currency", "core.Currency"),
         GraphQLForeignKey("route", "explore.Route"),
         GraphQLForeignKey("special", "explore.Special"),
     ]

@@ -13,6 +13,10 @@ export interface SpecialRouteSummary {
   special: {
     name: string;
   };
+  currency?: {
+    currencyCode: string;
+    currencySymbol: string;
+  };
 }
 
 // Interface for Special
@@ -81,6 +85,10 @@ export const GET_SPECIALS_INDEX_PAGE_QUERY = gql`
         special {
           name
         }
+        currency {
+          currencyCode
+          currencySymbol
+        }
       }
     }
   }
@@ -125,6 +133,12 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
               special: {
                 name: route.special?.name || "",
               },
+              currency: route.currency
+                ? {
+                    currencyCode: route.currency.currencyCode || "",
+                    currencySymbol: route.currency.currencySymbol || "",
+                  }
+                : undefined,
             })) || [],
           __typename: "Special",
         })) || [],

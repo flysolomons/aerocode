@@ -69,7 +69,12 @@ export default function DestinationTemplate({
               heading={`${initialPage.country} Specials`}
               description="Check out our special fares and promotions for flights to this destination."
               specials={initialPage.routes
-                .flatMap((route) => route.specialRoutes || [])
+                .flatMap((route) =>
+                  (route.specialRoutes || []).map((special) => ({
+                    ...special,
+                    currency: special.currency,
+                  }))
+                )
                 .filter((special) => !!special)
                 .slice(0, 3)}
             />

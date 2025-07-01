@@ -7,6 +7,7 @@ interface RouteSpecialCardProps {
   price: string;
   image: string;
   specialName?: string;
+  currency?: string;
 }
 
 function RouteSpecialCard({
@@ -14,6 +15,7 @@ function RouteSpecialCard({
   price,
   image,
   specialName,
+  currency,
 }: RouteSpecialCardProps) {
   return (
     <>
@@ -33,8 +35,8 @@ function RouteSpecialCard({
         </div>
         <div className="absolute bottom-2 sm:bottom-4 lg:bottom-4 left-2 sm:left-4 lg:left-4 text-white z-20 flex flex-col items-start">
           <p className="text-xs sm:text-sm lg:text-sm text-left">From</p>
-          <p className="text-xl sm:text-2xl lg:text-2xl font-bold break-words text-left">
-            {price}
+          <p className="text-xl sm:text-2xl lg:text-2xl font-bold text-left">
+            {currency ? `${currency} ${price}` : price}
           </p>
         </div>
       </div>

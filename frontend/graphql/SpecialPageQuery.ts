@@ -19,6 +19,10 @@ export interface SpecialRoute {
   route: SpecialRouteRoute;
   special: SpecialRouteSpecial;
   startingPrice: string;
+  currency?: {
+    currencyCode: string;
+    currencySymbol: string;
+  };
 }
 
 // Interface for TravelPeriod in SpecialPage
@@ -98,6 +102,11 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
           name
         }
         startingPrice
+
+        currency {
+          currencyCode
+          currencySymbol
+        }
       }
     }
     specials {
@@ -163,6 +172,12 @@ export async function fetchSpecialPage(
             name: route.special?.name || "",
           },
           startingPrice: route.startingPrice || "0",
+          currency: route.currency
+            ? {
+                currencyCode: route.currency.currencyCode || "",
+                currencySymbol: route.currency.currencySymbol || "",
+              }
+            : undefined,
         })) || [],
       specials,
       __typename: "Special",

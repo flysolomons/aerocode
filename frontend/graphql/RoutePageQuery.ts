@@ -21,6 +21,10 @@ export interface SpecialRoute {
     };
   };
   startingPrice?: string;
+  currency?: {
+    currencyCode: string;
+    currencySymbol: string;
+  };
 }
 
 // Interface for the Route page
@@ -96,6 +100,10 @@ export const GET_ROUTE_PAGE_QUERY = gql`
           }
         }
         startingPrice
+        currency {
+          currencyCode
+          currencySymbol
+        }
       }
       parent {
         ... on Destination {
@@ -176,7 +184,26 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       departureAirportCode: route.departureAirportCode || "",
       arrivalAirportCode: route.arrivalAirportCode || "",
       fares: route.fares || [],
-      specialRoutes: route.specialRoutes || [],
+      specialRoutes: route.specialRoutes
+        ? route.specialRoutes.map((sr: any) => ({
+            special: {
+              name: sr.special?.name || "",
+            },
+            route: sr.route
+              ? {
+                  nameFull: sr.route.nameFull || "",
+                  heroImage: sr.route.heroImage || { url: "/image.jpg" },
+                }
+              : undefined,
+            startingPrice: sr.startingPrice || "",
+            currency: sr.currency
+              ? {
+                  currencyCode: sr.currency.currencyCode || "",
+                  currencySymbol: sr.currency.currencySymbol || "",
+                }
+              : undefined,
+          }))
+        : [],
       parent: route.parent ? { country: route.parent.country } : undefined,
       __typename: "Route",
     };
