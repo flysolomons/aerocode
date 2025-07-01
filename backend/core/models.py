@@ -38,6 +38,15 @@ class BasePage(Page):
         help_text="Image that will be displayed on this page's hero section",
     )
 
+    svg_icon = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="SVG icon for the page, used in other sections.",
+    )
+
     sub_title = models.CharField(
         max_length=100,
         blank=True,
@@ -52,6 +61,7 @@ class BasePage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("hero_image", heading="Hero Image"),
+        FieldPanel("svg_icon", heading="SVG Icon"),
         FieldPanel("description", heading="Description"),
         FieldPanel("sub_title", heading="Subtitle"),
     ]
@@ -59,6 +69,7 @@ class BasePage(Page):
     graphql_fields = [
         GraphQLString("hero_title", name="heroTitle"),
         GraphQLImage("hero_image", name="heroImage"),
+        GraphQLImage("svg_icon", name="svgIcon"),
         GraphQLString("description", name="description"),
         GraphQLString("sub_title", name="subTitle"),
     ]

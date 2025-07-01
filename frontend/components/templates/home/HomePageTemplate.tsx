@@ -29,7 +29,7 @@ export default function HomePageTemplate({
       <Container>
         <div className="pt-8 md:pt-12 space-y-8 md:space-y-16">
           <RouteSpecialSection
-            heading="Our Specials"
+            heading="Flight Specials"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
             specials={[
               {

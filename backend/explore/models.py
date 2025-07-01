@@ -401,7 +401,9 @@ class SpecialRoute(models.Model):
     ]
 
     def __str__(self):
-        return f"{self.special.name} - ({self.route.name_full})"
+        return (
+            f"{self.special.name} - ({self.route.name_full}) at {self.starting_price}"
+        )
 
     class Meta:
         verbose_name = "Special Route"

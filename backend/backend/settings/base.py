@@ -275,3 +275,6 @@ CORS_ALLOW_HEADERS = [
     "x-csrf-token",
     "x-requested-with",
 ]
+
+# Default primary key field type for all models
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
