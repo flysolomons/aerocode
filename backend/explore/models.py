@@ -2,7 +2,7 @@ from core.models import BasePage
 from wagtail.search import index
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from wagtail.fields import RichTextField, StreamField
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, FieldRowPanel
 from grapple.models import (
     GraphQLString,
     GraphQLStreamfield,
@@ -286,8 +286,12 @@ class Special(BasePage):
             [
                 FieldPanel("name", heading="Special Name"),
                 FieldPanel("special_code", heading="Special ID"),
-                FieldPanel("start_date", heading="Start Date"),
-                FieldPanel("end_date", heading="End Date"),
+                FieldRowPanel(
+                    [
+                        FieldPanel("start_date", heading="Start Date"),
+                        FieldPanel("end_date", heading="End Date"),
+                    ]
+                ),
                 FieldPanel("travel_periods", heading="Travel Periods"),
                 FieldPanel("booking_class", heading="Booking Class"),
                 FieldPanel("trip_type", heading="Trip Type"),
