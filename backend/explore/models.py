@@ -220,7 +220,12 @@ class Route(BasePage):
 
 @register_query_field("special")
 class Special(BasePage):
-    name = models.CharField(max_length=20, null=True, blank=False)
+    name = models.CharField(
+        max_length=20,
+        null=True,
+        blank=False,
+        help_text="Name of this special.",
+    )
 
     start_date = models.DateField(
         null=True, blank=False, help_text="Start date of the flight special"
@@ -245,7 +250,7 @@ class Special(BasePage):
         max_length=20,
         null=True,
         blank=False,
-        help_text="Class of booking for this flight special",
+        # help_text="Class of booking for this flight special",
     )
 
     trip_type = models.CharField(
@@ -255,7 +260,6 @@ class Special(BasePage):
             ("return", "Return"),
         ],
         default="Return",
-        help_text="Type of trip for this special (One Way or Return)",
     )
 
     flight_scope = models.CharField(
@@ -272,7 +276,7 @@ class Special(BasePage):
         null=True,
         blank=False,
         unique=True,
-        help_text="Unique ID for this flight special. This is used for tracking purposes only.",
+        help_text="Unique ID for this flight special - used for tracking purposes only.",
     )
 
     terms_and_conditions = RichTextField(
@@ -284,8 +288,12 @@ class Special(BasePage):
     content_panels = BasePage.content_panels + [
         MultiFieldPanel(
             [
-                FieldPanel("name", heading="Special Name"),
-                FieldPanel("special_code", heading="Special ID"),
+                FieldRowPanel(
+                    [
+                        FieldPanel("name", heading="Special Name"),
+                        FieldPanel("special_code", heading="Special ID"),
+                    ]
+                ),
                 FieldRowPanel(
                     [
                         FieldPanel("start_date", heading="Start Date"),
@@ -293,10 +301,18 @@ class Special(BasePage):
                     ]
                 ),
                 FieldPanel("travel_periods", heading="Travel Periods"),
-                FieldPanel("booking_class", heading="Booking Class"),
-                FieldPanel("trip_type", heading="Trip Type"),
-                FieldPanel("flight_scope", heading="Flight Scope"),
-                FieldPanel("discount", heading="Discount"),
+                FieldRowPanel(
+                    [
+                        FieldPanel("trip_type", heading="Trip Type"),
+                        FieldPanel("flight_scope", heading="Flight Scope"),
+                    ]
+                ),
+                FieldRowPanel(
+                    [
+                        FieldPanel("booking_class", heading="Booking Class"),
+                        FieldPanel("discount", heading="Discount"),
+                    ]
+                ),
                 FieldPanel("terms_and_conditions", heading="Terms and Conditions"),
             ],
             heading="Special Details",
