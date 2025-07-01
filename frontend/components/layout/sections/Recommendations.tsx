@@ -45,10 +45,10 @@ function Recommendations({
       <h2 className="text-3xl text-center font-bold text-blue-500">
         {heading}
       </h2>
-      <div className="grid grid-cols-3 gap-4 h-[25rem]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-auto">
         {/* Left column: two stacked cards */}
         <div className="space-y-4 h-full flex flex-col">
-          <div className="h-[12rem]">
+          <div className="h-[12rem] sm:h-[12rem] lg:h-[12rem]">
             {randomized[0] && (
               <DestinationCard
                 title={randomized[0].country}
@@ -58,7 +58,7 @@ function Recommendations({
               />
             )}
           </div>
-          <div className="h-[12rem]">
+          <div className="h-[12rem] sm:h-[12rem] lg:h-[12rem]">
             {randomized[1] && (
               <DestinationCard
                 title={randomized[1].country}
@@ -71,7 +71,7 @@ function Recommendations({
         </div>
 
         {/* Middle column: single tall card */}
-        <div className="h-full flex flex-col justify-center">
+        <div className="h-[12rem] lg:h-full flex flex-col justify-center">
           {randomized[2] && (
             <DestinationCard
               title={randomized[2].country}
@@ -84,7 +84,7 @@ function Recommendations({
 
         {/* Right column: two stacked cards */}
         <div className="space-y-4 h-full flex flex-col">
-          <div className="h-[12rem]">
+          <div className="h-[12rem] sm:h-[12rem] lg:h-[12rem]">
             {randomized[3] && (
               <DestinationCard
                 title={randomized[3].country}
@@ -94,7 +94,7 @@ function Recommendations({
               />
             )}
           </div>
-          <div className="h-[12rem]">
+          <div className="h-[12rem] sm:h-[12rem] lg:h-[12rem]">
             {randomized[4] && (
               <DestinationCard
                 title={randomized[4].country}
