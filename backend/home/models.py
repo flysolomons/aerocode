@@ -4,7 +4,6 @@ from grapple.models import (
     GraphQLImage,
     GraphQLCollection,
     GraphQLForeignKey,
-    GraphQLPage,
     GraphQLString,
 )
 from core.models import BasePage

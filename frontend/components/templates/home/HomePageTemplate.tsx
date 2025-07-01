@@ -1,6 +1,6 @@
 "use client";
 
-import { HomePage } from "@/graphql/HomePageQuery";
+import { HomePage, HomePageData } from "@/graphql/HomePageQuery";
 import Container from "@/components/layout/Container";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import InfoCard from "@/components/ui/cards/InfoCard";
@@ -14,14 +14,16 @@ import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSectio
 import MainCarousel from "@/components/layout/hero/MainCarousel";
 
 interface HomePageTemplateProps {
-  initialPage: HomePage;
+  initialPage: HomePageData;
 }
 
 export default function HomePageTemplate({
   initialPage,
 }: HomePageTemplateProps) {
-  const homePage = initialPage;
-  // console.log(data);
+  // Assume only one page is returned
+  const homePage = initialPage.pages[0];
+  const destinations = initialPage.destinations;
+  console.log("Homepage data", homePage);
   return (
     <>
       {/* <MainCarousel /> */}
@@ -31,44 +33,16 @@ export default function HomePageTemplate({
           <RouteSpecialSection
             heading="Flight Specials"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-            specials={[
-              {
-                special: {
-                  name: "Island Explorer",
-                },
-                route: {
-                  nameFull: "Honiara to Brisbane",
-                  heroImage: {
-                    url: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=300&fit=crop",
-                  },
-                },
-                startingPrice: "$899",
+            specials={homePage.specialRouteItems.map((item) => ({
+              special: {
+                name: item.specialRoute.special.name,
               },
-              {
-                special: {
-                  name: "Pacific Paradise",
-                },
-                route: {
-                  nameFull: "Honiara to Nadi",
-                  heroImage: {
-                    url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop",
-                  },
-                },
-                startingPrice: "$749",
+              route: {
+                nameFull: item.specialRoute.route.nameFull,
+                heroImage: { url: item.specialRoute.route.heroImage?.url },
               },
-              {
-                special: {
-                  name: "Vanuatu Adventure",
-                },
-                route: {
-                  nameFull: "Honiara to Port Vila",
-                  heroImage: {
-                    url: "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=400&h=300&fit=crop",
-                  },
-                },
-                startingPrice: "$649",
-              },
-            ]}
+              startingPrice: String(item.specialRoute.startingPrice),
+            }))}
           />
         </div>
       </Container>
@@ -92,38 +66,12 @@ export default function HomePageTemplate({
           <div className="h-auto">
             {/* <Slider /> */}
             <EmblaCarousel
-              slides={[
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
-                  country: "Papua New Guinea",
-                  subtitle: "Insert Subtitle here",
-                },
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop",
-                  country: "Fiji",
-                  subtitle: "Insert Subtitle here",
-                },
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&h=600&fit=crop",
-                  country: "Solomon Islands",
-                  subtitle: "Insert Subtitle here",
-                },
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&fit=crop",
-                  country: "New Zealand",
-                  subtitle: "Insert Subtitle here",
-                },
-                {
-                  imageUrl:
-                    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop",
-                  country: "Australia",
-                  subtitle: "Insert Subtitle here",
-                },
-              ]}
+              slides={destinations.map((dest) => ({
+                imageUrl: dest.heroImage.url,
+                country: dest.country,
+                subtitle: dest.subTitle,
+                url: dest.url,
+              }))}
             />
           </div>
           {/* </InViewWrapper> */}
@@ -139,7 +87,7 @@ export default function HomePageTemplate({
       <div
         className="min-h-screen md:h-screen space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
         style={{
-          backgroundImage: `url(/belama-lounge.png)`,
+          backgroundImage: `url(${homePage.belamaImage.url})`,
         }}
       >
         <div className="space-y-6 md:space-y-8 w-full max-w-4xl">
@@ -182,42 +130,19 @@ export default function HomePageTemplate({
                 </span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 text-slate-500 px-4 md:px-0">
-                <InfoCard
-                  title="Travel Alerts"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/travel-alert.svg"}
-                  url="#"
-                />
-                <InfoCard
-                  title="Check-In Information"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/check-in.svg"}
-                  url="#"
-                />
-                <InfoCard
-                  title="Travel Advice"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/travel-advice.svg"}
-                  url="#"
-                />
-                <InfoCard
-                  title="Baggage Information"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/baggage.svg"}
-                  url="#"
-                />
-                <InfoCard
-                  title="Conditions of Carriage"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/conditions.svg"}
-                  url="#"
-                />
-                <InfoCard
-                  title="Travel Alerts"
-                  description="Hay muchas variaciones de los pasajes de Lorem Ipsum disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le agregó humor,"
-                  svg={"./svg/travel-alert.svg"}
-                  url="#"
-                />
+                {homePage.allYouNeedItems.map((item, idx) => (
+                  <InfoCard
+                    key={idx}
+                    title={item.pageHeroTitle}
+                    description={item.pageDescription}
+                    svg={
+                      item.pageSvgIcon && item.pageSvgIcon.url
+                        ? item.pageSvgIcon.url
+                        : undefined
+                    }
+                    url={item.pageUrl}
+                  />
+                ))}
               </div>
             </div>
           </div>

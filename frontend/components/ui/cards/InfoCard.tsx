@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface InfoCardProps {
   title: string;
   description: string;
-  svg: string; // Now represents the src path to an SVG file
+  svg?: string; // Now optional, can be undefined
   url: string;
 }
 
@@ -15,11 +15,13 @@ function InfoCard({ title, description, svg, url }: InfoCardProps) {
       <div className="flex-1 space-y-2 sm:space-y-4 w-full h-full flex flex-col">
         <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex-shrink-0">
-            <img
-              src={svg}
-              alt={`${title} icon`}
-              className="w-6 h-6 sm:w-10 sm:h-10"
-            />
+            {svg ? (
+              <img
+                src={svg}
+                alt={`${title} icon`}
+                className="w-6 h-6 sm:w-10 sm:h-10"
+              />
+            ) : null}
           </div>
           <h3 className="text-base sm:text-xl font-semibold text-blue-500 text-left">
             {title}
