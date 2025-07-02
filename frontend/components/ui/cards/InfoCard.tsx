@@ -14,23 +14,28 @@ function InfoCard({ title, description, svg, url }: InfoCardProps) {
   // Function to extract URL from rich text if needed
   const extractUrl = (urlString: string): string => {
     // If it's already a plain URL, return as is
-    if (urlString.startsWith('/') || urlString.startsWith('http://') || urlString.startsWith('https://')) {
+    if (
+      urlString.startsWith("/") ||
+      urlString.startsWith("http://") ||
+      urlString.startsWith("https://")
+    ) {
       return urlString;
     }
-    
+
     // Try to extract URL from HTML anchor tag
     const linkMatch = urlString.match(/href\s*=\s*["']([^"']+)["']/i);
     if (linkMatch && linkMatch[1]) {
       return linkMatch[1];
     }
-    
+
     // If no href found, return the original string (fallback)
     return urlString;
   };
 
   const actualUrl = extractUrl(url);
   // Check if URL is external (starts with http:// or https://) or internal
-  const isExternalLink = actualUrl.startsWith("http://") || actualUrl.startsWith("https://");
+  const isExternalLink =
+    actualUrl.startsWith("http://") || actualUrl.startsWith("https://");
 
   return (
     <div className="bg-white rounded-3xl p-3 sm:p-6 shadow-sm border border-gray-300 transition-transform hover:scale-105 h-40 sm:h-auto">
@@ -49,8 +54,15 @@ function InfoCard({ title, description, svg, url }: InfoCardProps) {
             {title}
           </h3>
         </div>
-        <div className="text-xs sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
-          {parse(description)}
+        <div className="text-sm sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
+          {/* Mobile: use line clamping for overflow truncation */}
+          <div className="sm:hidden line-clamp-3">
+            {parse(description)}
+          </div>
+          {/* Desktop: show full text */}
+          <div className="hidden sm:block">
+            {parse(description)}
+          </div>
         </div>
         <div className="flex justify-start mt-auto">
           {isExternalLink ? (

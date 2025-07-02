@@ -7,6 +7,7 @@ import ReasonToVisitCard from "@/components/layout/sections/ReasonToVisit";
 import InfoCard from "@/components/ui/cards/InfoCard";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import Recommendations from "@/components/layout/sections/Recommendations";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import {
   DestinationPage,
   DestinationSpecialRoute,
@@ -55,7 +56,7 @@ export default function DestinationTemplate({
         breadcrumbs={initialPage.url}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
+        <div className="py-8 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           {initialPage.description && (
             <div className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
@@ -81,16 +82,29 @@ export default function DestinationTemplate({
             />
           )}
           {/* Reasons to Visit */}
-          {initialPage.reasonsToVisit &&
-            initialPage.reasonsToVisit.map((reason, index) => (
-              <ReasonToVisitCard
-                key={index}
-                title={reason.heading}
-                image={reason.image?.url || "/image.jpg"}
-                description={reason.text}
-                imageOnLeft={index % 2 !== 0}
-              />
-            ))}
+          {initialPage.reasonsToVisit && initialPage.reasonsToVisit.length > 0 && (
+            <div className="space-y-6 sm:space-y-8">
+              <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
+                  Why Visit {initialPage.country}
+                </h2>
+                <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  Discover what makes {initialPage.country} a must-visit destination.
+                </p>
+              </div>
+              <div className="space-y-8 sm:space-y-12 lg:space-y-16">
+                {initialPage.reasonsToVisit.map((reason, index) => (
+                  <ReasonToVisitCard
+                    key={index}
+                    title={reason.heading}
+                    image={reason.image?.url || "/image.jpg"}
+                    description={reason.text}
+                    imageOnLeft={index % 2 !== 0}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
@@ -163,6 +177,22 @@ export default function DestinationTemplate({
             excludeCountry={initialPage.country}
             heading="Explore more destinations"
           />
+          
+          {/* Book Now Button */}
+          <div className="flex justify-center pt-8">
+            <PrimaryButton
+              text="Book Now"
+              onClick={() => {
+                const widget = document.querySelector('.stripped-booking-widget');
+                if (widget) {
+                  widget.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  // Fallback to scroll to top where the hero with booking widget is
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+            />
+          </div>
         </div>
       </Container>
     </>

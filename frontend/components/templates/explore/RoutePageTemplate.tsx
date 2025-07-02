@@ -14,6 +14,7 @@ import {
   SpecialRoute,
 } from "@/graphql/RoutePageQuery";
 import Recommendations from "@/components/layout/sections/Recommendations";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import parse from "html-react-parser";
 
 interface RoutePageTemplateProps {
@@ -96,7 +97,7 @@ export default function RoutePageTemplate({
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          <StrippedBookingWidget />
+          <StrippedBookingWidget id="booking-widget" />
           {initialPage.description && (
             <div className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
@@ -195,6 +196,19 @@ export default function RoutePageTemplate({
             excludeCountry={initialPage.parent?.country}
             heading="Explore other destinations"
           />
+          
+          {/* Book Now Button */}
+          <div className="flex justify-center pt-8">
+            <PrimaryButton
+              text="Book Now"
+              onClick={() => {
+                const widget = document.getElementById('booking-widget');
+                if (widget) {
+                  widget.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            />
+          </div>
         </div>
       </Container>
     </>
