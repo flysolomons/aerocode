@@ -349,8 +349,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={departureInputRef}>
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                  Flying from?
+                </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
+                  className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
                   onClick={() => {
                     const newState = !isDeparturePopoverOpen;
                     setIsDeparturePopoverOpen(newState);
@@ -361,13 +364,10 @@ export default function BookATripForm({
                     }
                   }}
                 >
-                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-                    Flying from?
-                  </label>
                   <input
                     type="text"
                     placeholder="Select destination"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
+                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
                     readOnly
                     value={
                       selectedDeparture
@@ -525,8 +525,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={arrivalInputRef}>
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                  Flying to?
+                </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
+                  className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
                   onClick={() => {
                     const newState = !isArrivalPopoverOpen;
                     setIsArrivalPopoverOpen(newState);
@@ -537,13 +540,10 @@ export default function BookATripForm({
                     }
                   }}
                 >
-                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-                    Flying to?
-                  </label>
                   <input
                     type="text"
                     placeholder="Select destination"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
+                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
                     readOnly
                     value={
                       selectedArrival
@@ -803,8 +803,11 @@ export default function BookATripForm({
             </div>
             {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={travelersMobileRef}>
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                Travelling with?
+              </label>
               <div
-                className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
+                className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
                 onClick={() => {
                   const newState = !isTravelersMobileOpen;
                   setIsTravelersMobileOpen(newState);
@@ -815,13 +818,10 @@ export default function BookATripForm({
                   }
                 }}
               >
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-                  Travelling with?
-                </label>
                 <input
                   type="text"
                   placeholder="Select travellers"
-                  className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 px-2 sm:px-0"
+                  className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
                   readOnly
                   value={formatTravelers()}
                 />

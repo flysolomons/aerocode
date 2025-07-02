@@ -131,14 +131,14 @@ export function DateRangePicker({
   if (isMobile) {
     return (
       <div className={cn("w-full", className)}>
+        <label className="block text-left text-xs text-gray-600 font-mono font-semibold mb-2">
+          {placeholder}
+        </label>
         <div
-          className="cursor-pointer border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300"
+          className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-3 hover:border-blue-300"
           onClick={() => setOpen(true)}
         >
-          <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
-            {placeholder}
-          </label>
-          <div className="flex items-center w-full px-2 sm:px-0">
+          <div className="flex items-center w-full">
             {dateRange?.from ? (
               mode === "range" && dateRange.to ? (
                 <span className="text-gray-800 text-sm">
@@ -153,7 +153,7 @@ export function DateRangePicker({
             ) : (
               <span className="text-gray-400 text-sm">
                 {mode === "single"
-                  ? "Select departure date"
+                  ? "Pick your departure date"
                   : "Pick your travel dates"}
               </span>
             )}
@@ -282,7 +282,7 @@ export function DateRangePicker({
             <div className="flex flex-col items-start w-full">
               <label
                 className={cn(
-                  "block text-left text-xs font-semibold cursor-pointer mb-1 text-black",
+                  "block text-left text-xs font-mono font-semibold cursor-pointer mb-1 text-black",
                   labelClassName
                 )}
               >
@@ -303,7 +303,7 @@ export function DateRangePicker({
                 ) : (
                   <span className="text-gray-400 text-sm">
                     {mode === "single"
-                      ? "Select departure date"
+                      ? "Pick your departure date"
                       : "Pick your travel dates"}
                   </span>
                 )}
