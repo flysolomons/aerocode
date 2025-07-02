@@ -100,7 +100,7 @@ export default function RoutePageTemplate({
           <StrippedBookingWidget id="booking-widget" />
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+              <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>
@@ -155,59 +155,64 @@ export default function RoutePageTemplate({
               arrivalAirportCode={arrivalAirportCode}
             />
           </div>
-          <div className="space-y-6 sm:space-y-8">
-            <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
-                Other Routes to {initialPage.arrivalAirport}
-              </h2>
-              <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                Explore other popular flight routes that might interest you.
-              </p>
-            </div>
+          {(loadingRelatedRoutes || relatedRoutes.length > 0) && (
+            <div className="space-y-6 sm:space-y-8">
+              <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+                  Other Routes to {initialPage.arrivalAirport}
+                </h2>
+                <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  Explore other popular flight routes that might interest you.
+                </p>
+              </div>
 
-            {loadingRelatedRoutes ? (
-              <div className="text-center py-8 sm:py-12">
-                <div className="text-sm sm:text-base text-gray-600">
-                  Loading related routes...
+              {loadingRelatedRoutes ? (
+                <div className="text-center py-8 sm:py-12">
+                  <div className="text-sm sm:text-base text-gray-600">
+                    Loading related routes...
+                  </div>
                 </div>
-              </div>
-            ) : relatedRoutes.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                {relatedRoutes.map((route, index) => (
-                  <RouteCard
-                    key={index}
-                    origin={route.departureAirport}
-                    destination={route.arrivalAirport}
-                    url={route.url}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 sm:py-12">
-                <div className="text-sm sm:text-base text-gray-600">
-                  No other routes to {initialPage.arrivalAirport} are currently
-                  available.
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                  {relatedRoutes.map((route, index) => (
+                    <RouteCard
+                      key={index}
+                      origin={route.departureAirport}
+                      destination={route.arrivalAirport}
+                      url={route.url}
+                    />
+                  ))}
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
           {/* Recommendation Section */}
           <Recommendations
             excludeCountry={initialPage.parent?.country}
             heading="Explore other destinations"
           />
-          
-          {/* Book Now Button */}
-          <div className="flex justify-center pt-8">
-            <PrimaryButton
-              text="Book Now"
-              onClick={() => {
-                const widget = document.getElementById('booking-widget');
-                if (widget) {
-                  widget.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            />
+
+          {/* Ready to Fly Section */}
+          <div className="text-center space-y-6">
+            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
+              Ready to Fly?
+            </h2>
+            <div className="flex justify-center">
+              <PrimaryButton
+                text="Book Now"
+                onClick={() => {
+                  const widget = document.querySelector(
+                    ".stripped-booking-widget"
+                  );
+                  if (widget) {
+                    widget.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    // Fallback to scroll to top where the hero with booking widget is
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
       </Container>
