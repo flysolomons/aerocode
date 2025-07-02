@@ -1,5 +1,6 @@
 "use client";
 import DestinationCard from "@/components/ui/cards/DestinationCard";
+import RecommendationCarousel from "@/components/layout/carousel/RecommendationCarousel";
 import {
   fetchAllDestinations,
   Destination,
@@ -45,7 +46,22 @@ function Recommendations({
       <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500 text-center">
         {heading}
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-auto">
+      
+      {/* Mobile: Carousel */}
+      <div className="lg:hidden">
+        <RecommendationCarousel
+          slides={randomized.map((dest) => ({
+            image: dest.heroImage.url,
+            title: dest.country,
+            label: dest.heroTitle,
+            url: dest.url,
+          }))}
+          options={{ align: "start", loop: false }}
+        />
+      </div>
+
+      {/* Desktop: Grid layout */}
+      <div className="hidden lg:grid grid-cols-3 gap-4 h-auto">
         {/* Left column: two stacked cards */}
         <div className="space-y-4 h-full flex flex-col">
           <div className="h-[12rem] sm:h-[12rem] lg:h-[12rem]">

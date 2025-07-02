@@ -9,7 +9,7 @@ interface RouteCardProps {
 function RouteCard({ origin, destination, url }: RouteCardProps) {
   const content = (
     <div className="px-4 py-4 bg-white rounded-2xl shadow hover:shadow-md transition-shadow cursor-pointer">
-      <span>
+      <span className="text-sm sm:text-base lg:text-base">
         {origin} to {destination}
       </span>
     </div>
