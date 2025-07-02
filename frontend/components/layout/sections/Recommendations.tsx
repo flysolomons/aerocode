@@ -43,10 +43,10 @@ function Recommendations({
   // Always render the structure, but only show cards if data exists
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500 text-center">
+      <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500 text-center">
         {heading}
       </h2>
-      
+
       {/* Mobile: Carousel */}
       <div className="lg:hidden">
         <RecommendationCarousel

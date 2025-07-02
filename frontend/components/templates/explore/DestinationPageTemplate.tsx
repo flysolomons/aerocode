@@ -176,11 +176,11 @@ export default function DestinationTemplate({
           {/* Recommendation Section */}
           <Recommendations
             excludeCountry={initialPage.country}
-            heading="Explore more destinations"
-          />{" "}
+            heading="Explore More Destinations"
+          />
           {/* Ready to Fly Section */}
           <div className="text-center space-y-6">
-            <h2 className="text-xl sm:text-xxl lg:text-2xl font-semibold text-blue-500">
+            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
               Ready to Fly?
             </h2>
             <div className="flex justify-center">
