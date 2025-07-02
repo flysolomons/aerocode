@@ -21,7 +21,7 @@ export default function HomePageTemplate({
   // Assume only one page is returned
   const homePage = initialPage.pages[0];
   const destinations = initialPage.destinations;
-  console.log("Homepage data", homePage);
+  // console.log("Homepage data", homePage);
   return (
     <>
       {/* <MainCarousel /> */}

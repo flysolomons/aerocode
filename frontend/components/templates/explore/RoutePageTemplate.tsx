@@ -14,6 +14,7 @@ import {
   SpecialRoute,
 } from "@/graphql/RoutePageQuery";
 import Recommendations from "@/components/layout/sections/Recommendations";
+import parse from "html-react-parser";
 
 interface RoutePageTemplateProps {
   initialPage: RoutePage | null;
@@ -98,9 +99,9 @@ export default function RoutePageTemplate({
           <StrippedBookingWidget />
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
-              </p>
+              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                {parse(initialPage.description)}
+              </div>
             </div>
           )}
           <RouteSpecialSection

@@ -98,11 +98,16 @@ class TravelRequirementBlock(StructBlock):
         help_text="A link to the visa requirements",
         required=True,
     )
+    svg_icon = ImageChooserBlock(
+        required=False,
+        help_text="SVG icon for the travel requirement card",
+    )
 
     graphql_fields = [
         GraphQLString("title", name="title"),
         GraphQLString("description", name="description"),
         GraphQLString("link", name="link"),
+        GraphQLImage("svg_icon", name="svgIcon"),
     ]
 
     class Meta:

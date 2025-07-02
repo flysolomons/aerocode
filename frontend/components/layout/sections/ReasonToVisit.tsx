@@ -1,4 +1,5 @@
 import Image from "next/image";
+import parse from "html-react-parser";
 
 interface ReasonToVisitCardProps {
   title: string;
@@ -33,9 +34,9 @@ function ReasonToVisitCard({
           <h2 className="text-xl sm:text-2xl lg:text-2xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
             {title}
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
-            {description}
-          </p>
+          <div className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
+            {parse(description)}
+          </div>
         </div>
       </div>
     </>

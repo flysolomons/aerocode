@@ -15,6 +15,7 @@ import {
   RouteSearchResult,
   fetchRoutesByCountry,
 } from "@/graphql/RoutePageQuery";
+import parse from "html-react-parser";
 
 interface DestinationTemplateProps {
   initialPage: DestinationPage;
@@ -57,9 +58,9 @@ export default function DestinationTemplate({
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
-              </p>
+              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                {parse(initialPage.description)}
+              </div>
             </div>
           )}
           {initialPage.routes?.some(
@@ -110,8 +111,8 @@ export default function DestinationTemplate({
                     <InfoCard
                       key={index}
                       title={requirement.title}
-                      svg={"<svg>...</svg> "}
-                      url="<url>"
+                      svg={requirement.svgIcon?.url || ""}
+                      url={requirement.link || ""}
                       description={requirement.description}
                     />
                   ))}

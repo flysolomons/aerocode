@@ -14,6 +14,10 @@ export interface SectionBlock {
 export interface TravelRequirementBlock {
   title: string;
   description: string;
+  svgIcon?: {
+    url: string;
+  };
+  link?: string;
 }
 
 // Interface for Special Route in destination context
@@ -36,12 +40,8 @@ export interface DestinationSpecialRoute {
 
 // Interface for the Route
 export interface Route {
-  name: string;
-  nameFull: string;
-  url: string;
-  heroImage?: {
-    url: string;
-  };
+  departureAirport: string;
+  arrivalAirport: string;
   specialRoutes?: DestinationSpecialRoute[];
 }
 
@@ -86,6 +86,10 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
         ... on TravelRequirementBlock {
           title
           description
+          svgIcon {
+            url
+          }
+          link
         }
       }
       routes {
@@ -136,7 +140,8 @@ export async function fetchDestinationPage(
       reasonsToVisit: data.destination.reasonsToVisit || [],
       travelRequirements: data.destination.travelRequirements || [],
       routes: (data.destination.routes || []).map((route: any) => ({
-        ...route,
+        departureAirport: route.departureAirport || "",
+        arrivalAirport: route.arrivalAirport || "",
         specialRoutes: (route.specialRoutes || []).map((sr: any) => ({
           special: {
             name: sr.special?.name || "",
