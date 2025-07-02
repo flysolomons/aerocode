@@ -42,7 +42,7 @@ function Recommendations({
   // Always render the structure, but only show cards if data exists
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
+      <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500 text-center">
         {heading}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-auto">
