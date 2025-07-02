@@ -59,7 +59,7 @@ export default function DestinationTemplate({
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>
