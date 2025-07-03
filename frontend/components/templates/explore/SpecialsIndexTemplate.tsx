@@ -7,6 +7,7 @@ import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
 import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
+import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -83,7 +84,7 @@ export default function SpecialsIndexTemplate({
 
           {/* Find great deals section, now spaced by parent space-y-6/sm:space-y-8 */}
           <div className="w-full mx-auto text-center space-y-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
+            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
               Browse Special Fares
             </h2>
             <ThumbnailCarousel
@@ -100,6 +101,28 @@ export default function SpecialsIndexTemplate({
                 )
                 .filter((slide) => slide.route && slide.image && slide.url)}
             />
+          </div>
+
+          <div className="text-center space-y-6">
+            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
+              Ready to Fly?
+            </h2>
+            <div className="flex justify-center">
+              <PrimaryButton
+                text="Book Now"
+                onClick={() => {
+                  const widget = document.querySelector(
+                    ".stripped-booking-widget"
+                  );
+                  if (widget) {
+                    widget.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    // Fallback to scroll to top where the hero with booking widget is
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
       </Container>

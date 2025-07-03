@@ -96,7 +96,7 @@ export default function RoutePageTemplate({
         onColorCalculated={setGradientStartColor}
       />
       <Container>
-        <div className="pt-12 sm:pt-12 lg:pt-8 pb-12 sm:pb-12 lg:pb-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
+        <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           <div className="space-y-8">
             <StrippedBookingWidget id="booking-widget" />
             {initialPage.description && (
@@ -118,7 +118,7 @@ export default function RoutePageTemplate({
           {fares && fares.length > 0 && (
             <div className="space-y-6 sm:space-y-8">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+                <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                   Year Round Fares
                 </h2>
                 <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
@@ -141,7 +141,7 @@ export default function RoutePageTemplate({
           )}
           <div className="space-y-6 sm:space-y-8">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+              <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                 Flight Information
               </h2>
               <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
@@ -160,7 +160,7 @@ export default function RoutePageTemplate({
           {(loadingRelatedRoutes || relatedRoutes.length > 0) && (
             <div className="space-y-6 sm:space-y-8">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-500">
+                <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                   Other Routes to {initialPage.arrivalAirport}
                 </h2>
                 <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">

@@ -11,6 +11,7 @@ export interface Fare {
 
 // Interface for Special Routes
 export interface SpecialRoute {
+  isExpired: string;
   special: {
     name: string;
   };
@@ -89,7 +90,8 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         tripType
         currency
       }
-      specialRoutes {
+      specialRoutes(limit: 100) {
+        isExpired
         special {
           name
         }
@@ -185,24 +187,27 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       arrivalAirportCode: route.arrivalAirportCode || "",
       fares: route.fares || [],
       specialRoutes: route.specialRoutes
-        ? route.specialRoutes.map((sr: any) => ({
-            special: {
-              name: sr.special?.name || "",
-            },
-            route: sr.route
-              ? {
-                  nameFull: sr.route.nameFull || "",
-                  heroImage: sr.route.heroImage || { url: "/image.jpg" },
-                }
-              : undefined,
-            startingPrice: sr.startingPrice || "",
-            currency: sr.currency
-              ? {
-                  currencyCode: sr.currency.currencyCode || "",
-                  currencySymbol: sr.currency.currencySymbol || "",
-                }
-              : undefined,
-          }))
+        ? route.specialRoutes
+            .filter((sr: any) => sr.isExpired !== "true")
+            .map((sr: any) => ({
+              isExpired: sr.isExpired || "",
+              special: {
+                name: sr.special?.name || "",
+              },
+              route: sr.route
+                ? {
+                    nameFull: sr.route.nameFull || "",
+                    heroImage: sr.route.heroImage || { url: "/image.jpg" },
+                  }
+                : undefined,
+              startingPrice: sr.startingPrice || "",
+              currency: sr.currency
+                ? {
+                    currencyCode: sr.currency.currencyCode || "",
+                    currencySymbol: sr.currency.currencySymbol || "",
+                  }
+                : undefined,
+            }))
         : [],
       parent: route.parent ? { country: route.parent.country } : undefined,
       __typename: "Route",

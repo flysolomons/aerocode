@@ -15,6 +15,8 @@ from grapple.helpers import register_query_field
 from django.db import models
 from django.core.exceptions import ValidationError
 from django import forms
+from django.utils import timezone
+import pytz
 from .blocks import PeriodBlock
 
 
@@ -330,6 +332,16 @@ class Special(BasePage):
         ),
     ]
 
+    @property
+    def is_expired(self):
+        """Check if this special has expired based on its end date using Solomon Islands timezone."""
+        if self.end_date:
+            # Use Solomon Islands timezone (Pacific/Guadalcanal)
+            solomon_tz = pytz.timezone("Pacific/Guadalcanal")
+            solomon_now = timezone.now().astimezone(solomon_tz).date()
+            return solomon_now > self.end_date
+        return False
+
     graphql_fields = BasePage.graphql_fields + [
         GraphQLString("start_date", name="startDate"),
         GraphQLString("end_date", name="endDate"),
@@ -341,6 +353,7 @@ class Special(BasePage):
         GraphQLString("terms_and_conditions", name="termsAndConditions"),
         GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
         GraphQLString("name", name="specialName"),
+        GraphQLString("is_expired", name="isExpired"),
     ]
 
     parent_page_types = ["explore.SpecialsIndexPage"]
@@ -403,11 +416,22 @@ class SpecialRoute(models.Model):
             self.trip_type, self.trip_type
         )
 
+    @property
+    def is_expired(self):
+        """Check if this special route has expired based on the special's end date using Solomon Islands timezone."""
+        if self.special and self.special.end_date:
+            # Use Solomon Islands timezone (Pacific/Guadalcanal)
+            solomon_tz = pytz.timezone("Pacific/Guadalcanal")
+            solomon_now = timezone.now().astimezone(solomon_tz).date()
+            return solomon_now > self.special.end_date
+        return False
+
     graphql_fields = [
         GraphQLString("starting_price", name="startingPrice"),
         GraphQLForeignKey("currency", "core.Currency"),
         GraphQLForeignKey("route", "explore.Route"),
         GraphQLForeignKey("special", "explore.Special"),
+        GraphQLString("is_expired", name="isExpired"),
     ]
 
     def __str__(self):

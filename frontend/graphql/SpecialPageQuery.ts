@@ -16,6 +16,7 @@ export interface SpecialRouteSpecial {
 
 // Interface for SpecialRoute
 export interface SpecialRoute {
+  isExpired: string;
   route: SpecialRouteRoute;
   special: SpecialRouteSpecial;
   startingPrice: string;
@@ -33,6 +34,7 @@ export interface TravelPeriod {
 
 // Interface for the Special page
 export interface SpecialPage {
+  isExpired: string;
   heroTitle: string;
   heroImage: {
     url: string;
@@ -57,6 +59,7 @@ export interface SpecialPage {
 
 // Interface for summary specials (used in specials array)
 export interface SpecialSummary {
+  isExpired: string;
   name: string;
   endDate: string;
   subTitle: string;
@@ -69,6 +72,7 @@ export interface SpecialSummary {
 export const GET_SPECIAL_PAGE_QUERY = gql`
   query GetSpecial($slug: String!) {
     special(slug: $slug) {
+      isExpired
       heroTitle
       heroImage {
         url
@@ -92,6 +96,7 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
       }
       termsAndConditions
       specialRoutes {
+        isExpired
         route {
           nameFull
           heroImage {
@@ -102,7 +107,6 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
           name
         }
         startingPrice
-
         currency {
           currencyCode
           currencySymbol
@@ -110,6 +114,7 @@ export const GET_SPECIAL_PAGE_QUERY = gql`
       }
     }
     specials {
+      isExpired
       name
       endDate
       subTitle
@@ -134,15 +139,19 @@ export async function fetchSpecialPage(
       return null;
     } // Get the special data
     const special = data.special;
-    // Get the specials array
-    const specials: SpecialSummary[] = (data.specials || []).map((s: any) => ({
-      name: s.name || "",
-      endDate: s.endDate || "",
-      subTitle: s.subTitle || "",
-      heroImage: s.heroImage || { url: "/hero.jpg" },
-      url: s.url || "",
-    }));
+    // Get the specials array - filter out expired specials and the current special
+    const specials: SpecialSummary[] = (data.specials || [])
+      .filter((s: any) => s.isExpired !== "true" && s.name !== special.name)
+      .map((s: any) => ({
+        isExpired: s.isExpired || "",
+        name: s.name || "",
+        endDate: s.endDate || "",
+        subTitle: s.subTitle || "",
+        heroImage: s.heroImage || { url: "/hero.jpg" },
+        url: s.url || "",
+      }));
     return {
+      isExpired: special.isExpired || "",
       heroTitle: special.heroTitle || "",
       heroImage: special.heroImage || { url: "/hero.jpg" },
       url: special.url || "",
@@ -163,22 +172,25 @@ export async function fetchSpecialPage(
         })) || [],
       termsAndConditions: special.termsAndConditions || "",
       specialRoutes:
-        special.specialRoutes?.map((route: any) => ({
-          route: {
-            nameFull: route.route?.nameFull || "",
-            heroImage: route.route?.heroImage || { url: "/image.jpg" },
-          },
-          special: {
-            name: route.special?.name || "",
-          },
-          startingPrice: route.startingPrice || "0",
-          currency: route.currency
-            ? {
-                currencyCode: route.currency.currencyCode || "",
-                currencySymbol: route.currency.currencySymbol || "",
-              }
-            : undefined,
-        })) || [],
+        special.specialRoutes
+          ?.filter((route: any) => route.isExpired !== "true")
+          .map((route: any) => ({
+            isExpired: route.isExpired || "",
+            route: {
+              nameFull: route.route?.nameFull || "",
+              heroImage: route.route?.heroImage || { url: "/image.jpg" },
+            },
+            special: {
+              name: route.special?.name || "",
+            },
+            startingPrice: route.startingPrice || "0",
+            currency: route.currency
+              ? {
+                  currencyCode: route.currency.currencyCode || "",
+                  currencySymbol: route.currency.currencySymbol || "",
+                }
+              : undefined,
+          })) || [],
       specials,
       __typename: "Special",
     };

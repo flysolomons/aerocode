@@ -88,6 +88,9 @@ export default function SpecialPageTemplate({
   // Extract specials for the carousel
   const specials = initialPage?.specials || [];
 
+  // Check if the current special is expired using the isExpired field
+  const isCurrentSpecialExpired = initialPage?.isExpired === "true";
+
   return (
     <>
       <SecondaryHero
@@ -107,15 +110,47 @@ export default function SpecialPageTemplate({
                 {parse(description)}
               </div>
             )}
-            <FlightSpecialInformation
-              bookingClass={bookingClass}
-              discount={discount}
-              tripType={tripType}
-              flightScope={flightScope}
-              travelPeriods={travelPeriods}
-              startDate={startDate}
-              endDate={endDate}
-            />
+
+            {/* Show expired message or flight information */}
+            {isCurrentSpecialExpired ? (
+              <div className="w-full max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+                <div className="flex justify-center mb-4">
+                  <svg
+                    className="w-12 h-12 text-red-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-red-700 mb-2">
+                  Special Offer Expired
+                </h3>
+                <p className="text-red-600 mb-4">
+                  Sorry! The flight special you're looking for has expired.
+                  Please browse some of our other specials below.
+                </p>
+                <p className="text-sm text-red-500">
+                  This special expired on {formatDate(endDate)}
+                </p>
+              </div>
+            ) : (
+              <FlightSpecialInformation
+                bookingClass={bookingClass}
+                discount={discount}
+                tripType={tripType}
+                flightScope={flightScope}
+                travelPeriods={travelPeriods}
+                startDate={startDate}
+                endDate={endDate}
+              />
+            )}
           </div>
 
           {/* Route specials section */}
@@ -159,24 +194,46 @@ export default function SpecialPageTemplate({
           )}
 
           {/*This section will display specials carousel NOT route specials */}
-          <div className="w-full mx-auto text-center space-y-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
-              Browse More Flight Specials
-            </h2>
+          {specials && specials.length > 0 && (
+            <div className="w-full mx-auto text-center space-y-8">
+              <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
+                Browse More Flight Specials
+              </h2>
 
-            <ThumbnailCarouselSpecialCard
-              slides={specials.map((special) => ({
-                specialName: special.name,
-                image: special.heroImage?.url,
-                url: special.url,
-                description: special.subTitle,
-                expires: special.endDate,
-              }))}
-            />
-          </div>
+              <ThumbnailCarouselSpecialCard
+                slides={specials.map((special) => ({
+                  specialName: special.name,
+                  image: special.heroImage?.url,
+                  url: special.url,
+                  description: special.subTitle,
+                  expires: special.endDate,
+                }))}
+              />
+            </div>
+          )}
 
           {/* Book Now CTA button */}
-          <PrimaryButton text="Book Now" />
+          <div className="text-center space-y-6">
+            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
+              Ready to Fly?
+            </h2>
+            <div className="flex justify-center">
+              <PrimaryButton
+                text="Book Now"
+                onClick={() => {
+                  const widget = document.querySelector(
+                    ".stripped-booking-widget"
+                  );
+                  if (widget) {
+                    widget.scrollIntoView({ behavior: "smooth" });
+                  } else {
+                    // Fallback to scroll to top where the hero with booking widget is
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              />
+            </div>
+          </div>
         </div>
       </Container>
     </>

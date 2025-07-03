@@ -22,6 +22,7 @@ export interface TravelRequirementBlock {
 
 // Interface for Special Route in destination context
 export interface DestinationSpecialRoute {
+  isExpired: string;
   special: {
     name: string;
   };
@@ -92,10 +93,11 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
           link
         }
       }
-      routes {
+      routes(limit: 100) {
         departureAirport
         arrivalAirport
         specialRoutes {
+          isExpired
           special {
             name
           }
@@ -142,24 +144,27 @@ export async function fetchDestinationPage(
       routes: (data.destination.routes || []).map((route: any) => ({
         departureAirport: route.departureAirport || "",
         arrivalAirport: route.arrivalAirport || "",
-        specialRoutes: (route.specialRoutes || []).map((sr: any) => ({
-          special: {
-            name: sr.special?.name || "",
-          },
-          route: sr.route
-            ? {
-                nameFull: sr.route.nameFull || "",
-                heroImage: sr.route.heroImage || { url: "/image.jpg" },
-              }
-            : undefined,
-          startingPrice: sr.startingPrice || "",
-          currency: sr.currency
-            ? {
-                currencyCode: sr.currency.currencyCode || "",
-                currencySymbol: sr.currency.currencySymbol || "",
-              }
-            : undefined,
-        })),
+        specialRoutes: (route.specialRoutes || [])
+          .filter((sr: any) => sr.isExpired !== "true")
+          .map((sr: any) => ({
+            isExpired: sr.isExpired || "",
+            special: {
+              name: sr.special?.name || "",
+            },
+            route: sr.route
+              ? {
+                  nameFull: sr.route.nameFull || "",
+                  heroImage: sr.route.heroImage || { url: "/image.jpg" },
+                }
+              : undefined,
+            startingPrice: sr.startingPrice || "",
+            currency: sr.currency
+              ? {
+                  currencyCode: sr.currency.currencyCode || "",
+                  currencySymbol: sr.currency.currencySymbol || "",
+                }
+              : undefined,
+          })),
       })),
       __typename: "Destination",
     };

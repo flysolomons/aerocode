@@ -21,6 +21,7 @@ export interface SpecialRouteSummary {
 
 // Interface for Special
 export interface Special {
+  isExpired: string;
   name: string;
   heroImage: {
     url: string;
@@ -67,6 +68,7 @@ export const GET_SPECIALS_INDEX_PAGE_QUERY = gql`
       }
     }
     specials {
+      isExpired
       name
       heroImage {
         url
@@ -115,33 +117,36 @@ export async function fetchSpecialsIndexPage(): Promise<SpecialsIndexPage> {
     return {
       pageMetadata,
       specials:
-        data.specials?.map((special: any) => ({
-          name: special.name || "",
-          heroImage: special.heroImage || { url: "/default-special.jpg" },
-          url: special.url || "",
-          subTitle: special.subTitle || "",
-          endDate: special.endDate || "",
-          specialRoutes:
-            special.specialRoutes?.map((route: any) => ({
-              route: {
-                nameFull: route.route?.nameFull || "",
-                heroImage: route.route?.heroImage || {
-                  url: "/default-special.jpg",
+        data.specials
+          ?.filter((special: any) => special.isExpired !== "true")
+          .map((special: any) => ({
+            isExpired: special.isExpired || "",
+            name: special.name || "",
+            heroImage: special.heroImage || { url: "/default-special.jpg" },
+            url: special.url || "",
+            subTitle: special.subTitle || "",
+            endDate: special.endDate || "",
+            specialRoutes:
+              special.specialRoutes?.map((route: any) => ({
+                route: {
+                  nameFull: route.route?.nameFull || "",
+                  heroImage: route.route?.heroImage || {
+                    url: "/default-special.jpg",
+                  },
                 },
-              },
-              startingPrice: route.startingPrice || "",
-              special: {
-                name: route.special?.name || "",
-              },
-              currency: route.currency
-                ? {
-                    currencyCode: route.currency.currencyCode || "",
-                    currencySymbol: route.currency.currencySymbol || "",
-                  }
-                : undefined,
-            })) || [],
-          __typename: "Special",
-        })) || [],
+                startingPrice: route.startingPrice || "",
+                special: {
+                  name: route.special?.name || "",
+                },
+                currency: route.currency
+                  ? {
+                      currencyCode: route.currency.currencyCode || "",
+                      currencySymbol: route.currency.currencySymbol || "",
+                    }
+                  : undefined,
+              })) || [],
+            __typename: "Special",
+          })) || [],
       __typename: "SpecialsIndexPage",
     };
   } catch (error) {
