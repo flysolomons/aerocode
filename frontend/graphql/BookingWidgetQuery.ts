@@ -1,4 +1,3 @@
-
 import { gql } from "@apollo/client";
 import client from "../lib/apolloClient";
 
@@ -18,11 +17,9 @@ export interface ArrivalAirport {
 // Query to fetch departure destinations
 export const GET_DEPARTURE_DESTINATIONS_QUERY = gql`
   query GetDepartureDestinations {
-    pages(contentType: "explore.Route") {
-      ... on Route {
-        departureAirport
-        departureAirportCode
-      }
+    routes(limit: 100) {
+      departureAirportCode
+      departureAirport
     }
   }
 `;
@@ -30,11 +27,9 @@ export const GET_DEPARTURE_DESTINATIONS_QUERY = gql`
 // Query to fetch arrival destinations
 export const GET_ARRIVAL_DESTINATIONS_QUERY = gql`
   query GetArrivalDestinations {
-    pages(contentType: "explore.Route") {
-      ... on Route {
-        arrivalAirport
-        arrivalAirportCode
-      }
+    routes(limit: 100) {
+      arrivalAirport
+      arrivalAirportCode
     }
   }
 `;
@@ -43,27 +38,33 @@ export const GET_ARRIVAL_DESTINATIONS_QUERY = gql`
  * Fetches all departure destinations from the server
  * @returns Promise with an array of distinct departure airports
  */
-export async function fetchDepartureDestinations(): Promise<DepartureAirport[]> {
+export async function fetchDepartureDestinations(): Promise<
+  DepartureAirport[]
+> {
   try {
     const { data } = await client.query({
       query: GET_DEPARTURE_DESTINATIONS_QUERY,
     });
 
-    const airports = data.pages || [];
-    
+    const airports = data.routes || [];
+
     // Use a Map to track unique airports by their code
     const uniqueAirportsMap = new Map<string, DepartureAirport>();
-    
+
     // Add each airport to the map, using the airport code as key
     airports.forEach((airport: DepartureAirport) => {
-      if (airport.departureAirportCode && !uniqueAirportsMap.has(airport.departureAirportCode)) {
+      if (
+        airport.departureAirportCode &&
+        !uniqueAirportsMap.has(airport.departureAirportCode)
+      ) {
         uniqueAirportsMap.set(airport.departureAirportCode, airport);
       }
     });
-    
+
     // Convert the Map values back to an array and sort alphabetically by airport name
-    return Array.from(uniqueAirportsMap.values())
-      .sort((a, b) => a.departureAirport.localeCompare(b.departureAirport));
+    return Array.from(uniqueAirportsMap.values()).sort((a, b) =>
+      a.departureAirport.localeCompare(b.departureAirport)
+    );
   } catch (error) {
     console.error("Error fetching departure destinations:", error);
     return [];
@@ -80,21 +81,25 @@ export async function fetchArrivalDestinations(): Promise<ArrivalAirport[]> {
       query: GET_ARRIVAL_DESTINATIONS_QUERY,
     });
 
-    const airports = data.pages || [];
-    
+    const airports = data.routes || [];
+
     // Use a Map to track unique airports by their code
     const uniqueAirportsMap = new Map<string, ArrivalAirport>();
-    
+
     // Add each airport to the map, using the airport code as key
     airports.forEach((airport: ArrivalAirport) => {
-      if (airport.arrivalAirportCode && !uniqueAirportsMap.has(airport.arrivalAirportCode)) {
+      if (
+        airport.arrivalAirportCode &&
+        !uniqueAirportsMap.has(airport.arrivalAirportCode)
+      ) {
         uniqueAirportsMap.set(airport.arrivalAirportCode, airport);
       }
     });
-    
+
     // Convert the Map values back to an array and sort alphabetically by airport name
-    return Array.from(uniqueAirportsMap.values())
-      .sort((a, b) => a.arrivalAirport.localeCompare(b.arrivalAirport));
+    return Array.from(uniqueAirportsMap.values()).sort((a, b) =>
+      a.arrivalAirport.localeCompare(b.arrivalAirport)
+    );
   } catch (error) {
     console.error("Error fetching arrival destinations:", error);
     return [];
