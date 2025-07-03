@@ -96,15 +96,17 @@ export default function RoutePageTemplate({
         onColorCalculated={setGradientStartColor}
       />
       <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          <StrippedBookingWidget id="booking-widget" />
-          {initialPage.description && (
-            <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                {parse(initialPage.description)}
+        <div className="pt-12 sm:pt-12 lg:pt-8 pb-12 sm:pb-12 lg:pb-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
+          <div className="space-y-8">
+            <StrippedBookingWidget id="booking-widget" />
+            {initialPage.description && (
+              <div className="mx-auto w-full">
+                <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  {parse(initialPage.description)}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
           <RouteSpecialSection
             heading={`${departureAirport} to ${arrivalAirport} Specials`}
             description="Check out our latest special fares for this route. Book early to secure the best prices."
