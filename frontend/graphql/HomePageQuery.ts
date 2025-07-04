@@ -13,6 +13,7 @@ export interface HomePage {
   };
   specialRouteItems: Array<{
     specialRoute: {
+      isExpired: string;
       route: {
         nameFull: string;
         heroImage: {
@@ -69,6 +70,7 @@ export const GET_HOMEPAGE = gql`
         }
         specialRouteItems {
           specialRoute {
+            isExpired
             route {
               nameFull
               heroImage {
@@ -114,7 +116,19 @@ export async function fetchHomePage(): Promise<HomePageData> {
     if (!data.pages[0]) {
       throw new Error("No homepage data found");
     }
-    return data;
+
+    // Filter out expired special routes
+    const filteredPages = data.pages.map(page => ({
+      ...page,
+      specialRouteItems: page.specialRouteItems?.filter(
+        item => item.specialRoute.isExpired !== "true"
+      ) || []
+    }));
+
+    return {
+      ...data,
+      pages: filteredPages
+    };
   } catch (error) {
     console.error("Error fetching HomePage data:", error);
     throw error;

@@ -33,6 +33,7 @@ export default function HomePageTemplate({
               heading="Flight Specials"
               description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
               specials={homePage.specialRouteItems.map((item) => ({
+                isExpired: item.specialRoute.isExpired,
                 special: {
                   name: item.specialRoute.special.name,
                 },

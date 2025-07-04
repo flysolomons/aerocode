@@ -10,6 +10,7 @@ from core.models import BasePage
 from wagtail.admin.panels import PageChooserPanel
 from modelcluster.fields import ParentalKey
 from wagtail.admin.panels import InlinePanel
+from datetime import date
 
 
 class AllYouNeedPage(models.Model):
@@ -63,6 +64,7 @@ class HomePageSpecialRoute(models.Model):
         "explore.SpecialRoute",
         on_delete=models.CASCADE,
         related_name="home_page_specials",
+        limit_choices_to={"special__end_date__gte": date.today()},
     )
     panels = [
         FieldPanel("special_route"),
