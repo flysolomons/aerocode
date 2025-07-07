@@ -14,16 +14,16 @@ export default function FareCard({
   // Format price with commas for thousands
   const formatPrice = (priceString: string): string => {
     // Ensure we have a string to work with
-    const priceStr = String(priceString || '');
-    
+    const priceStr = String(priceString || "");
+
     // Remove any existing commas and parse as number
-    const numericPrice = parseFloat(priceStr.replace(/,/g, ''));
-    
+    const numericPrice = parseFloat(priceStr.replace(/,/g, ""));
+
     // If it's a valid number, format with commas
     if (!isNaN(numericPrice)) {
       return numericPrice.toLocaleString();
     }
-    
+
     // If it's not a valid number, return original string
     return priceStr;
   };
@@ -38,7 +38,7 @@ export default function FareCard({
           <span className="text-base sm:text-lg lg:text-lg font-semibold">
             {currency}
           </span>
-          <span className="text-base sm:text-lg lg:text-lg font-semibold">
+          <span className="text-base sm:text-lg lg:text-lg">
             {formatPrice(price)}
           </span>
         </div>
