@@ -7,9 +7,21 @@ import BookATripForm from "./BookATripForm";
 // Accept id as a prop with type
 interface StrippedBookingWidgetProps {
   id?: string;
+  preselectedDeparture?: {
+    departureAirport: string;
+    departureAirportCode: string;
+  };
+  preselectedArrival?: {
+    arrivalAirport: string;
+    arrivalAirportCode: string;
+  };
 }
 
-export default function StrippedBookingWidget({ id }: StrippedBookingWidgetProps) {
+export default function StrippedBookingWidget({
+  id,
+  preselectedDeparture,
+  preselectedArrival,
+}: StrippedBookingWidgetProps) {
   const [showMobileForm, setShowMobileForm] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -107,7 +119,10 @@ export default function StrippedBookingWidget({ id }: StrippedBookingWidgetProps
 
           {/* Form content */}
           <div className="flex-1 overflow-y-auto px-4 pb-4">
-            <BookATripForm />
+            <BookATripForm
+              preselectedDeparture={preselectedDeparture}
+              preselectedArrival={preselectedArrival}
+            />
           </div>
         </motion.div>
       )}
@@ -132,7 +147,10 @@ export default function StrippedBookingWidget({ id }: StrippedBookingWidgetProps
 
           {/* Desktop content - direct form without background wrapper */}
           <div className="hidden xl:block">
-            <BookATripForm />
+            <BookATripForm
+              preselectedDeparture={preselectedDeparture}
+              preselectedArrival={preselectedArrival}
+            />
           </div>
         </div>
       </div>

@@ -98,7 +98,17 @@ export default function RoutePageTemplate({
       <Container>
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           <div className="space-y-8">
-            <StrippedBookingWidget id="booking-widget" />
+            <StrippedBookingWidget
+              id="booking-widget"
+              preselectedDeparture={{
+                departureAirport: departureAirport,
+                departureAirportCode: departureAirportCode,
+              }}
+              preselectedArrival={{
+                arrivalAirport: arrivalAirport,
+                arrivalAirportCode: arrivalAirportCode,
+              }}
+            />
             {initialPage.description && (
               <div className="mx-auto w-full">
                 <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">

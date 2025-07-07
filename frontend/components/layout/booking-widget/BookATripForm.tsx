@@ -17,11 +17,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+interface BookATripFormProps {
+  onModalStateChange?: (isActive: boolean) => void;
+  preselectedDeparture?: {
+    departureAirport: string;
+    departureAirportCode: string;
+  };
+  preselectedArrival?: {
+    arrivalAirport: string;
+    arrivalAirportCode: string;
+  };
+}
+
 export default function BookATripForm({
   onModalStateChange,
-}: {
-  onModalStateChange?: (isActive: boolean) => void;
-}) {
+  preselectedDeparture,
+  preselectedArrival,
+}: BookATripFormProps) {
   //Initialize default values for travelers.
   const [travelers, setTravelers] = useState<Travelers>({
     adults: 1,
@@ -114,6 +126,35 @@ export default function BookATripForm({
     };
     fetchAirports();
   }, []);
+
+  // Handle preselected airports when data is loaded
+  useEffect(() => {
+    if (departureAirports.length > 0 && preselectedDeparture) {
+      const preselectedDepartureAirport = departureAirports.find(
+        (airport) =>
+          airport.departureAirportCode ===
+          preselectedDeparture.departureAirportCode
+      );
+      if (preselectedDepartureAirport) {
+        setSelectedDeparture(preselectedDepartureAirport);
+      }
+    }
+
+    if (arrivalAirports.length > 0 && preselectedArrival) {
+      const preselectedArrivalAirport = arrivalAirports.find(
+        (airport) =>
+          airport.arrivalAirportCode === preselectedArrival.arrivalAirportCode
+      );
+      if (preselectedArrivalAirport) {
+        setSelectedArrival(preselectedArrivalAirport);
+      }
+    }
+  }, [
+    departureAirports,
+    arrivalAirports,
+    preselectedDeparture,
+    preselectedArrival,
+  ]);
 
   // Handle outside clicks for travelers mobile dropdown
   useEffect(() => {
