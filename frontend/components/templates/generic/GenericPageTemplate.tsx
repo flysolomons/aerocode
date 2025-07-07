@@ -9,6 +9,7 @@ import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
 import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import { GenericPage } from "@/graphql/genericPageQuery";
+import parse from "html-react-parser";
 
 interface GenericPageTemplateProps {
   initialPage: GenericPage;
@@ -32,9 +33,9 @@ export default function GenericPageTemplate({
         <Container>
           <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
             <div className="mx-auto w-full">
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
-              </p>
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
+                {parse(initialPage.description)}
+              </div>
             </div>
           </div>
         </Container>

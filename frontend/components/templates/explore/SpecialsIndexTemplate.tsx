@@ -48,15 +48,17 @@ export default function SpecialsIndexTemplate({
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-10 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          <StrippedBookingWidget />
           <div className="space-y-8">
+            <StrippedBookingWidget id="booking-widget" />
             {pageDescription && (
               <div className="mx-auto w-full">
-                <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+                <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                   {parse(pageDescription)}
                 </div>
               </div>
             )}
+          </div>
+          <div className="space-y-8">
             {specials && specials.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                 {specials.map((special, index) => (

@@ -101,16 +101,19 @@ export default function SpecialPageTemplate({
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          <StrippedBookingWidget id="stripped-booking-widget" />
+          <div className="space-y-8">
+            <StrippedBookingWidget id="booking-widget" />
+            {description && (
+              <div className="mx-auto w-full">
+                <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  {parse(description)}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Description with validity period */}
           <div className="w-full mx-auto space-y-8 sm:space-y-8">
-            {description && (
-              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {parse(description)}
-              </div>
-            )}
-
             {/* Show expired message or flight information */}
             {isCurrentSpecialExpired ? (
               <div className="w-full max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-xl p-6 text-center">
