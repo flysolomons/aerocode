@@ -138,11 +138,12 @@ const TravelAlertsBanner: React.FC<TravelAlertsBannerProps> = ({
               {travelAlert.link && (
                 <a
                   href={travelAlert.link.url}
-                  className={`text-sm font-medium underline hover:no-underline whitespace-nowrap flex-shrink-0 hidden sm:inline ${getLinkStyles(
+                  className={`text-sm font-medium underline hover:no-underline whitespace-nowrap flex-shrink-0 ${getLinkStyles(
                     travelAlert.type
                   )}`}
                 >
-                  {travelAlert.link.text}
+                  <span className="hidden sm:inline">{travelAlert.link.text}</span>
+                  <span className="sm:hidden">More</span>
                 </a>
               )}
             </div>
