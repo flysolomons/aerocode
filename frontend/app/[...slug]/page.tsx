@@ -143,8 +143,6 @@ export default async function Page({
   try {
     const page = await fetchPageData(slug, fullPath);
 
-    console.log("Fetched Page:", page);
-
     // Trigger 404 if page is not found
     if (!page) {
       notFound();
