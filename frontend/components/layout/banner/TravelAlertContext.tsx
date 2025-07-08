@@ -14,7 +14,7 @@ const TravelAlertContext = createContext<TravelAlertContextType | undefined>(
 export const TravelAlertProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [hasTravelAlert, setHasTravelAlert] = useState(true); // Default to true for dummy data
+  const [hasTravelAlert, setHasTravelAlert] = useState(false); // Default to false, will be set based on actual data
 
   return (
     <TravelAlertContext.Provider value={{ hasTravelAlert, setHasTravelAlert }}>

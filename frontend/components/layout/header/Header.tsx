@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useTravelAlert } from "../TravelAlertContext";
+import { useTravelAlert } from "../banner/TravelAlertContext";
 
 function Header({
   headerMenus,
@@ -1002,16 +1002,15 @@ function Header({
   if (isAtTop) {
     return (
       <motion.header
-        className={`w-full absolute z-40 ${
-          hasTravelAlert ? "top-[46px]" : "top-0"
-        }`}
+        className="w-full absolute z-40"
         animate={{
+          top: hasTravelAlert ? "46px" : "0px",
           backgroundColor:
             isHovered || activeMegaMenu
               ? "rgba(255, 255, 255, 1)"
               : "rgba(255, 255, 255, 0)",
         }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
           setIsHovered(false);

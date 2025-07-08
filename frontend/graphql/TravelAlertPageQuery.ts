@@ -55,6 +55,7 @@ const GET_TRAVEL_ALERT_PAGE_QUERY = gql`
 
 // Interface for active travel alert page
 export interface ActiveTravelAlertPage {
+  url: string;
   activeAlert: {
     title: string;
     content: string;
@@ -73,6 +74,7 @@ const GET_ACTIVE_TRAVEL_ALERT_QUERY = gql`
   query GetActiveTravelAlert {
     pages(contentType: "alerts.TravelAlertPage") {
       ... on TravelAlertPage {
+        url
         activeAlert {
           title
           content
@@ -96,6 +98,15 @@ export async function fetchTravelAlertPage(): Promise<TravelAlertPageQueryRespon
 export async function fetchActiveTravelAlert(): Promise<ActiveTravelAlertQueryResponse> {
   const { data } = await client.query({
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
+  });
+  return data;
+}
+
+// Server-side fetch function for active travel alert (doesn't use React hooks)
+export async function fetchActiveTravelAlertServer(): Promise<ActiveTravelAlertQueryResponse> {
+  const { data } = await client.query({
+    query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
+    fetchPolicy: "no-cache", // Ensure fresh data on server
   });
   return data;
 }

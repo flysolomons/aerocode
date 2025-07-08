@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, AlertTriangle, Info } from "lucide-react";
 import { useTravelAlert } from "./TravelAlertContext";
+import parse from "html-react-parser";
 
 interface TravelAlert {
   id: string;
@@ -15,10 +16,31 @@ interface TravelAlert {
   };
 }
 
-const TravelAlertsBanner: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(true);
+interface TravelAlertsBannerProps {
+  activeAlert: {
+    url: string;
+    activeAlert: {
+      title: string;
+      content: string;
+      isActive: boolean;
+      createdAt: string;
+    };
+  } | null;
+}
+
+const TravelAlertsBanner: React.FC<TravelAlertsBannerProps> = ({
+  activeAlert,
+}) => {
+  const [isVisible, setIsVisible] = useState(!!activeAlert?.activeAlert);
   const [isAnimating, setIsAnimating] = useState(false);
   const { setHasTravelAlert } = useTravelAlert();
+
+  // Set hasTravelAlert based on whether there's an active alert
+  useEffect(() => {
+    const hasAlert = !!activeAlert?.activeAlert;
+    setHasTravelAlert(hasAlert);
+    setIsVisible(hasAlert);
+  }, [activeAlert, setHasTravelAlert]);
 
   const handleClose = () => {
     setIsAnimating(true);
@@ -29,18 +51,19 @@ const TravelAlertsBanner: React.FC = () => {
     }, 300); // Match the transition duration
   };
 
-  // Dummy data - will be replaced with backend data later
-  // Show only the most recent/important alert
-  const travelAlert: TravelAlert | null = {
-    id: "1",
-    type: "warning",
-    title: "Travel Alert",
-    message: "Flight delays expected due to severe weather in Honiara.",
-    link: {
-      text: "Read More",
-      url: "/flight-status",
-    },
-  };
+  // Transform server data to component format
+  const travelAlert: TravelAlert | null = activeAlert?.activeAlert
+    ? {
+        id: activeAlert.activeAlert.createdAt, // Use createdAt as unique ID
+        type: "warning", // Default to warning -
+        title: activeAlert.activeAlert.title,
+        message: activeAlert.activeAlert.content,
+        link: {
+          text: "Read More",
+          url: activeAlert.url,
+        },
+      }
+    : null;
 
   const getAlertIcon = (type: TravelAlert["type"]) => {
     switch (type) {
@@ -81,8 +104,13 @@ const TravelAlertsBanner: React.FC = () => {
     }
   };
 
-  if (!isVisible || !travelAlert) {
-    return null;
+  if (!travelAlert) {
+    return (
+      <div
+        className="transition-all duration-300 ease-in-out h-0 opacity-0 overflow-hidden"
+        style={{ height: "0px" }}
+      />
+    );
   }
 
   return (
@@ -90,7 +118,7 @@ const TravelAlertsBanner: React.FC = () => {
       className={`${getAlertStyles(
         travelAlert.type
       )} transition-all duration-300 ease-in-out ${
-        isAnimating ? "h-0 opacity-0" : "h-[46px] opacity-100"
+        isAnimating || !isVisible ? "h-0 opacity-0" : "h-[46px] opacity-100"
       }`}
       style={{
         overflow: "hidden",
@@ -106,7 +134,9 @@ const TravelAlertsBanner: React.FC = () => {
               <h3 className="font-semibold text-sm whitespace-nowrap">
                 {travelAlert.title}:
               </h3>
-              <p className="text-sm truncate">{travelAlert.message}</p>
+              <div className="text-sm truncate">
+                {parse(travelAlert.message)}
+              </div>
               {travelAlert.link && (
                 <a
                   href={travelAlert.link.url}
