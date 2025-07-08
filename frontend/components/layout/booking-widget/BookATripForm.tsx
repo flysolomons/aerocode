@@ -1024,7 +1024,7 @@ export default function BookATripForm({
             {/* Desktop: Original button */}
             <div className="hidden md:flex items-center justify-end w-auto">
               <button
-                className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors"
+                className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-2"
                 onClick={handleSearch}
               >
                 <svg
@@ -1039,6 +1039,7 @@ export default function BookATripForm({
                     clipRule="evenodd"
                   />
                 </svg>
+                <span className="text-sm font-medium">Search</span>
               </button>
             </div>
           </div>

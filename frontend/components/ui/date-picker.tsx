@@ -142,7 +142,7 @@ export function DateRangePicker({
             {dateRange?.from ? (
               mode === "range" && dateRange.to ? (
                 <span className="text-gray-800 text-sm">
-                  {format(dateRange.from, "dd MMM, yyyy")} -
+                  {format(dateRange.from, "dd MMM, yyyy")} -{" "}
                   {format(dateRange.to, "dd MMM, yyyy")}
                 </span>
               ) : (
@@ -292,7 +292,7 @@ export function DateRangePicker({
                 {dateRange?.from ? (
                   mode === "range" && dateRange.to ? (
                     <span className="text-gray-800 text-sm">
-                      {format(dateRange.from, "dd MMM, yyyy")} -
+                      {format(dateRange.from, "dd MMM, yyyy")} -{" "}
                       {format(dateRange.to, "dd MMM, yyyy")}
                     </span>
                   ) : (
