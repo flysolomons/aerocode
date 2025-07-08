@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useTravelAlert } from "../TravelAlertContext";
 
 function Header({
   headerMenus,
@@ -17,6 +18,7 @@ function Header({
   headerMenus: TransformedHeaderMenu[];
   currencies?: Currency[];
 }) {
+  const { hasTravelAlert } = useTravelAlert();
   const [isWhiteHeader, setIsWhiteHeader] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -1000,7 +1002,9 @@ function Header({
   if (isAtTop) {
     return (
       <motion.header
-        className="w-full absolute top-0 z-50"
+        className={`w-full absolute z-40 ${
+          hasTravelAlert ? "top-[46px]" : "top-0"
+        }`}
         animate={{
           backgroundColor:
             isHovered || activeMegaMenu

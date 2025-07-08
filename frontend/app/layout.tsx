@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
+import TravelAlertsBanner from "@/components/layout/TravelAlertsBanner";
+import { TravelAlertProvider } from "@/components/layout/TravelAlertContext";
 import {
   fetchHeaderDataServer,
   fallbackHeaderData,
@@ -65,12 +67,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${rubik.variable} antialiased`}>
-        <Header
-          headerMenus={headerData.headerMenus}
-          currencies={headerData.currencies}
-        />
-        {children}
-        <Footer footerMenus={footerMenus} />
+        <TravelAlertProvider>
+          <TravelAlertsBanner />
+          <Header
+            headerMenus={headerData.headerMenus}
+            currencies={headerData.currencies}
+          />
+          {children}
+          <Footer footerMenus={footerMenus} />
+        </TravelAlertProvider>
       </body>
     </html>
   );
