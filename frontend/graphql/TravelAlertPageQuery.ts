@@ -87,26 +87,26 @@ const GET_ACTIVE_TRAVEL_ALERT_QUERY = gql`
 `;
 
 // Fetch function
-export async function fetchTravelAlertPage(): Promise<TravelAlertPageQueryResponse> {
+export async function fetchTravelAlertPage(): Promise<TravelAlertPage | null> {
   const { data } = await client.query({
     query: GET_TRAVEL_ALERT_PAGE_QUERY,
   });
-  return data;
+  return data.pages?.[0] || null;
 }
 
 // Fetch function for active travel alert
-export async function fetchActiveTravelAlert(): Promise<ActiveTravelAlertQueryResponse> {
+export async function fetchActiveTravelAlert(): Promise<ActiveTravelAlertPage | null> {
   const { data } = await client.query({
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
   });
-  return data;
+  return data.pages?.[0] || null;
 }
 
 // Server-side fetch function for active travel alert (doesn't use React hooks)
-export async function fetchActiveTravelAlertServer(): Promise<ActiveTravelAlertQueryResponse> {
+export async function fetchActiveTravelAlertServer(): Promise<ActiveTravelAlertPage | null> {
   const { data } = await client.query({
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
     fetchPolicy: "no-cache", // Ensure fresh data on server
   });
-  return data;
+  return data.pages?.[0] || null;
 }

@@ -15,6 +15,7 @@ import SpecialPageTemplate from "@/components/templates/explore/SpecialPageTempl
 import AboutPageTemplate from "@/components/templates/about/AboutPageTemplate";
 import BelamaIndexPageTemplate from "@/components/templates/belama/BelamaIndexPageTemplate";
 import BelamaSignUpPageTemplate from "@/components/templates/belama/BelamaSignUpPageTemplate";
+import TravelAlertsPageTemplate from "@/components/templates/travel-alerts/TravelAlertsPageTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -35,6 +36,7 @@ import {
   fetchBelamaPage,
   fetchBelamaSignUpPage,
 } from "@/graphql/BelamaPageQuery";
+import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
 
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
@@ -80,6 +82,8 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchBelamaPage();
     case "BelamaSignUpPage":
       return fetchBelamaSignUpPage();
+    case "TravelAlertPage":
+      return fetchTravelAlertPage();
     default:
       return null;
   }
@@ -139,6 +143,8 @@ export default async function Page({
   try {
     const page = await fetchPageData(slug, fullPath);
 
+    console.log("Fetched Page:", page);
+
     // Trigger 404 if page is not found
     if (!page) {
       notFound();
@@ -178,6 +184,8 @@ export default async function Page({
         return <BelamaIndexPageTemplate initialPage={page} />;
       case "BelamaSignUpPage":
         return <BelamaSignUpPageTemplate initialPage={page} />;
+      case "TravelAlertPage":
+        return <TravelAlertsPageTemplate initialPage={page} />;
       default:
         notFound();
     }

@@ -15,7 +15,7 @@ import {
 } from "@/graphql/FooterQuery";
 import {
   fetchActiveTravelAlertServer,
-  type ActiveTravelAlertQueryResponse,
+  type ActiveTravelAlertPage,
 } from "@/graphql/TravelAlertPageQuery";
 import "./globals.css";
 
@@ -73,8 +73,8 @@ export default async function RootLayout({
 
   try {
     const alertData = await fetchActiveTravelAlertServer();
-    if (alertData.pages.length > 0 && alertData.pages[0].activeAlert) {
-      activeTravelAlert = alertData.pages[0];
+    if (alertData?.activeAlert) {
+      activeTravelAlert = alertData;
     }
   } catch (error) {
     console.error("Failed to fetch travel alert data in layout:", error);

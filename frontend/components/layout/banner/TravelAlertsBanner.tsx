@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { X, AlertTriangle, Info } from "lucide-react";
 import { useTravelAlert } from "./TravelAlertContext";
 import parse from "html-react-parser";
+import { type ActiveTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
 
 interface TravelAlert {
   id: string;
@@ -17,15 +18,7 @@ interface TravelAlert {
 }
 
 interface TravelAlertsBannerProps {
-  activeAlert: {
-    url: string;
-    activeAlert: {
-      title: string;
-      content: string;
-      isActive: boolean;
-      createdAt: string;
-    };
-  } | null;
+  activeAlert: ActiveTravelAlertPage | null;
 }
 
 const TravelAlertsBanner: React.FC<TravelAlertsBannerProps> = ({
@@ -131,16 +124,21 @@ const TravelAlertsBanner: React.FC<TravelAlertsBannerProps> = ({
               {getAlertIcon(travelAlert.type)}
             </div>
             <div className="flex items-center space-x-2 flex-1 min-w-0">
-              <h3 className="font-semibold text-sm whitespace-nowrap">
+              <h3 className="font-semibold text-sm whitespace-nowrap flex-shrink-0">
                 {travelAlert.title}:
               </h3>
-              <div className="text-sm truncate">
-                {parse(travelAlert.message)}
+              <div className="text-sm flex-1 min-w-0 overflow-hidden">
+                <div
+                  className="truncate cursor-default"
+                  title={activeAlert?.activeAlert.content}
+                >
+                  {parse(travelAlert.message)}
+                </div>
               </div>
               {travelAlert.link && (
                 <a
                   href={travelAlert.link.url}
-                  className={`text-sm font-medium underline hover:no-underline whitespace-nowrap ${getLinkStyles(
+                  className={`text-sm font-medium underline hover:no-underline whitespace-nowrap flex-shrink-0 hidden sm:inline ${getLinkStyles(
                     travelAlert.type
                   )}`}
                 >
