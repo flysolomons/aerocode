@@ -166,21 +166,25 @@ export function DateRangePicker({
             )}
           </div>
           {/* Add selected indicator */}
-          {dateRange?.from && (
-            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
-              <svg
-                className="w-3 h-3 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          )}
+          {dateRange?.from &&
+            (mode === "single" || (mode === "range" && dateRange.to)) && (
+              <div className="flex items-center justify-center mr-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#2B8A1E"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                  <path d="m9 11 3 3L22 4" />
+                </svg>
+              </div>
+            )}
           {/* Calendar icon indicator */}
           <svg
             className={`w-5 h-5 text-gray-400 transition-all duration-200 group-active:text-blue-500 ${
@@ -244,23 +248,6 @@ export function DateRangePicker({
                     : "Pick your departure and return dates"}
                 </p>
                 {/* Date selection status */}
-                {(dateRange?.from || dateRange?.to) && (
-                  <div className="mt-2 px-3 py-1 bg-blue-50 rounded-full inline-block">
-                    <span className="text-sm text-blue-700 font-medium">
-                      {dateRange?.from && dateRange?.to
-                        ? `${format(dateRange.from, "dd MMM")} - ${format(
-                            dateRange.to,
-                            "dd MMM"
-                          )}`
-                        : dateRange?.from
-                        ? `Departure: ${format(
-                            dateRange.from,
-                            "dd MMM, yyyy"
-                          )}${mode === "range" ? " (Select return)" : ""}`
-                        : ""}
-                    </span>
-                  </div>
-                )}
                 {/* Horizontal line after header text */}
                 <div className="w-full h-px bg-gray-200 mt-4"></div>
               </div>

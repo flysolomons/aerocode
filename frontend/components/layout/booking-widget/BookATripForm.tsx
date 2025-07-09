@@ -289,7 +289,7 @@ export default function BookATripForm({
         <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-[60] transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
-        className={`px-4 py-2 md:py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
+        className={`px-4 py-6 md:py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
           isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-[70]" : ""
         }`}
       >
@@ -315,19 +315,32 @@ export default function BookATripForm({
           </button>
         )}
         <div className="flex-1 flex flex-col items-center space-y-3 md:space-y-4">
-          <div className="relative mt-2 md:mt-0">
-            <RadioButton
-              optionOne="Round Trip"
-              optionTwo="One Way"
-              onOptionChange={(option) => {
-                const isNowOneWay = option === "two"; // "two" corresponds to "One Way"
-                setIsOneWay(isNowOneWay);
-                // Clear return date when switching to one way
-                if (isNowOneWay) {
-                  setDateRange((prev) => ({ ...prev, to: undefined }));
-                }
-              }}
-            />
+          <div className="relative mt-2 md:mt-0 w-full md:w-auto px-0 md:px-0">
+            <div className="w-full md:w-auto [&>*]:w-full [&>*]:md:w-auto [&_*]:w-full [&_*]:md:w-auto [&_button]:w-full [&_button]:md:w-auto">
+              <RadioButton
+                optionOne="Round Trip"
+                optionTwo="One Way"
+                onOptionChange={(option) => {
+                  const isNowOneWay = option === "two"; // "two" corresponds to "One Way"
+                  setIsOneWay(isNowOneWay);
+                  // Clear return date when switching to one way
+                  if (isNowOneWay) {
+                    setDateRange((prev) => ({ ...prev, to: undefined }));
+                  } else {
+                    // When switching back to round trip, ensure return date is undefined
+                    // so it shows "(Return date?)" placeholder without tick
+                    setDateRange((prev) => ({ 
+                      from: prev.from, 
+                      to: undefined 
+                    }));
+                  }
+                  // Add haptic feedback for mobile
+                  if (navigator.vibrate && window.innerWidth < 768) {
+                    navigator.vibrate(10);
+                  }
+                }}
+              />
+            </div>
           </div>
           {/* search form */}
           <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
@@ -443,17 +456,20 @@ export default function BookATripForm({
                   />
                   {/* Add selected indicator */}
                   {selectedDeparture && (
-                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                    <div className="flex items-center justify-center mr-2">
                       <svg
-                        className="w-3 h-3 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#2B8A1E"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
+                        <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                        <path d="m9 11 3 3L22 4" />
                       </svg>
                     </div>
                   )}
@@ -516,29 +532,6 @@ export default function BookATripForm({
                         <p className="text-sm text-gray-500 mt-1">
                           Select your departure destination
                         </p>
-                        {/* Search bar for large lists */}
-                        {departureAirports.length > 5 && (
-                          <div className="mt-3 relative">
-                            <input
-                              type="text"
-                              placeholder="Search destinations..."
-                              className="w-full px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <svg
-                              className="absolute right-3 top-2.5 w-4 h-4 text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                              />
-                            </svg>
-                          </div>
-                        )}
                         {/* Horizontal line after header text */}
                         <div className="w-full h-px bg-gray-200 mt-4"></div>
                       </div>
@@ -695,17 +688,20 @@ export default function BookATripForm({
                   />
                   {/* Add selected indicator */}
                   {selectedArrival && (
-                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                    <div className="flex items-center justify-center mr-2">
                       <svg
-                        className="w-3 h-3 text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#2B8A1E"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
+                        <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                        <path d="m9 11 3 3L22 4" />
                       </svg>
                     </div>
                   )}
@@ -770,29 +766,6 @@ export default function BookATripForm({
                         <p className="text-sm text-gray-500 mt-1">
                           Select your arrival destination
                         </p>
-                        {/* Search bar for large lists */}
-                        {arrivalAirports.length > 5 && (
-                          <div className="mt-3 relative">
-                            <input
-                              type="text"
-                              placeholder="Search destinations..."
-                              className="w-full px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <svg
-                              className="absolute right-3 top-2.5 w-4 h-4 text-gray-400"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                              />
-                            </svg>
-                          </div>
-                        )}
                         {/* Horizontal line after header text */}
                         <div className="w-full h-px bg-gray-200 mt-4"></div>
                       </div>
@@ -1032,15 +1005,23 @@ export default function BookATripForm({
                   readOnly
                   value={formatTravelers()}
                 />
-                {/* Add traveler count indicator */}
-                {travelers.adults + travelers.children + travelers.infants >
-                  1 && (
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-2">
-                    <span className="text-xs text-white font-medium">
-                      {travelers.adults +
-                        travelers.children +
-                        travelers.infants}
-                    </span>
+                {/* Add traveler selected indicator */}
+                {(travelers.adults + travelers.children + travelers.infants) > 0 && (
+                  <div className="flex items-center justify-center mr-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#2B8A1E"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                      <path d="m9 11 3 3L22 4" />
+                    </svg>
                   </div>
                 )}
                 {/* Add chevron indicator */}
@@ -1103,22 +1084,6 @@ export default function BookATripForm({
                       <p className="text-sm text-gray-500 mt-1">
                         Select number of travelers
                       </p>
-                      {/* Total count display */}
-                      <div className="mt-2 px-3 py-1 bg-blue-50 rounded-full inline-block">
-                        <span className="text-sm text-blue-700 font-medium">
-                          Total:{" "}
-                          {travelers.adults +
-                            travelers.children +
-                            travelers.infants}{" "}
-                          passenger
-                          {travelers.adults +
-                            travelers.children +
-                            travelers.infants !==
-                          1
-                            ? "s"
-                            : ""}
-                        </span>
-                      </div>
                       {/* Horizontal line after header text */}
                       <div className="w-full h-px bg-gray-200 mt-4"></div>
                     </div>
