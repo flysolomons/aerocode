@@ -289,7 +289,7 @@ export default function BookATripForm({
         <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-[60] transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
-        className={`px-4 py-6 md:py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
+        className={`px-4 py-4 md:py-3 flex flex-col h-full md:min-h-0 transition-all duration-500 ease-in-out ${
           isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-[70]" : ""
         }`}
       >
@@ -314,7 +314,7 @@ export default function BookATripForm({
             </svg>
           </button>
         )}
-        <div className="flex-1 flex flex-col items-center space-y-3 md:space-y-4">
+        <div className="flex-1 flex flex-col items-center space-y-3 md:space-y-4 min-h-0">
           <div className="relative mt-2 md:mt-0 w-full md:w-auto px-0 md:px-0">
             <div className="w-full md:w-auto [&>*]:w-full [&>*]:md:w-auto [&_*]:w-full [&_*]:md:w-auto [&_button]:w-full [&_button]:md:w-auto">
               <RadioButton
@@ -343,8 +343,9 @@ export default function BookATripForm({
             </div>
           </div>
           {/* search form */}
-          <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
-            <div className="w-full md:flex-1">
+          <div className="flex-1 flex flex-col w-full space-y-4 md:space-y-0 min-h-0">
+            <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
+              <div className="w-full md:flex-1">
               {/* Desktop: Use Popover */}
               <div className="hidden md:block">
                 <Popover
@@ -508,7 +509,11 @@ export default function BookATripForm({
                         margin: 0,
                         padding: 0,
                       }}
-                      onClick={() => setIsDeparturePopoverOpen(false)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsDeparturePopoverOpen(false);
+                      }}
                     />
                     {/* Bottom sheet */}
                     <div
@@ -550,7 +555,9 @@ export default function BookATripForm({
                               <div
                                 key={index}
                                 className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
                                   setSelectedDeparture(airport);
                                   setIsDeparturePopoverOpen(false);
                                 }}
@@ -741,7 +748,11 @@ export default function BookATripForm({
                         margin: 0,
                         padding: 0,
                       }}
-                      onClick={() => setIsArrivalPopoverOpen(false)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsArrivalPopoverOpen(false);
+                      }}
                     />
 
                     {/* Bottom sheet */}
@@ -786,7 +797,9 @@ export default function BookATripForm({
                               <div
                                 key={index}
                                 className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
                                   setSelectedArrival(airport);
                                   setIsArrivalPopoverOpen(false);
                                 }}
@@ -1062,7 +1075,11 @@ export default function BookATripForm({
                       margin: 0,
                       padding: 0,
                     }}
-                    onClick={() => setIsTravelersMobileOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setIsTravelersMobileOpen(false);
+                    }}
                   />
 
                   {/* Bottom sheet */}
@@ -1195,7 +1212,11 @@ export default function BookATripForm({
                     {/* Continue button */}
                     <div className="px-6 py-4 border-t border-gray-200">
                       <button
-                        onClick={() => setIsTravelersMobileOpen(false)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsTravelersMobileOpen(false);
+                        }}
                         className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
                       >
                         Continue
@@ -1237,32 +1258,34 @@ export default function BookATripForm({
                 </span>
               </button>
             </div>
+            </div>
+          
+          {/* Mobile: Search button inside form container */}
+          <div className="md:hidden pt-4 px-0 pb-2 mt-auto">
+            <button
+              className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
+                isSearchFormValid && !isSearching
+                  ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
+                  : ""
+              } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
+              onClick={
+                isSearchFormValid && !isSearching ? handleSearch : undefined
+              }
+              disabled={!isSearchFormValid || isSearching}
+            >
+              {isSearching && (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              )}
+              <span>
+                {isSearching
+                  ? "Searching Flights..."
+                  : !isSearchFormValid
+                  ? "Complete form to search"
+                  : "Search Flights"}
+              </span>
+            </button>
           </div>
-        </div>
-        {/* Mobile: Search button always under form */}
-        <div className="md:hidden pt-4 bg-white px-0 py-3">
-          <button
-            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
-              isSearchFormValid && !isSearching
-                ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
-                : ""
-            } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
-            onClick={
-              isSearchFormValid && !isSearching ? handleSearch : undefined
-            }
-            disabled={!isSearchFormValid || isSearching}
-          >
-            {isSearching && (
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            )}
-            <span>
-              {isSearching
-                ? "Searching Flights..."
-                : !isSearchFormValid
-                ? "Complete form to search"
-                : "Search Flights"}
-            </span>
-          </button>
+          </div>
         </div>
       </div>
     </>

@@ -135,7 +135,7 @@ export function DateRangePicker({
           {placeholder}
         </label>
         <div
-          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[52px] flex items-center relative group shadow-lg hover:shadow-xl"
+          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[50px] flex items-center relative group shadow-lg hover:shadow-xl"
           onClick={() => {
             setOpen(true);
             // Add haptic feedback for iOS

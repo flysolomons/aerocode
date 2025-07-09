@@ -308,61 +308,76 @@ export default function BookingWidget({
           </div>
         </div>
       </div>
-      {/* Mobile full-screen form overlay */}
+      {/* Mobile overlay form (90% coverage) */}
       <AnimatePresence>
         {showMobileForm && (
-          <motion.div
-            initial={{ opacity: 0, y: "100%" }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: "100%" }}
-            transition={{
-              duration: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94], // Custom easing curve for smooth feel
-              y: { type: "spring", damping: 30, stiffness: 300 },
-            }}
-            className="fixed inset-0 z-50 bg-white xl:hidden flex flex-col"
-          >
-            {/* Header with heading and close button */}
-            <div className="flex justify-between items-center p-4 flex-shrink-0">
-              {/* Empty space for balance */}
-              <div className="w-10"></div>
-              {/* Dynamic heading based on active tab - centered */}
-              <div className="flex-1 flex justify-center items-center">
-                <h1 className="text-lg font-semibold text-blue-500">
-                  {activeTab === 0 && "Book a Trip"}
-                  {activeTab === 1 && "Manage Booking"}
-                  {activeTab === 2 && "Flight Upgrade"}
-                </h1>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-40 xl:hidden"
+              onClick={closeMobileForm}
+            />
+
+            {/* Modal content */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{
+                duration: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="fixed inset-x-0 bottom-0 z-50 xl:hidden"
+            >
+              <div className="w-full h-[80vh] bg-white rounded-t-3xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300 ease-out">
+                {/* Header with heading and close button */}
+                <div className="flex justify-between items-center p-4 flex-shrink-0 border-b border-gray-200">
+                  {/* Empty space for balance */}
+                  <div className="w-10"></div>
+                  {/* Dynamic heading based on active tab - centered */}
+                  <div className="flex-1 flex justify-center items-center">
+                    <h1 className="text-lg font-semibold text-blue-500">
+                      {activeTab === 0 && "Book a Trip"}
+                      {activeTab === 1 && "Manage Booking"}
+                      {activeTab === 2 && "Flight Upgrade"}
+                    </h1>
+                  </div>
+                  {/* Close button */}
+                  <button
+                    onClick={closeMobileForm}
+                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    aria-label="Close form"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-gray-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Form content */}
+                <div className="flex-1 overflow-y-auto">
+                  {activeTab === 0 && <BookATripForm />}
+                  {activeTab === 1 && <ManageBookingForm />}
+                  {activeTab === 2 && <FlightUpgradeForm />}
+                </div>
               </div>
-              {/* Close button */}
-              <button
-                onClick={closeMobileForm}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                aria-label="Close form"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            {/* Form content */}
-            <div className="flex-1 overflow-y-auto px-4 pb-4">
-              {activeTab === 0 && <BookATripForm />}
-              {activeTab === 1 && <ManageBookingForm />}
-              {activeTab === 2 && <FlightUpgradeForm />}
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
