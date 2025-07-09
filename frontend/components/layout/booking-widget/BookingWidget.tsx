@@ -67,59 +67,220 @@ export default function BookingWidget({
                 : "xl:opacity-100"
             }`}
           >
-            <div
-              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-tl-[2rem] xl:rounded-tr-none xl:rounded-bl-none xl:rounded-br-none bg-white shadow-md xl:shadow-none ${
-                activeTab === 0
-                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
-                  : "border border-gray-200 xl:border-0"
-              }`}
-            >
-              <button
-                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
+            {/* Mobile: Full-width rectangles layout */}
+            <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
+              {/* Book a Trip - Full width rectangle */}
+              <div
+                className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/70 backdrop-blur-md shadow-lg ${
                   activeTab === 0
-                    ? "text-blue-500"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "border-2 border-blue-500"
+                    : "border border-white/40"
                 }`}
-                onClick={() => handleTabClick(0)}
               >
-                Book a Trip
-              </button>
+                <button
+                  className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                    activeTab === 0
+                      ? "text-blue-500"
+                      : "text-gray-700 hover:text-gray-900"
+                  }`}
+                  onClick={() => handleTabClick(0)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                  </svg>
+                  <span className="text-sm font-semibold text-center">
+                    Book a Trip
+                  </span>
+                </button>
+              </div>
+
+              {/* Manage Booking and Flight Upgrade - Same row */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Manage Booking - Half width rectangle */}
+                <div
+                  className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/70 backdrop-blur-md shadow-lg ${
+                    activeTab === 1
+                      ? "border-2 border-blue-500"
+                      : "border border-white/40"
+                  }`}
+                >
+                  <button
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                      activeTab === 1
+                        ? "text-blue-500"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    onClick={() => handleTabClick(1)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/>
+                      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>
+                    </svg>
+                    <span className="text-sm font-semibold text-center">
+                      Manage Booking
+                    </span>
+                  </button>
+                </div>
+
+                {/* Flight Upgrade - Half width rectangle */}
+                <div
+                  className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/70 backdrop-blur-md shadow-lg ${
+                    activeTab === 2
+                      ? "border-2 border-blue-500"
+                      : "border border-white/40"
+                  }`}
+                >
+                  <button
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                      activeTab === 2
+                        ? "text-blue-500"
+                        : "text-gray-700 hover:text-gray-900"
+                    }`}
+                    onClick={() => handleTabClick(2)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                      <path d="m16 12-4-4-4 4" />
+                      <path d="M12 16V8" />
+                      <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                      <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                      <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                      <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                    </svg>
+                    <span className="text-sm font-semibold text-center">
+                      Flight Upgrade
+                    </span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div
-              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-none bg-white shadow-md xl:shadow-none ${
-                activeTab === 1
-                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
-                  : "border border-gray-200 xl:border-0"
-              }`}
-            >
-              <button
-                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
+
+            {/* Desktop: Original horizontal layout */}
+            <div className="hidden xl:flex xl:w-full">
+              <div
+                className={`flex px-4 py-3 h-12 w-[11rem] rounded-tl-[2rem] rounded-tr-none rounded-bl-none rounded-br-none bg-white xl:shadow-none ${
+                  activeTab === 0
+                    ? "border-0 border-b-2 border-b-blue-500"
+                    : "border-0"
+                }`}
+              >
+                <button
+                  className={`text-sm font-semibold w-[11rem] text-center flex items-center justify-center gap-2 ${
+                    activeTab === 0
+                      ? "text-blue-500"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  onClick={() => handleTabClick(0)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                  </svg>
+                  Book a Trip
+                </button>
+              </div>
+              <div
+                className={`flex px-4 py-3 h-12 w-[11rem] rounded-none bg-white xl:shadow-none ${
                   activeTab === 1
-                    ? "text-blue-500"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "border-0 border-b-2 border-b-blue-500"
+                    : "border-0"
                 }`}
-                onClick={() => handleTabClick(1)}
               >
-                Manage Booking
-              </button>
-            </div>
-            <div
-              className={`flex px-4 py-3 h-12 w-full xl:w-[11rem] rounded-[2rem] xl:rounded-tl-none xl:rounded-tr-[2rem] xl:rounded-bl-none xl:rounded-br-none bg-white shadow-md xl:shadow-none ${
-                activeTab === 2
-                  ? "border-2 border-blue-500 xl:border-0 xl:border-b-2 xl:border-b-blue-500"
-                  : "border border-gray-200 xl:border-0"
-              }`}
-            >
-              <button
-                className={`text-sm font-semibold w-full xl:w-[11rem] text-center ${
+                <button
+                  className={`text-sm font-semibold w-[11rem] text-center flex items-center justify-center gap-2 ${
+                    activeTab === 1
+                      ? "text-blue-500"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  onClick={() => handleTabClick(1)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/>
+                    <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>
+                  </svg>
+                  Manage Booking
+                </button>
+              </div>
+              <div
+                className={`flex px-4 py-3 h-12 w-[11rem] rounded-tl-none rounded-tr-[2rem] rounded-bl-none rounded-br-none bg-white xl:shadow-none ${
                   activeTab === 2
-                    ? "text-blue-500"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "border-0 border-b-2 border-b-blue-500"
+                    : "border-0"
                 }`}
-                onClick={() => handleTabClick(2)}
               >
-                Flight Upgrade
-              </button>
+                <button
+                  className={`text-sm font-semibold w-[11rem] text-center flex items-center justify-center gap-2 ${
+                    activeTab === 2
+                      ? "text-blue-500"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  onClick={() => handleTabClick(2)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                    <path d="m16 12-4-4-4 4" />
+                    <path d="M12 16V8" />
+                    <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                    <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                    <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                    <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                  </svg>
+                  Flight Upgrade
+                </button>
+              </div>
             </div>
           </div>
           {/* Desktop content */}
