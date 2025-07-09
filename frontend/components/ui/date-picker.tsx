@@ -135,7 +135,7 @@ export function DateRangePicker({
           {placeholder}
         </label>
         <div
-          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[52px] flex items-center relative group shadow-sm"
+          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[52px] flex items-center relative group shadow-lg hover:shadow-xl"
           onClick={() => {
             setOpen(true);
             // Add haptic feedback for iOS
@@ -176,9 +176,10 @@ export function DateRangePicker({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#2B8A1E"
-                  strokeWidth="1.5"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                 >
                   <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                   <path d="m9 11 3 3L22 4" />

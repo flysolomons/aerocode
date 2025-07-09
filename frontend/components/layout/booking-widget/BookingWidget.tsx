@@ -44,12 +44,25 @@ export default function BookingWidget({
 
   const handleTabClick = (tabIndex: number) => {
     setActiveTab(tabIndex);
-    // On mobile, show the full-screen form
+
+    // Add haptic feedback for mobile
+    if (navigator.vibrate && window.innerWidth < 1280) {
+      navigator.vibrate(10);
+    }
+
+    // On mobile, show the full-screen form with slight delay for better UX
     if (isMobile) {
-      setShowMobileForm(true);
+      // Small delay to show the tab selection state before transitioning
+      setTimeout(() => {
+        setShowMobileForm(true);
+      }, 150);
     }
   };
   const closeMobileForm = () => {
+    // Add haptic feedback when closing
+    if (navigator.vibrate && window.innerWidth < 1280) {
+      navigator.vibrate(5);
+    }
     setShowMobileForm(false);
   };
   const handleDesktopModalStateChange = (isActive: boolean) => {
@@ -71,17 +84,17 @@ export default function BookingWidget({
             <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
               {/* Book a Trip - Full width rectangle */}
               <div
-                className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
                   activeTab === 0
                     ? "border-2 border-blue-500"
-                    : "border border-white/40"
+                    : "border border-white/40 hover:shadow-xl active:scale-95"
                 }`}
               >
                 <button
-                  className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                  className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
                     activeTab === 0
                       ? "text-blue-500"
-                      : "text-gray-700 hover:text-gray-900"
+                      : "text-gray-700 hover:text-gray-900 active:text-blue-400"
                   }`}
                   onClick={() => handleTabClick(0)}
                 >
@@ -107,17 +120,17 @@ export default function BookingWidget({
               <div className="grid grid-cols-2 gap-3">
                 {/* Manage Booking - Half width rectangle */}
                 <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
                     activeTab === 1
                       ? "border-2 border-blue-500"
-                      : "border border-white/40"
+                      : "border border-white/40 hover:shadow-xl active:scale-95"
                   }`}
                 >
                   <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
                       activeTab === 1
                         ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900"
+                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
                     }`}
                     onClick={() => handleTabClick(1)}
                   >
@@ -142,17 +155,17 @@ export default function BookingWidget({
 
                 {/* Flight Upgrade - Half width rectangle */}
                 <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
                     activeTab === 2
                       ? "border-2 border-blue-500"
-                      : "border border-white/40"
+                      : "border border-white/40 hover:shadow-xl active:scale-95"
                   }`}
                 >
                   <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full ${
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
                       activeTab === 2
                         ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900"
+                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
                     }`}
                     onClick={() => handleTabClick(2)}
                   >
@@ -299,10 +312,14 @@ export default function BookingWidget({
       <AnimatePresence>
         {showMobileForm && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{
+              duration: 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94], // Custom easing curve for smooth feel
+              y: { type: "spring", damping: 30, stiffness: 300 },
+            }}
             className="fixed inset-0 z-50 bg-white xl:hidden flex flex-col"
           >
             {/* Header with heading and close button */}

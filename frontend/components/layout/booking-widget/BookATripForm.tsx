@@ -329,9 +329,9 @@ export default function BookATripForm({
                   } else {
                     // When switching back to round trip, ensure return date is undefined
                     // so it shows "(Return date?)" placeholder without tick
-                    setDateRange((prev) => ({ 
-                      from: prev.from, 
-                      to: undefined 
+                    setDateRange((prev) => ({
+                      from: prev.from,
+                      to: undefined,
                     }));
                   }
                   // Add haptic feedback for mobile
@@ -414,11 +414,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={departureInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
                   Flying from?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
                   onClick={() => {
                     const newState = !isDeparturePopoverOpen;
                     setIsDeparturePopoverOpen(newState);
@@ -464,9 +464,10 @@ export default function BookATripForm({
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="#2B8A1E"
-                        strokeWidth="1.5"
+                        strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                       >
                         <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                         <path d="m9 11 3 3L22 4" />
@@ -646,11 +647,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={arrivalInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
                   Flying to?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
                   onClick={() => {
                     const newState = !isArrivalPopoverOpen;
                     setIsArrivalPopoverOpen(newState);
@@ -696,9 +697,10 @@ export default function BookATripForm({
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="#2B8A1E"
-                        strokeWidth="1.5"
+                        strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                       >
                         <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                         <path d="m9 11 3 3L22 4" />
@@ -979,11 +981,11 @@ export default function BookATripForm({
             </div>
             {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={travelersMobileRef}>
-              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
                 Travelling with?
               </label>
               <div
-                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
+                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
                 onClick={() => {
                   const newState = !isTravelersMobileOpen;
                   setIsTravelersMobileOpen(newState);
@@ -1006,7 +1008,8 @@ export default function BookATripForm({
                   value={formatTravelers()}
                 />
                 {/* Add traveler selected indicator */}
-                {(travelers.adults + travelers.children + travelers.infants) > 0 && (
+                {travelers.adults + travelers.children + travelers.infants >
+                  0 && (
                   <div className="flex items-center justify-center mr-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -1015,9 +1018,10 @@ export default function BookATripForm({
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="#2B8A1E"
-                      strokeWidth="1.5"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
                     >
                       <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                       <path d="m9 11 3 3L22 4" />
@@ -1238,7 +1242,7 @@ export default function BookATripForm({
         {/* Mobile: Search button always under form */}
         <div className="md:hidden pt-4 bg-white px-0 py-3">
           <button
-            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg ${
+            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
               isSearchFormValid && !isSearching
                 ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
                 : ""
