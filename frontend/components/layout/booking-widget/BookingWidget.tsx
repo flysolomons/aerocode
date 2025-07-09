@@ -71,7 +71,7 @@ export default function BookingWidget({
             <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
               {/* Book a Trip - Full width rectangle */}
               <div
-                className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
                   activeTab === 0
                     ? "border-2 border-blue-500"
                     : "border border-white/40"
@@ -107,7 +107,7 @@ export default function BookingWidget({
               <div className="grid grid-cols-2 gap-3">
                 {/* Manage Booking - Half width rectangle */}
                 <div
-                  className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
                     activeTab === 1
                       ? "border-2 border-blue-500"
                       : "border border-white/40"
@@ -142,7 +142,7 @@ export default function BookingWidget({
 
                 {/* Flight Upgrade - Half width rectangle */}
                 <div
-                  className={`flex items-center justify-center h-24 py-2 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg ${
                     activeTab === 2
                       ? "border-2 border-blue-500"
                       : "border border-white/40"

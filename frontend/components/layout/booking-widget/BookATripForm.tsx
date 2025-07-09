@@ -76,7 +76,8 @@ export default function BookATripForm({
   const [isTravelersPopoverOpen, setIsTravelersPopoverOpen] =
     useState<boolean>(false);
   const [isTravelersMobileOpen, setIsTravelersMobileOpen] =
-    useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
+    useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
   const travelersMobileRef = useRef<HTMLDivElement>(null);
   const travelersInputRef = useRef<HTMLDivElement>(null);
 
@@ -247,26 +248,40 @@ export default function BookATripForm({
 
   const handleSearch = () => {
     // Handle search with selected airports
-    if (selectedDeparture && selectedArrival) {
-      console.log("Searching for flights...");
-      console.log(
-        "From:",
-        selectedDeparture.departureAirport,
-        selectedDeparture.departureAirportCode
-      );
-      console.log(
-        "To:",
-        selectedArrival.arrivalAirport,
-        selectedArrival.arrivalAirportCode
-      );
-      console.log("Date range:", dateRange);
-      console.log("Travelers:", travelers);
-      console.log("Is one way:", isOneWay);
-      // Implement search functionality or navigation here
+    if (selectedDeparture && selectedArrival && dateRange.from) {
+      setIsSearching(true);
+
+      // Simulate search delay
+      setTimeout(() => {
+        console.log("Searching for flights...");
+        console.log(
+          "From:",
+          selectedDeparture.departureAirport,
+          selectedDeparture.departureAirportCode
+        );
+        console.log(
+          "To:",
+          selectedArrival.arrivalAirport,
+          selectedArrival.arrivalAirportCode
+        );
+        console.log("Date range:", dateRange);
+        console.log("Travelers:", travelers);
+        console.log("Is one way:", isOneWay);
+        // Implement search functionality or navigation here
+        setIsSearching(false);
+      }, 2000);
     } else {
-      alert("Please select both departure and arrival airports");
+      if (!selectedDeparture || !selectedArrival) {
+        alert("Please select both departure and arrival airports");
+      } else if (!dateRange.from) {
+        alert("Please select travel dates");
+      }
     }
   };
+
+  // Check if search form is valid
+  const isSearchFormValid =
+    selectedDeparture && selectedArrival && dateRange.from;
   return (
     <>
       {/* Desktop Overlay */}
@@ -301,7 +316,7 @@ export default function BookATripForm({
         )}
         <div className="flex-1 flex flex-col items-center space-y-4">
           {/* Mobile: Heading */}
-          <h2 className="block md:hidden text-lg font-bold text-blue-500 mb-2">
+          <h2 className="block md:hidden text-lg font-medium text-blue-500 mb-5">
             Book a Trip
           </h2>
           <div className="relative">
@@ -319,7 +334,7 @@ export default function BookATripForm({
             />
           </div>
           {/* search form */}
-          <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0">
+          <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-6 md:space-y-0 py-2 md:py-0 pb-8 md:pb-0">
             <div className="w-full md:flex-1">
               {/* Desktop: Use Popover */}
               <div className="hidden md:block">
@@ -394,7 +409,7 @@ export default function BookATripForm({
                   Flying from?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
                   onClick={() => {
                     const newState = !isDeparturePopoverOpen;
                     setIsDeparturePopoverOpen(newState);
@@ -402,13 +417,27 @@ export default function BookATripForm({
                       // Close other dropdowns
                       setIsArrivalPopoverOpen(false);
                       setIsTravelersMobileOpen(false);
+                      // Add haptic feedback for iOS
+                      if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                      }
                     }
                   }}
                 >
+                  {/* Add loading indicator */}
+                  {isLoading && (
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
                   <input
                     type="text"
-                    placeholder="Select destination"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
+                    placeholder={
+                      isLoading ? "Loading..." : "Select destination"
+                    }
+                    className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                      isLoading ? "pl-8" : ""
+                    }`}
                     readOnly
                     value={
                       selectedDeparture
@@ -416,7 +445,40 @@ export default function BookATripForm({
                         : ""
                     }
                   />
+                  {/* Add selected indicator */}
+                  {selectedDeparture && (
+                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                      <svg
+                        className="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  {/* Add chevron indicator */}
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      isDeparturePopoverOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
                 </div>
+
                 {/* Mobile bottom overlay */}
                 {isDeparturePopoverOpen && (
                   <>
@@ -437,8 +499,11 @@ export default function BookATripForm({
                     />
                     {/* Bottom sheet */}
                     <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out flex flex-col"
-                      style={{ height: "75vh" }}
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                      style={{ height: "80vh", maxHeight: "600px" }}
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="departure-modal-title"
                     >
                       {/* Handle bar */}
                       <div className="flex justify-center pt-3 pb-2">
@@ -446,12 +511,38 @@ export default function BookATripForm({
                       </div>
                       {/* Sticky Header */}
                       <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3
+                          id="departure-modal-title"
+                          className="text-lg font-semibold text-gray-900"
+                        >
                           Flying from?
                         </h3>
                         <p className="text-sm text-gray-500 mt-1">
                           Select your departure destination
                         </p>
+                        {/* Search bar for large lists */}
+                        {departureAirports.length > 5 && (
+                          <div className="mt-3 relative">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              className="w-full px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                            <svg
+                              className="absolute right-3 top-2.5 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                        )}
                         {/* Horizontal line after header text */}
                         <div className="w-full h-px bg-gray-200 mt-4"></div>
                       </div>
@@ -570,7 +661,7 @@ export default function BookATripForm({
                   Flying to?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
                   onClick={() => {
                     const newState = !isArrivalPopoverOpen;
                     setIsArrivalPopoverOpen(newState);
@@ -578,13 +669,27 @@ export default function BookATripForm({
                       // Close other dropdowns
                       setIsDeparturePopoverOpen(false);
                       setIsTravelersMobileOpen(false);
+                      // Add haptic feedback for iOS
+                      if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                      }
                     }
                   }}
                 >
+                  {/* Add loading indicator */}
+                  {isLoading && (
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
                   <input
                     type="text"
-                    placeholder="Select destination"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
+                    placeholder={
+                      isLoading ? "Loading..." : "Select destination"
+                    }
+                    className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                      isLoading ? "pl-8" : ""
+                    }`}
                     readOnly
                     value={
                       selectedArrival
@@ -592,6 +697,38 @@ export default function BookATripForm({
                         : ""
                     }
                   />
+                  {/* Add selected indicator */}
+                  {selectedArrival && (
+                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
+                      <svg
+                        className="w-3 h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                  {/* Add chevron indicator */}
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      isArrivalPopoverOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
                 </div>
 
                 {/* Mobile bottom overlay */}
@@ -615,8 +752,11 @@ export default function BookATripForm({
 
                     {/* Bottom sheet */}
                     <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out flex flex-col"
-                      style={{ height: "75vh" }}
+                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                      style={{ height: "80vh", maxHeight: "600px" }}
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="arrival-modal-title"
                     >
                       {/* Handle bar */}
                       <div className="flex justify-center pt-3 pb-2">
@@ -625,12 +765,38 @@ export default function BookATripForm({
 
                       {/* Sticky Header */}
                       <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3
+                          id="arrival-modal-title"
+                          className="text-lg font-semibold text-gray-900"
+                        >
                           Flying to?
                         </h3>
                         <p className="text-sm text-gray-500 mt-1">
                           Select your arrival destination
                         </p>
+                        {/* Search bar for large lists */}
+                        {arrivalAirports.length > 5 && (
+                          <div className="mt-3 relative">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              className="w-full px-4 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                            <svg
+                              className="absolute right-3 top-2.5 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                        )}
                         {/* Horizontal line after header text */}
                         <div className="w-full h-px bg-gray-200 mt-4"></div>
                       </div>
@@ -848,7 +1014,7 @@ export default function BookATripForm({
                 Travelling with?
               </label>
               <div
-                className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300"
+                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
                 onClick={() => {
                   const newState = !isTravelersMobileOpen;
                   setIsTravelersMobileOpen(newState);
@@ -856,6 +1022,10 @@ export default function BookATripForm({
                     // Close other dropdowns
                     setIsDeparturePopoverOpen(false);
                     setIsArrivalPopoverOpen(false);
+                    // Add haptic feedback for iOS
+                    if (navigator.vibrate) {
+                      navigator.vibrate(10);
+                    }
                   }
                 }}
               >
@@ -866,6 +1036,33 @@ export default function BookATripForm({
                   readOnly
                   value={formatTravelers()}
                 />
+                {/* Add traveler count indicator */}
+                {travelers.adults + travelers.children + travelers.infants >
+                  1 && (
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                    <span className="text-xs text-white font-medium">
+                      {travelers.adults +
+                        travelers.children +
+                        travelers.infants}
+                    </span>
+                  </div>
+                )}
+                {/* Add chevron indicator */}
+                <svg
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    isTravelersMobileOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
               </div>
 
               {/* Mobile bottom overlay */}
@@ -889,8 +1086,11 @@ export default function BookATripForm({
 
                   {/* Bottom sheet */}
                   <div
-                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in fade-in-0 duration-300 ease-out flex flex-col"
-                    style={{ height: "75vh" }}
+                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                    style={{ height: "80vh", maxHeight: "600px" }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="travelers-modal-title"
                   >
                     {/* Handle bar */}
                     <div className="flex justify-center pt-3 pb-2">
@@ -898,12 +1098,31 @@ export default function BookATripForm({
                     </div>
                     {/* Sticky Header */}
                     <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                      <h3 className="text-lg font-semibold text-gray-900">
+                      <h3
+                        id="travelers-modal-title"
+                        className="text-lg font-semibold text-gray-900"
+                      >
                         Travelling with?
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
                         Select number of travelers
                       </p>
+                      {/* Total count display */}
+                      <div className="mt-2 px-3 py-1 bg-blue-50 rounded-full inline-block">
+                        <span className="text-sm text-blue-700 font-medium">
+                          Total:{" "}
+                          {travelers.adults +
+                            travelers.children +
+                            travelers.infants}{" "}
+                          passenger
+                          {travelers.adults +
+                            travelers.children +
+                            travelers.infants !==
+                          1
+                            ? "s"
+                            : ""}
+                        </span>
+                      </div>
                       {/* Horizontal line after header text */}
                       <div className="w-full h-px bg-gray-200 mt-4"></div>
                     </div>
@@ -1024,33 +1243,60 @@ export default function BookATripForm({
             {/* Desktop: Original button */}
             <div className="hidden md:flex items-center justify-end w-auto">
               <button
-                className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-2"
+                className={`p-4 rounded-full transition-colors flex items-center gap-2 disabled:cursor-not-allowed ${
+                  isSearchFormValid && !isSearching
+                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    : "bg-gray-300 text-gray-500"
+                }`}
                 onClick={handleSearch}
+                disabled={!isSearchFormValid || isSearching}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-sm font-medium">Search</span>
+                {isSearching ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
+                <span className="text-sm font-medium">
+                  {isSearching ? "Searching..." : "Search"}
+                </span>
               </button>
             </div>
           </div>
         </div>
         {/* Mobile: Search button always under form */}
-        <div className="md:hidden pt-6 bg-white border-t border-gray-300 px-0 py-4">
+        <div className="md:hidden pt-8 bg-white border-t border-gray-300 px-0 py-4">
           <button
-            className="w-full bg-blue-500 text-white py-4 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
-            onClick={handleSearch}
+            className={`w-full py-4 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg ${
+              isSearchFormValid && !isSearching
+                ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
+                : ""
+            } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
+            onClick={
+              isSearchFormValid && !isSearching ? handleSearch : undefined
+            }
+            disabled={!isSearchFormValid || isSearching}
           >
-            Search Flights
+            {isSearching && (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            )}
+            <span>
+              {isSearching
+                ? "Searching Flights..."
+                : !isSearchFormValid
+                ? "Complete form to search"
+                : "Search Flights"}
+            </span>
           </button>
         </div>
       </div>

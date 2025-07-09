@@ -131,12 +131,18 @@ export function DateRangePicker({
   if (isMobile) {
     return (
       <div className={cn("w-full", className)}>
-        <label className="block text-left text-xs text-gray-600 font-mono font-semibold mb-2">
+        <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
           {placeholder}
         </label>
         <div
-          className="cursor-pointer border-2 border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-3 hover:border-blue-300"
-          onClick={() => setOpen(true)}
+          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[52px] flex items-center relative group shadow-sm"
+          onClick={() => {
+            setOpen(true);
+            // Add haptic feedback for iOS
+            if (navigator.vibrate) {
+              navigator.vibrate(10);
+            }
+          }}
         >
           <div className="flex items-center w-full">
             {dateRange?.from ? (
@@ -148,6 +154,7 @@ export function DateRangePicker({
               ) : (
                 <span className="text-gray-800 text-sm">
                   {format(dateRange.from, "dd MMM, yyyy")}
+                  {mode === "range" && " (Return date?)"}
                 </span>
               )
             ) : (
@@ -158,6 +165,38 @@ export function DateRangePicker({
               </span>
             )}
           </div>
+          {/* Add selected indicator */}
+          {dateRange?.from && (
+            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mr-2">
+              <svg
+                className="w-3 h-3 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          )}
+          {/* Calendar icon indicator */}
+          <svg
+            className={`w-5 h-5 text-gray-400 transition-all duration-200 group-active:text-blue-500 ${
+              open ? "scale-110" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
         </div>
 
         {/* Mobile bottom overlay */}
@@ -181,8 +220,11 @@ export function DateRangePicker({
 
             {/* Bottom sheet */}
             <div
-              className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom-0 duration-700 ease-out flex flex-col"
-              style={{ height: "75vh" }}
+              className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+              style={{ height: "80vh", maxHeight: "600px" }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="date-modal-title"
             >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
@@ -190,7 +232,10 @@ export function DateRangePicker({
               </div>
               {/* Sticky Header */}
               <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3
+                  id="date-modal-title"
+                  className="text-lg font-semibold text-gray-900"
+                >
                   {mode === "single" ? "Travel Date" : "Travel Dates"}
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">
@@ -198,6 +243,24 @@ export function DateRangePicker({
                     ? "Pick your departure date"
                     : "Pick your departure and return dates"}
                 </p>
+                {/* Date selection status */}
+                {(dateRange?.from || dateRange?.to) && (
+                  <div className="mt-2 px-3 py-1 bg-blue-50 rounded-full inline-block">
+                    <span className="text-sm text-blue-700 font-medium">
+                      {dateRange?.from && dateRange?.to
+                        ? `${format(dateRange.from, "dd MMM")} - ${format(
+                            dateRange.to,
+                            "dd MMM"
+                          )}`
+                        : dateRange?.from
+                        ? `Departure: ${format(
+                            dateRange.from,
+                            "dd MMM, yyyy"
+                          )}${mode === "range" ? " (Select return)" : ""}`
+                        : ""}
+                    </span>
+                  </div>
+                )}
                 {/* Horizontal line after header text */}
                 <div className="w-full h-px bg-gray-200 mt-4"></div>
               </div>
@@ -252,9 +315,20 @@ export function DateRangePicker({
                   <button
                     onClick={() => setOpen(false)}
                     disabled={!dateRange?.from}
-                    className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 active:bg-blue-700 transition-all duration-200 text-sm font-medium disabled:bg-gray-400 disabled:cursor-not-allowed relative group"
                   >
-                    Continue
+                    <span className="flex items-center justify-center gap-2">
+                      Continue
+                    </span>
+                    {/* Progress indicator */}
+                    {!dateRange?.to && dateRange?.from && (
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white bg-opacity-20 rounded-b-full">
+                        <div
+                          className="h-full bg-white bg-opacity-60 rounded-b-full transition-all duration-300"
+                          style={{ width: "50%" }}
+                        ></div>
+                      </div>
+                    )}
                   </button>
                 </div>
               )}
