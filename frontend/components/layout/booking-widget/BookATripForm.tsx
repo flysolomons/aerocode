@@ -289,7 +289,7 @@ export default function BookATripForm({
         <div className="fixed inset-0 bg-gray-900 bg-opacity-85 z-[60] transition-opacity duration-300 ease-in-out hidden md:block" />
       )}
       <div
-        className={`px-4 py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
+        className={`px-4 py-2 md:py-3 flex flex-col min-h-[calc(100vh-12rem)] md:min-h-0 transition-all duration-500 ease-in-out ${
           isDesktopModalActive ? "md:-mt-[18rem] md:relative md:z-[70]" : ""
         }`}
       >
@@ -314,12 +314,8 @@ export default function BookATripForm({
             </svg>
           </button>
         )}
-        <div className="flex-1 flex flex-col items-center space-y-4">
-          {/* Mobile: Heading */}
-          <h2 className="block md:hidden text-lg font-medium text-blue-500 mb-5">
-            Book a Trip
-          </h2>
-          <div className="relative">
+        <div className="flex-1 flex flex-col items-center space-y-3 md:space-y-4">
+          <div className="relative mt-2 md:mt-0">
             <RadioButton
               optionOne="Round Trip"
               optionTwo="One Way"
@@ -334,7 +330,7 @@ export default function BookATripForm({
             />
           </div>
           {/* search form */}
-          <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-6 md:space-y-0 py-2 md:py-0 pb-8 md:pb-0">
+          <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
             <div className="w-full md:flex-1">
               {/* Desktop: Use Popover */}
               <div className="hidden md:block">
@@ -405,11 +401,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={departureInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
                   Flying from?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
                   onClick={() => {
                     const newState = !isDeparturePopoverOpen;
                     setIsDeparturePopoverOpen(newState);
@@ -657,11 +653,11 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={arrivalInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
                   Flying to?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
                   onClick={() => {
                     const newState = !isArrivalPopoverOpen;
                     setIsArrivalPopoverOpen(newState);
@@ -1010,11 +1006,11 @@ export default function BookATripForm({
             </div>
             {/* Mobile: Use inline dropdown that pushes content */}
             <div className="block md:hidden" ref={travelersMobileRef}>
-              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-1">
                 Travelling with?
               </label>
               <div
-                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-5 py-2.5 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[52px] flex items-center relative shadow-sm md:shadow-none"
+                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-sm md:shadow-none"
                 onClick={() => {
                   const newState = !isTravelersMobileOpen;
                   setIsTravelersMobileOpen(newState);
@@ -1275,9 +1271,9 @@ export default function BookATripForm({
           </div>
         </div>
         {/* Mobile: Search button always under form */}
-        <div className="md:hidden pt-8 bg-white border-t border-gray-300 px-0 py-4">
+        <div className="md:hidden pt-4 bg-white px-0 py-3">
           <button
-            className={`w-full py-4 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg ${
+            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-lg ${
               isSearchFormValid && !isSearching
                 ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
                 : ""

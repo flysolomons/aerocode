@@ -57,7 +57,7 @@ export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
 
 export const GET_SCHEDULES_QUERY = gql`
   query GetSchedules {
-    schedules {
+    schedules(limit: 100) {
       id
       startDate
       endDate

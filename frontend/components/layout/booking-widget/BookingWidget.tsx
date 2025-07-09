@@ -305,11 +305,17 @@ export default function BookingWidget({
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed inset-0 z-50 bg-white xl:hidden flex flex-col"
           >
-            {/* Header with logo and close button */}
+            {/* Header with heading and close button */}
             <div className="flex justify-between items-center p-4 flex-shrink-0">
-              {/* Logo */}
-              <div className="flex items-center">
-                <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
+              {/* Empty space for balance */}
+              <div className="w-10"></div>
+              {/* Dynamic heading based on active tab - centered */}
+              <div className="flex-1 flex justify-center items-center">
+                <h1 className="text-lg font-semibold text-blue-500">
+                  {activeTab === 0 && "Book a Trip"}
+                  {activeTab === 1 && "Manage Booking"}
+                  {activeTab === 2 && "Flight Upgrade"}
+                </h1>
               </div>
               {/* Close button */}
               <button
