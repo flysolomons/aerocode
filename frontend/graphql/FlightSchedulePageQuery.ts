@@ -57,13 +57,13 @@ export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
 
 export const GET_SCHEDULES_QUERY = gql`
   query GetSchedules {
-    schedules(limit: 100) {
+    schedules {
       id
       startDate
       endDate
       snippetType
       contentType
-      flights {
+      flights(limit: 100) {
         id
         day
         flightNumber
