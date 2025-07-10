@@ -82,43 +82,42 @@ export default function BookingWidget({
           >
             {/* Mobile: Full-width rectangles layout */}
             <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
-              {/* Book a Trip - Full width rectangle */}
-              <div
-                className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
-                  activeTab === 0
-                    ? "border-2 border-blue-500"
-                    : "border border-white/40 hover:shadow-xl active:scale-95"
-                }`}
-              >
-                <button
-                  className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
-                    activeTab === 0
-                      ? "text-blue-500"
-                      : "text-gray-700 hover:text-gray-900 active:text-blue-400"
-                  }`}
-                  onClick={() => handleTabClick(0)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-                  </svg>
-                  <span className="text-sm font-semibold text-center">
-                    Book a Trip
-                  </span>
-                </button>
-              </div>
-
-              {/* Manage Booking and Flight Upgrade - Same row */}
+              {/* Book a Trip & Manage Booking - Same row */}
               <div className="grid grid-cols-2 gap-3">
-                {/* Manage Booking - Half width rectangle */}
+                {/* Book a Trip */}
+                <div
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
+                    activeTab === 0
+                      ? "border-2 border-blue-500"
+                      : "border border-white/40 hover:shadow-xl active:scale-95"
+                  }`}
+                >
+                  <button
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
+                      activeTab === 0
+                        ? "text-blue-500"
+                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
+                    }`}
+                    onClick={() => handleTabClick(0)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    <span className="text-sm font-semibold text-center">
+                      Book a Trip
+                    </span>
+                  </button>
+                </div>
+                {/* Manage Booking */}
                 <div
                   className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
                     activeTab === 1
@@ -152,8 +151,10 @@ export default function BookingWidget({
                     </span>
                   </button>
                 </div>
-
-                {/* Flight Upgrade - Half width rectangle */}
+              </div>
+              {/* Flight Upgrade & Flight Timetable - Same row */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Flight Upgrade */}
                 <div
                   className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
                     activeTab === 2
@@ -192,11 +193,51 @@ export default function BookingWidget({
                     </span>
                   </button>
                 </div>
+                {/* Flight Timetable */}
+                <div
+                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
+                    activeTab === 3
+                      ? "border-2 border-blue-500"
+                      : "border border-white/40 hover:shadow-xl active:scale-95"
+                  }`}
+                >
+                  <button
+                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
+                      activeTab === 3
+                        ? "text-blue-500"
+                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
+                    }`}
+                    onClick={() => handleTabClick(3)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-6 w-6"
+                    >
+                      <path d="M8 2v4" />
+                      <path d="M16 2v4" />
+                      <rect width="18" height="18" x="3" y="4" rx="2" />
+                      <path d="M3 10h18" />
+                      <path d="m9 16 2 2 4-4" />
+                    </svg>
+                    <span className="text-sm font-semibold text-center">
+                      Flight Timetable
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Desktop: Original horizontal layout */}
             <div className="hidden xl:flex xl:w-full">
+              {/* Book a Trip */}
               <div
                 className={`flex px-4 py-3 h-12 w-[11rem] rounded-tl-[2rem] rounded-tr-none rounded-bl-none rounded-br-none bg-white xl:shadow-none ${
                   activeTab === 0
@@ -227,6 +268,7 @@ export default function BookingWidget({
                   Book a Trip
                 </button>
               </div>
+              {/* Manage Booking */}
               <div
                 className={`flex px-4 py-3 h-12 w-[11rem] rounded-none bg-white xl:shadow-none ${
                   activeTab === 1
@@ -258,8 +300,9 @@ export default function BookingWidget({
                   Manage Booking
                 </button>
               </div>
+              {/* Flight Upgrade */}
               <div
-                className={`flex px-4 py-3 h-12 w-[11rem] rounded-tl-none rounded-tr-[2rem] rounded-bl-none rounded-br-none bg-white xl:shadow-none ${
+                className={`flex px-4 py-3 h-12 w-[11rem] rounded-none bg-white xl:shadow-none ${
                   activeTab === 2
                     ? "border-0 border-b-2 border-b-blue-500"
                     : "border-0"
@@ -292,6 +335,43 @@ export default function BookingWidget({
                     <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
                   </svg>
                   Flight Upgrade
+                </button>
+              </div>
+              {/* Flight Timetable */}
+              <div
+                className={`flex px-4 py-3 h-12 w-[11rem] rounded-tr-[2rem] rounded-none bg-white xl:shadow-none ${
+                  activeTab === 3
+                    ? "border-0 border-b-2 border-b-blue-500"
+                    : "border-0"
+                }`}
+              >
+                <button
+                  className={`text-sm font-semibold w-[11rem] text-center flex items-center justify-center gap-2 ${
+                    activeTab === 3
+                      ? "text-blue-500"
+                      : "text-gray-500 hover:text-gray-700"
+                  }`}
+                  onClick={() => handleTabClick(3)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M8 2v4" />
+                    <path d="M16 2v4" />
+                    <rect width="18" height="18" x="3" y="4" rx="2" />
+                    <path d="M3 10h18" />
+                    <path d="m9 16 2 2 4-4" />
+                  </svg>
+                  Flight Timetable
                 </button>
               </div>
             </div>
