@@ -81,9 +81,9 @@ export default function BookingWidget({
             }`}
           >
             {/* Mobile: Full-width rectangles layout */}
-            <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
+            <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto xl:hidden">
               {/* Book a Trip & Manage Booking - Same row */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {/* Book a Trip */}
                 <div
                   className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
@@ -113,7 +113,7 @@ export default function BookingWidget({
                       <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
                     </svg>
                     <span className="text-sm font-semibold text-center">
-                      Book a Trip
+                      Book
                     </span>
                   </button>
                 </div>
@@ -147,13 +147,13 @@ export default function BookingWidget({
                       <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
                     </svg>
                     <span className="text-sm font-semibold text-center">
-                      Manage Booking
+                      Manage
                     </span>
                   </button>
                 </div>
               </div>
               {/* Flight Upgrade & Flight Timetable - Same row */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {/* Flight Upgrade */}
                 <div
                   className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
@@ -189,7 +189,7 @@ export default function BookingWidget({
                       <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
                     </svg>
                     <span className="text-sm font-semibold text-center">
-                      Flight Upgrade
+                      Upgrade
                     </span>
                   </button>
                 </div>
@@ -228,7 +228,7 @@ export default function BookingWidget({
                       <path d="m9 16 2 2 4-4" />
                     </svg>
                     <span className="text-sm font-semibold text-center">
-                      Flight Timetable
+                      Timetable
                     </span>
                   </button>
                 </div>
