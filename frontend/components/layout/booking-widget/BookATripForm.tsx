@@ -552,7 +552,7 @@ export default function BookATripForm({
                     Flying from?
                   </label>
                   <div
-                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                     onClick={() => {
                       const newState = !isDeparturePopoverOpen;
                       setIsDeparturePopoverOpen(newState);
@@ -830,7 +830,7 @@ export default function BookATripForm({
                     Flying to?
                   </label>
                   <div
-                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                     onClick={() => {
                       const newState = !isArrivalPopoverOpen;
                       setIsArrivalPopoverOpen(newState);
@@ -1212,11 +1212,12 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={travelersMobileRef}>
+                {" "}
                 <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
                   Travelling with?
                 </label>
                 <div
-                  className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                  className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                   onClick={() => {
                     const newState = !isTravelersMobileOpen;
                     setIsTravelersMobileOpen(newState);
@@ -1276,7 +1277,6 @@ export default function BookATripForm({
                     />
                   </svg>
                 </div>
-
                 {/* Mobile bottom overlay */}
                 {isTravelersMobileOpen && (
                   <>
