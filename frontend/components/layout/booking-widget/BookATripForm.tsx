@@ -616,7 +616,7 @@ export default function BookATripForm({
                         onTouchCancel={handleTouchCancel}
                       >
                         {/* Handle bar */}
-                        <div className="flex justify-center pt-3 pb-2">
+                        <div className="flex justify-center pt-2 pb-1">
                           <div
                             className={`w-12 h-1 rounded-full transition-all duration-200 ${
                               isDragging && isDeparturePopoverOpen
@@ -626,7 +626,7 @@ export default function BookATripForm({
                           ></div>
                         </div>
                         {/* Sticky Header */}
-                        <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                        <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
                           <h3
                             id="departure-modal-title"
                             className="text-lg font-semibold text-gray-900"
@@ -637,10 +637,10 @@ export default function BookATripForm({
                             Select your departure destination
                           </p>
                           {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-4"></div>
+                          <div className="w-full h-px bg-gray-200 mt-3"></div>
                         </div>
                         {/* Content */}
-                        <div className="flex-1 overflow-y-auto pb-4">
+                        <div className="flex-1 overflow-y-auto pb-4 pt-1">
                           {isLoading ? (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
@@ -877,7 +877,7 @@ export default function BookATripForm({
                         onTouchCancel={handleTouchCancel}
                       >
                         {/* Handle bar */}
-                        <div className="flex justify-center pt-3 pb-2">
+                        <div className="flex justify-center pt-2 pb-1">
                           <div
                             className={`w-12 h-1 rounded-full transition-all duration-200 ${
                               isDragging && isArrivalPopoverOpen
@@ -888,7 +888,7 @@ export default function BookATripForm({
                         </div>
 
                         {/* Sticky Header */}
-                        <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                        <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
                           <h3
                             id="arrival-modal-title"
                             className="text-lg font-semibold text-gray-900"
@@ -899,11 +899,11 @@ export default function BookATripForm({
                             Select your arrival destination
                           </p>
                           {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-4"></div>
+                          <div className="w-full h-px bg-gray-200 mt-3"></div>
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 overflow-y-auto pb-4">
+                        <div className="flex-1 overflow-y-auto pb-4 pt-1">
                           {isLoading ? (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
@@ -1232,7 +1232,7 @@ export default function BookATripForm({
                       onTouchCancel={handleTouchCancel}
                     >
                       {/* Handle bar */}
-                      <div className="flex justify-center pt-3 pb-2">
+                      <div className="flex justify-center pt-2 pb-1">
                         <div
                           className={`w-12 h-1 rounded-full transition-all duration-200 ${
                             isDragging && isTravelersMobileOpen
@@ -1242,7 +1242,7 @@ export default function BookATripForm({
                         ></div>
                       </div>
                       {/* Sticky Header */}
-                      <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                      <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
                         <h3
                           id="travelers-modal-title"
                           className="text-lg font-semibold text-gray-900"
@@ -1253,10 +1253,10 @@ export default function BookATripForm({
                           Select number of travelers
                         </p>
                         {/* Horizontal line after header text */}
-                        <div className="w-full h-px bg-gray-200 mt-4"></div>
+                        <div className="w-full h-px bg-gray-200 mt-3"></div>
                       </div>
                       {/* Content */}
-                      <div className="flex-1 overflow-y-auto px-6 py-2 pb-4">
+                      <div className="flex-1 overflow-y-auto px-6 py-1 pb-4">
                         {/* Adults */}
                         <div className="flex justify-between items-center mb-6">
                           <div>

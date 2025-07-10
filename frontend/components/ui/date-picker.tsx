@@ -306,7 +306,7 @@ export function DateRangePicker({
               onTouchCancel={handleTouchCancel}
             >
               {/* Handle bar */}
-              <div className="flex justify-center pt-3 pb-2">
+              <div className="flex justify-center pt-2 pb-1">
                 <div
                   className={`w-12 h-1 rounded-full transition-all duration-200 ${
                     isDragging ? "bg-blue-400 w-16" : "bg-gray-300"
@@ -314,7 +314,7 @@ export function DateRangePicker({
                 ></div>
               </div>
               {/* Sticky Header */}
-              <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+              <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
                 <h3
                   id="date-modal-title"
                   className="text-lg font-semibold text-gray-900"
@@ -328,10 +328,10 @@ export function DateRangePicker({
                 </p>
                 {/* Date selection status */}
                 {/* Horizontal line after header text */}
-                <div className="w-full h-px bg-gray-200 mt-4"></div>
+                <div className="w-full h-px bg-gray-200 mt-3"></div>
               </div>
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-6 py-2 pb-4">
+              <div className="flex-1 overflow-y-auto px-6 py-1 pb-4">
                 {mode === "single" ? (
                   <Calendar
                     initialFocus
