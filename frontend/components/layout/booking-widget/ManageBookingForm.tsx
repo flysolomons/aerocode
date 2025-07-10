@@ -16,10 +16,6 @@ export default function ManageBookingForm() {
 
   return (
     <div className="px-4 py-3 flex flex-col items-center space-y-4">
-      {/* Mobile: Heading */}
-      <h2 className="block md:hidden text-lg font-bold text-blue-500 mb-2">
-        Manage Booking
-      </h2>
       {/* Desktop version - original styling */}
       <div className="hidden md:block w-full">
         <br />
@@ -78,40 +74,94 @@ export default function ManageBookingForm() {
       <div className="block md:hidden w-full">
         <div className="space-y-4">
           {/* Booking Reference Input Card */}
-          <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
-            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+          <div>
+            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
               Booking Reference
             </label>
-            <input
-              type="text"
-              placeholder="Enter your booking reference"
-              className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 px-2 sm:px-0"
-              value={bookingReference}
-              onChange={(e) => setBookingReference(e.target.value)}
-            />
+            <div className="cursor-text border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg">
+              <input
+                type="text"
+                placeholder="Enter your booking reference"
+                className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+                value={bookingReference}
+                onChange={(e) => setBookingReference(e.target.value)}
+              />
+              {/* Add selected indicator */}
+              {bookingReference && (
+                <div className="flex items-center justify-center mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#2B8A1E"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                  >
+                    <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                    <path d="m9 11 3 3L22 4" />
+                  </svg>
+                </div>
+              )}
+            </div>
           </div>
+
           {/* Last Name Input Card */}
-          <div className="w-full border-2 border-gray-300 rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-white px-5 py-1.5 sm:px-4 sm:py-3 hover:border-blue-300">
-            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1">
+          <div>
+            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
               Last Name
             </label>
-            <input
-              type="text"
-              placeholder="Enter your last name"
-              className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 px-2 sm:px-0"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
+            <div className="cursor-text border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg">
+              <input
+                type="text"
+                placeholder="Enter your last name"
+                className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              {/* Add selected indicator */}
+              {lastName && (
+                <div className="flex items-center justify-center mr-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#2B8A1E"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                  >
+                    <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                    <path d="m9 11 3 3L22 4" />
+                  </svg>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Mobile: Search button always under form */}
-        <div className="mt-2 pt-6 bg-white border-t border-gray-300 px-0 py-4">
+        {/* Mobile: Search button */}
+        <div className="md:hidden pt-4 px-0 pb-2 mt-4">
           <button
-            className="w-full bg-blue-500 text-white py-4 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
-            onClick={handleSearch}
+            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
+              bookingReference && lastName
+                ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
+                : ""
+            } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
+            onClick={bookingReference && lastName ? handleSearch : undefined}
+            disabled={!bookingReference || !lastName}
           >
-            Retrieve Booking
+            <span>
+              {!bookingReference || !lastName
+                ? "Complete form to search"
+                : "Retrieve Booking"}
+            </span>
           </button>
         </div>
       </div>
