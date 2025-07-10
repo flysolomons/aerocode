@@ -139,6 +139,15 @@ export function DateRangePicker({
 
   // Touch gesture handlers for swipe-down dismissal
   const handleTouchStart = (e: React.TouchEvent) => {
+    // Only handle touch events from the header area, not from calendar buttons
+    const target = e.target as HTMLElement;
+    if (
+      target.closest("button[data-day]") ||
+      target.closest('[role="button"]')
+    ) {
+      return;
+    }
+
     const touch = e.touches[0];
     setTouchStart({
       y: touch.clientY,
@@ -150,6 +159,15 @@ export function DateRangePicker({
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!touchStart || !isDragging) return;
+
+    // Only handle touch events from the header area, not from calendar buttons
+    const target = e.target as HTMLElement;
+    if (
+      target.closest("button[data-day]") ||
+      target.closest('[role="button"]')
+    ) {
+      return;
+    }
 
     const touch = e.touches[0];
     const deltaY = touch.clientY - touchStart.y;
@@ -166,6 +184,15 @@ export function DateRangePicker({
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!touchStart || !isDragging) return;
+
+    // Only handle touch events from the header area, not from calendar buttons
+    const target = e.target as HTMLElement;
+    if (
+      target.closest("button[data-day]") ||
+      target.closest('[role="button"]')
+    ) {
+      return;
+    }
 
     const touch = e.changedTouches[0];
     const deltaY = touch.clientY - touchStart.y;
@@ -293,20 +320,22 @@ export function DateRangePicker({
               ref={overlayRef}
               className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
               style={{
-                height: "65vh",
+                height: "75vh",
                 transform: isDragging ? `translateY(${dragOffset}px)` : "none",
                 transition: isDragging ? "none" : "transform 0.3s ease-out",
               }}
               role="dialog"
               aria-modal="true"
               aria-labelledby="date-modal-title"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onTouchCancel={handleTouchCancel}
             >
               {/* Handle bar */}
-              <div className="flex justify-center pt-2 pb-1">
+              <div
+                className="flex justify-center pt-2 pb-1"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchCancel}
+              >
                 <div
                   className={`w-12 h-1 rounded-full transition-all duration-200 ${
                     isDragging ? "bg-blue-400 w-16" : "bg-gray-300"
@@ -314,7 +343,13 @@ export function DateRangePicker({
                 ></div>
               </div>
               {/* Header */}
-              <div className="bg-white px-6 py-3">
+              <div
+                className="bg-white px-6 py-3"
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchCancel}
+              >
                 <h3
                   id="date-modal-title"
                   className="text-lg font-semibold text-gray-900"
@@ -331,7 +366,12 @@ export function DateRangePicker({
                 <div className="w-full h-px bg-gray-200 mt-3"></div>
               </div>
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-6 py-1 pb-4">
+              <div
+                className="flex-1 overflow-y-auto px-6 py-1 pb-4"
+                onTouchStart={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
+                onTouchEnd={(e) => e.stopPropagation()}
+              >
                 {mode === "single" ? (
                   <Calendar
                     initialFocus
@@ -377,7 +417,12 @@ export function DateRangePicker({
               </div>
               {/* Continue button for range mode only */}
               {mode === "range" && (
-                <div className="px-6 py-4 border-t border-gray-200">
+                <div
+                  className="px-6 py-4 border-t border-gray-200"
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchMove={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setOpen(false)}
                     disabled={!dateRange?.from}
