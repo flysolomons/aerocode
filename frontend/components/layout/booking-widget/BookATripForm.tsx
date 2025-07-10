@@ -546,516 +546,491 @@ export default function BookATripForm({
                     </PopoverContent>
                   </Popover>
                 </div>
-                {/* Mobile: Use inline dropdowns in a single row with icon between */}
-                <div className="flex flex-row gap-2 w-full md:hidden items-end">
-                  <div className="flex-1 min-w-0" ref={departureInputRef}>
-                    <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                      Flying from?
-                    </label>
-                    <div
-                      className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg"
-                      onClick={() => {
-                        const newState = !isDeparturePopoverOpen;
-                        setIsDeparturePopoverOpen(newState);
-                        if (newState) {
-                          setIsArrivalPopoverOpen(false);
-                          setIsTravelersMobileOpen(false);
-                          if (navigator.vibrate) {
-                            navigator.vibrate(10);
-                          }
-                        }
-                      }}
-                    >
-                      {isLoading && (
-                        <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                      )}
-                      <input
-                        type="text"
-                        placeholder="Select"
-                        className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
-                          isLoading ? "pl-8" : ""
-                        }`}
-                        readOnly
-                        value={
-                          selectedDeparture
-                            ? selectedDeparture.departureAirportCode
-                            : ""
-                        }
-                      />
-                      {selectedDeparture && (
-                        <div className="flex items-center justify-center mr-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#2B8A1E"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
-                          >
-                            <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                            <path d="m9 11 3 3L22 4" />
-                          </svg>
-                        </div>
-                      )}
-                      <svg
-                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                          isDeparturePopoverOpen ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </div>
-                    {/* ...existing code for mobile bottom overlay... */}
-                    {isDeparturePopoverOpen && (
-                      <>
-                        {/* Backdrop with blur effect */}
-                        <div
-                          className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
-                          style={{
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            margin: 0,
-                            padding: 0,
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setIsDeparturePopoverOpen(false);
-                          }}
-                        />
-                        {/* Bottom sheet */}
-                        <div
-                          ref={departureOverlayRef}
-                          className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
-                          style={{
-                            height: "75vh",
-                            transform:
-                              isDragging && isDeparturePopoverOpen
-                                ? `translateY(${dragOffset}px)`
-                                : "none",
-                            transition: isDragging
-                              ? "none"
-                              : "transform 0.3s ease-out",
-                          }}
-                          role="dialog"
-                          aria-modal="true"
-                          aria-labelledby="departure-modal-title"
-                        >
-                          {/* ...existing code for handle bar, header, content... */}
-                          <div
-                            className="flex justify-center pt-3 pb-2"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            onTouchCancel={handleTouchCancel}
-                          >
-                            <div
-                              className={`h-1 rounded-full transition-all duration-200 ${
-                                isDragging && isDeparturePopoverOpen
-                                  ? "bg-blue-400 w-16"
-                                  : "bg-gray-400 w-12"
-                              }`}
-                            ></div>
-                          </div>
-                          <div
-                            className="bg-white px-6 py-3"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            onTouchCancel={handleTouchCancel}
-                          >
-                            <h3
-                              id="departure-modal-title"
-                              className="text-lg font-semibold text-gray-900"
-                            >
-                              Flying from?
-                            </h3>
-                            <p className="text-sm text-gray-500 mt-1">
-                              Select your departure destination
-                            </p>
-                            <div className="w-full h-px bg-gray-200 mt-3"></div>
-                          </div>
-                          <div
-                            className="flex-1 overflow-y-auto pb-4 pt-1"
-                            onTouchStart={(e) => e.stopPropagation()}
-                            onTouchMove={(e) => e.stopPropagation()}
-                            onTouchEnd={(e) => e.stopPropagation()}
-                          >
-                            {isLoading ? (
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-gray-500">
-                                  Loading destinations...
-                                </div>
-                              </div>
-                            ) : departureAirports.length > 0 ? (
-                              <div className="divide-y divide-gray-100">
-                                {departureAirports.map((airport, index) => (
-                                  <div
-                                    key={index}
-                                    className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      setSelectedDeparture(airport);
-                                      setIsDeparturePopoverOpen(false);
-                                    }}
-                                  >
-                                    <div className="text-gray-900 font-medium">
-                                      {airport.departureAirport}
-                                    </div>
-                                    <div className="text-sm text-gray-500 mt-1">
-                                      {airport.departureAirportCode}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-gray-500">
-                                  No destinations found
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  {/* Icon between inputs */}
+                {/* Mobile: Use inline dropdown that pushes content */}
+                <div className="block md:hidden" ref={departureInputRef}>
+                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                    Flying from?
+                  </label>
                   <div
-                    className="flex items-center justify-center px-1"
-                    style={{ alignSelf: "stretch" }}
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    onClick={() => {
+                      const newState = !isDeparturePopoverOpen;
+                      setIsDeparturePopoverOpen(newState);
+                      if (newState) {
+                        // Close other dropdowns
+                        setIsArrivalPopoverOpen(false);
+                        setIsTravelersMobileOpen(false);
+                        // Add haptic feedback for iOS
+                        if (navigator.vibrate) {
+                          navigator.vibrate(10);
+                        }
+                      }
+                    }}
                   >
-                    <div
-                      className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 bg-white shadow-md"
-                      style={{
-                        boxShadow: "0 2px 8px 0 rgba(0,0,0,0.07)",
-                        margin: "auto",
-                      }}
-                    >
-                      {isOneWay ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-move-right-icon lucide-move-right"
-                        >
-                          <path d="M18 8L22 12L18 16" />
-                          <path d="M2 12H22" />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-arrow-right-left-icon lucide-arrow-right-left"
-                        >
-                          <path d="m16 3 4 4-4 4" />
-                          <path d="M20 7H4" />
-                          <path d="m8 21-4-4 4-4" />
-                          <path d="M4 17h16" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0" ref={arrivalInputRef}>
-                    <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                      Flying to?
-                    </label>
-                    <div
-                      className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg"
-                      onClick={() => {
-                        const newState = !isArrivalPopoverOpen;
-                        setIsArrivalPopoverOpen(newState);
-                        if (newState) {
-                          setIsDeparturePopoverOpen(false);
-                          setIsTravelersMobileOpen(false);
-                          if (navigator.vibrate) {
-                            navigator.vibrate(10);
-                          }
-                        }
-                      }}
-                    >
-                      {isLoading && (
-                        <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                      )}
-                      <input
-                        type="text"
-                        placeholder="Select"
-                        className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
-                          isLoading ? "pl-8" : ""
-                        }`}
-                        readOnly
-                        value={
-                          selectedArrival
-                            ? selectedArrival.arrivalAirportCode
-                            : ""
-                        }
-                      />
-                      {selectedArrival && (
-                        <div className="flex items-center justify-center mr-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#2B8A1E"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
-                          >
-                            <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                            <path d="m9 11 3 3L22 4" />
-                          </svg>
-                        </div>
-                      )}
-                      <svg
-                        className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                          isArrivalPopoverOpen ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </div>
-                    {/* ...existing code for mobile bottom overlay... */}
-                    {isArrivalPopoverOpen && (
-                      <>
-                        {/* Backdrop with blur effect */}
-                        <div
-                          className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
-                          style={{
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            margin: 0,
-                            padding: 0,
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setIsArrivalPopoverOpen(false);
-                          }}
-                        />
-                        {/* Bottom sheet */}
-                        <div
-                          ref={arrivalOverlayRef}
-                          className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
-                          style={{
-                            height: "75vh",
-                            transform:
-                              isDragging && isArrivalPopoverOpen
-                                ? `translateY(${dragOffset}px)`
-                                : "none",
-                            transition: isDragging
-                              ? "none"
-                              : "transform 0.3s ease-out",
-                          }}
-                          role="dialog"
-                          aria-modal="true"
-                          aria-labelledby="arrival-modal-title"
-                        >
-                          {/* ...existing code for handle bar, header, content... */}
-                          <div
-                            className="flex justify-center pt-3 pb-2"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            onTouchCancel={handleTouchCancel}
-                          >
-                            <div
-                              className={`h-1 rounded-full transition-all duration-200 ${
-                                isDragging && isArrivalPopoverOpen
-                                  ? "bg-blue-400 w-16"
-                                  : "bg-gray-400 w-12"
-                              }`}
-                            ></div>
-                          </div>
-                          <div
-                            className="bg-white px-6 py-3"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                            onTouchCancel={handleTouchCancel}
-                          >
-                            <h3
-                              id="arrival-modal-title"
-                              className="text-lg font-semibold text-gray-900"
-                            >
-                              Flying to?
-                            </h3>
-                            <p className="text-sm text-gray-500 mt-1">
-                              Select your arrival destination
-                            </p>
-                            <div className="w-full h-px bg-gray-200 mt-3"></div>
-                          </div>
-                          <div
-                            className="flex-1 overflow-y-auto pb-4 pt-1"
-                            onTouchStart={(e) => e.stopPropagation()}
-                            onTouchMove={(e) => e.stopPropagation()}
-                            onTouchEnd={(e) => e.stopPropagation()}
-                          >
-                            {isLoading ? (
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-gray-500">
-                                  Loading destinations...
-                                </div>
-                              </div>
-                            ) : arrivalAirports.length > 0 ? (
-                              <div className="divide-y divide-gray-100">
-                                {arrivalAirports.map((airport, index) => (
-                                  <div
-                                    key={index}
-                                    className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      setSelectedArrival(airport);
-                                      setIsArrivalPopoverOpen(false);
-                                    }}
-                                  >
-                                    <div className="text-gray-900 font-medium">
-                                      {airport.arrivalAirport}
-                                    </div>
-                                    <div className="text-sm text-gray-500 mt-1">
-                                      {airport.arrivalAirportCode}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="flex items-center justify-center h-32">
-                                <div className="text-gray-500">
-                                  No destinations found
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </>
+                    {/* Add loading indicator */}
+                    {isLoading && (
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
                     )}
+                    <input
+                      type="text"
+                      placeholder={
+                        isLoading ? "Loading..." : "Select destination"
+                      }
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                        isLoading ? "pl-8" : ""
+                      }`}
+                      readOnly
+                      value={
+                        selectedDeparture
+                          ? `${selectedDeparture.departureAirport} (${selectedDeparture.departureAirportCode})`
+                          : ""
+                      }
+                    />
+                    {/* Add selected indicator */}
+                    {selectedDeparture && (
+                      <div className="flex items-center justify-center mr-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#2B8A1E"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                        >
+                          <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                          <path d="m9 11 3 3L22 4" />
+                        </svg>
+                      </div>
+                    )}
+                    {/* Add chevron indicator */}
+                    <svg
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                        isDeparturePopoverOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
                   </div>
+
+                  {/* Mobile bottom overlay */}
+                  {isDeparturePopoverOpen && (
+                    <>
+                      {/* Backdrop with blur effect */}
+                      <div
+                        className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
+                        style={{
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "100vw",
+                          height: "100vh",
+                          margin: 0,
+                          padding: 0,
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsDeparturePopoverOpen(false);
+                        }}
+                      />
+                      {/* Bottom sheet */}
+                      <div
+                        ref={departureOverlayRef}
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
+                        style={{
+                          height: "75vh",
+                          transform:
+                            isDragging && isDeparturePopoverOpen
+                              ? `translateY(${dragOffset}px)`
+                              : "none",
+                          transition: isDragging
+                            ? "none"
+                            : "transform 0.3s ease-out",
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="departure-modal-title"
+                      >
+                        {/* Handle bar */}
+                        <div
+                          className="flex justify-center pt-3 pb-2"
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                          onTouchCancel={handleTouchCancel}
+                        >
+                          <div
+                            className={`h-1 rounded-full transition-all duration-200 ${
+                              isDragging && isDeparturePopoverOpen
+                                ? "bg-blue-400 w-16"
+                                : "bg-gray-400 w-12"
+                            }`}
+                          ></div>
+                        </div>
+                        {/* Header */}
+                        <div
+                          className="bg-white px-6 py-3"
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                          onTouchCancel={handleTouchCancel}
+                        >
+                          <h3
+                            id="departure-modal-title"
+                            className="text-lg font-semibold text-gray-900"
+                          >
+                            Flying from?
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Select your departure destination
+                          </p>
+                          {/* Horizontal line after header text */}
+                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                        </div>
+                        {/* Content */}
+                        <div
+                          className="flex-1 overflow-y-auto pb-4 pt-1"
+                          onTouchStart={(e) => e.stopPropagation()}
+                          onTouchMove={(e) => e.stopPropagation()}
+                          onTouchEnd={(e) => e.stopPropagation()}
+                        >
+                          {isLoading ? (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                Loading destinations...
+                              </div>
+                            </div>
+                          ) : departureAirports.length > 0 ? (
+                            <div className="divide-y divide-gray-100">
+                              {departureAirports.map((airport, index) => (
+                                <div
+                                  key={index}
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setSelectedDeparture(airport);
+                                    setIsDeparturePopoverOpen(false);
+                                  }}
+                                >
+                                  <div className="text-gray-900 font-medium">
+                                    {airport.departureAirport}
+                                  </div>
+                                  <div className="text-sm text-gray-500 mt-1">
+                                    {airport.departureAirportCode}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                No destinations found
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
-              {/* <div className="w-full md:flex-1"> */}
-              {/* Desktop: Use Popover */}
-              <div className="hidden md:block">
-                <Popover
-                  open={isArrivalPopoverOpen && window.innerWidth >= 768}
-                  onOpenChange={(open) => {
-                    // Only allow opening on desktop
-                    if (window.innerWidth < 768) {
-                      return;
-                    }
+              <div className="w-full md:flex-1">
+                {/* Desktop: Use Popover */}
+                <div className="hidden md:block">
+                  <Popover
+                    open={isArrivalPopoverOpen && window.innerWidth >= 768}
+                    onOpenChange={(open) => {
+                      // Only allow opening on desktop
+                      if (window.innerWidth < 768) {
+                        return;
+                      }
 
-                    if (open && !isDesktopModalActive) {
-                      // Only trigger modal if we're not already in modal state
-                      handleDesktopInputClick();
-                    }
-                    setIsArrivalPopoverOpen(open);
-                  }}
-                >
-                  <PopoverTrigger asChild className="w-full">
-                    <div className="cursor-pointer px-6 py-3">
-                      <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Flying to?
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Select destination"
-                        className="w-full text-sm outline-none text-gray-700 cursor-pointer"
-                        readOnly
-                        value={
-                          selectedArrival
-                            ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
-                            : ""
-                        }
-                      />
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
-                    style={{
-                      maxHeight: arrivalAirports.length > 3 ? "12rem" : "auto",
+                      if (open && !isDesktopModalActive) {
+                        // Only trigger modal if we're not already in modal state
+                        handleDesktopInputClick();
+                      }
+                      setIsArrivalPopoverOpen(open);
                     }}
-                    align="start"
-                    side="bottom"
-                    sideOffset={4}
                   >
-                    {isLoading ? (
-                      <div className="text-gray-500 p-3">
-                        Loading destinations...
+                    <PopoverTrigger asChild className="w-full">
+                      <div className="cursor-pointer px-6 py-3">
+                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
+                          Flying to?
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Select destination"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          readOnly
+                          value={
+                            selectedArrival
+                              ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
+                              : ""
+                          }
+                        />
                       </div>
-                    ) : arrivalAirports.length > 0 ? (
-                      arrivalAirports.map((airport, index) => (
-                        <div
-                          key={index}
-                          className="hover:bg-gray-100 cursor-pointer p-3"
-                          onClick={() => {
-                            setSelectedArrival(airport);
-                            setIsArrivalPopoverOpen(false);
-                          }}
-                        >
-                          <div className="text-black text-sm">
-                            {airport.arrivalAirport}
-                          </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      style={{
+                        maxHeight:
+                          arrivalAirports.length > 3 ? "12rem" : "auto",
+                      }}
+                      align="start"
+                      side="bottom"
+                      sideOffset={4}
+                    >
+                      {isLoading ? (
+                        <div className="text-gray-500 p-3">
+                          Loading destinations...
                         </div>
-                      ))
-                    ) : (
-                      <div className="text-gray-500 p-3">
-                        No destinations found
+                      ) : arrivalAirports.length > 0 ? (
+                        arrivalAirports.map((airport, index) => (
+                          <div
+                            key={index}
+                            className="hover:bg-gray-100 cursor-pointer p-3"
+                            onClick={() => {
+                              setSelectedArrival(airport);
+                              setIsArrivalPopoverOpen(false);
+                            }}
+                          >
+                            <div className="text-black text-sm">
+                              {airport.arrivalAirport}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-gray-500 p-3">
+                          No destinations found
+                        </div>
+                      )}
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {/* Mobile: Use inline dropdown that pushes content */}
+                <div className="block md:hidden" ref={arrivalInputRef}>
+                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                    Flying to?
+                  </label>
+                  <div
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    onClick={() => {
+                      const newState = !isArrivalPopoverOpen;
+                      setIsArrivalPopoverOpen(newState);
+                      if (newState) {
+                        // Close other dropdowns
+                        setIsDeparturePopoverOpen(false);
+                        setIsTravelersMobileOpen(false);
+                        // Add haptic feedback for iOS
+                        if (navigator.vibrate) {
+                          navigator.vibrate(10);
+                        }
+                      }
+                    }}
+                  >
+                    {/* Add loading indicator */}
+                    {isLoading && (
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
-                  </PopoverContent>
-                </Popover>
+                    <input
+                      type="text"
+                      placeholder={
+                        isLoading ? "Loading..." : "Select destination"
+                      }
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                        isLoading ? "pl-8" : ""
+                      }`}
+                      readOnly
+                      value={
+                        selectedArrival
+                          ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
+                          : ""
+                      }
+                    />
+                    {/* Add selected indicator */}
+                    {selectedArrival && (
+                      <div className="flex items-center justify-center mr-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#2B8A1E"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                        >
+                          <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                          <path d="m9 11 3 3L22 4" />
+                        </svg>
+                      </div>
+                    )}
+                    {/* Add chevron indicator */}
+                    <svg
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                        isArrivalPopoverOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Mobile bottom overlay */}
+                  {isArrivalPopoverOpen && (
+                    <>
+                      {/* Backdrop with blur effect */}
+                      <div
+                        className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
+                        style={{
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "100vw",
+                          height: "100vh",
+                          margin: 0,
+                          padding: 0,
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsArrivalPopoverOpen(false);
+                        }}
+                      />
+
+                      {/* Bottom sheet */}
+                      <div
+                        ref={arrivalOverlayRef}
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
+                        style={{
+                          height: "75vh",
+                          transform:
+                            isDragging && isArrivalPopoverOpen
+                              ? `translateY(${dragOffset}px)`
+                              : "none",
+                          transition: isDragging
+                            ? "none"
+                            : "transform 0.3s ease-out",
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="arrival-modal-title"
+                      >
+                        {/* Handle bar */}
+                        <div
+                          className="flex justify-center pt-3 pb-2"
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                          onTouchCancel={handleTouchCancel}
+                        >
+                          <div
+                            className={`h-1 rounded-full transition-all duration-200 ${
+                              isDragging && isArrivalPopoverOpen
+                                ? "bg-blue-400 w-16"
+                                : "bg-gray-400 w-12"
+                            }`}
+                          ></div>
+                        </div>
+
+                        {/* Header */}
+                        <div
+                          className="bg-white px-6 py-3"
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                          onTouchCancel={handleTouchCancel}
+                        >
+                          <h3
+                            id="arrival-modal-title"
+                            className="text-lg font-semibold text-gray-900"
+                          >
+                            Flying to?
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Select your arrival destination
+                          </p>
+                          {/* Horizontal line after header text */}
+                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                        </div>
+
+                        {/* Content */}
+                        <div
+                          className="flex-1 overflow-y-auto pb-4 pt-1"
+                          onTouchStart={(e) => e.stopPropagation()}
+                          onTouchMove={(e) => e.stopPropagation()}
+                          onTouchEnd={(e) => e.stopPropagation()}
+                        >
+                          {isLoading ? (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                Loading destinations...
+                              </div>
+                            </div>
+                          ) : arrivalAirports.length > 0 ? (
+                            <div className="divide-y divide-gray-100">
+                              {arrivalAirports.map((airport, index) => (
+                                <div
+                                  key={index}
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setSelectedArrival(airport);
+                                    setIsArrivalPopoverOpen(false);
+                                  }}
+                                >
+                                  <div className="text-gray-900 font-medium">
+                                    {airport.arrivalAirport}
+                                  </div>
+                                  <div className="text-sm text-gray-500 mt-1">
+                                    {airport.arrivalAirportCode}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                No destinations found
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              {/* Mobile: Use inline dropdown that pushes content */}
-              {/* </div> */}
               <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
               {/* Desktop: Combined date picker */}
               <div className="hidden md:flex w-full md:flex-1">
@@ -1237,6 +1212,7 @@ export default function BookATripForm({
               </div>
               {/* Mobile: Use inline dropdown that pushes content */}
               <div className="block md:hidden" ref={travelersMobileRef}>
+                {" "}
                 <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
                   Travelling with?
                 </label>
