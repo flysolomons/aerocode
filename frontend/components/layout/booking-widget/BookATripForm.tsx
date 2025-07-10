@@ -598,7 +598,7 @@ export default function BookATripForm({
                         ref={departureOverlayRef}
                         className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
                         style={{
-                          height: "80vh",
+                          height: "65vh",
                           transform:
                             isDragging && isDeparturePopoverOpen
                               ? `translateY(${dragOffset}px)`
@@ -625,8 +625,8 @@ export default function BookATripForm({
                             }`}
                           ></div>
                         </div>
-                        {/* Sticky Header */}
-                        <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
+                        {/* Header */}
+                        <div className="bg-white px-6 py-3">
                           <h3
                             id="departure-modal-title"
                             className="text-lg font-semibold text-gray-900"
@@ -859,7 +859,7 @@ export default function BookATripForm({
                         ref={arrivalOverlayRef}
                         className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
                         style={{
-                          height: "80vh",
+                          height: "65vh",
                           transform:
                             isDragging && isArrivalPopoverOpen
                               ? `translateY(${dragOffset}px)`
@@ -887,8 +887,8 @@ export default function BookATripForm({
                           ></div>
                         </div>
 
-                        {/* Sticky Header */}
-                        <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
+                        {/* Header */}
+                        <div className="bg-white px-6 py-3">
                           <h3
                             id="arrival-modal-title"
                             className="text-lg font-semibold text-gray-900"
@@ -1214,7 +1214,7 @@ export default function BookATripForm({
                       ref={travelersOverlayRef}
                       className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
                       style={{
-                        height: "80vh",
+                        height: "65vh",
                         transform:
                           isDragging && isTravelersMobileOpen
                             ? `translateY(${dragOffset}px)`
@@ -1241,8 +1241,8 @@ export default function BookATripForm({
                           }`}
                         ></div>
                       </div>
-                      {/* Sticky Header */}
-                      <div className="sticky top-0 z-10 bg-white px-6 pt-1 pb-3">
+                      {/* Header */}
+                      <div className="bg-white px-6 py-3">
                         <h3
                           id="travelers-modal-title"
                           className="text-lg font-semibold text-gray-900"
