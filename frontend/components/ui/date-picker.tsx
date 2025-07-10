@@ -128,6 +128,71 @@ export function DateRangePicker({
   const [open, setOpen] = React.useState(false);
   const isMobile = variant === "mobile";
 
+  // Touch gesture state for swipe-down dismissal
+  const [touchStart, setTouchStart] = React.useState<{
+    y: number;
+    time: number;
+  } | null>(null);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [dragOffset, setDragOffset] = React.useState(0);
+  const overlayRef = React.useRef<HTMLDivElement>(null);
+
+  // Touch gesture handlers for swipe-down dismissal
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({
+      y: touch.clientY,
+      time: Date.now(),
+    });
+    setIsDragging(true);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart || !isDragging) return;
+
+    const touch = e.touches[0];
+    const deltaY = touch.clientY - touchStart.y;
+
+    // Only allow downward swipes
+    if (deltaY > 0) {
+      // Prevent default scrolling behavior when dragging
+      e.preventDefault();
+      // Add some resistance - the further you drag, the more resistance
+      const resistance = Math.max(0.3, 1 - deltaY / 300);
+      setDragOffset(deltaY * resistance);
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart || !isDragging) return;
+
+    const touch = e.changedTouches[0];
+    const deltaY = touch.clientY - touchStart.y;
+    const deltaTime = Date.now() - touchStart.time;
+    const velocity = Math.abs(deltaY) / deltaTime;
+
+    // Dismiss if:
+    // 1. Dragged down more than 100px, OR
+    // 2. Fast swipe (velocity > 0.5) with at least 50px drag
+    const shouldDismiss = deltaY > 100 || (velocity > 0.5 && deltaY > 50);
+
+    if (shouldDismiss) {
+      setOpen(false);
+    }
+
+    // Reset touch state
+    setTouchStart(null);
+    setIsDragging(false);
+    setDragOffset(0);
+  };
+
+  const handleTouchCancel = () => {
+    setTouchStart(null);
+    setIsDragging(false);
+    setDragOffset(0);
+  };
+
   if (isMobile) {
     return (
       <div className={cn("w-full", className)}>
@@ -209,7 +274,7 @@ export function DateRangePicker({
           <>
             {/* Backdrop with blur effect */}
             <div
-              className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
+              className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out"
               style={{
                 left: 0,
                 right: 0,
@@ -225,18 +290,31 @@ export function DateRangePicker({
 
             {/* Bottom sheet */}
             <div
-              className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
-              style={{ height: "80vh", maxHeight: "600px" }}
+              ref={overlayRef}
+              className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+              style={{
+                height: "80vh",
+                transform: isDragging ? `translateY(${dragOffset}px)` : "none",
+                transition: isDragging ? "none" : "transform 0.3s ease-out",
+              }}
               role="dialog"
               aria-modal="true"
               aria-labelledby="date-modal-title"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchCancel}
             >
               {/* Handle bar */}
               <div className="flex justify-center pt-3 pb-2">
-                <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
+                <div
+                  className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                    isDragging ? "bg-blue-400 w-16" : "bg-gray-300"
+                  }`}
+                ></div>
               </div>
               {/* Sticky Header */}
-              <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
+              <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
                 <h3
                   id="date-modal-title"
                   className="text-lg font-semibold text-gray-900"
@@ -253,7 +331,7 @@ export function DateRangePicker({
                 <div className="w-full h-px bg-gray-200 mt-4"></div>
               </div>
               {/* Content */}
-              <div className="flex-1 overflow-y-auto px-6 py-2">
+              <div className="flex-1 overflow-y-auto px-6 py-2 pb-4">
                 {mode === "single" ? (
                   <Calendar
                     initialFocus

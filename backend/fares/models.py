@@ -23,6 +23,7 @@ class Fare(models.Model):
         help_text="The route this fare applies to (e.g., JFK-LAX)",
     )
 
+    # effective date
     graphql_fields = [
         GraphQLString("fare_family"),
         GraphQLFloat("price"),

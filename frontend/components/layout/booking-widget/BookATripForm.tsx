@@ -83,7 +83,20 @@ export default function BookATripForm({
 
   // Refs for form inputs to handle scrolling
   const departureInputRef = useRef<HTMLDivElement>(null);
-  const arrivalInputRef = useRef<HTMLDivElement>(null); // Function to scroll input into better view when dropdown opens
+  const arrivalInputRef = useRef<HTMLDivElement>(null);
+
+  // Refs for swipe gesture handling
+  const departureOverlayRef = useRef<HTMLDivElement>(null);
+  const arrivalOverlayRef = useRef<HTMLDivElement>(null);
+  const travelersOverlayRef = useRef<HTMLDivElement>(null);
+
+  // Touch gesture state
+  const [touchStart, setTouchStart] = useState<{
+    y: number;
+    time: number;
+  } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0); // Function to scroll input into better view when dropdown opens
   const scrollInputIntoView = (
     inputRef: React.RefObject<HTMLDivElement | null>
   ) => {
@@ -177,6 +190,71 @@ export default function BookATripForm({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isTravelersMobileOpen]);
+
+  // Touch gesture handlers for swipe-down dismissal
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStart({
+      y: touch.clientY,
+      time: Date.now(),
+    });
+    setIsDragging(true);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart || !isDragging) return;
+
+    const touch = e.touches[0];
+    const deltaY = touch.clientY - touchStart.y;
+
+    // Only allow downward swipes
+    if (deltaY > 0) {
+      // Prevent default scrolling behavior when dragging
+      e.preventDefault();
+      setDragOffset(deltaY);
+      // Add some resistance - the further you drag, the more resistance
+      const resistance = Math.max(0.3, 1 - deltaY / 300);
+      setDragOffset(deltaY * resistance);
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart || !isDragging) return;
+
+    const touch = e.changedTouches[0];
+    const deltaY = touch.clientY - touchStart.y;
+    const deltaTime = Date.now() - touchStart.time;
+    const velocity = Math.abs(deltaY) / deltaTime;
+
+    // Dismiss if:
+    // 1. Dragged down more than 100px, OR
+    // 2. Fast swipe (velocity > 0.5) with at least 50px drag
+    const shouldDismiss = deltaY > 100 || (velocity > 0.5 && deltaY > 50);
+
+    if (shouldDismiss) {
+      // Dismiss the appropriate overlay
+      if (isDeparturePopoverOpen) {
+        setIsDeparturePopoverOpen(false);
+      } else if (isArrivalPopoverOpen) {
+        setIsArrivalPopoverOpen(false);
+      } else if (isTravelersMobileOpen) {
+        setIsTravelersMobileOpen(false);
+      }
+    }
+
+    // Reset touch state
+    setTouchStart(null);
+    setIsDragging(false);
+    setDragOffset(0);
+  };
+
+  // Prevent default touch behavior on overlays to avoid conflicts
+  const handleTouchCancel = () => {
+    setTouchStart(null);
+    setIsDragging(false);
+    setDragOffset(0);
+  };
 
   // Handle changes to traveler counts
   const handleChange = (
@@ -346,945 +424,1022 @@ export default function BookATripForm({
           <div className="flex-1 flex flex-col w-full space-y-4 md:space-y-0 min-h-0">
             <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
               <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}
-              <div className="hidden md:block">
-                <Popover
-                  open={isDeparturePopoverOpen}
-                  onOpenChange={(open) => {
-                    if (open && !isDesktopModalActive) {
-                      // Only trigger modal if we're not already in modal state
-                      handleDesktopInputClick();
-                    }
-                    setIsDeparturePopoverOpen(open);
-                  }}
-                >
-                  <PopoverTrigger asChild className="w-full">
-                    <div className="cursor-pointer px-6 py-3">
-                      <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Flying from?
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Select destination"
-                        className="w-full text-sm outline-none text-gray-700 cursor-pointer"
-                        readOnly
-                        value={
-                          selectedDeparture
-                            ? `${selectedDeparture.departureAirport} (${selectedDeparture.departureAirportCode})`
-                            : ""
-                        }
-                      />
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
-                    style={{
-                      maxHeight:
-                        departureAirports.length > 3 ? "12rem" : "auto",
-                    }}
-                    align="start"
-                    side="bottom"
-                    sideOffset={4}
-                  >
-                    {isLoading ? (
-                      <div className="text-gray-500 p-3">
-                        Loading destinations...
-                      </div>
-                    ) : departureAirports.length > 0 ? (
-                      departureAirports.map((airport, index) => (
-                        <div
-                          key={index}
-                          className="hover:bg-gray-100 cursor-pointer p-3"
-                          onClick={() => {
-                            setSelectedDeparture(airport);
-                            setIsDeparturePopoverOpen(false);
-                          }}
-                        >
-                          <div className="text-black text-sm">
-                            {airport.departureAirport}
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-gray-500 p-3">
-                        No destinations found
-                      </div>
-                    )}
-                  </PopoverContent>
-                </Popover>
-              </div>
-              {/* Mobile: Use inline dropdown that pushes content */}
-              <div className="block md:hidden" ref={departureInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                  Flying from?
-                </label>
-                <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
-                  onClick={() => {
-                    const newState = !isDeparturePopoverOpen;
-                    setIsDeparturePopoverOpen(newState);
-                    if (newState) {
-                      // Close other dropdowns
-                      setIsArrivalPopoverOpen(false);
-                      setIsTravelersMobileOpen(false);
-                      // Add haptic feedback for iOS
-                      if (navigator.vibrate) {
-                        navigator.vibrate(10);
+                {/* Desktop: Use Popover */}
+                <div className="hidden md:block">
+                  <Popover
+                    open={isDeparturePopoverOpen}
+                    onOpenChange={(open) => {
+                      if (open && !isDesktopModalActive) {
+                        // Only trigger modal if we're not already in modal state
+                        handleDesktopInputClick();
                       }
-                    }
-                  }}
-                >
-                  {/* Add loading indicator */}
-                  {isLoading && (
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    placeholder={
-                      isLoading ? "Loading..." : "Select destination"
-                    }
-                    className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
-                      isLoading ? "pl-8" : ""
-                    }`}
-                    readOnly
-                    value={
-                      selectedDeparture
-                        ? `${selectedDeparture.departureAirport} (${selectedDeparture.departureAirportCode})`
-                        : ""
-                    }
-                  />
-                  {/* Add selected indicator */}
-                  {selectedDeparture && (
-                    <div className="flex items-center justify-center mr-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#2B8A1E"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
-                      >
-                        <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                        <path d="m9 11 3 3L22 4" />
-                      </svg>
-                    </div>
-                  )}
-                  {/* Add chevron indicator */}
-                  <svg
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                      isDeparturePopoverOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                      setIsDeparturePopoverOpen(open);
+                    }}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-
-                {/* Mobile bottom overlay */}
-                {isDeparturePopoverOpen && (
-                  <>
-                    {/* Backdrop with blur effect */}
-                    <div
-                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
-                      style={{
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        margin: 0,
-                        padding: 0,
-                      }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsDeparturePopoverOpen(false);
-                      }}
-                    />
-                    {/* Bottom sheet */}
-                    <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
-                      style={{ height: "80vh", maxHeight: "600px" }}
-                      role="dialog"
-                      aria-modal="true"
-                      aria-labelledby="departure-modal-title"
-                    >
-                      {/* Handle bar */}
-                      <div className="flex justify-center pt-3 pb-2">
-                        <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-                      </div>
-                      {/* Sticky Header */}
-                      <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                        <h3
-                          id="departure-modal-title"
-                          className="text-lg font-semibold text-gray-900"
-                        >
+                    <PopoverTrigger asChild className="w-full">
+                      <div className="cursor-pointer px-6 py-3">
+                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
                           Flying from?
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Select your departure destination
-                        </p>
-                        {/* Horizontal line after header text */}
-                        <div className="w-full h-px bg-gray-200 mt-4"></div>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Select destination"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          readOnly
+                          value={
+                            selectedDeparture
+                              ? `${selectedDeparture.departureAirport} (${selectedDeparture.departureAirportCode})`
+                              : ""
+                          }
+                        />
                       </div>
-                      {/* Content */}
-                      <div className="flex-1 overflow-y-auto">
-                        {isLoading ? (
-                          <div className="flex items-center justify-center h-32">
-                            <div className="text-gray-500">
-                              Loading destinations...
-                            </div>
-                          </div>
-                        ) : departureAirports.length > 0 ? (
-                          <div className="divide-y divide-gray-100">
-                            {departureAirports.map((airport, index) => (
-                              <div
-                                key={index}
-                                className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setSelectedDeparture(airport);
-                                  setIsDeparturePopoverOpen(false);
-                                }}
-                              >
-                                <div className="text-gray-900 font-medium">
-                                  {airport.departureAirport}
-                                </div>
-                                <div className="text-sm text-gray-500 mt-1">
-                                  {airport.departureAirportCode}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center h-32">
-                            <div className="text-gray-500">
-                              No destinations found
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
-            <div className="w-full md:flex-1">
-              {/* Desktop: Use Popover */}
-              <div className="hidden md:block">
-                <Popover
-                  open={isArrivalPopoverOpen}
-                  onOpenChange={(open) => {
-                    if (open && !isDesktopModalActive) {
-                      // Only trigger modal if we're not already in modal state
-                      handleDesktopInputClick();
-                    }
-                    setIsArrivalPopoverOpen(open);
-                  }}
-                >
-                  <PopoverTrigger asChild className="w-full">
-                    <div className="cursor-pointer px-6 py-3">
-                      <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Flying to?
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Select destination"
-                        className="w-full text-sm outline-none text-gray-700 cursor-pointer"
-                        readOnly
-                        value={
-                          selectedArrival
-                            ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
-                            : ""
-                        }
-                      />
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
-                    style={{
-                      maxHeight: arrivalAirports.length > 3 ? "12rem" : "auto",
-                    }}
-                    align="start"
-                    side="bottom"
-                    sideOffset={4}
-                  >
-                    {isLoading ? (
-                      <div className="text-gray-500 p-3">
-                        Loading destinations...
-                      </div>
-                    ) : arrivalAirports.length > 0 ? (
-                      arrivalAirports.map((airport, index) => (
-                        <div
-                          key={index}
-                          className="hover:bg-gray-100 cursor-pointer p-3"
-                          onClick={() => {
-                            setSelectedArrival(airport);
-                            setIsArrivalPopoverOpen(false);
-                          }}
-                        >
-                          <div className="text-black text-sm">
-                            {airport.arrivalAirport}
-                          </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      style={{
+                        maxHeight:
+                          departureAirports.length > 3 ? "12rem" : "auto",
+                      }}
+                      align="start"
+                      side="bottom"
+                      sideOffset={4}
+                    >
+                      {isLoading ? (
+                        <div className="text-gray-500 p-3">
+                          Loading destinations...
                         </div>
-                      ))
-                    ) : (
-                      <div className="text-gray-500 p-3">
-                        No destinations found
+                      ) : departureAirports.length > 0 ? (
+                        departureAirports.map((airport, index) => (
+                          <div
+                            key={index}
+                            className="hover:bg-gray-100 cursor-pointer p-3"
+                            onClick={() => {
+                              setSelectedDeparture(airport);
+                              setIsDeparturePopoverOpen(false);
+                            }}
+                          >
+                            <div className="text-black text-sm">
+                              {airport.departureAirport}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-gray-500 p-3">
+                          No destinations found
+                        </div>
+                      )}
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {/* Mobile: Use inline dropdown that pushes content */}
+                <div className="block md:hidden" ref={departureInputRef}>
+                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                    Flying from?
+                  </label>
+                  <div
+                    className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                    onClick={() => {
+                      const newState = !isDeparturePopoverOpen;
+                      setIsDeparturePopoverOpen(newState);
+                      if (newState) {
+                        // Close other dropdowns
+                        setIsArrivalPopoverOpen(false);
+                        setIsTravelersMobileOpen(false);
+                        // Add haptic feedback for iOS
+                        if (navigator.vibrate) {
+                          navigator.vibrate(10);
+                        }
+                      }
+                    }}
+                  >
+                    {/* Add loading indicator */}
+                    {isLoading && (
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
-                  </PopoverContent>
-                </Popover>
-              </div>
-              {/* Mobile: Use inline dropdown that pushes content */}
-              <div className="block md:hidden" ref={arrivalInputRef}>
-                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                  Flying to?
-                </label>
-                <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
-                  onClick={() => {
-                    const newState = !isArrivalPopoverOpen;
-                    setIsArrivalPopoverOpen(newState);
-                    if (newState) {
-                      // Close other dropdowns
-                      setIsDeparturePopoverOpen(false);
-                      setIsTravelersMobileOpen(false);
-                      // Add haptic feedback for iOS
-                      if (navigator.vibrate) {
-                        navigator.vibrate(10);
+                    <input
+                      type="text"
+                      placeholder={
+                        isLoading ? "Loading..." : "Select destination"
                       }
-                    }
-                  }}
-                >
-                  {/* Add loading indicator */}
-                  {isLoading && (
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    placeholder={
-                      isLoading ? "Loading..." : "Select destination"
-                    }
-                    className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
-                      isLoading ? "pl-8" : ""
-                    }`}
-                    readOnly
-                    value={
-                      selectedArrival
-                        ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
-                        : ""
-                    }
-                  />
-                  {/* Add selected indicator */}
-                  {selectedArrival && (
-                    <div className="flex items-center justify-center mr-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#2B8A1E"
-                        strokeWidth="2"
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                        isLoading ? "pl-8" : ""
+                      }`}
+                      readOnly
+                      value={
+                        selectedDeparture
+                          ? `${selectedDeparture.departureAirport} (${selectedDeparture.departureAirportCode})`
+                          : ""
+                      }
+                    />
+                    {/* Add selected indicator */}
+                    {selectedDeparture && (
+                      <div className="flex items-center justify-center mr-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#2B8A1E"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                        >
+                          <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                          <path d="m9 11 3 3L22 4" />
+                        </svg>
+                      </div>
+                    )}
+                    {/* Add chevron indicator */}
+                    <svg
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                        isDeparturePopoverOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
-                      >
-                        <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                        <path d="m9 11 3 3L22 4" />
-                      </svg>
-                    </div>
-                  )}
-                  {/* Add chevron indicator */}
-                  <svg
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                      isArrivalPopoverOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-
-                {/* Mobile bottom overlay */}
-                {isArrivalPopoverOpen && (
-                  <>
-                    {/* Backdrop with blur effect */}
-                    <div
-                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
-                      style={{
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: "100vw",
-                        height: "100vh",
-                        margin: 0,
-                        padding: 0,
-                      }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsArrivalPopoverOpen(false);
-                      }}
-                    />
-
-                    {/* Bottom sheet */}
-                    <div
-                      className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
-                      style={{ height: "80vh", maxHeight: "600px" }}
-                      role="dialog"
-                      aria-modal="true"
-                      aria-labelledby="arrival-modal-title"
-                    >
-                      {/* Handle bar */}
-                      <div className="flex justify-center pt-3 pb-2">
-                        <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-                      </div>
-
-                      {/* Sticky Header */}
-                      <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                        <h3
-                          id="arrival-modal-title"
-                          className="text-lg font-semibold text-gray-900"
-                        >
-                          Flying to?
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Select your arrival destination
-                        </p>
-                        {/* Horizontal line after header text */}
-                        <div className="w-full h-px bg-gray-200 mt-4"></div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 overflow-y-auto">
-                        {isLoading ? (
-                          <div className="flex items-center justify-center h-32">
-                            <div className="text-gray-500">
-                              Loading destinations...
-                            </div>
-                          </div>
-                        ) : arrivalAirports.length > 0 ? (
-                          <div className="divide-y divide-gray-100">
-                            {arrivalAirports.map((airport, index) => (
-                              <div
-                                key={index}
-                                className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setSelectedArrival(airport);
-                                  setIsArrivalPopoverOpen(false);
-                                }}
-                              >
-                                <div className="text-gray-900 font-medium">
-                                  {airport.arrivalAirport}
-                                </div>
-                                <div className="text-sm text-gray-500 mt-1">
-                                  {airport.arrivalAirportCode}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center h-32">
-                            <div className="text-gray-500">
-                              No destinations found
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
-            {/* Desktop: Combined date picker */}
-            <div className="hidden md:flex w-full md:flex-1">
-              <DateRangePicker
-                dateRange={dateRange}
-                onSelect={(range) =>
-                  setDateRange(range || { from: undefined, to: undefined })
-                }
-                placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
-                variant="desktop"
-                mode={isOneWay ? "single" : "range"}
-                onClick={handleDesktopInputClick}
-                sideOffset={8}
-              />
-            </div>
-            {/* Mobile: Combined date picker */}
-            <div className="block md:hidden w-full">
-              <DateRangePicker
-                dateRange={dateRange}
-                onSelect={(range) =>
-                  setDateRange(range || { from: undefined, to: undefined })
-                }
-                placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
-                variant="mobile"
-                mode={isOneWay ? "single" : "range"}
-              />
-            </div>
-            <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
-            {/* Desktop: Use Popover */}
-            <div className="hidden md:flex w-full md:flex-1 flex border border-gray-200 rounded-3xl shadow-md md:border-0 md:rounded-none md:shadow-none bg-white md:bg-transparent">
-              <div className="flex-1 cursor-pointer">
-                <Popover
-                  open={isTravelersPopoverOpen}
-                  onOpenChange={(open) => {
-                    if (open && !isDesktopModalActive) {
-                      // Only trigger modal if we're not already in modal state
-                      handleDesktopInputClick();
-                    }
-                    setIsTravelersPopoverOpen(open);
-                  }}
-                >
-                  <PopoverTrigger
-                    asChild
-                    className="w-full px-4 py-3 md:px-6 md:py-3"
-                  >
-                    <div className="w-full h-full text-left cursor-pointer">
-                      <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                        Travelling with?
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Select travellers"
-                        className="w-full text-sm outline-none text-gray-700 cursor-pointer"
-                        readOnly
-                        value={formatTravelers()}
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
                       />
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
-                    align="start"
-                  >
-                    <div className=" bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-                      {/* Adults */}
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="text-sm font-semibold text-black">
-                            Adults
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            Ages 13 or above
-                          </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() => handleChange("adults", "decrement")}
-                            disabled={travelers.adults <= 1}
-                            aria-label="Decrease adults"
-                          >
-                            -
-                          </button>
-                          <span className="text-sm text-black font-medium">
-                            {travelers.adults}
-                          </span>
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() => handleChange("adults", "increment")}
-                            disabled={travelers.adults >= 9}
-                            aria-label="Increase adults"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Children */}
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="text-sm font-semibold text-black">
-                            Children
-                          </p>
-                          <p className="text-xs text-gray-500">Ages 2–12</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() =>
-                              handleChange("children", "decrement")
-                            }
-                            disabled={travelers.children <= 0}
-                            aria-label="Decrease children"
-                          >
-                            -
-                          </button>
-                          <span className="text-sm text-black font-medium">
-                            {travelers.children}
-                          </span>
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() =>
-                              handleChange("children", "increment")
-                            }
-                            disabled={travelers.children >= 9}
-                            aria-label="Increase children"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Infants */}
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <p className="text-sm font-semibold text-black">
-                            Infants
-                          </p>
-                          <p className="text-xs text-gray-500">Under 2</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() => handleChange("infants", "decrement")}
-                            disabled={travelers.infants <= 0}
-                            aria-label="Decrease infants"
-                          >
-                            -
-                          </button>
-                          <span className="text-sm text-black font-medium">
-                            {travelers.infants}
-                          </span>
-                          <button
-                            className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
-                            onClick={() => handleChange("infants", "increment")}
-                            disabled={travelers.infants >= 9}
-                            aria-label="Increase infants"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-            </div>
-            {/* Mobile: Use inline dropdown that pushes content */}
-            <div className="block md:hidden" ref={travelersMobileRef}>
-              <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                Travelling with?
-              </label>
-              <div
-                className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-300 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
-                onClick={() => {
-                  const newState = !isTravelersMobileOpen;
-                  setIsTravelersMobileOpen(newState);
-                  if (newState) {
-                    // Close other dropdowns
-                    setIsDeparturePopoverOpen(false);
-                    setIsArrivalPopoverOpen(false);
-                    // Add haptic feedback for iOS
-                    if (navigator.vibrate) {
-                      navigator.vibrate(10);
-                    }
-                  }
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Select travellers"
-                  className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
-                  readOnly
-                  value={formatTravelers()}
-                />
-                {/* Add traveler selected indicator */}
-                {travelers.adults + travelers.children + travelers.infants >
-                  0 && (
-                  <div className="flex items-center justify-center mr-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#2B8A1E"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
-                    >
-                      <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-                      <path d="m9 11 3 3L22 4" />
                     </svg>
                   </div>
-                )}
-                {/* Add chevron indicator */}
-                <svg
-                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                    isTravelersMobileOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
 
-              {/* Mobile bottom overlay */}
-              {isTravelersMobileOpen && (
-                <>
-                  {/* Backdrop with blur effect */}
-                  <div
-                    className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[90] animate-in fade-in-0 duration-700 ease-out"
-                    style={{
-                      left: 0,
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      width: "100vw",
-                      height: "100vh",
-                      margin: 0,
-                      padding: 0,
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setIsTravelersMobileOpen(false);
-                    }}
-                  />
-
-                  {/* Bottom sheet */}
-                  <div
-                    className="fixed inset-x-0 bottom-0 z-[100] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
-                    style={{ height: "80vh", maxHeight: "600px" }}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="travelers-modal-title"
-                  >
-                    {/* Handle bar */}
-                    <div className="flex justify-center pt-3 pb-2">
-                      <div className="w-12 h-1 bg-gray-300 rounded-full"></div>
-                    </div>
-                    {/* Sticky Header */}
-                    <div className="sticky top-0 z-10 bg-white px-6 pt-0 pb-4">
-                      <h3
-                        id="travelers-modal-title"
-                        className="text-lg font-semibold text-gray-900"
-                      >
-                        Travelling with?
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Select number of travelers
-                      </p>
-                      {/* Horizontal line after header text */}
-                      <div className="w-full h-px bg-gray-200 mt-4"></div>
-                    </div>
-                    {/* Content */}
-                    <div className="flex-1 overflow-y-auto px-6 py-2">
-                      {/* Adults */}
-                      <div className="flex justify-between items-center mb-6">
-                        <div>
-                          <p className="text-base font-semibold text-black">
-                            Adults
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Ages 13 or above
-                          </p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() => handleChange("adults", "decrement")}
-                            disabled={travelers.adults <= 1}
-                            aria-label="Decrease adults"
-                          >
-                            -
-                          </button>
-                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
-                            {travelers.adults}
-                          </span>
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() => handleChange("adults", "increment")}
-                            disabled={travelers.adults >= 9}
-                            aria-label="Increase adults"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Children */}
-                      <div className="flex justify-between items-center mb-6">
-                        <div>
-                          <p className="text-base font-semibold text-black">
-                            Children
-                          </p>
-                          <p className="text-sm text-gray-500">Ages 2–12</p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() =>
-                              handleChange("children", "decrement")
-                            }
-                            disabled={travelers.children <= 0}
-                            aria-label="Decrease children"
-                          >
-                            -
-                          </button>
-                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
-                            {travelers.children}
-                          </span>
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() =>
-                              handleChange("children", "increment")
-                            }
-                            disabled={travelers.children >= 9}
-                            aria-label="Increase children"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Infants */}
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="text-base font-semibold text-black">
-                            Infants
-                          </p>
-                          <p className="text-sm text-gray-500">Under 2</p>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() => handleChange("infants", "decrement")}
-                            disabled={travelers.infants <= 0}
-                            aria-label="Decrease infants"
-                          >
-                            -
-                          </button>
-                          <span className="text-lg text-black font-medium min-w-[2rem] text-center">
-                            {travelers.infants}
-                          </span>
-                          <button
-                            className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
-                            onClick={() => handleChange("infants", "increment")}
-                            disabled={travelers.infants >= 9}
-                            aria-label="Increase infants"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Continue button */}
-                    <div className="px-6 py-4 border-t border-gray-200">
-                      <button
+                  {/* Mobile bottom overlay */}
+                  {isDeparturePopoverOpen && (
+                    <>
+                      {/* Backdrop with blur effect */}
+                      <div
+                        className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out"
+                        style={{
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "100vw",
+                          height: "100vh",
+                          margin: 0,
+                          padding: 0,
+                        }}
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          setIsTravelersMobileOpen(false);
+                          setIsDeparturePopoverOpen(false);
                         }}
-                        className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
+                      />
+                      {/* Bottom sheet */}
+                      <div
+                        ref={departureOverlayRef}
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                        style={{
+                          height: "80vh",
+                          transform:
+                            isDragging && isDeparturePopoverOpen
+                              ? `translateY(${dragOffset}px)`
+                              : "none",
+                          transition: isDragging
+                            ? "none"
+                            : "transform 0.3s ease-out",
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="departure-modal-title"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        onTouchCancel={handleTouchCancel}
                       >
-                        Continue
-                      </button>
-                    </div>
+                        {/* Handle bar */}
+                        <div className="flex justify-center pt-3 pb-2">
+                          <div
+                            className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                              isDragging && isDeparturePopoverOpen
+                                ? "bg-blue-400 w-16"
+                                : "bg-gray-300"
+                            }`}
+                          ></div>
+                        </div>
+                        {/* Sticky Header */}
+                        <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                          <h3
+                            id="departure-modal-title"
+                            className="text-lg font-semibold text-gray-900"
+                          >
+                            Flying from?
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Select your departure destination
+                          </p>
+                          {/* Horizontal line after header text */}
+                          <div className="w-full h-px bg-gray-200 mt-4"></div>
+                        </div>
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto pb-4">
+                          {isLoading ? (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                Loading destinations...
+                              </div>
+                            </div>
+                          ) : departureAirports.length > 0 ? (
+                            <div className="divide-y divide-gray-100">
+                              {departureAirports.map((airport, index) => (
+                                <div
+                                  key={index}
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setSelectedDeparture(airport);
+                                    setIsDeparturePopoverOpen(false);
+                                  }}
+                                >
+                                  <div className="text-gray-900 font-medium">
+                                    {airport.departureAirport}
+                                  </div>
+                                  <div className="text-sm text-gray-500 mt-1">
+                                    {airport.departureAirportCode}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                No destinations found
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
+              <div className="w-full md:flex-1">
+                {/* Desktop: Use Popover */}
+                <div className="hidden md:block">
+                  <Popover
+                    open={isArrivalPopoverOpen}
+                    onOpenChange={(open) => {
+                      if (open && !isDesktopModalActive) {
+                        // Only trigger modal if we're not already in modal state
+                        handleDesktopInputClick();
+                      }
+                      setIsArrivalPopoverOpen(open);
+                    }}
+                  >
+                    <PopoverTrigger asChild className="w-full">
+                      <div className="cursor-pointer px-6 py-3">
+                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
+                          Flying to?
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Select destination"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          readOnly
+                          value={
+                            selectedArrival
+                              ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
+                              : ""
+                          }
+                        />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      style={{
+                        maxHeight:
+                          arrivalAirports.length > 3 ? "12rem" : "auto",
+                      }}
+                      align="start"
+                      side="bottom"
+                      sideOffset={4}
+                    >
+                      {isLoading ? (
+                        <div className="text-gray-500 p-3">
+                          Loading destinations...
+                        </div>
+                      ) : arrivalAirports.length > 0 ? (
+                        arrivalAirports.map((airport, index) => (
+                          <div
+                            key={index}
+                            className="hover:bg-gray-100 cursor-pointer p-3"
+                            onClick={() => {
+                              setSelectedArrival(airport);
+                              setIsArrivalPopoverOpen(false);
+                            }}
+                          >
+                            <div className="text-black text-sm">
+                              {airport.arrivalAirport}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-gray-500 p-3">
+                          No destinations found
+                        </div>
+                      )}
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                {/* Mobile: Use inline dropdown that pushes content */}
+                <div className="block md:hidden" ref={arrivalInputRef}>
+                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                    Flying to?
+                  </label>
+                  <div
+                    className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                    onClick={() => {
+                      const newState = !isArrivalPopoverOpen;
+                      setIsArrivalPopoverOpen(newState);
+                      if (newState) {
+                        // Close other dropdowns
+                        setIsDeparturePopoverOpen(false);
+                        setIsTravelersMobileOpen(false);
+                        // Add haptic feedback for iOS
+                        if (navigator.vibrate) {
+                          navigator.vibrate(10);
+                        }
+                      }
+                    }}
+                  >
+                    {/* Add loading indicator */}
+                    {isLoading && (
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      placeholder={
+                        isLoading ? "Loading..." : "Select destination"
+                      }
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                        isLoading ? "pl-8" : ""
+                      }`}
+                      readOnly
+                      value={
+                        selectedArrival
+                          ? `${selectedArrival.arrivalAirport} (${selectedArrival.arrivalAirportCode})`
+                          : ""
+                      }
+                    />
+                    {/* Add selected indicator */}
+                    {selectedArrival && (
+                      <div className="flex items-center justify-center mr-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#2B8A1E"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                        >
+                          <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                          <path d="m9 11 3 3L22 4" />
+                        </svg>
+                      </div>
+                    )}
+                    {/* Add chevron indicator */}
+                    <svg
+                      className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                        isArrivalPopoverOpen ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
                   </div>
-                </>
-              )}
-            </div>
-            {/* Desktop: Original button */}
-            <div className="hidden md:flex items-center justify-end w-auto">
-              <button
-                className={`p-4 rounded-full transition-colors flex items-center gap-2 disabled:cursor-not-allowed ${
-                  isSearchFormValid && !isSearching
-                    ? "bg-blue-500 text-white hover:bg-blue-600"
-                    : "bg-gray-300 text-gray-500"
-                }`}
-                onClick={handleSearch}
-                disabled={!isSearchFormValid || isSearching}
-              >
-                {isSearching ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                ) : (
+
+                  {/* Mobile bottom overlay */}
+                  {isArrivalPopoverOpen && (
+                    <>
+                      {/* Backdrop with blur effect */}
+                      <div
+                        className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out"
+                        style={{
+                          left: 0,
+                          right: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: "100vw",
+                          height: "100vh",
+                          margin: 0,
+                          padding: 0,
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsArrivalPopoverOpen(false);
+                        }}
+                      />
+
+                      {/* Bottom sheet */}
+                      <div
+                        ref={arrivalOverlayRef}
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                        style={{
+                          height: "80vh",
+                          transform:
+                            isDragging && isArrivalPopoverOpen
+                              ? `translateY(${dragOffset}px)`
+                              : "none",
+                          transition: isDragging
+                            ? "none"
+                            : "transform 0.3s ease-out",
+                        }}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="arrival-modal-title"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        onTouchCancel={handleTouchCancel}
+                      >
+                        {/* Handle bar */}
+                        <div className="flex justify-center pt-3 pb-2">
+                          <div
+                            className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                              isDragging && isArrivalPopoverOpen
+                                ? "bg-blue-400 w-16"
+                                : "bg-gray-300"
+                            }`}
+                          ></div>
+                        </div>
+
+                        {/* Sticky Header */}
+                        <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                          <h3
+                            id="arrival-modal-title"
+                            className="text-lg font-semibold text-gray-900"
+                          >
+                            Flying to?
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            Select your arrival destination
+                          </p>
+                          {/* Horizontal line after header text */}
+                          <div className="w-full h-px bg-gray-200 mt-4"></div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 overflow-y-auto pb-4">
+                          {isLoading ? (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                Loading destinations...
+                              </div>
+                            </div>
+                          ) : arrivalAirports.length > 0 ? (
+                            <div className="divide-y divide-gray-100">
+                              {arrivalAirports.map((airport, index) => (
+                                <div
+                                  key={index}
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setSelectedArrival(airport);
+                                    setIsArrivalPopoverOpen(false);
+                                  }}
+                                >
+                                  <div className="text-gray-900 font-medium">
+                                    {airport.arrivalAirport}
+                                  </div>
+                                  <div className="text-sm text-gray-500 mt-1">
+                                    {airport.arrivalAirportCode}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center h-32">
+                              <div className="text-gray-500">
+                                No destinations found
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
+              {/* Desktop: Combined date picker */}
+              <div className="hidden md:flex w-full md:flex-1">
+                <DateRangePicker
+                  dateRange={dateRange}
+                  onSelect={(range) =>
+                    setDateRange(range || { from: undefined, to: undefined })
+                  }
+                  placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
+                  variant="desktop"
+                  mode={isOneWay ? "single" : "range"}
+                  onClick={handleDesktopInputClick}
+                  sideOffset={8}
+                />
+              </div>
+              {/* Mobile: Combined date picker */}
+              <div className="block md:hidden w-full">
+                <DateRangePicker
+                  dateRange={dateRange}
+                  onSelect={(range) =>
+                    setDateRange(range || { from: undefined, to: undefined })
+                  }
+                  placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
+                  variant="mobile"
+                  mode={isOneWay ? "single" : "range"}
+                />
+              </div>
+              <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
+              {/* Desktop: Use Popover */}
+              <div className="hidden md:flex w-full md:flex-1 flex border border-gray-200 rounded-3xl shadow-md md:border-0 md:rounded-none md:shadow-none bg-white md:bg-transparent">
+                <div className="flex-1 cursor-pointer">
+                  <Popover
+                    open={isTravelersPopoverOpen}
+                    onOpenChange={(open) => {
+                      if (open && !isDesktopModalActive) {
+                        // Only trigger modal if we're not already in modal state
+                        handleDesktopInputClick();
+                      }
+                      setIsTravelersPopoverOpen(open);
+                    }}
+                  >
+                    <PopoverTrigger
+                      asChild
+                      className="w-full px-4 py-3 md:px-6 md:py-3"
+                    >
+                      <div className="w-full h-full text-left cursor-pointer">
+                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
+                          Travelling with?
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Select travellers"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          readOnly
+                          value={formatTravelers()}
+                        />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      align="start"
+                    >
+                      <div className=" bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+                        {/* Adults */}
+                        <div className="flex justify-between items-center mb-4">
+                          <div>
+                            <p className="text-sm font-semibold text-black">
+                              Adults
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Ages 13 or above
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("adults", "decrement")
+                              }
+                              disabled={travelers.adults <= 1}
+                              aria-label="Decrease adults"
+                            >
+                              -
+                            </button>
+                            <span className="text-sm text-black font-medium">
+                              {travelers.adults}
+                            </span>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("adults", "increment")
+                              }
+                              disabled={travelers.adults >= 9}
+                              aria-label="Increase adults"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Children */}
+                        <div className="flex justify-between items-center mb-4">
+                          <div>
+                            <p className="text-sm font-semibold text-black">
+                              Children
+                            </p>
+                            <p className="text-xs text-gray-500">Ages 2–12</p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("children", "decrement")
+                              }
+                              disabled={travelers.children <= 0}
+                              aria-label="Decrease children"
+                            >
+                              -
+                            </button>
+                            <span className="text-sm text-black font-medium">
+                              {travelers.children}
+                            </span>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("children", "increment")
+                              }
+                              disabled={travelers.children >= 9}
+                              aria-label="Increase children"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Infants */}
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="text-sm font-semibold text-black">
+                              Infants
+                            </p>
+                            <p className="text-xs text-gray-500">Under 2</p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("infants", "decrement")
+                              }
+                              disabled={travelers.infants <= 0}
+                              aria-label="Decrease infants"
+                            >
+                              -
+                            </button>
+                            <span className="text-sm text-black font-medium">
+                              {travelers.infants}
+                            </span>
+                            <button
+                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              onClick={() =>
+                                handleChange("infants", "increment")
+                              }
+                              disabled={travelers.infants >= 9}
+                              aria-label="Increase infants"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              {/* Mobile: Use inline dropdown that pushes content */}
+              <div className="block md:hidden" ref={travelersMobileRef}>
+                <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
+                  Travelling with?
+                </label>
+                <div
+                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                  onClick={() => {
+                    const newState = !isTravelersMobileOpen;
+                    setIsTravelersMobileOpen(newState);
+                    if (newState) {
+                      // Close other dropdowns
+                      setIsDeparturePopoverOpen(false);
+                      setIsArrivalPopoverOpen(false);
+                      // Add haptic feedback for iOS
+                      if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                      }
+                    }
+                  }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Select travellers"
+                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
+                    readOnly
+                    value={formatTravelers()}
+                  />
+                  {/* Add traveler selected indicator */}
+                  {travelers.adults + travelers.children + travelers.infants >
+                    0 && (
+                    <div className="flex items-center justify-center mr-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#2B8A1E"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-circle-check-big-icon lucide-circle-check-big"
+                      >
+                        <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                        <path d="m9 11 3 3L22 4" />
+                      </svg>
+                    </div>
+                  )}
+                  {/* Add chevron indicator */}
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      isTravelersMobileOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
                     />
                   </svg>
+                </div>
+
+                {/* Mobile bottom overlay */}
+                {isTravelersMobileOpen && (
+                  <>
+                    {/* Backdrop with blur effect */}
+                    <div
+                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out"
+                      style={{
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        margin: 0,
+                        padding: 0,
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsTravelersMobileOpen(false);
+                      }}
+                    />
+
+                    {/* Bottom sheet */}
+                    <div
+                      ref={travelersOverlayRef}
+                      className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+                      style={{
+                        height: "80vh",
+                        transform:
+                          isDragging && isTravelersMobileOpen
+                            ? `translateY(${dragOffset}px)`
+                            : "none",
+                        transition: isDragging
+                          ? "none"
+                          : "transform 0.3s ease-out",
+                      }}
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="travelers-modal-title"
+                      onTouchStart={handleTouchStart}
+                      onTouchMove={handleTouchMove}
+                      onTouchEnd={handleTouchEnd}
+                      onTouchCancel={handleTouchCancel}
+                    >
+                      {/* Handle bar */}
+                      <div className="flex justify-center pt-3 pb-2">
+                        <div
+                          className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                            isDragging && isTravelersMobileOpen
+                              ? "bg-blue-400 w-16"
+                              : "bg-gray-300"
+                          }`}
+                        ></div>
+                      </div>
+                      {/* Sticky Header */}
+                      <div className="sticky top-0 z-10 bg-white px-6 pt-2 pb-4">
+                        <h3
+                          id="travelers-modal-title"
+                          className="text-lg font-semibold text-gray-900"
+                        >
+                          Travelling with?
+                        </h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Select number of travelers
+                        </p>
+                        {/* Horizontal line after header text */}
+                        <div className="w-full h-px bg-gray-200 mt-4"></div>
+                      </div>
+                      {/* Content */}
+                      <div className="flex-1 overflow-y-auto px-6 py-2 pb-4">
+                        {/* Adults */}
+                        <div className="flex justify-between items-center mb-6">
+                          <div>
+                            <p className="text-base font-semibold text-black">
+                              Adults
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Ages 13 or above
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("adults", "decrement")
+                              }
+                              disabled={travelers.adults <= 1}
+                              aria-label="Decrease adults"
+                            >
+                              -
+                            </button>
+                            <span className="text-lg text-black font-medium min-w-[2rem] text-center">
+                              {travelers.adults}
+                            </span>
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("adults", "increment")
+                              }
+                              disabled={travelers.adults >= 9}
+                              aria-label="Increase adults"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Children */}
+                        <div className="flex justify-between items-center mb-6">
+                          <div>
+                            <p className="text-base font-semibold text-black">
+                              Children
+                            </p>
+                            <p className="text-sm text-gray-500">Ages 2–12</p>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("children", "decrement")
+                              }
+                              disabled={travelers.children <= 0}
+                              aria-label="Decrease children"
+                            >
+                              -
+                            </button>
+                            <span className="text-lg text-black font-medium min-w-[2rem] text-center">
+                              {travelers.children}
+                            </span>
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("children", "increment")
+                              }
+                              disabled={travelers.children >= 9}
+                              aria-label="Increase children"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Infants */}
+                        <div className="flex justify-between items-center mb-4">
+                          <div>
+                            <p className="text-base font-semibold text-black">
+                              Infants
+                            </p>
+                            <p className="text-sm text-gray-500">Under 2</p>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("infants", "decrement")
+                              }
+                              disabled={travelers.infants <= 0}
+                              aria-label="Decrease infants"
+                            >
+                              -
+                            </button>
+                            <span className="text-lg text-black font-medium min-w-[2rem] text-center">
+                              {travelers.infants}
+                            </span>
+                            <button
+                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              onClick={() =>
+                                handleChange("infants", "increment")
+                              }
+                              disabled={travelers.infants >= 9}
+                              aria-label="Increase infants"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Continue button */}
+                      <div className="px-6 py-4 border-t border-gray-200">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsTravelersMobileOpen(false);
+                          }}
+                          className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    </div>
+                  </>
                 )}
-                <span className="text-sm font-medium">
-                  {isSearching ? "Searching..." : "Search"}
+              </div>
+              {/* Desktop: Original button */}
+              <div className="hidden md:flex items-center justify-end w-auto">
+                <button
+                  className={`p-4 rounded-full transition-colors flex items-center gap-2 disabled:cursor-not-allowed ${
+                    isSearchFormValid && !isSearching
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-300 text-gray-500"
+                  }`}
+                  onClick={handleSearch}
+                  disabled={!isSearchFormValid || isSearching}
+                >
+                  {isSearching ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                  <span className="text-sm font-medium">
+                    {isSearching ? "Searching..." : "Search"}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile: Search button inside form container */}
+            <div className="md:hidden pt-4 px-0 pb-2 mt-auto">
+              <button
+                className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
+                  isSearchFormValid && !isSearching
+                    ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
+                    : ""
+                } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
+                onClick={
+                  isSearchFormValid && !isSearching ? handleSearch : undefined
+                }
+                disabled={!isSearchFormValid || isSearching}
+              >
+                {isSearching && (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                )}
+                <span>
+                  {isSearching
+                    ? "Searching Flights..."
+                    : !isSearchFormValid
+                    ? "Complete form to search"
+                    : "Search Flights"}
                 </span>
               </button>
             </div>
-            </div>
-          
-          {/* Mobile: Search button inside form container */}
-          <div className="md:hidden pt-4 px-0 pb-2 mt-auto">
-            <button
-              className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
-                isSearchFormValid && !isSearching
-                  ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
-                  : ""
-              } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
-              onClick={
-                isSearchFormValid && !isSearching ? handleSearch : undefined
-              }
-              disabled={!isSearchFormValid || isSearching}
-            >
-              {isSearching && (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              )}
-              <span>
-                {isSearching
-                  ? "Searching Flights..."
-                  : !isSearchFormValid
-                  ? "Complete form to search"
-                  : "Search Flights"}
-              </span>
-            </button>
-          </div>
           </div>
         </div>
       </div>
