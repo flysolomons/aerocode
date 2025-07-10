@@ -201,12 +201,12 @@ export default function BookATripForm({
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     // Call once on mount to ensure correct state
     handleResize();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -214,10 +214,14 @@ export default function BookATripForm({
   const handleTouchStart = (e: React.TouchEvent) => {
     // Only handle touch events from the header area, not from interactive buttons
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('[role="button"]') || target.closest('div[onClick]')) {
+    if (
+      target.closest("button") ||
+      target.closest('[role="button"]') ||
+      target.closest("div[onClick]")
+    ) {
       return;
     }
-    
+
     const touch = e.touches[0];
     setTouchStart({
       y: touch.clientY,
@@ -232,7 +236,11 @@ export default function BookATripForm({
 
     // Only handle touch events from the header area, not from interactive buttons
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('[role="button"]') || target.closest('div[onClick]')) {
+    if (
+      target.closest("button") ||
+      target.closest('[role="button"]') ||
+      target.closest("div[onClick]")
+    ) {
       return;
     }
 
@@ -255,7 +263,11 @@ export default function BookATripForm({
 
     // Only handle touch events from the header area, not from interactive buttons
     const target = e.target as HTMLElement;
-    if (target.closest('button') || target.closest('[role="button"]') || target.closest('div[onClick]')) {
+    if (
+      target.closest("button") ||
+      target.closest('[role="button"]') ||
+      target.closest("div[onClick]")
+    ) {
       return;
     }
 
@@ -462,21 +474,23 @@ export default function BookATripForm({
             <div className="flex flex-col bg-white md:flex-row w-full md:items-center md:border md:border-gray-200 md:rounded-full md:px-2 md:shadow-md space-y-4 md:space-y-0 py-2 md:py-0 pb-2 md:pb-0">
               <div className="w-full md:flex-1">
                 {/* Desktop: Use Popover */}
-                <div className="hidden md:block">                    <Popover
-                      open={isDeparturePopoverOpen && window.innerWidth >= 768}
-                      onOpenChange={(open) => {
-                        // Only allow opening on desktop
-                        if (window.innerWidth < 768) {
-                          return;
-                        }
-                        
-                        if (open && !isDesktopModalActive) {
-                          // Only trigger modal if we're not already in modal state
-                          handleDesktopInputClick();
-                        }
-                        setIsDeparturePopoverOpen(open);
-                      }}
-                    >
+                <div className="hidden md:block">
+                  {" "}
+                  <Popover
+                    open={isDeparturePopoverOpen && window.innerWidth >= 768}
+                    onOpenChange={(open) => {
+                      // Only allow opening on desktop
+                      if (window.innerWidth < 768) {
+                        return;
+                      }
+
+                      if (open && !isDesktopModalActive) {
+                        // Only trigger modal if we're not already in modal state
+                        handleDesktopInputClick();
+                      }
+                      setIsDeparturePopoverOpen(open);
+                    }}
+                  >
                     <PopoverTrigger asChild className="w-full">
                       <div className="cursor-pointer px-6 py-3">
                         <label className="block text-left text-xs text-black font-semibold cursor-pointer">
@@ -538,7 +552,7 @@ export default function BookATripForm({
                     Flying from?
                   </label>
                   <div
-                    className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                     onClick={() => {
                       const newState = !isDeparturePopoverOpen;
                       setIsDeparturePopoverOpen(newState);
@@ -617,7 +631,7 @@ export default function BookATripForm({
                     <>
                       {/* Backdrop with blur effect */}
                       <div
-                        className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
+                        className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
                         style={{
                           left: 0,
                           right: 0,
@@ -637,7 +651,7 @@ export default function BookATripForm({
                       {/* Bottom sheet */}
                       <div
                         ref={departureOverlayRef}
-                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
                         style={{
                           height: "75vh",
                           transform:
@@ -653,23 +667,23 @@ export default function BookATripForm({
                         aria-labelledby="departure-modal-title"
                       >
                         {/* Handle bar */}
-                        <div 
-                          className="flex justify-center pt-2 pb-1"
+                        <div
+                          className="flex justify-center pt-3 pb-2"
                           onTouchStart={handleTouchStart}
                           onTouchMove={handleTouchMove}
                           onTouchEnd={handleTouchEnd}
                           onTouchCancel={handleTouchCancel}
                         >
                           <div
-                            className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                            className={`h-1 rounded-full transition-all duration-200 ${
                               isDragging && isDeparturePopoverOpen
                                 ? "bg-blue-400 w-16"
-                                : "bg-gray-300"
+                                : "bg-gray-400 w-12"
                             }`}
                           ></div>
                         </div>
                         {/* Header */}
-                        <div 
+                        <div
                           className="bg-white px-6 py-3"
                           onTouchStart={handleTouchStart}
                           onTouchMove={handleTouchMove}
@@ -689,7 +703,7 @@ export default function BookATripForm({
                           <div className="w-full h-px bg-gray-200 mt-3"></div>
                         </div>
                         {/* Content */}
-                        <div 
+                        <div
                           className="flex-1 overflow-y-auto pb-4 pt-1"
                           onTouchStart={(e) => e.stopPropagation()}
                           onTouchMove={(e) => e.stopPropagation()}
@@ -747,7 +761,7 @@ export default function BookATripForm({
                       if (window.innerWidth < 768) {
                         return;
                       }
-                      
+
                       if (open && !isDesktopModalActive) {
                         // Only trigger modal if we're not already in modal state
                         handleDesktopInputClick();
@@ -816,7 +830,7 @@ export default function BookATripForm({
                     Flying to?
                   </label>
                   <div
-                    className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                     onClick={() => {
                       const newState = !isArrivalPopoverOpen;
                       setIsArrivalPopoverOpen(newState);
@@ -895,7 +909,7 @@ export default function BookATripForm({
                     <>
                       {/* Backdrop with blur effect */}
                       <div
-                        className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
+                        className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
                         style={{
                           left: 0,
                           right: 0,
@@ -916,7 +930,7 @@ export default function BookATripForm({
                       {/* Bottom sheet */}
                       <div
                         ref={arrivalOverlayRef}
-                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
+                        className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
                         style={{
                           height: "75vh",
                           transform:
@@ -932,24 +946,24 @@ export default function BookATripForm({
                         aria-labelledby="arrival-modal-title"
                       >
                         {/* Handle bar */}
-                        <div 
-                          className="flex justify-center pt-2 pb-1"
+                        <div
+                          className="flex justify-center pt-3 pb-2"
                           onTouchStart={handleTouchStart}
                           onTouchMove={handleTouchMove}
                           onTouchEnd={handleTouchEnd}
                           onTouchCancel={handleTouchCancel}
                         >
                           <div
-                            className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                            className={`h-1 rounded-full transition-all duration-200 ${
                               isDragging && isArrivalPopoverOpen
                                 ? "bg-blue-400 w-16"
-                                : "bg-gray-300"
+                                : "bg-gray-400 w-12"
                             }`}
                           ></div>
                         </div>
 
                         {/* Header */}
-                        <div 
+                        <div
                           className="bg-white px-6 py-3"
                           onTouchStart={handleTouchStart}
                           onTouchMove={handleTouchMove}
@@ -970,7 +984,7 @@ export default function BookATripForm({
                         </div>
 
                         {/* Content */}
-                        <div 
+                        <div
                           className="flex-1 overflow-y-auto pb-4 pt-1"
                           onTouchStart={(e) => e.stopPropagation()}
                           onTouchMove={(e) => e.stopPropagation()}
@@ -1055,7 +1069,7 @@ export default function BookATripForm({
                       if (window.innerWidth < 768) {
                         return;
                       }
-                      
+
                       if (open && !isDesktopModalActive) {
                         // Only trigger modal if we're not already in modal state
                         handleDesktopInputClick();
@@ -1202,7 +1216,7 @@ export default function BookATripForm({
                   Travelling with?
                 </label>
                 <div
-                  className="cursor-pointer border-2 border-gray-400 md:border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-lg hover:shadow-xl md:shadow-none"
+                  className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                   onClick={() => {
                     const newState = !isTravelersMobileOpen;
                     setIsTravelersMobileOpen(newState);
@@ -1268,7 +1282,7 @@ export default function BookATripForm({
                   <>
                     {/* Backdrop with blur effect */}
                     <div
-                      className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
+                      className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out md:hidden"
                       style={{
                         left: 0,
                         right: 0,
@@ -1289,7 +1303,7 @@ export default function BookATripForm({
                     {/* Bottom sheet */}
                     <div
                       ref={travelersOverlayRef}
-                      className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
+                      className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col md:hidden"
                       style={{
                         height: "75vh",
                         transform:
@@ -1305,23 +1319,23 @@ export default function BookATripForm({
                       aria-labelledby="travelers-modal-title"
                     >
                       {/* Handle bar */}
-                      <div 
-                        className="flex justify-center pt-2 pb-1"
+                      <div
+                        className="flex justify-center pt-3 pb-2"
                         onTouchStart={handleTouchStart}
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                         onTouchCancel={handleTouchCancel}
                       >
                         <div
-                          className={`w-12 h-1 rounded-full transition-all duration-200 ${
+                          className={`h-1 rounded-full transition-all duration-200 ${
                             isDragging && isTravelersMobileOpen
                               ? "bg-blue-400 w-16"
-                              : "bg-gray-300"
+                              : "bg-gray-400 w-12"
                           }`}
                         ></div>
                       </div>
                       {/* Header */}
-                      <div 
+                      <div
                         className="bg-white px-6 py-3"
                         onTouchStart={handleTouchStart}
                         onTouchMove={handleTouchMove}
@@ -1341,7 +1355,7 @@ export default function BookATripForm({
                         <div className="w-full h-px bg-gray-200 mt-3"></div>
                       </div>
                       {/* Content */}
-                      <div 
+                      <div
                         className="flex-1 overflow-y-auto px-6 py-1 pb-4"
                         onTouchStart={(e) => e.stopPropagation()}
                         onTouchMove={(e) => e.stopPropagation()}
@@ -1455,7 +1469,7 @@ export default function BookATripForm({
                         </div>
                       </div>
                       {/* Continue button */}
-                      <div 
+                      <div
                         className="px-6 py-4 border-t border-gray-200"
                         onTouchStart={(e) => e.stopPropagation()}
                         onTouchMove={(e) => e.stopPropagation()}

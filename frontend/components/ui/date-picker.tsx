@@ -227,7 +227,7 @@ export function DateRangePicker({
           {placeholder}
         </label>
         <div
-          className="cursor-pointer border-2 border-gray-400 rounded-3xl transition-all duration-300 ease-in-out bg-white px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 hover:shadow-md active:border-blue-500 min-h-[50px] flex items-center relative group shadow-lg hover:shadow-xl"
+          className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 hover:border-blue-400 active:border-blue-500 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg"
           onClick={() => {
             setOpen(true);
             // Add haptic feedback for iOS
@@ -301,7 +301,7 @@ export function DateRangePicker({
           <>
             {/* Backdrop with blur effect */}
             <div
-              className="fixed inset-0 backdrop-blur-[2px] bg-black bg-opacity-25 z-[55] animate-in fade-in-0 duration-700 ease-out"
+              className="fixed inset-0 backdrop-blur-[2px] bg-gray-900/20 z-[55] animate-in fade-in-0 duration-700 ease-out"
               style={{
                 left: 0,
                 right: 0,
@@ -318,7 +318,7 @@ export function DateRangePicker({
             {/* Bottom sheet */}
             <div
               ref={overlayRef}
-              className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
+              className="fixed inset-x-0 bottom-0 z-[60] bg-white rounded-t-[24px] shadow-2xl animate-in slide-in-from-bottom duration-300 ease-out flex flex-col"
               style={{
                 height: "75vh",
                 transform: isDragging ? `translateY(${dragOffset}px)` : "none",
@@ -330,15 +330,15 @@ export function DateRangePicker({
             >
               {/* Handle bar */}
               <div
-                className="flex justify-center pt-2 pb-1"
+                className="flex justify-center pt-3 pb-2"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
                 onTouchCancel={handleTouchCancel}
               >
                 <div
-                  className={`w-12 h-1 rounded-full transition-all duration-200 ${
-                    isDragging ? "bg-blue-400 w-16" : "bg-gray-300"
+                  className={`h-1 rounded-full transition-all duration-200 ${
+                    isDragging ? "bg-blue-400 w-16" : "bg-gray-400 w-12"
                   }`}
                 ></div>
               </div>
