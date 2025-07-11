@@ -378,25 +378,49 @@ export default function BookATripForm({
     if (selectedDeparture && selectedArrival && dateRange.from) {
       setIsSearching(true);
 
-      // Simulate search delay
-      setTimeout(() => {
-        console.log("Searching for flights...");
-        console.log(
-          "From:",
-          selectedDeparture.departureAirport,
-          selectedDeparture.departureAirportCode
-        );
-        console.log(
-          "To:",
-          selectedArrival.arrivalAirport,
-          selectedArrival.arrivalAirportCode
-        );
-        console.log("Date range:", dateRange);
-        console.log("Travelers:", travelers);
-        console.log("Is one way:", isOneWay);
-        // Implement search functionality or navigation here
-        setIsSearching(false);
-      }, 2000);
+      // Hardcoded REST API POST request (with provided JSON structure)
+      fetch("https://uat.digital.airline.amadeus.com/ie/booking?lang=en-GB", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          search: {
+            travelers: [
+              {
+                passengerTypeCode: "ADT",
+              },
+            ],
+            commercialFareFamilies: ["CFFSOLO", "CFFSOLOBIS"],
+            itineraries: [
+              {
+                originLocationCode: "BNE",
+                destinationLocationCode: "HIR",
+                departureDateTime: "2025-07-16",
+              },
+            ],
+          },
+          portalFacts:
+            '[{"key":"OfficeID", "value":"HIRIE08AA"},{"key":"countryCode", "value":"AU"}]',
+          trace: "true",
+        }),
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("API request failed");
+          }
+          // Placeholder: handle response data
+          const data = await response.json();
+          console.log("API response:", data);
+          // TODO: Implement what to do with the response
+        })
+        .catch((error) => {
+          console.error("API error:", error);
+          // TODO: Show error to user if needed
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
     } else {
       if (!selectedDeparture || !selectedArrival) {
         alert("Please select both departure and arrival airports");
