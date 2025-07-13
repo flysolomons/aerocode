@@ -374,53 +374,64 @@ export default function BookATripForm({
   };
 
   const handleSearch = () => {
-    // Handle search with selected airports
     if (selectedDeparture && selectedArrival && dateRange.from) {
-      setIsSearching(true);
+      // Build the GET URL for Amadeus booking engine with correct structure
+      const baseUrl = process.env.NEXT_PUBLIC_AMADEUS_API_URL;
+      // Build the search object
+      // Helper to format date in Solomon Islands timezone (UTC+11) as ISO 8601 date string
+      function formatSolomonDate(date: Date) {
+        // Get UTC midnight for the selected date
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        // Create a date at midnight local time
+        const localMidnight = new Date(year, month, day, 0, 0, 0);
+        // Solomon Islands is UTC+11, so subtract the timezone offset to get the correct date in UTC
+        // This ensures the date is interpreted as the selected local date
+        const solomonOffset = -11 * 60; // in minutes
+        const utcDate = new Date(
+          localMidnight.getTime() - solomonOffset * 60000
+        );
+        return utcDate.toISOString().slice(0, 10);
+      }
 
-      // Hardcoded REST API POST request (with provided JSON structure)
-      fetch("https://uat.digital.airline.amadeus.com/ie/booking?lang=en-GB", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          search: {
-            travelers: [
-              {
-                passengerTypeCode: "ADT",
-              },
-            ],
-            commercialFareFamilies: ["CFFSOLO", "CFFSOLOBIS"],
-            itineraries: [
-              {
-                originLocationCode: "BNE",
-                destinationLocationCode: "HIR",
-                departureDateTime: "2025-07-16",
-              },
-            ],
+      const searchObj: any = {
+        travelers: [{ passengerTypeCode: "ADT" }],
+        commercialFareFamilies: ["CFFSOLO", "CFFSOLOBIS"],
+        itineraries: [
+          {
+            originLocationCode: selectedDeparture.departureAirportCode,
+            destinationLocationCode: selectedArrival.arrivalAirportCode,
+            departureDateTime: formatSolomonDate(dateRange.from),
           },
-          portalFacts:
-            '[{"key":"OfficeID", "value":"HIRIE08AA"},{"key":"countryCode", "value":"AU"}]',
-          trace: "true",
-        }),
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            throw new Error("API request failed");
-          }
-          // Placeholder: handle response data
-          const data = await response.json();
-          console.log("API response:", data);
-          // TODO: Implement what to do with the response
-        })
-        .catch((error) => {
-          console.error("API error:", error);
-          // TODO: Show error to user if needed
-        })
-        .finally(() => {
-          setIsSearching(false);
+        ],
+      };
+      // Add return itinerary if round trip
+      if (dateRange.to && !isOneWay) {
+        searchObj.itineraries.push({
+          originLocationCode: selectedArrival.arrivalAirportCode,
+          destinationLocationCode: selectedDeparture.departureAirportCode,
+          departureDateTime: formatSolomonDate(dateRange.to),
         });
+      }
+
+      // Build portalFacts
+      const portalFacts = JSON.stringify([
+        { key: "OfficeID", value: process.env.NEXT_PUBLIC_IE_OFFICE_ID },
+        { key: "countryCode", value: "AU" }, // switch to selected current country
+      ]);
+
+      // Build query string
+      const params = new URLSearchParams({
+        lang: "en-GB",
+        search: encodeURIComponent(JSON.stringify(searchObj)),
+        portalFacts,
+        trace: "true",
+      });
+
+      console.log("Search base + Params:", `${baseUrl}?${params.toString()}`);
+      // Redirect the browser using GET
+      window.location.href = `${baseUrl}?${params.toString()}`;
     } else {
       if (!selectedDeparture || !selectedArrival) {
         alert("Please select both departure and arrival airports");
