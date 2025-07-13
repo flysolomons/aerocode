@@ -172,6 +172,16 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       return null;
     } // Get the route data
     const route = data.route;
+    // Order fares by Saver, Smart, Flexi, Business
+    const fareOrder = ["Saver", "Smart", "Flexi", "Business"];
+    const orderedFares = Array.isArray(route.fares)
+      ? [...route.fares].sort((a, b) => {
+          const aIndex = fareOrder.indexOf(a.fareFamily);
+          const bIndex = fareOrder.indexOf(b.fareFamily);
+          return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
+        })
+      : [];
+
     return {
       heroTitle: route.heroTitle || "",
       heroImage: route.heroImage || { url: "/hero.jpg" },
@@ -185,7 +195,7 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       arrivalAirport: route.arrivalAirport || "",
       departureAirportCode: route.departureAirportCode || "",
       arrivalAirportCode: route.arrivalAirportCode || "",
-      fares: route.fares || [],
+      fares: orderedFares,
       specialRoutes: route.specialRoutes
         ? route.specialRoutes
             .filter((sr: any) => sr.isExpired !== "true")
