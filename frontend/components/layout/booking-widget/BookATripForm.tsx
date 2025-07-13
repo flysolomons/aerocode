@@ -429,7 +429,6 @@ export default function BookATripForm({
         trace: "true",
       });
 
-      console.log("Search base + Params:", `${baseUrl}?${params.toString()}`);
       // Redirect the browser using GET
       window.location.href = `${baseUrl}?${params.toString()}`;
     } else {
@@ -1529,12 +1528,12 @@ export default function BookATripForm({
               <div className="hidden md:flex items-center justify-end w-auto">
                 <button
                   className={`p-4 rounded-full transition-colors flex items-center gap-2 disabled:cursor-not-allowed ${
-                    isSearchFormValid && !isSearching
+                    !isSearching
                       ? "bg-blue-500 text-white hover:bg-blue-600"
                       : "bg-gray-300 text-gray-500"
                   }`}
                   onClick={handleSearch}
-                  disabled={!isSearchFormValid || isSearching}
+                  disabled={isSearching}
                 >
                   {isSearching ? (
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -1552,7 +1551,16 @@ export default function BookATripForm({
                       />
                     </svg>
                   )}
-                  <span className="text-sm font-medium">
+                  <span
+                    className={`text-sm font-medium transition-all duration-700 ease-in-out ${
+                      isDesktopModalActive ? "opacity-100" : "opacity-0"
+                    }`}
+                    style={{
+                      maxWidth: isDesktopModalActive ? "100px" : "0px",
+                      overflow: "hidden",
+                      display: isDesktopModalActive ? "inline-block" : "none",
+                    }}
+                  >
                     {isSearching ? "Searching..." : "Search"}
                   </span>
                 </button>
