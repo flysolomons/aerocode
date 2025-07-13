@@ -136,7 +136,18 @@ export default function RoutePageTemplate({
                   competitive fares. Prices may vary by season and availability.
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              {/* Responsive grid columns based on fares count */}
+              <div
+                className={`grid gap-4 sm:gap-6 lg:gap-8 ${
+                  fares.length === 1
+                    ? "grid-cols-1"
+                    : fares.length === 2
+                    ? "grid-cols-1 sm:grid-cols-2"
+                    : fares.length === 3
+                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                }`}
+              >
                 {fares.map((fare, index) => (
                   <FareCard
                     key={index}
