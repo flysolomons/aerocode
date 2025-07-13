@@ -376,7 +376,7 @@ export default function BookATripForm({
   const handleSearch = () => {
     if (selectedDeparture && selectedArrival && dateRange.from) {
       // Build the GET URL for Amadeus booking engine with correct structure
-      const baseUrl = process.env.NEXT_PUBLIC_AMADEUS_API_URL;
+      const baseUrl = "https://uat.digital.airline.amadeus.com/ie/booking";
       // Build the search object
       // Helper to format date in Solomon Islands timezone (UTC+11) as ISO 8601 date string
       function formatSolomonDate(date: Date) {
@@ -417,7 +417,7 @@ export default function BookATripForm({
 
       // Build portalFacts
       const portalFacts = JSON.stringify([
-        { key: "OfficeID", value: process.env.NEXT_PUBLIC_IE_OFFICE_ID },
+        { key: "OfficeID", value: "HIRIE08AA" },
         { key: "countryCode", value: "AU" }, // switch to selected current country
       ]);
 
