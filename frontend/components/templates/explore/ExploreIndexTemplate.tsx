@@ -29,19 +29,31 @@ export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
           )}
 
           {/* Explore options */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-6">
-            {initialPage.children &&
-              initialPage.children.length > 0 &&
-              initialPage.children.map((child, index) => (
-                <GenericCard
-                  key={index}
-                  title={child.title}
-                  subTitle={child.subTitle}
-                  image={child.heroImage?.url || "/image.jpg"}
-                  url={child.url}
-                />
+          {(initialPage.children?.length ?? 0) > 0 && (
+            <div className="space-y-6">
+              {Array.from({
+                length: Math.ceil((initialPage.children?.length ?? 0) / 3),
+              }).map((_, rowIdx) => (
+                <div
+                  key={rowIdx}
+                  className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center"
+                >
+                  {(initialPage.children ?? [])
+                    .slice(rowIdx * 3, rowIdx * 3 + 3)
+                    .map((child, idx) => (
+                      <div key={idx} className="flex-1">
+                        <GenericCard
+                          title={child.title}
+                          subTitle={child.subTitle}
+                          image={child.heroImage?.url || "/image.jpg"}
+                          url={child.url}
+                        />
+                      </div>
+                    ))}
+                </div>
               ))}
-          </div>
+            </div>
+          )}
         </div>
       </Container>
     </>

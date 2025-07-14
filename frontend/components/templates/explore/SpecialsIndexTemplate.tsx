@@ -60,16 +60,28 @@ export default function SpecialsIndexTemplate({
           </div>
           <div className="space-y-8">
             {specials && specials.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                {specials.map((special, index) => (
-                  <SpecialCard
-                    key={index}
-                    specialName={special.name}
-                    image={special.heroImage?.url}
-                    url={special.url}
-                    description={special.subTitle}
-                    expires={special.endDate}
-                  />
+              <div className="space-y-8">
+                {Array.from({
+                  length: Math.ceil((specials?.length ?? 0) / 3),
+                }).map((_, rowIdx) => (
+                  <div
+                    key={rowIdx}
+                    className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center"
+                  >
+                    {(specials ?? [])
+                      .slice(rowIdx * 3, rowIdx * 3 + 3)
+                      .map((special, idx) => (
+                        <div key={idx} className="flex-1">
+                          <SpecialCard
+                            specialName={special.name}
+                            image={special.heroImage?.url}
+                            url={special.url}
+                            description={special.subTitle}
+                            expires={special.endDate}
+                          />
+                        </div>
+                      ))}
+                  </div>
                 ))}
               </div>
             ) : (

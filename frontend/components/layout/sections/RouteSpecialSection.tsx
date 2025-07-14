@@ -29,34 +29,49 @@ export default function RouteSpecialSection({
               </p>
             </>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {specials &&
-              specials.length > 0 &&
-              specials.map((special, index) => {
-                let currency = undefined;
-                if (special.currency) {
-                  const { currencyCode } = special.currency;
-                  currency = currencyCode;
-                }
-                // Format price with commas for thousands, preserve decimals
-                let formattedPrice = special.startingPrice || "Contact for price";
-                if (
-                  special.startingPrice &&
-                  !isNaN(Number(special.startingPrice))
-                ) {
-                  formattedPrice = Number(special.startingPrice).toLocaleString();
-                }
-                return (
-                  <RouteSpecial
-                    key={index}
-                    route={special.route?.nameFull || "Special Route"}
-                    price={formattedPrice}
-                    image={special.route?.heroImage?.url || "/image.jpg"}
-                    specialName={special.special?.name || "Special"}
-                    currency={currency}
-                  />
-                );
-              })}
+          <div className="space-y-6">
+            {Array.from({ length: Math.ceil((specials?.length ?? 0) / 3) }).map(
+              (_, rowIdx) => (
+                <div
+                  key={rowIdx}
+                  className="flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8 justify-center"
+                >
+                  {(specials ?? [])
+                    .slice(rowIdx * 3, rowIdx * 3 + 3)
+                    .map((special, idx) => {
+                      let currency = undefined;
+                      if (special.currency) {
+                        const { currencyCode } = special.currency;
+                        currency = currencyCode;
+                      }
+                      // Format price with commas for thousands, preserve decimals
+                      let formattedPrice =
+                        special.startingPrice || "Contact for price";
+                      if (
+                        special.startingPrice &&
+                        !isNaN(Number(special.startingPrice))
+                      ) {
+                        formattedPrice = Number(
+                          special.startingPrice
+                        ).toLocaleString();
+                      }
+                      return (
+                        <div key={idx} className="flex-1">
+                          <RouteSpecial
+                            route={special.route?.nameFull || "Special Route"}
+                            price={formattedPrice}
+                            image={
+                              special.route?.heroImage?.url || "/image.jpg"
+                            }
+                            specialName={special.special?.name || "Special"}
+                            currency={currency}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              )
+            )}
           </div>
         </div>
       )}

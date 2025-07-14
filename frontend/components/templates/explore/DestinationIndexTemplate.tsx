@@ -30,18 +30,30 @@ export default function DestinationIndexTemplate({
           )}
 
           {/* Explore options */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {initialPage.children &&
-              initialPage.children.length > 0 &&
-              initialPage.children.map((child, index) => (
-                <GenericCard
-                  key={index}
-                  title={child.country}
-                  image={child.heroImage?.url || "/image.jpg"}
-                  url={child.url}
-                />
+          {(initialPage.children?.length ?? 0) > 0 && (
+            <div className="space-y-6">
+              {Array.from({
+                length: Math.ceil((initialPage.children?.length ?? 0) / 3),
+              }).map((_, rowIdx) => (
+                <div
+                  key={rowIdx}
+                  className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center"
+                >
+                  {(initialPage.children ?? [])
+                    .slice(rowIdx * 3, rowIdx * 3 + 3)
+                    .map((child, idx) => (
+                      <div key={idx} className="flex-1">
+                        <GenericCard
+                          title={child.country}
+                          image={child.heroImage?.url || "/image.jpg"}
+                          url={child.url}
+                        />
+                      </div>
+                    ))}
+                </div>
               ))}
-          </div>
+            </div>
+          )}
         </div>
       </Container>
     </>
