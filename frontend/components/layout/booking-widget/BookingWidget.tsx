@@ -81,28 +81,17 @@ export default function BookingWidget({
             }`}
           >
             {/* Mobile: Full-width rectangles layout */}
-            <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto xl:hidden">
-              {/* Book a Trip & Manage Booking - Same row */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Book a Trip */}
-                <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
-                    activeTab === 0
-                      ? "border-2 border-blue-500"
-                      : "border border-white/40 hover:shadow-xl active:scale-95"
-                  }`}
-                >
+            <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
+              {/* Book a Trip - Full width */}
+              <div className="w-full">
+                <div className="flex items-center justify-center h-14 rounded-full bg-gray-500/10 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
                   <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
-                      activeTab === 0
-                        ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
-                    }`}
+                    className="flex flex-row items-center justify-center gap-2 w-full h-full text-white font-medium transition-colors duration-200"
                     onClick={() => handleTabClick(0)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
+                      className="h-4 w-4 text-white"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -112,125 +101,95 @@ export default function BookingWidget({
                     >
                       <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
                     </svg>
-                    <span className="text-sm font-semibold text-center">
+                    <span className="text-sm font-medium text-white text-center">
                       Book
                     </span>
                   </button>
                 </div>
-                {/* Manage Booking */}
-                <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
-                    activeTab === 1
-                      ? "border-2 border-blue-500"
-                      : "border border-white/40 hover:shadow-xl active:scale-95"
-                  }`}
-                >
-                  <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
-                      activeTab === 1
-                        ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
-                    }`}
-                    onClick={() => handleTabClick(1)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
-                      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-                    </svg>
-                    <span className="text-sm font-semibold text-center">
-                      Manage
-                    </span>
-                  </button>
-                </div>
               </div>
-              {/* Flight Upgrade & Flight Timetable - Same row */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Flight Upgrade */}
-                <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
-                    activeTab === 2
-                      ? "border-2 border-blue-500"
-                      : "border border-white/40 hover:shadow-xl active:scale-95"
-                  }`}
-                >
-                  <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
-                      activeTab === 2
-                        ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
-                    }`}
-                    onClick={() => handleTabClick(2)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+              {/* Manage, Upgrade, Timetable - Same row */}
+              <div className="w-full">
+                <div className="grid grid-cols-3 gap-3 w-full">
+                  {/* Manage Booking */}
+                  <div className="flex items-center justify-center h-14 rounded-full bg-gray-500/10 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
+                    <button
+                      className="flex flex-row items-center justify-center gap-2 w-full h-full text-white font-medium transition-colors duration-200"
+                      onClick={() => handleTabClick(1)}
                     >
-                      <path d="M12 2a10 10 0 0 1 7.38 16.75" />
-                      <path d="m16 12-4-4-4 4" />
-                      <path d="M12 16V8" />
-                      <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
-                      <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
-                      <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
-                      <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
-                    </svg>
-                    <span className="text-sm font-semibold text-center">
-                      Upgrade
-                    </span>
-                  </button>
-                </div>
-                {/* Flight Timetable */}
-                <div
-                  className={`flex items-center justify-center h-24 py-0 rounded-3xl bg-white/85 backdrop-blur-md shadow-lg transition-all duration-200 ease-out ${
-                    activeTab === 3
-                      ? "border-2 border-blue-500"
-                      : "border border-white/40 hover:shadow-xl active:scale-95"
-                  }`}
-                >
-                  <button
-                    className={`flex flex-col items-center justify-center gap-2 w-full h-full transition-colors duration-200 ${
-                      activeTab === 3
-                        ? "text-blue-500"
-                        : "text-gray-700 hover:text-gray-900 active:text-blue-400"
-                    }`}
-                    onClick={() => handleTabClick(3)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-6 w-6"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-white hidden xs:inline"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+                        <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                      </svg>
+                      <span className="text-sm font-medium text-white text-center">
+                        Manage
+                      </span>
+                    </button>
+                  </div>
+                  {/* Flight Upgrade */}
+                  <div className="flex items-center justify-center h-14 rounded-full bg-gray-500/10 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
+                    <button
+                      className="flex flex-row items-center justify-center gap-2 w-full h-full text-white font-medium transition-colors duration-200"
+                      onClick={() => handleTabClick(2)}
                     >
-                      <path d="M8 2v4" />
-                      <path d="M16 2v4" />
-                      <rect width="18" height="18" x="3" y="4" rx="2" />
-                      <path d="M3 10h18" />
-                      <path d="m9 16 2 2 4-4" />
-                    </svg>
-                    <span className="text-sm font-semibold text-center">
-                      Timetable
-                    </span>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-white hidden xs:inline"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 2a10 10 0 0 1 7.38 16.75" />
+                        <path d="m16 12-4-4-4 4" />
+                        <path d="M12 16V8" />
+                        <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
+                        <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
+                        <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
+                        <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
+                      </svg>
+                      <span className="text-sm font-medium text-white text-center">
+                        Upgrade
+                      </span>
+                    </button>
+                  </div>
+                  {/* Flight Timetable */}
+                  <div className="flex items-center justify-center h-14 rounded-full bg-gray-500/10 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
+                    <button
+                      className="flex flex-row items-center justify-center gap-2 w-full h-full text-white font-medium transition-colors duration-200"
+                      onClick={() => handleTabClick(3)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-white hidden xs:inline"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M8 2v4" />
+                        <path d="M16 2v4" />
+                        <rect width="18" height="18" x="3" y="4" rx="2" />
+                        <path d="M3 10h18" />
+                        <path d="m9 16 2 2 4-4" />
+                      </svg>
+                      <span className="text-sm font-medium text-white text-center">
+                        Timetable
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
