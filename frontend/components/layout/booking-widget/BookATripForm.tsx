@@ -572,8 +572,7 @@ export default function BookATripForm({
                     <PopoverContent
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
-                        maxHeight:
-                          departureAirports.length > 3 ? "12rem" : "auto",
+                        maxHeight: departureAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
@@ -595,6 +594,9 @@ export default function BookATripForm({
                           >
                             <div className="text-black text-sm">
                               {airport.departureAirport}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {airport.departureAirportCode}
                             </div>
                           </div>
                         ))
@@ -850,8 +852,7 @@ export default function BookATripForm({
                     <PopoverContent
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
-                        maxHeight:
-                          arrivalAirports.length > 3 ? "12rem" : "auto",
+                        maxHeight: arrivalAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
@@ -873,6 +874,9 @@ export default function BookATripForm({
                           >
                             <div className="text-black text-sm">
                               {airport.arrivalAirport}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {airport.arrivalAirportCode}
                             </div>
                           </div>
                         ))
