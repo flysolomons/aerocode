@@ -167,28 +167,6 @@ export default function BookATripForm({
     }
   }, [selectedDeparture]);
 
-  // When selectedArrival changes, fetch departure airports for that destination
-  useEffect(() => {
-    if (selectedArrival) {
-      setIsLoading(true);
-      fetchOriginsForArrivalDestination(
-        selectedArrival.arrivalAirportCode
-      ).then((departures) => {
-        setDepartureAirports(departures);
-        // If the current selectedDeparture is not in the new departures, clear it
-        if (
-          selectedDeparture &&
-          !departures.some(
-            (d) => d.departureAirport === selectedDeparture.departureAirport
-          )
-        ) {
-          setSelectedDeparture(null);
-        }
-        setIsLoading(false);
-      });
-    }
-  }, [selectedArrival]);
-
   // Handle preselected airports when data is loaded
   useEffect(() => {
     if (departureAirports.length > 0 && preselectedDeparture) {

@@ -142,7 +142,9 @@ const TravelAlertsBanner: React.FC<TravelAlertsBannerProps> = ({
                     travelAlert.type
                   )}`}
                 >
-                  <span className="hidden sm:inline">{travelAlert.link.text}</span>
+                  <span className="hidden sm:inline">
+                    {travelAlert.link.text}
+                  </span>
                   <span className="sm:hidden">More</span>
                 </a>
               )}
