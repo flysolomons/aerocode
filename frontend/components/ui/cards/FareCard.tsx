@@ -29,31 +29,42 @@ export default function FareCard({
   };
 
   // Set background color with opacity using rgba
-  let bgColor = "rgba(7, 101, 53, 0.6)"; // default #076535
+  let bgColor = "rgba(7, 101, 53)"; // default #076535
   switch (family) {
     case "Saver":
-      bgColor = "rgba(67, 172, 225, 0.6)"; // #43ace1
+      bgColor = "rgba(67, 172, 225)"; // #43ace1
       break;
     case "Smart":
-      bgColor = "rgba(250, 204, 21, 0.6)"; // #facc15
+      bgColor = "rgba(250, 204, 21)"; // #facc15
       break;
     case "Flexi":
-      bgColor = "rgba(246, 137, 30, 0.6)"; // #f6891e
+      bgColor = "rgba(246, 137, 30)"; // #f6891e
       break;
     case "Business":
-      bgColor = "rgba(7, 101, 53, 0.5)"; // #076535
+      bgColor = "rgba(7, 101, 53)"; // #076535
       break;
     default:
-      bgColor = "rgba(153, 71, 29, 0.6)"; // #99471d
+      bgColor = "rgba(153, 71, 29)"; // #99471d
   }
 
   return (
     <div
       className="rounded-2xl sm:rounded-3xl lg:rounded-3xl p-3 sm:p-4 lg:p-4 shadow-lg w-full h-full"
-      style={{ backgroundColor: bgColor }}
+      style={{ border: `1px solid ${bgColor}` }}
     >
-      <div className="flex flex-col items-center gap-1 sm:gap-2 lg:gap-2">
-        <span className="text-blue-500 font-semibold text-lg sm:text-xl lg:text-xl text-center break-words">
+      <div className="flex flex-col items-center gap-1 sm:gap-2 lg:gap-2 w-full">
+        <span
+          className="font-semibold text-lg sm:text-xl lg:text-xl text-center break-words w-full rounded-xl"
+          style={{
+            backgroundColor: bgColor,
+            color: "#fff",
+            width: "100%",
+            display: "block",
+            padding: 0,
+            margin: 0,
+            borderRadius: "1rem",
+          }}
+        >
           {family}
         </span>
         <div className="flex items-baseline gap-1">
