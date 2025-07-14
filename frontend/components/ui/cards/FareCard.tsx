@@ -49,7 +49,7 @@ export default function FareCard({
 
   return (
     <div
-      className="rounded-2xl sm:rounded-3xl lg:rounded-3xl p-3 sm:p-4 lg:p-4 shadow-lg w-full h-full"
+      className="bg-white rounded-2xl sm:rounded-3xl lg:rounded-3xl p-3 sm:p-4 lg:p-4 shadow-lg w-full h-full"
       style={{ border: `1px solid ${bgColor}` }}
     >
       <div className="flex flex-col items-center gap-1 sm:gap-2 lg:gap-2 w-full">
