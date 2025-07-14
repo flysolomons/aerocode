@@ -7,6 +7,8 @@ import { DateRangePicker } from "@/components/ui/date-picker";
 import {
   fetchDepartureDestinations,
   fetchArrivalDestinations,
+  fetchArrivalDestinationsForOrigin,
+  fetchOriginsForArrivalDestination,
   DepartureAirport,
   ArrivalAirport,
 } from "@/graphql/BookingWidgetQuery";
@@ -129,7 +131,6 @@ export default function BookATripForm({
         setIsLoading(true);
         const departures = await fetchDepartureDestinations();
         const arrivals = await fetchArrivalDestinations();
-
         setDepartureAirports(departures);
         setArrivalAirports(arrivals);
       } catch (error) {
@@ -140,6 +141,53 @@ export default function BookATripForm({
     };
     fetchAirports();
   }, []);
+
+  // When selectedDeparture changes, fetch arrival airports for that origin
+  useEffect(() => {
+    if (selectedDeparture) {
+      setIsLoading(true);
+      fetchArrivalDestinationsForOrigin(
+        selectedDeparture.departureAirport
+      ).then((arrivals) => {
+        setArrivalAirports(arrivals);
+        // Only clear selectedArrival if arrivals are not empty and current selection is not valid
+        if (arrivals.length > 0) {
+          if (
+            selectedArrival &&
+            !arrivals.some(
+              (a) => a.arrivalAirport === selectedArrival.arrivalAirport
+            )
+          ) {
+            setSelectedArrival(null);
+          }
+        }
+        // If arrivals is empty, keep previous selection and show message in UI
+        setIsLoading(false);
+      });
+    }
+  }, [selectedDeparture]);
+
+  // When selectedArrival changes, fetch departure airports for that destination
+  useEffect(() => {
+    if (selectedArrival) {
+      setIsLoading(true);
+      fetchOriginsForArrivalDestination(
+        selectedArrival.arrivalAirportCode
+      ).then((departures) => {
+        setDepartureAirports(departures);
+        // If the current selectedDeparture is not in the new departures, clear it
+        if (
+          selectedDeparture &&
+          !departures.some(
+            (d) => d.departureAirport === selectedDeparture.departureAirport
+          )
+        ) {
+          setSelectedDeparture(null);
+        }
+        setIsLoading(false);
+      });
+    }
+  }, [selectedArrival]);
 
   // Handle preselected airports when data is loaded
   useEffect(() => {
