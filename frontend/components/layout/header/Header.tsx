@@ -274,7 +274,7 @@ function Header({
             <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
               Select Currency
             </div>
-            <div className="max-h-48 overflow-y-auto">
+            <div className="max-h-48 overflow-y-auto overflow-x-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
               {currencies.map((currency) => (
                 <button
                   key={currency.currencyCode}
@@ -339,7 +339,7 @@ function Header({
           </button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-64 p-2"
+          className="w-64 p-2 max-h-[80vh]"
           align="center"
           side="top"
           sideOffset={8}
@@ -347,7 +347,7 @@ function Header({
           <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
             Select Currency
           </div>
-          <div className="max-h-48 overflow-y-auto">
+          <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
             {currencies.map((currency) => (
               <button
                 key={currency.currencyCode}
@@ -529,7 +529,7 @@ function Header({
           // animate={{ opacity: 1 }}
           // exit={{ opacity: 0 }}
           // transition={{ duration: 0.2, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 bg-white xl:hidden"
+          className="fixed inset-0 z-50 bg-white xl:hidden flex flex-col"
         >
           {/* Mobile menu header */}
           <div className="flex items-center justify-between p-4">
@@ -615,7 +615,7 @@ function Header({
           <div className="border-b border-gray-200"></div>
 
           {/* Mobile menu content */}
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="flex-1 px-4 py-6 overflow-y-auto overflow-x-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
             {/* Main navigation page */}
             {mobileMenuPage === "main" &&
               !mobileMenuColumn &&
@@ -807,8 +807,9 @@ function Header({
             )}
             {/* Currency selection page */}
             {mobileCurrencyPage && (
-              <div className="space-y-4">
-                <nav className="flex flex-col gap-4">
+              <div className="h-full flex flex-col">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
+                  <div className="flex flex-col gap-2 pb-4">
                   {currencies.map((currency) => (
                     <button
                       key={currency.currencyCode}
@@ -852,7 +853,8 @@ function Header({
                       </div>
                     </button>
                   ))}
-                </nav>
+                  </div>
+                </div>
               </div>
             )}
             {/* Submenu sections page - show column titles */}

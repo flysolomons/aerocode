@@ -112,9 +112,6 @@ export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData>
       description: "",
     };
 
-    console.log("Fetched Flight Schedule Page Data:", pageData);
-    console.log("Fetched Schedules:", allSchedules);
-
     return {
       ...pageData,
       schedules: allSchedules,
