@@ -38,7 +38,7 @@ export default function BookATripForm({
   preselectedArrival,
 }: BookATripFormProps) {
   const { selectedCurrency } = useCurrency();
-  
+
   //Initialize default values for travelers.
   const [travelers, setTravelers] = useState<Travelers>({
     adults: 1,
@@ -575,10 +575,12 @@ export default function BookATripForm({
                     <PopoverContent
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
-                        maxHeight: departureAirports.length > 5 ? "20rem" : "auto",
+                        maxHeight:
+                          departureAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
+                      avoidCollisions={false}
                       sideOffset={4}
                     >
                       {isLoading ? (
@@ -855,10 +857,12 @@ export default function BookATripForm({
                     <PopoverContent
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
-                        maxHeight: arrivalAirports.length > 5 ? "20rem" : "auto",
+                        maxHeight:
+                          arrivalAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
+                      avoidCollisions={false}
                       sideOffset={4}
                     >
                       {isLoading ? (
