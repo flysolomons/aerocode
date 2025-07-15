@@ -4,7 +4,7 @@ import { Inter, Rubik } from "next/font/google";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import TravelAlertsBanner from "@/components/layout/banner/TravelAlertsBanner";
-import { TravelAlertProvider } from "@/components/layout/banner/TravelAlertContext";
+import ClientProviders from "@/components/providers/ClientProviders";
 import {
   fetchHeaderDataServer,
   fallbackHeaderData,
@@ -83,7 +83,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${rubik.variable} antialiased`}>
-        <TravelAlertProvider>
+        <ClientProviders initialCurrencies={headerData.currencies}>
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header
             headerMenus={headerData.headerMenus}
@@ -91,7 +91,7 @@ export default async function RootLayout({
           />
           {children}
           <Footer footerMenus={footerMenus} />
-        </TravelAlertProvider>
+        </ClientProviders>
       </body>
     </html>
   );

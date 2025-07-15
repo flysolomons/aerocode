@@ -222,6 +222,9 @@ class FooterMenu(models.Model):
 @register_query_field("currency", "currencies")
 class Currency(models.Model):
     country_name = models.CharField(max_length=100, help_text="Name of the country")
+    country_code = models.CharField(
+        max_length=10, help_text="Country code (e.g., SB, AU, NZ)"
+    )
     currency_name = models.CharField(max_length=100, help_text="Name of the currency")
     currency_code = models.CharField(
         max_length=10, help_text="Currency code (e.g., USD, EUR)"
@@ -240,6 +243,7 @@ class Currency(models.Model):
 
     panels = [
         FieldPanel("country_name"),
+        FieldPanel("country_code"),
         FieldPanel("currency_name"),
         FieldPanel("currency_code"),
         FieldPanel("currency_symbol"),
@@ -248,6 +252,7 @@ class Currency(models.Model):
 
     graphql_fields = [
         GraphQLString("country_name", name="countryName"),
+        GraphQLString("country_code", name="countryCode"),
         GraphQLString("currency_name", name="currencyName"),
         GraphQLString("currency_code", name="currencyCode"),
         GraphQLString("currency_symbol", name="currencySymbol"),

@@ -45,6 +45,7 @@ export interface HeaderMenu {
 // Interface for currency data
 export interface Currency {
   countryName: string;
+  countryCode: string;
   currencyName: string;
   currencyCode: string;
   currencySymbol: string;
@@ -98,6 +99,7 @@ export const GET_HEADER_MENU = gql`
     }
     currencies {
       countryName
+      countryCode
       currencyName
       currencyCode
       currencySymbol
@@ -378,12 +380,14 @@ export const fallbackHeaderMenu: TransformedHeaderMenu[] = [
 export const fallbackCurrencies: Currency[] = [
   {
     countryName: "Solomon Islands",
+    countryCode: "SB",
     currencyName: "Solomon Islands Dollar",
     currencyCode: "SBD",
     currencySymbol: "$",
   },
   {
     countryName: "Australia",
+    countryCode: "AU",
     currencyName: "Australian Dollar",
     currencyCode: "AUD",
     currencySymbol: "A$",

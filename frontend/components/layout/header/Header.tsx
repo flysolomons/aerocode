@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useTravelAlert } from "../banner/TravelAlertContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 function Header({
   headerMenus,
@@ -19,6 +20,7 @@ function Header({
   currencies?: Currency[];
 }) {
   const { hasTravelAlert } = useTravelAlert();
+  const { selectedCurrency, setSelectedCurrency, setCurrencies } = useCurrency();
   const [isWhiteHeader, setIsWhiteHeader] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -29,13 +31,17 @@ function Header({
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [mobileMenuPage, setMobileMenuPage] = useState<"main" | string>("main"); // Track current page in mobile menu
   const [mobileMenuColumn, setMobileMenuColumn] = useState<any | null>(null); // Track current column being viewed
-  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
-    currencies.length > 0 ? currencies[0] : null
-  );
   // Add state for General submenu page
   const [mobileGeneralPage, setMobileGeneralPage] = useState(false); // Track if on General submenu
   // Add state for Currency selection page
   const [mobileCurrencyPage, setMobileCurrencyPage] = useState(false);
+
+  // Update context currencies when prop changes
+  useEffect(() => {
+    if (currencies.length > 0) {
+      setCurrencies(currencies);
+    }
+  }, [currencies, setCurrencies]);
 
   // Debug: Log the passed header menus
   // console.log("Header Menus received:", headerMenus);

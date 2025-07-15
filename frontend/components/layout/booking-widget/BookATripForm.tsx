@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface BookATripFormProps {
   onModalStateChange?: (isActive: boolean) => void;
@@ -36,6 +37,8 @@ export default function BookATripForm({
   preselectedDeparture,
   preselectedArrival,
 }: BookATripFormProps) {
+  const { selectedCurrency } = useCurrency();
+  
   //Initialize default values for travelers.
   const [travelers, setTravelers] = useState<Travelers>({
     adults: 1,
@@ -444,7 +447,7 @@ export default function BookATripForm({
       // Build portalFacts
       const portalFacts = JSON.stringify([
         { key: "OfficeID", value: "HIRIE08AA" },
-        { key: "countryCode", value: "AU" }, // switch to selected current country
+        { key: "countryCode", value: selectedCurrency?.countryCode || "AU" }, // Use selected currency's country code
       ]);
 
       // Build query string
