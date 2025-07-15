@@ -10,7 +10,6 @@ interface MembershipCardProps {
   features: string; // HTML content from RichTextBlock
   signUpUrl: string;
   isPopular: string; // changed from boolean to string
-  key?: number;
   index: number;
 }
 
@@ -20,7 +19,6 @@ function MembershipCard({
   features,
   signUpUrl,
   isPopular,
-  key,
   index,
 }: MembershipCardProps) {
   // Convert isPopular string to boolean

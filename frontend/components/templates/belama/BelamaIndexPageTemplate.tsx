@@ -1,9 +1,15 @@
+"use client";
+
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import MembershipCard from "@/components/ui/cards/MembershipCard";
 import Image from "next/image";
 import { BelamaIndexPage } from "@/graphql/BelamaPageQuery";
 import parse from "html-react-parser";
+import TableOfContents, {
+  TOCSection,
+} from "@/components/layout/TableOfContents";
+import { useTableOfContents } from "@/hooks/useTableOfContents";
 
 interface BelamaIndexPageTemplateProps {
   initialPage: BelamaIndexPage;
@@ -11,6 +17,30 @@ interface BelamaIndexPageTemplateProps {
 export default function BelamaIndexPageTemplate({
   initialPage,
 }: BelamaIndexPageTemplateProps) {
+  // Define TOC sections
+  const tocSections: TOCSection[] = [
+    {
+      id: "overview",
+      label: "Overview",
+      hasContent: !!initialPage.description,
+    },
+    {
+      id: "individual-memberships",
+      label: "Individual",
+      hasContent: initialPage.individualMemberships.length > 0,
+    },
+    {
+      id: "group-memberships",
+      label: "Group",
+      hasContent: initialPage.groupMemberships.length > 0,
+    },
+  ];
+
+  const { activeSection, scrollToSection } = useTableOfContents({
+    sections: tocSections,
+    scrollOffset: 120,
+  });
+
   return (
     <>
       <SecondaryHero
@@ -18,17 +48,26 @@ export default function BelamaIndexPageTemplate({
         image={initialPage.heroImage.url || ""}
         breadcrumbs={initialPage.url || "> Belama"}
       />
+      {/* Table of Contents */}
+      <TableOfContents
+        sections={tocSections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
       <Container>
         <div className="py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-12 px-4 sm:px-6">
           {/* Description */}
           {initialPage.description && (
-            <div className="mx-auto w-full">
+            <div id="overview" className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>
           )}
-          <div className="space-y-4 sm:space-y-8 lg:space-y-8">
+          <div
+            id="individual-memberships"
+            className="space-y-4 sm:space-y-8 lg:space-y-8"
+          >
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500 space-y-0">
               Individual Memberships
             </h2>
@@ -59,7 +98,10 @@ export default function BelamaIndexPageTemplate({
       <Container>
         <div className=" py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 ">
           {/* Group memebership section */}
-          <div className="space-y-6 sm:space-y-8 lg:space-y-8">
+          <div
+            id="group-memberships"
+            className="space-y-6 sm:space-y-8 lg:space-y-8"
+          >
             <h2 className="text-2xl sm:text-3xl lg:text-3xl text-center font-bold text-blue-500">
               Group Memberships
             </h2>
