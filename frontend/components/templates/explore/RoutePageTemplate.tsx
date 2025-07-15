@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
@@ -11,8 +11,6 @@ import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents
 import { useTableOfContents } from "@/hooks/useTableOfContents";
 import {
   RoutePage,
-  RouteSearchResult,
-  fetchRoutesByDestination,
   SpecialRoute,
 } from "@/graphql/RoutePageQuery";
 import Recommendations from "@/components/layout/sections/Recommendations";
@@ -29,34 +27,9 @@ export default function RoutePageTemplate({
   loading = false,
 }: RoutePageTemplateProps) {
   const [gradientStartColor, setGradientStartColor] = useState("transparent");
-  const [relatedRoutes, setRelatedRoutes] = useState<RouteSearchResult[]>([]);
-  const [loadingRelatedRoutes, setLoadingRelatedRoutes] = useState(false);
-
-  // Fetch related routes when the component mounts
-  useEffect(() => {
-    if (initialPage?.arrivalAirportCode) {
-      setLoadingRelatedRoutes(true);
-      fetchRoutesByDestination(initialPage.arrivalAirportCode)
-        .then((routes) => {
-          // Filter out the current route if it exists in the results
-          const filteredRoutes = routes.filter(
-            (route) =>
-              !(
-                route.departureAirportCode ===
-                  initialPage.departureAirportCode &&
-                route.arrivalAirportCode === initialPage.arrivalAirportCode
-              )
-          );
-          setRelatedRoutes(filteredRoutes);
-        })
-        .catch((error) => {
-          console.error("Error fetching related routes:", error);
-        })
-        .finally(() => {
-          setLoadingRelatedRoutes(false);
-        });
-    }
-  }, [initialPage]);
+  
+  // Get ranked related routes from the initial page data
+  const relatedRoutes = initialPage?.rankedRelatedRoutes || [];
 
   // Handle loading state
   if (loading) {
@@ -235,35 +208,27 @@ export default function RoutePageTemplate({
               arrivalAirportCode={arrivalAirportCode}
             />
           </div>
-          {(loadingRelatedRoutes || relatedRoutes.length > 0) && (
+          {relatedRoutes.length > 0 && (
             <div id="other-routes" className="space-y-6 sm:space-y-8 scroll-mt-10">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                 <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
-                  Other Routes to {initialPage.arrivalAirport}
+                  Other Routes to {initialPage?.arrivalAirport}
                 </h2>
                 <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                   Explore other popular flight routes that might interest you.
                 </p>
               </div>
 
-              {loadingRelatedRoutes ? (
-                <div className="text-center py-8 sm:py-12">
-                  <div className="text-sm sm:text-base text-gray-600">
-                    Loading related routes...
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                  {relatedRoutes.map((route, index) => (
-                    <RouteCard
-                      key={index}
-                      origin={route.departureAirport}
-                      destination={route.arrivalAirport}
-                      url={route.url}
-                    />
-                  ))}
-                </div>
-              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                {relatedRoutes.map((rankedRoute, index) => (
+                  <RouteCard
+                    key={index}
+                    origin={rankedRoute.relatedRoute.departureAirport}
+                    destination={rankedRoute.relatedRoute.arrivalAirport}
+                    url={rankedRoute.relatedRoute.url || ""}
+                  />
+                ))}
+              </div>
             </div>
           )}
           {/* Recommendation Section */}

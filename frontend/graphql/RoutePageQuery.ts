@@ -46,6 +46,7 @@ export interface RoutePage {
   arrivalAirportCode: string;
   fares?: Fare[];
   specialRoutes?: SpecialRoute[];
+  rankedRelatedRoutes?: RankedRelatedRoute[];
   parent?: {
     country?: string;
   };
@@ -65,6 +66,11 @@ export interface RouteSearchResult {
     country: string;
   };
   __typename?: string;
+}
+
+// Interface for ranked related routes
+export interface RankedRelatedRoute {
+  relatedRoute: RouteSearchResult;
 }
 
 export const GET_ROUTE_PAGE_QUERY = gql`
@@ -105,6 +111,17 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         currency {
           currencyCode
           currencySymbol
+        }
+      }
+      rankedRelatedRoutes(limit: 100) {
+        relatedRoute {
+          departureAirport
+          arrivalAirport
+          departureAirportCode
+          arrivalAirportCode
+          url
+          name
+          nameFull
         }
       }
       parent {
@@ -219,6 +236,17 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
                 : undefined,
             }))
         : [],
+      rankedRelatedRoutes: (route.rankedRelatedRoutes || []).map((rankedRoute: any) => ({
+        relatedRoute: {
+          departureAirport: rankedRoute.relatedRoute?.departureAirport || "",
+          arrivalAirport: rankedRoute.relatedRoute?.arrivalAirport || "",
+          departureAirportCode: rankedRoute.relatedRoute?.departureAirportCode || "",
+          arrivalAirportCode: rankedRoute.relatedRoute?.arrivalAirportCode || "",
+          url: rankedRoute.relatedRoute?.url || "",
+          name: rankedRoute.relatedRoute?.name || "",
+          nameFull: rankedRoute.relatedRoute?.nameFull || "",
+        },
+      })),
       parent: route.parent ? { country: route.parent.country } : undefined,
       __typename: "Route",
     };

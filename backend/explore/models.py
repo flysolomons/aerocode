@@ -249,6 +249,39 @@ class WhereWeFlyInternationalRoute(Orderable):
         return f"{self.route.name_full}"
 
 
+class RouteRelatedRoute(Orderable):
+    """Intermediate model for ranking related routes within route pages"""
+
+    route = ParentalKey(
+        "explore.Route", on_delete=models.CASCADE, related_name="ranked_related_routes"
+    )
+    related_route = models.ForeignKey(
+        "explore.Route", on_delete=models.CASCADE, related_name="related_route_rankings"
+    )
+
+    panels = [
+        FieldPanel("related_route", read_only=True),
+    ]
+
+    graphql_fields = [
+        GraphQLForeignKey("related_route", "explore.Route"),
+        GraphQLString("sort_order", name="sortOrder"),
+    ]
+
+    class Meta:
+        verbose_name = "Related Route"
+        verbose_name_plural = "Related Routes"
+        ordering = ["sort_order"]
+        unique_together = ["route", "related_route"]
+
+    def delete(self, *args, **kwargs):
+        """Silently ignore deletion attempts - routes are auto-managed"""
+        pass
+
+    def __str__(self):
+        return f"{self.related_route.name_full}"
+
+
 @register_query_field("route")
 class Route(BasePage):
     destination_country = models.ForeignKey(
@@ -295,6 +328,12 @@ class Route(BasePage):
         FieldPanel("arrival_airport", heading="Arrival Airport"),
         FieldPanel("departure_airport_code", heading="Departure Airport Code"),
         FieldPanel("arrival_airport_code", heading="Arrival Airport Code"),
+        InlinePanel(
+            "ranked_related_routes",
+            label="Related Route Display Order",
+            help_text="Drag and drop to reorder how related routes appear on this route page. Related routes are automatically populated based on routes to the same destination.",
+            panels=None,  # Use default panels from RouteRelatedRoute.panels
+        ),
     ]
 
     search_fields = BasePage.search_fields + [
@@ -320,6 +359,9 @@ class Route(BasePage):
         # GraphQLCollection(GraphQLForeignKey, "specials", "explore.Special"),
         GraphQLCollection(GraphQLForeignKey, "fares", "fares.Fare"),
         GraphQLCollection(GraphQLForeignKey, "special_routes", "explore.SpecialRoute"),
+        GraphQLCollection(
+            GraphQLForeignKey, "ranked_related_routes", "explore.RouteRelatedRoute"
+        ),
         GraphQLString("flight_scope", name="flightScope"),
     ]
 
@@ -443,6 +485,60 @@ class Route(BasePage):
         except WhereWeFly.DoesNotExist:
             # WhereWeFly page doesn't exist yet, skip auto-population
             pass
+
+        # Auto-populate related routes rankings
+        self.populate_related_route_rankings()
+
+    def populate_related_route_rankings(self):
+        """Auto-create RouteRelatedRoute entries for all routes to the same destination"""
+        if self.arrival_airport_code:
+            # Get all routes that go to the same destination (excluding this route)
+            related_routes = Route.objects.filter(
+                arrival_airport_code=self.arrival_airport_code
+            ).exclude(pk=self.pk)
+
+            # Create RouteRelatedRoute entries for any missing related routes
+            for related_route in related_routes:
+                route_ranking, created = RouteRelatedRoute.objects.get_or_create(
+                    route=self,
+                    related_route=related_route,
+                    defaults={
+                        "sort_order": RouteRelatedRoute.objects.filter(
+                            route=self
+                        ).count()
+                    },
+                )
+                # If this is a new route ranking, set proper sort_order
+                if created:
+                    max_sort_order = (
+                        RouteRelatedRoute.objects.filter(route=self)
+                        .exclude(pk=route_ranking.pk)
+                        .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                        or -1
+                    )
+                    route_ranking.sort_order = max_sort_order + 1
+                    route_ranking.save()
+
+            # Also add this route to other routes that go to the same destination
+            for related_route in related_routes:
+                reverse_ranking, created = RouteRelatedRoute.objects.get_or_create(
+                    route=related_route,
+                    related_route=self,
+                    defaults={
+                        "sort_order": RouteRelatedRoute.objects.filter(
+                            route=related_route
+                        ).count()
+                    },
+                )
+                if created:
+                    max_sort_order = (
+                        RouteRelatedRoute.objects.filter(route=related_route)
+                        .exclude(pk=reverse_ranking.pk)
+                        .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                        or -1
+                    )
+                    reverse_ranking.sort_order = max_sort_order + 1
+                    reverse_ranking.save()
 
     class Meta:
         verbose_name = "Route Page"
