@@ -35,6 +35,7 @@ class Flight(models.Model):
         Schedule, on_delete=models.CASCADE, related_name="flights"
     )
     day = models.CharField(max_length=10)
+    aircraft = models.CharField(max_length=30)  # e.g., "Boeing 737"
     flight_number = models.CharField(max_length=10)
     departure_port = models.CharField(max_length=20)  # e.g., "JFK"
     arrival_port = models.CharField(max_length=20)  # e.g., "LAX"
@@ -54,6 +55,7 @@ class Flight(models.Model):
 
     graphql_fields = [
         GraphQLString("day"),
+        GraphQLString("aircraft"),
         GraphQLString("flight_number"),
         GraphQLString("departure_port"),
         GraphQLString("arrival_port"),

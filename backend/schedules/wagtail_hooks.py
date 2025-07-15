@@ -27,6 +27,7 @@ class ScheduleUploadView(View):
                 "Start Date",
                 "End Date",
                 "Day",
+                "Aircraft",
                 "Flight Number",
                 "Departure Port",
                 "Arrival Port",
@@ -114,6 +115,8 @@ class ScheduleUploadView(View):
                     invalid_fields = []
                     if pd.isna(row["Day"]):
                         invalid_fields.append("Day")
+                    if pd.isna(row["Aircraft"]):
+                        invalid_fields.append("Aircraft")
                     if pd.isna(row["Flight Number"]):
                         invalid_fields.append("Flight Number")
                     if pd.isna(row["Departure Port"]):
@@ -138,6 +141,7 @@ class ScheduleUploadView(View):
                         Flight.objects.create(
                             schedule=schedule,
                             day=row["Day"],
+                            aircraft=row["Aircraft"],
                             flight_number=row["Flight Number"],
                             departure_port=row["Departure Port"],
                             arrival_port=row["Arrival Port"],

@@ -23,18 +23,40 @@ export default function Accordion({ items, defaultOpen }: AccordionProps) {
   };
 
   return (
-    <div className="divide-y divide-gray-200 bg-white p-4 rounded-2xl">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       {items.map((item, index) => (
-        <div key={index} className="space-y-4 py-4 px-4">
+        <div key={index} className={`${index !== 0 ? 'border-t border-gray-200' : ''}`}>
           <button
-            className="flex w-full justify-between items-center text-left"
+            className="flex w-full justify-between items-center text-left px-4 sm:px-6 py-4 sm:py-5 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:bg-gray-50"
             onClick={() => toggleAccordion(index)}
           >
-            <h3 className="text-lg font-medium text-gray-900">{item.title}</h3>
-            {/*Chevron Down*/}
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 pr-4">
+              {item.title}
+            </h3>
+            <div className="flex-shrink-0">
+              <svg
+                className={`w-5 h-5 text-gray-500 transition-transform duration-200 ${
+                  openIndex === index ? 'rotate-180' : ''
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
           </button>
           {openIndex === index && (
-            <div className="mt-3 text-gray-600">{item.content}</div>
+            <div className="px-4 sm:px-6 pb-4 sm:pb-6 animate-in slide-in-from-top-2 duration-200">
+              <div className="pt-2 border-t border-gray-100">
+                {item.content}
+              </div>
+            </div>
           )}
         </div>
       ))}

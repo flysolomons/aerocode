@@ -26,6 +26,7 @@ export interface Schedule {
 export interface Flight {
   id: string;
   day: string;
+  aircraft: string;
   flightNumber: string;
   departurePort: string;
   arrivalPort: string;
@@ -63,9 +64,10 @@ export const GET_SCHEDULES_QUERY = gql`
       endDate
       snippetType
       contentType
-      flights(limit: 100) {
+      flights(limit: 1000) {
         id
         day
+        aircraft
         flightNumber
         departurePort
         arrivalPort
@@ -77,15 +79,26 @@ export const GET_SCHEDULES_QUERY = gql`
   }
 `;
 
+async function fetchAllSchedules() {
+  try {
+    const result = await client.query({
+      query: GET_SCHEDULES_QUERY,
+    });
+
+    return result.data.schedules || [];
+  } catch (error) {
+    console.error("Error fetching schedules:", error);
+    return [];
+  }
+}
+
 export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData> {
   try {
-    const [pageResult, schedulesResult] = await Promise.all([
+    const [pageResult, allSchedules] = await Promise.all([
       client.query({
         query: GET_FLIGHT_SCHEDULE_PAGE_QUERY,
       }),
-      client.query({
-        query: GET_SCHEDULES_QUERY,
-      }),
+      fetchAllSchedules(),
     ]);
 
     const pageData = pageResult.data.pages.find(
@@ -99,9 +112,12 @@ export async function fetchFlightSchedulePage(): Promise<ScheduleWithFlightData>
       description: "",
     };
 
+    console.log("Fetched Flight Schedule Page Data:", pageData);
+    console.log("Fetched Schedules:", allSchedules);
+
     return {
       ...pageData,
-      schedules: schedulesResult.data.schedules || [],
+      schedules: allSchedules,
       __typename: "FlightSchedule",
     };
   } catch (error) {
