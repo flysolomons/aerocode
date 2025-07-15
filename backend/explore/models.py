@@ -3,6 +3,7 @@ from wagtail.search import index
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel, FieldRowPanel
+from wagtail.models import Orderable
 from grapple.models import (
     GraphQLString,
     GraphQLStreamfield,
@@ -84,19 +85,90 @@ class Destination(BasePage):
         FieldPanel("country", heading="Country"),
         FieldPanel("reasons_to_visit", heading="Reasons to Visit"),
         FieldPanel("travel_requirements", heading="Travel Requirements"),
+        InlinePanel(
+            "ranked_routes",
+            label="Route Display Order",
+            help_text="Drag and drop to reorder how routes appear on this destination page. Routes are automatically populated based on routes to this destination.",
+            panels=None,  # Use default panels from DestinationRoute.panels
+        ),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
         GraphQLStreamfield("reasons_to_visit"),
         GraphQLStreamfield("travel_requirements"),
         GraphQLCollection(GraphQLForeignKey, "routes", "explore.Route"),
+        GraphQLCollection(
+            GraphQLForeignKey, "ranked_routes", "explore.DestinationRoute"
+        ),
         GraphQLString("country"),
     ]
 
     parent_page_types = ["explore.DestinationIndexPage"]
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Auto-populate route rankings for all routes to this destination
+        self.populate_route_rankings()
+
+    def populate_route_rankings(self):
+        """Auto-create DestinationRoute entries for all routes to this destination"""
+        # Get all routes that go to this destination
+        routes_to_destination = Route.objects.filter(destination_country=self)
+
+        # Create DestinationRoute entries for any missing routes
+        for index, route in enumerate(routes_to_destination):
+            destination_route, created = DestinationRoute.objects.get_or_create(
+                destination=self,
+                route=route,
+                defaults={
+                    "sort_order": DestinationRoute.objects.filter(
+                        destination=self
+                    ).count()
+                },
+            )
+            # If this is a new route ranking and we have existing ones,
+            # make sure sort_order is properly set
+            if created:
+                max_sort_order = (
+                    DestinationRoute.objects.filter(destination=self)
+                    .exclude(pk=destination_route.pk)
+                    .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                    or -1
+                )
+                destination_route.sort_order = max_sort_order + 1
+                destination_route.save()
+
     class Meta:
         verbose_name = "Destination Page"
+
+
+class DestinationRoute(Orderable):
+    """Intermediate model for ranking routes within destinations"""
+
+    destination = ParentalKey(
+        "explore.Destination", on_delete=models.CASCADE, related_name="ranked_routes"
+    )
+    route = models.ForeignKey(
+        "explore.Route", on_delete=models.CASCADE, related_name="destination_rankings"
+    )
+
+    panels = [
+        FieldPanel("route", read_only=True),
+    ]
+
+    graphql_fields = [
+        GraphQLForeignKey("route", "explore.Route"),
+        GraphQLString("sort_order", name="sortOrder"),
+    ]
+
+    class Meta:
+        verbose_name = "Destination Route"
+        verbose_name_plural = "Destination Routes"
+        ordering = ["sort_order"]
+        unique_together = ["destination", "route"]
+
+    def __str__(self):
+        return f"{self.route.name_full}"
 
 
 @register_query_field("route")
@@ -214,6 +286,26 @@ class Route(BasePage):
         # Run full validation (including clean) before saving
         self.full_clean()
         super().save(*args, **kwargs)
+
+        # Auto-create DestinationRoute ranking if destination_country is set
+        if self.destination_country:
+            destination_route, created = DestinationRoute.objects.get_or_create(
+                destination=self.destination_country,
+                route=self,
+                defaults={"sort_order": 0},
+            )
+            # If this is a new route ranking, set proper sort_order
+            if created:
+                max_sort_order = (
+                    DestinationRoute.objects.filter(
+                        destination=self.destination_country
+                    )
+                    .exclude(pk=destination_route.pk)
+                    .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                    or -1
+                )
+                destination_route.sort_order = max_sort_order + 1
+                destination_route.save()
 
     class Meta:
         verbose_name = "Route Page"

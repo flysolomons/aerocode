@@ -26,3 +26,5 @@ wheels/
 *.egg
 
 db.sqlite3
+
+.claude/

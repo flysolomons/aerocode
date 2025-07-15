@@ -9,7 +9,6 @@ from grapple.models import (
     GraphQLForeignKey,
     GraphQLStreamfield,
 )
-from wagtail_color_panel.blocks import NativeColorBlock
 
 from django.core.exceptions import ValidationError
 
@@ -24,12 +23,10 @@ class TextBlock(RichTextBlock):
 class ImageBlock(StructBlock):
     image = ImageChooserBlock(required=True)
     caption = CharBlock(required=False, max_length=200)
-    background_color = NativeColorBlock(required=False)
 
     graphql_fields = [
         GraphQLImage("image", name="image"),
         GraphQLString("caption", name="caption"),
-        GraphQLString("background_color", name="backgroundColor"),
     ]
 
     class Meta:
@@ -58,14 +55,12 @@ class SectionBlock(StructBlock):
     image_position = ChoiceBlock(
         choices=[("left", "Left"), ("right", "Right")], default="right"
     )
-    background_color = NativeColorBlock(required=False)
 
     graphql_fields = [
         GraphQLString("heading", name="heading"),
         GraphQLString("text", name="text"),
         GraphQLImage("image", name="image"),
         GraphQLString("image_position", name="imagePosition"),
-        GraphQLString("background_color", name="backgroundColor"),
     ]
 
     class Meta:
@@ -118,11 +113,9 @@ class TravelRequirementBlock(StructBlock):
 class GridCardSectionBlock(StructBlock):
     heading = CharBlock(required=True, max_length=100)
     grid_cards = ListBlock(GridCardBlock())
-    background_color = NativeColorBlock(required=False)
 
     graphql_fields = [
         GraphQLString("heading", name="heading"),
-        GraphQLString("background_color", name="backgroundColor"),
     ]
 
     class Meta:

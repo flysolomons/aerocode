@@ -46,6 +46,11 @@ export interface Route {
   specialRoutes?: DestinationSpecialRoute[];
 }
 
+// Interface for ranked routes
+export interface RankedRoute {
+  route: Route;
+}
+
 // Interface for the Destination page
 export interface DestinationPage {
   heroTitle: string;
@@ -59,7 +64,7 @@ export interface DestinationPage {
   country: string;
   reasonsToVisit: SectionBlock[];
   travelRequirements: TravelRequirementBlock[];
-  routes: Route[];
+  rankedRoutes: RankedRoute[];
   __typename?: string;
 }
 
@@ -93,24 +98,26 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
           link
         }
       }
-      routes(limit: 100) {
-        departureAirport
-        arrivalAirport
-        specialRoutes {
-          isExpired
-          special {
-            name
-          }
-          route {
-            nameFull
-            heroImage {
-              url
+      rankedRoutes(limit: 100) {
+        route {
+          departureAirport
+          arrivalAirport
+          specialRoutes {
+            isExpired
+            special {
+              name
             }
-          }
-          startingPrice
-          currency {
-            currencyCode
-            currencySymbol
+            route {
+              nameFull
+              heroImage {
+                url
+              }
+            }
+            startingPrice
+            currency {
+              currencyCode
+              currencySymbol
+            }
           }
         }
       }
@@ -141,30 +148,32 @@ export async function fetchDestinationPage(
       country: data.destination.country || "",
       reasonsToVisit: data.destination.reasonsToVisit || [],
       travelRequirements: data.destination.travelRequirements || [],
-      routes: (data.destination.routes || []).map((route: any) => ({
-        departureAirport: route.departureAirport || "",
-        arrivalAirport: route.arrivalAirport || "",
-        specialRoutes: (route.specialRoutes || [])
-          .filter((sr: any) => sr.isExpired !== "true")
-          .map((sr: any) => ({
-            isExpired: sr.isExpired || "",
-            special: {
-              name: sr.special?.name || "",
-            },
-            route: sr.route
-              ? {
-                  nameFull: sr.route.nameFull || "",
-                  heroImage: sr.route.heroImage || { url: "/image.jpg" },
-                }
-              : undefined,
-            startingPrice: sr.startingPrice || "",
-            currency: sr.currency
-              ? {
-                  currencyCode: sr.currency.currencyCode || "",
-                  currencySymbol: sr.currency.currencySymbol || "",
-                }
-              : undefined,
-          })),
+      rankedRoutes: (data.destination.rankedRoutes || []).map((rankedRoute: any) => ({
+        route: {
+          departureAirport: rankedRoute.route?.departureAirport || "",
+          arrivalAirport: rankedRoute.route?.arrivalAirport || "",
+          specialRoutes: (rankedRoute.route?.specialRoutes || [])
+            .filter((sr: any) => sr.isExpired !== "true")
+            .map((sr: any) => ({
+              isExpired: sr.isExpired || "",
+              special: {
+                name: sr.special?.name || "",
+              },
+              route: sr.route
+                ? {
+                    nameFull: sr.route.nameFull || "",
+                    heroImage: sr.route.heroImage || { url: "/image.jpg" },
+                  }
+                : undefined,
+              startingPrice: sr.startingPrice || "",
+              currency: sr.currency
+                ? {
+                    currencyCode: sr.currency.currencyCode || "",
+                    currencySymbol: sr.currency.currencySymbol || "",
+                  }
+                : undefined,
+            })),
+        },
       })),
       __typename: "Destination",
     };

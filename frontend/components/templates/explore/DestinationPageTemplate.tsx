@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Container from "@/components/layout/Container";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
@@ -14,10 +14,6 @@ import {
   DestinationPage,
   DestinationSpecialRoute,
 } from "@/graphql/DestinationPageQuery";
-import {
-  RouteSearchResult,
-  fetchRoutesByCountry,
-} from "@/graphql/RoutePageQuery";
 import parse from "html-react-parser";
 
 interface DestinationTemplateProps {
@@ -28,25 +24,6 @@ interface DestinationTemplateProps {
 export default function DestinationTemplate({
   initialPage,
 }: DestinationTemplateProps) {
-  const [routes, setRoutes] = useState<RouteSearchResult[]>([]);
-  const [loadingRoutes, setLoadingRoutes] = useState(false);
-
-  // Fetch routes by country when the component mounts
-  useEffect(() => {
-    if (initialPage?.country) {
-      setLoadingRoutes(true);
-      fetchRoutesByCountry(initialPage.country)
-        .then((routesData) => {
-          setRoutes(routesData);
-        })
-        .catch((error) => {
-          console.error("Error fetching routes by country:", error);
-        })
-        .finally(() => {
-          setLoadingRoutes(false);
-        });
-    }
-  }, [initialPage?.country]);
 
   // Determine which sections have content and should be shown in navigation
   const navigationSections = useMemo(() => {
@@ -59,8 +36,8 @@ export default function DestinationTemplate({
       {
         id: "specials",
         label: "Flight Specials",
-        hasContent: initialPage.routes?.some(
-          (route) => route.specialRoutes && route.specialRoutes.length > 0
+        hasContent: initialPage.rankedRoutes?.some(
+          (rankedRoute) => rankedRoute.route.specialRoutes && rankedRoute.route.specialRoutes.length > 0
         ) || false,
       },
       {
@@ -86,7 +63,7 @@ export default function DestinationTemplate({
     ];
 
     return sections.filter(section => section.hasContent);
-  }, [initialPage, routes]);
+  }, [initialPage]);
 
   // Use the table of contents hook
   const { activeSection, scrollToSection } = useTableOfContents({ 
@@ -119,16 +96,16 @@ export default function DestinationTemplate({
               </div>
             </div>
           )}
-          {initialPage.routes?.some(
-            (route) => route.specialRoutes && route.specialRoutes.length > 0
+          {initialPage.rankedRoutes?.some(
+            (rankedRoute) => rankedRoute.route.specialRoutes && rankedRoute.route.specialRoutes.length > 0
           ) && (
             <div id="specials" className="scroll-mt-10">
               <RouteSpecialSection
                 heading={`${initialPage.country} Specials`}
                 description="Check out our special fares and promotions for flights to this destination."
-                specials={initialPage.routes
-                  .flatMap((route) =>
-                    (route.specialRoutes || []).map((special) => ({
+                specials={initialPage.rankedRoutes
+                  .flatMap((rankedRoute) =>
+                    (rankedRoute.route.specialRoutes || []).map((special) => ({
                       ...special,
                       currency: special.currency,
                     }))
@@ -192,7 +169,7 @@ export default function DestinationTemplate({
                 </div>
               </div>
             )}
-          {/* Routes Section - Using dynamically fetched routes by country */}
+          {/* Routes Section - Using ranked routes from GraphQL */}
           <div id="routes" className="space-y-6 sm:space-y-8 scroll-mt-10">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
@@ -205,20 +182,14 @@ export default function DestinationTemplate({
               </p>
             </div>
 
-            {loadingRoutes ? (
-              <div className="text-center py-8 sm:py-12">
-                <div className="text-sm sm:text-base text-gray-600">
-                  Loading routes...
-                </div>
-              </div>
-            ) : routes.length > 0 ? (
+            {initialPage.rankedRoutes && initialPage.rankedRoutes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                {routes.map((route, index) => (
+                {initialPage.rankedRoutes.map((rankedRoute, index) => (
                   <RouteCard
                     key={index}
-                    origin={route.departureAirport}
-                    destination={route.arrivalAirport}
-                    url={route.url}
+                    origin={rankedRoute.route.departureAirport}
+                    destination={rankedRoute.route.arrivalAirport}
+                    url=""
                   />
                 ))}
               </div>
