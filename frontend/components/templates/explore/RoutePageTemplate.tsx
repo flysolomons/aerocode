@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
@@ -7,6 +7,8 @@ import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSectio
 import RouteCard from "@/components/ui/cards/RouteCard";
 import FareCard from "@/components/ui/cards/FareCard";
 import FlightInfoCard from "@/components/ui/cards/FlightInfoCard";
+import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents";
+import { useTableOfContents } from "@/hooks/useTableOfContents";
 import {
   RoutePage,
   RouteSearchResult,
@@ -55,6 +57,7 @@ export default function RoutePageTemplate({
         });
     }
   }, [initialPage]);
+
   // Handle loading state
   if (loading) {
     return (
@@ -74,6 +77,8 @@ export default function RoutePageTemplate({
       </div>
     );
   }
+
+  // Destructure page data
   const {
     heroTitle,
     heroImage,
@@ -87,6 +92,49 @@ export default function RoutePageTemplate({
     specialRoutes = [],
   } = initialPage;
 
+  // Define TOC sections for route pages
+  const tocSections = useMemo(() => {
+    const sections: TOCSection[] = [
+      {
+        id: "overview",
+        label: "Overview",
+        hasContent: !!initialPage.description,
+      },
+      {
+        id: "specials", 
+        label: "Flight Specials",
+        hasContent: specialRoutes && specialRoutes.length > 0,
+      },
+      {
+        id: "fares",
+        label: "Year Round Fares", 
+        hasContent: fares && fares.length > 0,
+      },
+      {
+        id: "flight-info",
+        label: "Flight Information",
+        hasContent: true, // Always show flight info
+      },
+      {
+        id: "other-routes",
+        label: "Other Routes",
+        hasContent: relatedRoutes.length > 0,
+      },
+      {
+        id: "destinations",
+        label: "More Destinations", 
+        hasContent: true, // Always show recommendations
+      },
+    ];
+
+    return sections.filter(section => section.hasContent);
+  }, [initialPage, specialRoutes, fares, relatedRoutes]);
+
+  // Use the table of contents hook
+  const { activeSection, scrollToSection } = useTableOfContents({ 
+    sections: tocSections 
+  });
+
   return (
     <>
       <SecondaryHero
@@ -95,6 +143,13 @@ export default function RoutePageTemplate({
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
       />
+      
+      <TableOfContents
+        sections={tocSections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
+
       <Container>
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           <div className="space-y-8">
@@ -110,23 +165,25 @@ export default function RoutePageTemplate({
               }}
             />
             {initialPage.description && (
-              <div className="mx-auto w-full">
+              <div id="overview" className="mx-auto w-full scroll-mt-10">
                 <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                   {parse(initialPage.description)}
                 </div>
               </div>
             )}
           </div>
-          <RouteSpecialSection
-            heading={`${departureAirport} to ${arrivalAirport} Specials`}
-            description="Check out our latest special fares for this route. Book early to secure the best prices."
-            specials={specialRoutes.map((special) => ({
-              ...special,
-              currency: special.currency,
-            }))}
-          />
+          <div id="specials" className="scroll-mt-10">
+            <RouteSpecialSection
+              heading={`${departureAirport} to ${arrivalAirport} Specials`}
+              description="Check out our latest special fares for this route. Book early to secure the best prices."
+              specials={specialRoutes.map((special) => ({
+                ...special,
+                currency: special.currency,
+              }))}
+            />
+          </div>
           {fares && fares.length > 0 && (
-            <div className="space-y-6 sm:space-y-8">
+            <div id="fares" className="space-y-6 sm:space-y-8 scroll-mt-10">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                 <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                   Year Round Fares
@@ -160,7 +217,7 @@ export default function RoutePageTemplate({
               </div>
             </div>
           )}
-          <div className="space-y-6 sm:space-y-8">
+          <div id="flight-info" className="space-y-6 sm:space-y-8 scroll-mt-10">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                 Flight Information
@@ -179,7 +236,7 @@ export default function RoutePageTemplate({
             />
           </div>
           {(loadingRelatedRoutes || relatedRoutes.length > 0) && (
-            <div className="space-y-6 sm:space-y-8">
+            <div id="other-routes" className="space-y-6 sm:space-y-8 scroll-mt-10">
               <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                 <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                   Other Routes to {initialPage.arrivalAirport}
@@ -210,10 +267,12 @@ export default function RoutePageTemplate({
             </div>
           )}
           {/* Recommendation Section */}
-          <Recommendations
-            excludeCountry={initialPage.parent?.country}
-            heading="Explore other destinations"
-          />
+          <div id="destinations" className="scroll-mt-10">
+            <Recommendations
+              excludeCountry={initialPage.parent?.country}
+              heading="Explore other destinations"
+            />
+          </div>
 
           {/* Ready to Fly Section */}
           <div className="text-center space-y-6">

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Container from "@/components/layout/Container";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
@@ -8,6 +8,8 @@ import InfoCard from "@/components/ui/cards/InfoCard";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import Recommendations from "@/components/layout/sections/Recommendations";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents";
+import { useTableOfContents } from "@/hooks/useTableOfContents";
 import {
   DestinationPage,
   DestinationSpecialRoute,
@@ -21,6 +23,7 @@ import parse from "html-react-parser";
 interface DestinationTemplateProps {
   initialPage: DestinationPage;
 }
+
 
 export default function DestinationTemplate({
   initialPage,
@@ -45,6 +48,51 @@ export default function DestinationTemplate({
     }
   }, [initialPage?.country]);
 
+  // Determine which sections have content and should be shown in navigation
+  const navigationSections = useMemo(() => {
+    const sections: TOCSection[] = [
+      {
+        id: "overview",
+        label: "Overview",
+        hasContent: !!initialPage.description,
+      },
+      {
+        id: "specials",
+        label: "Flight Specials",
+        hasContent: initialPage.routes?.some(
+          (route) => route.specialRoutes && route.specialRoutes.length > 0
+        ) || false,
+      },
+      {
+        id: "reasons",
+        label: "Why Visit",
+        hasContent: initialPage.reasonsToVisit && initialPage.reasonsToVisit.length > 0,
+      },
+      {
+        id: "requirements",
+        label: "Travel Info",
+        hasContent: initialPage.travelRequirements && initialPage.travelRequirements.length > 0,
+      },
+      {
+        id: "routes",
+        label: "Our Routes",
+        hasContent: true, // Always show routes section
+      },
+      {
+        id: "more",
+        label: "More Destinations",
+        hasContent: true, // Always show recommendations
+      },
+    ];
+
+    return sections.filter(section => section.hasContent);
+  }, [initialPage, routes]);
+
+  // Use the table of contents hook
+  const { activeSection, scrollToSection } = useTableOfContents({ 
+    sections: navigationSections 
+  });
+
   console.log("Initial Page Data:", initialPage);
 
   return (
@@ -55,10 +103,17 @@ export default function DestinationTemplate({
         widget="stripped"
         breadcrumbs={initialPage.url}
       />
+      
+      <TableOfContents
+        sections={navigationSections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
+
       <Container>
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           {initialPage.description && (
-            <div className="mx-auto w-full">
+            <div id="overview" className="mx-auto w-full scroll-mt-10">
               <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
@@ -67,24 +122,26 @@ export default function DestinationTemplate({
           {initialPage.routes?.some(
             (route) => route.specialRoutes && route.specialRoutes.length > 0
           ) && (
-            <RouteSpecialSection
-              heading={`${initialPage.country} Specials`}
-              description="Check out our special fares and promotions for flights to this destination."
-              specials={initialPage.routes
-                .flatMap((route) =>
-                  (route.specialRoutes || []).map((special) => ({
-                    ...special,
-                    currency: special.currency,
-                  }))
-                )
-                .filter((special) => !!special)
-                .slice(0, 3)}
-            />
+            <div id="specials" className="scroll-mt-10">
+              <RouteSpecialSection
+                heading={`${initialPage.country} Specials`}
+                description="Check out our special fares and promotions for flights to this destination."
+                specials={initialPage.routes
+                  .flatMap((route) =>
+                    (route.specialRoutes || []).map((special) => ({
+                      ...special,
+                      currency: special.currency,
+                    }))
+                  )
+                  .filter((special) => !!special)
+                  .slice(0, 3)}
+              />
+            </div>
           )}
           {/* Reasons to Visit */}
           {initialPage.reasonsToVisit &&
             initialPage.reasonsToVisit.length > 0 && (
-              <div className="space-y-6 sm:space-y-8">
+              <div id="reasons" className="space-y-6 sm:space-y-8 scroll-mt-10">
                 <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                   <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                     Why Visit {initialPage.country}
@@ -110,7 +167,7 @@ export default function DestinationTemplate({
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
-              <div className="space-y-6 sm:space-y-8">
+              <div id="requirements" className="space-y-6 sm:space-y-8 scroll-mt-10">
                 <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                   <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                     {initialPage.country} Travel Requirements
@@ -136,7 +193,7 @@ export default function DestinationTemplate({
               </div>
             )}
           {/* Routes Section - Using dynamically fetched routes by country */}
-          <div className="space-y-6 sm:space-y-8">
+          <div id="routes" className="space-y-6 sm:space-y-8 scroll-mt-10">
             <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                 Our {initialPage.country} Routes
@@ -174,10 +231,12 @@ export default function DestinationTemplate({
             )}
           </div>
           {/* Recommendation Section */}
-          <Recommendations
-            excludeCountry={initialPage.country}
-            heading="Explore More Destinations"
-          />
+          <div id="more" className="scroll-mt-10">
+            <Recommendations
+              excludeCountry={initialPage.country}
+              heading="Explore More Destinations"
+            />
+          </div>
           {/* Ready to Fly Section */}
           <div className="text-center space-y-6">
             <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
