@@ -167,6 +167,84 @@ class DestinationRoute(Orderable):
         ordering = ["sort_order"]
         unique_together = ["destination", "route"]
 
+    def delete(self, *args, **kwargs):
+        """Silently ignore deletion attempts - routes are auto-managed"""
+        pass
+
+    def __str__(self):
+        return f"{self.route.name_full}"
+
+
+class WhereWeFlyDomesticRoute(Orderable):
+    """Intermediate model for ranking domestic routes in WhereWeFly page"""
+
+    where_we_fly = ParentalKey(
+        "explore.WhereWeFly",
+        on_delete=models.CASCADE,
+        related_name="ranked_domestic_routes",
+    )
+    route = models.ForeignKey(
+        "explore.Route",
+        on_delete=models.CASCADE,
+        related_name="where_we_fly_domestic_rankings",
+    )
+
+    panels = [
+        FieldPanel("route", read_only=True),
+    ]
+
+    graphql_fields = [
+        GraphQLForeignKey("route", "explore.Route"),
+        GraphQLString("sort_order", name="sortOrder"),
+    ]
+
+    class Meta:
+        verbose_name = "Domestic Route"
+        verbose_name_plural = "Domestic Routes"
+        ordering = ["sort_order"]
+        unique_together = ["where_we_fly", "route"]
+
+    def delete(self, *args, **kwargs):
+        """Silently ignore deletion attempts - routes are auto-managed"""
+        pass
+
+    def __str__(self):
+        return f"{self.route.name_full}"
+
+
+class WhereWeFlyInternationalRoute(Orderable):
+    """Intermediate model for ranking international routes in WhereWeFly page"""
+
+    where_we_fly = ParentalKey(
+        "explore.WhereWeFly",
+        on_delete=models.CASCADE,
+        related_name="ranked_international_routes",
+    )
+    route = models.ForeignKey(
+        "explore.Route",
+        on_delete=models.CASCADE,
+        related_name="where_we_fly_international_rankings",
+    )
+
+    panels = [
+        FieldPanel("route", read_only=True),
+    ]
+
+    graphql_fields = [
+        GraphQLForeignKey("route", "explore.Route"),
+        GraphQLString("sort_order", name="sortOrder"),
+    ]
+
+    class Meta:
+        verbose_name = "International Route"
+        verbose_name_plural = "International Routes"
+        ordering = ["sort_order"]
+        unique_together = ["where_we_fly", "route"]
+
+    def delete(self, *args, **kwargs):
+        """Silently ignore deletion attempts - routes are auto-managed"""
+        pass
+
     def __str__(self):
         return f"{self.route.name_full}"
 
@@ -306,6 +384,65 @@ class Route(BasePage):
                 )
                 destination_route.sort_order = max_sort_order + 1
                 destination_route.save()
+
+        # Auto-create WhereWeFly route rankings based on flight scope
+        try:
+            where_we_fly_page = WhereWeFly.objects.first()
+            if where_we_fly_page:
+                if self.flight_scope == "domestic route":
+                    # Remove from international rankings if it exists there
+                    WhereWeFlyInternationalRoute.objects.filter(
+                        where_we_fly=where_we_fly_page, route=self
+                    ).delete()
+                    
+                    # Create domestic route ranking
+                    domestic_route, created = (
+                        WhereWeFlyDomesticRoute.objects.get_or_create(
+                            where_we_fly=where_we_fly_page,
+                            route=self,
+                            defaults={"sort_order": 0},
+                        )
+                    )
+                    if created:
+                        max_sort_order = (
+                            WhereWeFlyDomesticRoute.objects.filter(
+                                where_we_fly=where_we_fly_page
+                            )
+                            .exclude(pk=domestic_route.pk)
+                            .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                            or -1
+                        )
+                        domestic_route.sort_order = max_sort_order + 1
+                        domestic_route.save()
+
+                elif self.flight_scope == "international route":
+                    # Remove from domestic rankings if it exists there
+                    WhereWeFlyDomesticRoute.objects.filter(
+                        where_we_fly=where_we_fly_page, route=self
+                    ).delete()
+                    
+                    # Create international route ranking
+                    international_route, created = (
+                        WhereWeFlyInternationalRoute.objects.get_or_create(
+                            where_we_fly=where_we_fly_page,
+                            route=self,
+                            defaults={"sort_order": 0},
+                        )
+                    )
+                    if created:
+                        max_sort_order = (
+                            WhereWeFlyInternationalRoute.objects.filter(
+                                where_we_fly=where_we_fly_page
+                            )
+                            .exclude(pk=international_route.pk)
+                            .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                            or -1
+                        )
+                        international_route.sort_order = max_sort_order + 1
+                        international_route.save()
+        except WhereWeFly.DoesNotExist:
+            # WhereWeFly page doesn't exist yet, skip auto-population
+            pass
 
     class Meta:
         verbose_name = "Route Page"
@@ -557,12 +694,6 @@ class SpecialsIndexPage(BasePage):
 class WhereWeFly(BasePage):
     max_count = 1
 
-    # description = RichTextField(
-    #     features=["bold", "italic", "link"],
-    #     blank=True,
-    #     help_text="A short description of the page",
-    # )
-
     domestic_routes = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -585,15 +716,97 @@ class WhereWeFly(BasePage):
         # FieldPanel("description", heading="Description"),
         FieldPanel("domestic_routes", heading="Domestic Routes"),
         FieldPanel("international_routes", heading="International Routes"),
+        InlinePanel(
+            "ranked_domestic_routes",
+            label="Domestic Route Display Order",
+            help_text="Drag and drop to reorder how domestic routes appear on this page. Routes are automatically populated based on domestic routes.",
+            panels=None,  # Use default panels from WhereWeFlyDomesticRoute.panels
+        ),
+        InlinePanel(
+            "ranked_international_routes",
+            label="International Route Display Order",
+            help_text="Drag and drop to reorder how international routes appear on this page. Routes are automatically populated based on international routes.",
+            panels=None,  # Use default panels from WhereWeFlyInternationalRoute.panels
+        ),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
         # GraphQLString("description"),
         GraphQLImage("domestic_routes", name="domesticRoutes"),
         GraphQLImage("international_routes", name="internationalRoutes"),
+        GraphQLCollection(
+            GraphQLForeignKey,
+            "ranked_domestic_routes",
+            "explore.WhereWeFlyDomesticRoute",
+        ),
+        GraphQLCollection(
+            GraphQLForeignKey,
+            "ranked_international_routes",
+            "explore.WhereWeFlyInternationalRoute",
+        ),
     ]
 
     parent_page_types = ["explore.ExploreIndexPage"]
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Auto-populate route rankings for both domestic and international routes
+        self.populate_domestic_route_rankings()
+        self.populate_international_route_rankings()
+
+    def populate_domestic_route_rankings(self):
+        """Auto-create WhereWeFlyDomesticRoute entries for all domestic routes"""
+        # Get all domestic routes
+        domestic_routes = Route.objects.filter(flight_scope="domestic route")
+
+        # Create WhereWeFlyDomesticRoute entries for any missing routes
+        for route in domestic_routes:
+            route_ranking, created = WhereWeFlyDomesticRoute.objects.get_or_create(
+                where_we_fly=self,
+                route=route,
+                defaults={
+                    "sort_order": WhereWeFlyDomesticRoute.objects.filter(
+                        where_we_fly=self
+                    ).count()
+                },
+            )
+            # If this is a new route ranking, set proper sort_order
+            if created:
+                max_sort_order = (
+                    WhereWeFlyDomesticRoute.objects.filter(where_we_fly=self)
+                    .exclude(pk=route_ranking.pk)
+                    .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                    or -1
+                )
+                route_ranking.sort_order = max_sort_order + 1
+                route_ranking.save()
+
+    def populate_international_route_rankings(self):
+        """Auto-create WhereWeFlyInternationalRoute entries for all international routes"""
+        # Get all international routes
+        international_routes = Route.objects.filter(flight_scope="international route")
+
+        # Create WhereWeFlyInternationalRoute entries for any missing routes
+        for route in international_routes:
+            route_ranking, created = WhereWeFlyInternationalRoute.objects.get_or_create(
+                where_we_fly=self,
+                route=route,
+                defaults={
+                    "sort_order": WhereWeFlyInternationalRoute.objects.filter(
+                        where_we_fly=self
+                    ).count()
+                },
+            )
+            # If this is a new route ranking, set proper sort_order
+            if created:
+                max_sort_order = (
+                    WhereWeFlyInternationalRoute.objects.filter(where_we_fly=self)
+                    .exclude(pk=route_ranking.pk)
+                    .aggregate(max_order=models.Max("sort_order"))["max_order"]
+                    or -1
+                )
+                route_ranking.sort_order = max_sort_order + 1
+                route_ranking.save()
 
     class Meta:
         verbose_name = "Where We Fly Page"

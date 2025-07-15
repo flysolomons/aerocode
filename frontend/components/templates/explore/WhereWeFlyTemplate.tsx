@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
@@ -8,39 +8,17 @@ import RouteCard from "@/components/ui/cards/RouteCard";
 import { WhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
 import parse from "html-react-parser";
 
-import {
-  fetchRoutesByFlightScope,
-  RouteSearchResult,
-} from "@/graphql/RoutePageQuery";
-
 interface WhereWeFlyProps {
   initialPage: WhereWeFlyPage;
 }
 
 export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
   const [showInternational, setShowInternational] = useState(true);
-  const [routes, setRoutes] = useState<RouteSearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  // Fetch routes when flight scope changes
-  useEffect(() => {
-    const fetchRoutes = async () => {
-      setLoading(true);
-      try {
-        const flightScope = showInternational
-          ? "international route"
-          : "domestic route";
-        const routeData = await fetchRoutesByFlightScope(flightScope);
-        setRoutes(routeData);
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-        setRoutes([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoutes();
-  }, [showInternational]);
+  
+  // Get the appropriate routes based on the current selection
+  const currentRoutes = showInternational 
+    ? initialPage.rankedInternationalRoutes || []
+    : initialPage.rankedDomesticRoutes || [];
 
   return (
     <>
@@ -92,20 +70,14 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               {showInternational ? "International" : "Domestic"} Routes
             </h2>
 
-            {loading ? (
-              <div className="text-center py-8 sm:py-12">
-                <p className="text-sm sm:text-base text-gray-600">
-                  Loading routes...
-                </p>
-              </div>
-            ) : routes.length > 0 ? (
+            {currentRoutes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-                {routes.map((route, index) => (
+                {currentRoutes.map((rankedRoute, index) => (
                   <RouteCard
                     key={index}
-                    origin={route.departureAirport}
-                    destination={route.arrivalAirport}
-                    url={route.url}
+                    origin={rankedRoute.route.departureAirport}
+                    destination={rankedRoute.route.arrivalAirport}
+                    url={rankedRoute.route.url || ""}
                   />
                 ))}
               </div>
