@@ -1,6 +1,14 @@
-from wagtail.blocks import CharBlock, ChoiceBlock, ListBlock, RichTextBlock, StructBlock
+from wagtail.blocks import (
+    CharBlock,
+    ChoiceBlock,
+    ListBlock,
+    RichTextBlock,
+    StructBlock,
+    StreamBlock,
+)
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import PageChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 from grapple.helpers import register_streamfield_block
 from grapple.models import (
     GraphQLImage,
@@ -8,8 +16,12 @@ from grapple.models import (
     GraphQLCollection,
     GraphQLForeignKey,
     GraphQLStreamfield,
+    GraphQLField,
 )
-
+from graphene.types.generic import GenericScalar
+import graphene
+from django import forms
+from django.utils.html import format_html, format_html_join
 from django.core.exceptions import ValidationError
 
 
@@ -230,3 +242,37 @@ class JourneyItemBlock(StructBlock):
 
     class Meta:
         graphql_type = "JourneyItemBlock"
+
+
+@register_streamfield_block
+class DataTableBlock(StructBlock):
+    """Wrapper for TableBlock to expose it to GraphQL"""
+
+    table_data = TableBlock(
+        table_options={
+            "contextMenu": True,
+            "startRows": 3,
+            "startCols": 3,
+            "colHeaders": False,
+            "rowHeaders": False,
+        }
+    )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        # Pass through the table data directly for rendering
+        if value and "table_data" in value:
+            context["table"] = value["table_data"]
+        return context
+
+    graphql_fields = [
+        GraphQLField(
+            "tableData", graphene.types.generic.GenericScalar, source="table_data"
+        ),
+    ]
+
+    class Meta:
+        graphql_type = "DataTableBlock"
+        icon = "table"
+        label = "Table"
+        template = "table_block/blocks/table.html"

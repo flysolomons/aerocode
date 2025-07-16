@@ -15,6 +15,7 @@ from .blocks import (
     SectionBlock,
     GridCardSectionBlock,
     HeadingTextBlock,
+    DataTableBlock,
     MegaMenuBlock,
     MegaMenuColumnBlock,
 )
@@ -101,6 +102,7 @@ class GenericPage(BasePage):
             ("section", SectionBlock()),
             ("grid_card_section", GridCardSectionBlock()),
             ("heading_text", HeadingTextBlock()),
+            ("table", DataTableBlock()),
         ],
         use_json_field=True,
         blank=True,
@@ -207,15 +209,6 @@ class FooterMenu(models.Model):
     class Meta:
         verbose_name = "Footer Menu"
         verbose_name_plural = "Footer Menu"
-
-
-# snippet currency
-
-# Name of the Contry
-# Name of the currency
-# Currency code
-# Currency symbol
-# Country flag
 
 
 @register_snippet

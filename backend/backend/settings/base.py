@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "dashboard",  # Added dashboard app for customizing admin branding
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
+    "wagtail.contrib.table_block",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
