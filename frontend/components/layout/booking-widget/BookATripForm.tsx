@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { format } from "date-fns";
+import { motion, AnimatePresence } from "framer-motion";
 import RadioButton from "@/components/ui/buttons/RadioButton";
+import AirplaneSVG from "@/components/ui/icons/AirplaneSVG";
 import { Travelers } from "./TravelerDropDown";
 import { DateRangePicker } from "@/components/ui/date-picker";
 import {
@@ -68,6 +70,7 @@ export default function BookATripForm({
     null
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingArrivals, setIsLoadingArrivals] = useState<boolean>(false);
 
   // Desktop modal state
   const [isDesktopModalActive, setIsDesktopModalActive] =
@@ -82,7 +85,9 @@ export default function BookATripForm({
     useState<boolean>(false);
   const [isTravelersMobileOpen, setIsTravelersMobileOpen] =
     useState<boolean>(false);
-  const [isSearching, setIsSearching] = useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [showAirplaneAnimation, setShowAirplaneAnimation] =
+    useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
   const travelersMobileRef = useRef<HTMLDivElement>(null);
   const travelersInputRef = useRef<HTMLDivElement>(null);
 
@@ -148,7 +153,7 @@ export default function BookATripForm({
   // When selectedDeparture changes, fetch arrival airports for that origin
   useEffect(() => {
     if (selectedDeparture) {
-      setIsLoading(true);
+      setIsLoadingArrivals(true);
       fetchArrivalDestinationsForOrigin(
         selectedDeparture.departureAirport
       ).then((arrivals) => {
@@ -165,7 +170,7 @@ export default function BookATripForm({
           }
         }
         // If arrivals is empty, keep previous selection and show message in UI
-        setIsLoading(false);
+        setIsLoadingArrivals(false);
       });
     }
   }, [selectedDeparture]);
@@ -404,6 +409,10 @@ export default function BookATripForm({
 
   const handleSearch = () => {
     if (selectedDeparture && selectedArrival && dateRange.from) {
+      // Set searching state and show animation
+      setIsSearching(true);
+      setShowAirplaneAnimation(true);
+
       // Build the GET URL for Amadeus booking engine with correct structure
       const baseUrl = "https://uat.digital.airline.amadeus.com/ie/booking";
       // Build the search object
@@ -458,8 +467,10 @@ export default function BookATripForm({
         trace: "true",
       });
 
-      // Redirect the browser using GET
-      window.location.href = `${baseUrl}?${params.toString()}`;
+      // Wait for animation to complete before redirecting
+      setTimeout(() => {
+        window.location.href = `${baseUrl}?${params.toString()}`;
+      }, 2000); // 2 seconds for animation to complete
     } else {
       if (!selectedDeparture || !selectedArrival) {
         alert("Please select both departure and arrival airports");
@@ -865,7 +876,7 @@ export default function BookATripForm({
                       avoidCollisions={false}
                       sideOffset={4}
                     >
-                      {isLoading ? (
+                      {isLoadingArrivals ? (
                         <div className="text-gray-500 p-3">
                           Loading destinations...
                         </div>
@@ -1632,6 +1643,36 @@ export default function BookATripForm({
           </div>
         </div>
       </div>
+
+      {/* Airplane Animation Overlay */}
+      <AnimatePresence>
+        {showAirplaneAnimation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] overflow-hidden"
+          >
+            {/* Airplane flying across screen */}
+            <motion.div
+              initial={{ x: "-200px", y: "50%" }}
+              animate={{ x: "calc(100vw + 200px)" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute top-0 transform -translate-y-1/2"
+            >
+              <AirplaneSVG className="drop-shadow-lg" />
+            </motion.div>
+
+            {/* White fade overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="absolute inset-0 bg-white"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
