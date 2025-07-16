@@ -23,7 +23,6 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
-          backgroundColor
         }
         ... on ImageBlock {
           blockType
@@ -31,7 +30,6 @@ export const GET_GENERIC_PAGE_QUERY = gql`
           image {
             url
           }
-          backgroundColor
         }
         ... on HeadingTextBlock {
           heading
@@ -39,7 +37,6 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         }
         ... on GridCardSectionBlock {
           heading
-          backgroundColor
           blocks {
             ... on ListBlock {
               items {
@@ -64,6 +61,9 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         }
         ... on TextBlock {
           value
+        }
+        ... on DataTableBlock {
+          tableData
         }
       }
     }
@@ -106,14 +106,12 @@ interface SectionBlock {
   text?: string;
   imagePosition?: string;
   image?: ImageType;
-  backgroundColor?: string;
 }
 
 interface ImageBlock {
   blockType: "ImageBlock";
   caption?: string;
   image?: ImageType;
-  backgroundColor?: string;
 }
 
 interface HeadingTextBlock {
@@ -140,13 +138,29 @@ interface GridCardSectionBlock {
   blocks?: ListBlock[];
 }
 
+interface TableData {
+  cell: any[];
+  data: string[][];
+  mergeCells: any[];
+  table_caption?: string;
+  first_col_is_header: boolean;
+  table_header_choice: string;
+  first_row_is_table_header: boolean;
+}
+
+interface DataTableBlock {
+  blockType: "DataTableBlock";
+  tableData: TableData;
+}
+
 type ContentBlock =
   | SectionBlock
   | ImageBlock
   | HeadingTextBlock
   | FullWidthImageBlock
   | TextBlock
-  | GridCardSectionBlock;
+  | GridCardSectionBlock
+  | DataTableBlock;
 
 // Fetch GenericPage data
 export async function fetchGenericPage(

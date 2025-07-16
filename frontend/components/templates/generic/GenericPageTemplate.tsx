@@ -8,6 +8,7 @@ import ImageBlock from "@/components/ui/blocks/ImageBlock";
 import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
 import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
+import TableBlock from "@/components/ui/blocks/TableBlock";
 import { GenericPage } from "@/graphql/genericPageQuery";
 import parse from "html-react-parser";
 
@@ -87,6 +88,11 @@ export default function GenericPageTemplate({
                 {/* Grid card section block */}
                 {block.blockType === "GridCardSectionBlock" && (
                   <GridCardSectionBlock block={block} />
+                )}
+
+                {/* Table block */}
+                {block.blockType === "DataTableBlock" && (
+                  <TableBlock tableData={block.tableData} />
                 )}
               </div>
             </Container>
