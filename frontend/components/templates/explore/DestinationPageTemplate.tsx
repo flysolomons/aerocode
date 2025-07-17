@@ -189,7 +189,7 @@ export default function DestinationTemplate({
                     key={index}
                     origin={rankedRoute.route.departureAirport}
                     destination={rankedRoute.route.arrivalAirport}
-                    url=""
+                    url={rankedRoute.route.url}
                   />
                 ))}
               </div>

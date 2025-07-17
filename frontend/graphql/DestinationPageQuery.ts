@@ -43,6 +43,7 @@ export interface DestinationSpecialRoute {
 export interface Route {
   departureAirport: string;
   arrivalAirport: string;
+  url: string;
   specialRoutes?: DestinationSpecialRoute[];
 }
 
@@ -119,6 +120,7 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
               currencySymbol
             }
           }
+          url
         }
       }
     }
@@ -148,33 +150,36 @@ export async function fetchDestinationPage(
       country: data.destination.country || "",
       reasonsToVisit: data.destination.reasonsToVisit || [],
       travelRequirements: data.destination.travelRequirements || [],
-      rankedRoutes: (data.destination.rankedRoutes || []).map((rankedRoute: any) => ({
-        route: {
-          departureAirport: rankedRoute.route?.departureAirport || "",
-          arrivalAirport: rankedRoute.route?.arrivalAirport || "",
-          specialRoutes: (rankedRoute.route?.specialRoutes || [])
-            .filter((sr: any) => sr.isExpired !== "true")
-            .map((sr: any) => ({
-              isExpired: sr.isExpired || "",
-              special: {
-                name: sr.special?.name || "",
-              },
-              route: sr.route
-                ? {
-                    nameFull: sr.route.nameFull || "",
-                    heroImage: sr.route.heroImage || { url: "/image.jpg" },
-                  }
-                : undefined,
-              startingPrice: sr.startingPrice || "",
-              currency: sr.currency
-                ? {
-                    currencyCode: sr.currency.currencyCode || "",
-                    currencySymbol: sr.currency.currencySymbol || "",
-                  }
-                : undefined,
-            })),
-        },
-      })),
+      rankedRoutes: (data.destination.rankedRoutes || []).map(
+        (rankedRoute: any) => ({
+          route: {
+            departureAirport: rankedRoute.route?.departureAirport || "",
+            arrivalAirport: rankedRoute.route?.arrivalAirport || "",
+            url: rankedRoute.route?.url || "",
+            specialRoutes: (rankedRoute.route?.specialRoutes || [])
+              .filter((sr: any) => sr.isExpired !== "true")
+              .map((sr: any) => ({
+                isExpired: sr.isExpired || "",
+                special: {
+                  name: sr.special?.name || "",
+                },
+                route: sr.route
+                  ? {
+                      nameFull: sr.route.nameFull || "",
+                      heroImage: sr.route.heroImage || { url: "/image.jpg" },
+                    }
+                  : undefined,
+                startingPrice: sr.startingPrice || "",
+                currency: sr.currency
+                  ? {
+                      currencyCode: sr.currency.currencyCode || "",
+                      currencySymbol: sr.currency.currencySymbol || "",
+                    }
+                  : undefined,
+              })),
+          },
+        })
+      ),
       __typename: "Destination",
     };
   } catch (error) {

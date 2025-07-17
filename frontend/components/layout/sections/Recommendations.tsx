@@ -5,7 +5,7 @@ import {
   fetchAllDestinations,
   Destination,
 } from "@/graphql/DestinationIndexPageQuery";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface RecommendationsProps {
   heading?: string;
@@ -24,21 +24,25 @@ function Recommendations({
     });
   }, []);
 
-  // Filter out the excluded country if provided
-  const filtered = excludeCountry
-    ? destinations.filter((d) => d.country !== excludeCountry)
-    : destinations;
+  // Filter out the excluded country if provided and memoize
+  const filtered = useMemo(() => {
+    return excludeCountry
+      ? destinations.filter((d) => d.country !== excludeCountry)
+      : destinations;
+  }, [destinations, excludeCountry]);
 
   // Shuffle the filtered destinations for random order and limit to 5
-  function shuffleArray<T>(array: T[]): T[] {
-    const arr = [...array];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+  const randomized = useMemo(() => {
+    function shuffleArray<T>(array: T[]): T[] {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
     }
-    return arr;
-  }
-  const randomized = shuffleArray(filtered).slice(0, 5);
+    return shuffleArray(filtered).slice(0, 5);
+  }, [filtered]);
 
   // Always render the structure, but only show cards if data exists
   return (
