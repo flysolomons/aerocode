@@ -406,7 +406,12 @@ export default function BookATripForm({
   };
 
   const handleSearch = () => {
-    if (selectedDeparture && selectedArrival && dateRange.from && (isOneWay || dateRange.to)) {
+    if (
+      selectedDeparture &&
+      selectedArrival &&
+      dateRange.from &&
+      (isOneWay || dateRange.to)
+    ) {
       // Set searching state
       setIsSearching(true);
       setShowValidation(false);
@@ -474,12 +479,16 @@ export default function BookATripForm({
 
   // Check if search form is valid
   const isSearchFormValid =
-    selectedDeparture && selectedArrival && dateRange.from && (isOneWay || dateRange.to);
+    selectedDeparture &&
+    selectedArrival &&
+    dateRange.from &&
+    (isOneWay || dateRange.to);
 
   // Validation error flags
   const isDepartureError = showValidation && !selectedDeparture;
   const isArrivalError = showValidation && !selectedArrival;
-  const isDatesError = showValidation && (!dateRange.from || (!isOneWay && !dateRange.to));
+  const isDatesError =
+    showValidation && (!dateRange.from || (!isOneWay && !dateRange.to));
   const isReturnDateMissing = !isOneWay && dateRange.from && !dateRange.to;
   return (
     <>
@@ -570,7 +579,9 @@ export default function BookATripForm({
                             Flying from?
                           </label>
                           {isDepartureError && (
-                            <span className="text-red-500 text-xs">This field is required</span>
+                            <span className="text-red-500 text-xs">
+                              This field is required
+                            </span>
                           )}
                         </div>
                         <input
@@ -635,7 +646,9 @@ export default function BookATripForm({
                       Flying from?
                     </label>
                     {isDepartureError && (
-                      <span className="text-red-500 text-xs">This field is required</span>
+                      <span className="text-red-500 text-xs">
+                        This field is required
+                      </span>
                     )}
                   </div>
                   <div
@@ -814,8 +827,10 @@ export default function BookATripForm({
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedDeparture(airport);
-                                    if (showValidation) setShowValidation(false);
-                              if (showValidation) setShowValidation(false);
+                                    if (showValidation)
+                                      setShowValidation(false);
+                                    if (showValidation)
+                                      setShowValidation(false);
                                     setIsDeparturePopoverOpen(false);
                                   }}
                                 >
@@ -867,7 +882,9 @@ export default function BookATripForm({
                             Flying to?
                           </label>
                           {isArrivalError && (
-                            <span className="text-red-500 text-xs">This field is required</span>
+                            <span className="text-red-500 text-xs">
+                              This field is required
+                            </span>
                           )}
                         </div>
                         <input
@@ -932,7 +949,9 @@ export default function BookATripForm({
                       Flying to?
                     </label>
                     {isArrivalError && (
-                      <span className="text-red-500 text-xs">This field is required</span>
+                      <span className="text-red-500 text-xs">
+                        This field is required
+                      </span>
                     )}
                   </div>
                   <div
@@ -1114,8 +1133,10 @@ export default function BookATripForm({
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedArrival(airport);
-                                    if (showValidation) setShowValidation(false);
-                              if (showValidation) setShowValidation(false);
+                                    if (showValidation)
+                                      setShowValidation(false);
+                                    if (showValidation)
+                                      setShowValidation(false);
                                     setIsArrivalPopoverOpen(false);
                                   }}
                                 >
@@ -1669,7 +1690,6 @@ export default function BookATripForm({
           </div>
         </div>
       </div>
-
     </>
   );
 }

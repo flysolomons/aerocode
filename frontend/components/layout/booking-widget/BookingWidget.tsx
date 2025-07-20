@@ -74,7 +74,7 @@ export default function BookingWidget({
       <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0">
         <div className="w-full xl:w-[70.5rem] xl:bg-white xl:rounded-[2rem] xl:shadow-lg">
           <div
-            className={`flex flex-col space-y-2 xl:space-y-0 xl:flex-row xl:border-b xl:bg-white xl:rounded-[2rem] transition-opacity duration-500 ease-in-out ${
+            className={`flex flex-col space-y-2 xl:space-y-0 xl:flex-row xl:bg-white xl:rounded-[2rem] transition-opacity duration-500 ease-in-out ${
               isDesktopModalActive
                 ? "xl:opacity-0 xl:pointer-events-none"
                 : "xl:opacity-100"
@@ -195,7 +195,7 @@ export default function BookingWidget({
             </div>
 
             {/* Desktop: Original horizontal layout */}
-            <div className="hidden xl:flex xl:w-full">
+            <div className="hidden xl:flex xl:w-full xl:border-b">
               {/* Book a Trip */}
               <div
                 className={`flex px-4 py-3 h-12 w-[11rem] rounded-tl-[2rem] rounded-tr-none rounded-bl-none rounded-br-none bg-white xl:shadow-none ${
