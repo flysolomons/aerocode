@@ -22,11 +22,11 @@ export default function FlightUpgradeForm() {
       {/* Desktop version - original styling */}
       <div className="hidden md:block w-full">
         {/* Explanatory text for height matching */}
-        <div className="mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg px-4 py-2 border border-blue-100">
+        <div className="mb-3 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg px-4 py-2 border border-yellow-200 w-fit mx-auto">
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0 mt-0.5">
               <svg
-                className="w-5 h-5 text-blue-500"
+                className="w-5 h-5 text-amber-600"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
