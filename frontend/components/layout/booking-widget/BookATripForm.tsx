@@ -84,7 +84,8 @@ export default function BookATripForm({
     useState<boolean>(false);
   const [isTravelersMobileOpen, setIsTravelersMobileOpen] =
     useState<boolean>(false);
-  const [isSearching, setIsSearching] = useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [showValidation, setShowValidation] = useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
   const travelersMobileRef = useRef<HTMLDivElement>(null);
   const travelersInputRef = useRef<HTMLDivElement>(null);
 
@@ -405,9 +406,10 @@ export default function BookATripForm({
   };
 
   const handleSearch = () => {
-    if (selectedDeparture && selectedArrival && dateRange.from) {
+    if (selectedDeparture && selectedArrival && dateRange.from && (isOneWay || dateRange.to)) {
       // Set searching state
       setIsSearching(true);
+      setShowValidation(false);
 
       // Build the GET URL for Amadeus booking engine with correct structure
       const baseUrl = "https://uat.digital.airline.amadeus.com/ie/booking";
@@ -466,17 +468,19 @@ export default function BookATripForm({
       // Redirect immediately
       window.location.href = `${baseUrl}?${params.toString()}`;
     } else {
-      if (!selectedDeparture || !selectedArrival) {
-        alert("Please select both departure and arrival airports");
-      } else if (!dateRange.from) {
-        alert("Please select travel dates");
-      }
+      setShowValidation(true);
     }
   };
 
   // Check if search form is valid
   const isSearchFormValid =
-    selectedDeparture && selectedArrival && dateRange.from;
+    selectedDeparture && selectedArrival && dateRange.from && (isOneWay || dateRange.to);
+
+  // Validation error flags
+  const isDepartureError = showValidation && !selectedDeparture;
+  const isArrivalError = showValidation && !selectedArrival;
+  const isDatesError = showValidation && (!dateRange.from || (!isOneWay && !dateRange.to));
+  const isReturnDateMissing = !isOneWay && dateRange.from && !dateRange.to;
   return (
     <>
       {/* Desktop Overlay */}
@@ -561,9 +565,14 @@ export default function BookATripForm({
                   >
                     <PopoverTrigger asChild className="w-full">
                       <div className="cursor-pointer px-6 py-3">
-                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                          Flying from?
-                        </label>
+                        <div className="flex justify-between items-center">
+                          <label className="text-left text-xs text-black font-semibold cursor-pointer">
+                            Flying from?
+                          </label>
+                          {isDepartureError && (
+                            <span className="text-red-500 text-xs">This field is required</span>
+                          )}
+                        </div>
                         <input
                           type="text"
                           placeholder="Select destination"
@@ -599,6 +608,7 @@ export default function BookATripForm({
                             className="hover:bg-gray-100 cursor-pointer p-3"
                             onClick={() => {
                               setSelectedDeparture(airport);
+                              if (showValidation) setShowValidation(false);
                               setIsDeparturePopoverOpen(false);
                             }}
                           >
@@ -620,11 +630,18 @@ export default function BookATripForm({
                 </div>
                 {/* Mobile: Use inline dropdown that pushes content */}
                 <div className="block md:hidden" ref={departureInputRef}>
-                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                    Flying from?
-                  </label>
+                  <div className="flex justify-between items-center mb-1 ml-2 mr-2">
+                    <label className="text-left text-xs text-gray-600 font-semibold cursor-pointer">
+                      Flying from?
+                    </label>
+                    {isDepartureError && (
+                      <span className="text-red-500 text-xs">This field is required</span>
+                    )}
+                  </div>
                   <div
-                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
+                      isDepartureError ? "border-red-500" : "border-gray-300"
+                    }`}
                     onClick={() => {
                       const newState = !isDeparturePopoverOpen;
                       setIsDeparturePopoverOpen(newState);
@@ -797,6 +814,8 @@ export default function BookATripForm({
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedDeparture(airport);
+                                    if (showValidation) setShowValidation(false);
+                              if (showValidation) setShowValidation(false);
                                     setIsDeparturePopoverOpen(false);
                                   }}
                                 >
@@ -843,9 +862,14 @@ export default function BookATripForm({
                   >
                     <PopoverTrigger asChild className="w-full">
                       <div className="cursor-pointer px-6 py-3">
-                        <label className="block text-left text-xs text-black font-semibold cursor-pointer">
-                          Flying to?
-                        </label>
+                        <div className="flex justify-between items-center">
+                          <label className="text-left text-xs text-black font-semibold cursor-pointer">
+                            Flying to?
+                          </label>
+                          {isArrivalError && (
+                            <span className="text-red-500 text-xs">This field is required</span>
+                          )}
+                        </div>
                         <input
                           type="text"
                           placeholder="Select destination"
@@ -881,6 +905,7 @@ export default function BookATripForm({
                             className="hover:bg-gray-100 cursor-pointer p-3"
                             onClick={() => {
                               setSelectedArrival(airport);
+                              if (showValidation) setShowValidation(false);
                               setIsArrivalPopoverOpen(false);
                             }}
                           >
@@ -902,11 +927,18 @@ export default function BookATripForm({
                 </div>
                 {/* Mobile: Use inline dropdown that pushes content */}
                 <div className="block md:hidden" ref={arrivalInputRef}>
-                  <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-                    Flying to?
-                  </label>
+                  <div className="flex justify-between items-center mb-1 ml-2 mr-2">
+                    <label className="text-left text-xs text-gray-600 font-semibold cursor-pointer">
+                      Flying to?
+                    </label>
+                    {isArrivalError && (
+                      <span className="text-red-500 text-xs">This field is required</span>
+                    )}
+                  </div>
                   <div
-                    className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
+                      isArrivalError ? "border-red-500" : "border-gray-300"
+                    }`}
                     onClick={() => {
                       const newState = !isArrivalPopoverOpen;
                       setIsArrivalPopoverOpen(newState);
@@ -1082,6 +1114,8 @@ export default function BookATripForm({
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedArrival(airport);
+                                    if (showValidation) setShowValidation(false);
+                              if (showValidation) setShowValidation(false);
                                     setIsArrivalPopoverOpen(false);
                                   }}
                                 >
@@ -1112,13 +1146,17 @@ export default function BookATripForm({
               <div className="hidden md:flex w-full md:flex-1">
                 <DateRangePicker
                   dateRange={dateRange}
-                  onSelect={(range) =>
-                    setDateRange(range || { from: undefined, to: undefined })
-                  }
+                  onSelect={(range) => {
+                    setDateRange(range || { from: undefined, to: undefined });
+                    if (showValidation) setShowValidation(false);
+                  }}
                   placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
                   variant="desktop"
                   mode={isOneWay ? "single" : "range"}
                   onClick={handleDesktopInputClick}
+                  isError={isDatesError && !isReturnDateMissing}
+                  errorMessage="This field is required"
+                  showReturnDateError={isReturnDateMissing}
                   sideOffset={8}
                 />
               </div>
@@ -1126,12 +1164,16 @@ export default function BookATripForm({
               <div className="block md:hidden w-full">
                 <DateRangePicker
                   dateRange={dateRange}
-                  onSelect={(range) =>
-                    setDateRange(range || { from: undefined, to: undefined })
-                  }
+                  onSelect={(range) => {
+                    setDateRange(range || { from: undefined, to: undefined });
+                    if (showValidation) setShowValidation(false);
+                  }}
                   placeholder={isOneWay ? "Travel Date" : "Travel Dates"}
                   variant="mobile"
                   mode={isOneWay ? "single" : "range"}
+                  isError={isDatesError && !isReturnDateMissing}
+                  errorMessage="This field is required"
+                  showReturnDateError={isReturnDateMissing}
                 />
               </div>
               <div className="hidden md:block w-[1px] h-10 bg-gray-200"></div>
@@ -1612,25 +1654,15 @@ export default function BookATripForm({
             {/* Mobile: Search button inside form container */}
             <div className="md:hidden pt-4 px-0 pb-2 mt-auto">
               <button
-                className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
-                  isSearchFormValid && !isSearching
-                    ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
-                    : ""
-                } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
-                onClick={
-                  isSearchFormValid && !isSearching ? handleSearch : undefined
-                }
-                disabled={!isSearchFormValid || isSearching}
+                className="w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white"
+                onClick={handleSearch}
+                disabled={isSearching}
               >
                 {isSearching && (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 )}
                 <span>
-                  {isSearching
-                    ? "Searching Flights..."
-                    : !isSearchFormValid
-                    ? "Complete form to search"
-                    : "Search Flights"}
+                  {isSearching ? "Searching Flights..." : "Search Flights"}
                 </span>
               </button>
             </div>

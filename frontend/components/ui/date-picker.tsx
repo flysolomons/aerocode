@@ -109,6 +109,9 @@ interface DateRangePickerProps {
   mode?: "single" | "range";
   onClick?: () => void;
   sideOffset?: number;
+  isError?: boolean;
+  errorMessage?: string;
+  showReturnDateError?: boolean;
 }
 
 export function DateRangePicker({
@@ -124,6 +127,9 @@ export function DateRangePicker({
   mode = "range",
   onClick,
   sideOffset = 4,
+  isError = false,
+  errorMessage = "This field is required",
+  showReturnDateError = false,
 }: DateRangePickerProps) {
   const [open, setOpen] = React.useState(false);
   const isMobile = variant === "mobile";
@@ -223,11 +229,22 @@ export function DateRangePicker({
   if (isMobile) {
     return (
       <div className={cn("w-full", className)}>
-        <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-          {placeholder}
-        </label>
+        <div className="flex justify-between items-center mb-1 ml-2 mr-2">
+          <label className="text-left text-xs text-gray-600 font-semibold cursor-pointer">
+            {placeholder}
+          </label>
+          {(isError || showReturnDateError) && (
+            <span className="text-red-500 text-xs">
+              {showReturnDateError ? "Select return date" : errorMessage}
+            </span>
+          )}
+        </div>
         <div
-          className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg"
+          className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
+            isError || showReturnDateError
+              ? "border-red-500"
+              : "border-gray-300"
+          }`}
           onClick={() => {
             setOpen(true);
             // Add haptic feedback for iOS
@@ -246,7 +263,6 @@ export function DateRangePicker({
               ) : (
                 <span className="text-gray-800 text-sm">
                   {format(dateRange.from, "dd MMM, yyyy")}
-                  {mode === "range" && " (Return date?)"}
                 </span>
               )
             ) : (
@@ -465,28 +481,35 @@ export function DateRangePicker({
             onClick={onClick}
           >
             <div className="flex flex-col items-start w-full">
-              <label
-                className={cn(
-                  "block text-left text-xs font-mono font-semibold cursor-pointer mb-1 text-black",
-                  labelClassName
+              <div className="flex justify-between items-center w-full">
+                <label
+                  className={cn(
+                    "text-left text-xs font-mono font-semibold cursor-pointer mb-1 text-black",
+                    labelClassName
+                  )}
+                >
+                  {placeholder}
+                </label>
+                {(isError || showReturnDateError) && (
+                  <span className="text-red-500 text-xs mb-1">
+                    {showReturnDateError ? "Select return date" : errorMessage}
+                  </span>
                 )}
-              >
-                {placeholder}
-              </label>
+              </div>
               <div className="flex items-center w-full">
                 {dateRange?.from ? (
                   mode === "range" && dateRange.to ? (
-                    <span className="text-gray-800 text-sm">
+                    <span className="text-gray-800 text-sm font-mono">
                       {format(dateRange.from, "dd MMM, yyyy")} -{" "}
                       {format(dateRange.to, "dd MMM, yyyy")}
                     </span>
                   ) : (
-                    <span className="text-gray-800 text-sm">
+                    <span className="text-gray-800 text-sm font-mono">
                       {format(dateRange.from, "dd MMM, yyyy")}
                     </span>
                   )
                 ) : (
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-gray-400 text-sm font-mono">
                     {mode === "single"
                       ? "Pick your departure date"
                       : "Pick your travel dates"}

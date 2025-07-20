@@ -1,18 +1,52 @@
 "use client";
 import { useState } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
+
+function redirectToManageBooking(
+  bookingReference: string,
+  lastName: string,
+  countryCode: string
+) {
+  const baseUrl =
+    "https://uat.digital.airline.amadeus.com/ie/booking/manage-booking/retrieve";
+
+  // Build portalFacts
+  const portalFacts = JSON.stringify([
+    { key: "OfficeID", value: "HIRIE08AA" },
+    { key: "countryCode", value: countryCode },
+  ]);
+
+  // Build query string
+  const params = new URLSearchParams({
+    recloc: bookingReference,
+    lastName: lastName,
+    portalFacts: portalFacts,
+  });
+
+  // Redirect to manage booking page
+  window.location.href = `${baseUrl}?${params.toString()}`;
+}
 
 export default function ManageBookingForm() {
   const [bookingReference, setBookingReference] = useState("");
   const [lastName, setLastName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showValidation, setShowValidation] = useState(false);
+  const { selectedCurrency } = useCurrency();
 
   const handleSearch = () => {
     if (bookingReference && lastName) {
-      console.log("Searching for booking:", { bookingReference, lastName });
-      // Implement manage booking search functionality here
+      setIsLoading(true);
+      setShowValidation(false);
+      const countryCode = selectedCurrency?.countryCode || "AU";
+      redirectToManageBooking(bookingReference, lastName, countryCode);
     } else {
-      alert("Please enter both booking reference and last name");
+      setShowValidation(true);
     }
   };
+
+  const isBookingReferenceError = showValidation && !bookingReference;
+  const isLastNameError = showValidation && !lastName;
 
   return (
     <div className="px-4 py-3 flex flex-col items-center space-y-4">
@@ -43,53 +77,99 @@ export default function ManageBookingForm() {
           </div>
         </div>
         {/* Search form */}
-        <div className="flex w-full items-center border border-gray-200 rounded-full px-2 shadow-md">
+        <div className="flex w-full items-center border border-gray-200 rounded-full px-2 shadow-md relative">
           <div className="flex-1 px-6 py-3">
-            <label className="block text-left text-xs text-black font-semibold">
-              Booking Reference
-            </label>
+            <div className="flex justify-between items-center">
+              <label className="text-left text-xs text-black font-semibold">
+                Booking Reference
+              </label>
+              {isBookingReferenceError && (
+                <span className="text-red-500 text-xs">
+                  This field is required
+                </span>
+              )}
+            </div>
             <input
               type="text"
               placeholder="Enter your booking reference"
               className="w-full text-sm outline-none text-black"
               value={bookingReference}
-              onChange={(e) => setBookingReference(e.target.value)}
+              onChange={(e) => {
+                setBookingReference(e.target.value);
+                if (showValidation) setShowValidation(false);
+              }}
             />
           </div>
 
           <div className="w-[1px] h-10 bg-gray-200"></div>
 
           <div className="flex-1 px-6 py-3">
-            <label className="block text-left text-xs text-black font-semibold">
-              Last Name
-            </label>
+            <div className="flex justify-between items-center">
+              <label className="text-left text-xs text-black font-semibold">
+                Last Name
+              </label>
+              {isLastNameError && (
+                <span className="text-red-500 text-xs">
+                  This field is required
+                </span>
+              )}
+            </div>
             <input
               type="text"
               placeholder="Enter your last name"
               className="w-full text-sm outline-none text-black"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                if (showValidation) setShowValidation(false);
+              }}
             />
           </div>
 
           <div className="flex items-center justify-end">
             <button
-              className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-2"
+              className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
               onClick={handleSearch}
+              disabled={isLoading}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="text-sm font-medium">Manage</span>
+              {isLoading ? (
+                <svg
+                  className="animate-spin h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              )}
+              <span className="text-sm font-medium">
+                {isLoading ? "Retrieving..." : "Retrieve"}
+              </span>
             </button>
           </div>
         </div>
@@ -99,16 +179,28 @@ export default function ManageBookingForm() {
         <div className="space-y-4">
           {/* Booking Reference Input Card */}
           <div>
-            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-              Booking Reference
-            </label>
-            <div className="cursor-text border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg">
+            <div className="flex justify-between items-center mb-1 ml-2 mr-2">
+              <label className="text-left text-xs text-gray-600 font-semibold cursor-pointer">
+                Booking Reference
+              </label>
+              {isBookingReferenceError && (
+                <span className="text-red-500 text-xs">
+                  This field is required
+                </span>
+              )}
+            </div>
+            <div className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
+              isBookingReferenceError ? "border-red-500" : "border-gray-300"
+            }`}>
               <input
                 type="text"
                 placeholder="Enter your booking reference"
                 className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
                 value={bookingReference}
-                onChange={(e) => setBookingReference(e.target.value)}
+                onChange={(e) => {
+                  setBookingReference(e.target.value);
+                  if (showValidation) setShowValidation(false);
+                }}
               />
               {/* Add selected indicator */}
               {bookingReference && (
@@ -135,16 +227,28 @@ export default function ManageBookingForm() {
 
           {/* Last Name Input Card */}
           <div>
-            <label className="block text-left text-xs text-gray-600 font-semibold cursor-pointer mb-1 ml-2">
-              Last Name
-            </label>
-            <div className="cursor-text border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg">
+            <div className="flex justify-between items-center mb-1 ml-2 mr-2">
+              <label className="text-left text-xs text-gray-600 font-semibold cursor-pointer">
+                Last Name
+              </label>
+              {isLastNameError && (
+                <span className="text-red-500 text-xs">
+                  This field is required
+                </span>
+              )}
+            </div>
+            <div className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
+              isLastNameError ? "border-red-500" : "border-gray-300"
+            }`}>
               <input
                 type="text"
                 placeholder="Enter your last name"
                 className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                  if (showValidation) setShowValidation(false);
+                }}
               />
               {/* Add selected indicator */}
               {lastName && (
@@ -173,18 +277,34 @@ export default function ManageBookingForm() {
         {/* Mobile: Search button */}
         <div className="md:hidden pt-4 px-0 pb-2 mt-4">
           <button
-            className={`w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl ${
-              bookingReference && lastName
-                ? "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer"
-                : ""
-            } disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white`}
-            onClick={bookingReference && lastName ? handleSearch : undefined}
-            disabled={!bookingReference || !lastName}
+            className="w-full py-3 rounded-full transition-all duration-300 text-sm font-medium flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-100 disabled:text-white"
+            onClick={handleSearch}
+            disabled={isLoading}
           >
+            {isLoading && (
+              <svg
+                className="animate-spin h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            )}
             <span>
-              {!bookingReference || !lastName
-                ? "Complete form to search"
-                : "Retrieve Booking"}
+              {isLoading ? "Retrieving..." : "Retrieve Booking"}
             </span>
           </button>
         </div>
