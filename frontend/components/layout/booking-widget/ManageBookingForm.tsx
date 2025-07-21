@@ -189,9 +189,11 @@ export default function ManageBookingForm() {
                 </span>
               )}
             </div>
-            <div className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
-              isBookingReferenceError ? "border-red-500" : "border-gray-300"
-            }`}>
+            <div
+              className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
+                isBookingReferenceError ? "border-red-500" : "border-gray-300"
+              }`}
+            >
               <input
                 type="text"
                 placeholder="Enter your booking reference"
@@ -237,9 +239,11 @@ export default function ManageBookingForm() {
                 </span>
               )}
             </div>
-            <div className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
-              isLastNameError ? "border-red-500" : "border-gray-300"
-            }`}>
+            <div
+              className={`cursor-text rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg border ${
+                isLastNameError ? "border-red-500" : "border-gray-300"
+              }`}
+            >
               <input
                 type="text"
                 placeholder="Enter your last name"
@@ -303,9 +307,7 @@ export default function ManageBookingForm() {
                 ></path>
               </svg>
             )}
-            <span>
-              {isLoading ? "Retrieving..." : "Retrieve Booking"}
-            </span>
+            <span>{isLoading ? "Retrieving..." : "Retrieve Booking"}</span>
           </button>
         </div>
       </div>
