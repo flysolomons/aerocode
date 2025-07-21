@@ -124,6 +124,7 @@ class GenericPage(BasePage):
     parent_page_types = [
         "explore.ExploreIndexPage",
         "experience.ExperienceIndexPage",
+        "core.GenericPage",
     ]
 
     class Meta:
