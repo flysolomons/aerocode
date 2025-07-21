@@ -283,3 +283,55 @@ class DataTableBlock(StructBlock):
         icon = "table"
         label = "Table"
         template = "table_block/blocks/table.html"
+
+
+@register_streamfield_block
+class AccordionItemBlock(StructBlock):
+    """A single item in an accordion."""
+
+    heading = CharBlock(required=True, max_length=100)
+    content = TextBlock(required=True)
+
+    graphql_fields = [
+        GraphQLString("heading", name="heading"),
+        GraphQLString("content", name="content"),
+    ]
+
+    class Meta:
+        graphql_type = "AccordionItemBlock"
+
+
+@register_streamfield_block
+class AccordionBlock(StructBlock):
+    """A block for creating an accordion with multiple items."""
+
+    title = CharBlock(required=True, max_length=100, help_text="Accordion title")
+    items = ListBlock(AccordionItemBlock(), help_text="List of accordion items")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+    ]
+
+    class Meta:
+        graphql_type = "AccordionBlock"
+        icon = "list-ul"
+        label = "Accordion"
+
+
+@register_streamfield_block
+class SimpleDropdownBlock(StructBlock):
+    """A simple dropdown block with a title and a list of items."""
+
+    heading = CharBlock(required=True, max_length=100, help_text="Dropdown title")
+    content = TextBlock(
+        required=True,
+    )
+
+    graphql_fields = [
+        GraphQLString("heading", name="heading"),
+        GraphQLString("content", name="content"),
+    ]
+
+    class Meta:
+        graphql_type = "SimpleDropdownBlock"
+        label = "Simple Dropdown"

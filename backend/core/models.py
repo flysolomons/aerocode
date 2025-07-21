@@ -18,6 +18,8 @@ from .blocks import (
     DataTableBlock,
     MegaMenuBlock,
     MegaMenuColumnBlock,
+    AccordionBlock,
+    SimpleDropdownBlock,
 )
 from wagtail.blocks import ListBlock
 
@@ -103,6 +105,8 @@ class GenericPage(BasePage):
             ("grid_card_section", GridCardSectionBlock()),
             ("heading_text", HeadingTextBlock()),
             ("table", DataTableBlock()),
+            ("accordion", AccordionBlock()),
+            ("simple_dropdown", SimpleDropdownBlock()),
         ],
         use_json_field=True,
         blank=True,

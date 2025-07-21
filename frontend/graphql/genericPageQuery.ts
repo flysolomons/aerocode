@@ -66,6 +66,23 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         ... on DataTableBlock {
           tableData
         }
+        ... on AccordionBlock {
+          title
+          blocks {
+            ... on ListBlock {
+              items {
+                ... on AccordionItemBlock {
+                  heading
+                  content
+                }
+              }
+            }
+          }
+        }
+        ... on SimpleDropdownBlock {
+          heading
+          content
+        }
       }
     }
   }
@@ -155,6 +172,29 @@ interface DataTableBlock {
   tableData: TableData;
 }
 
+export interface AccordionItemBlock {
+  blockType?: "AccordionItemBlock";
+  heading?: string;
+  content?: string;
+}
+
+export interface AccordionListBlock {
+  blockType: string;
+  items?: AccordionItemBlock[];
+}
+
+export interface AccordionBlock {
+  blockType: "AccordionBlock";
+  title?: string;
+  blocks?: AccordionListBlock[];
+}
+
+export interface SimpleDropdownBlock {
+  blockType: "SimpleDropdownBlock";
+  heading?: string;
+  content?: string;
+}
+
 type ContentBlock =
   | SectionBlock
   | ImageBlock
@@ -162,7 +202,9 @@ type ContentBlock =
   | FullWidthImageBlock
   | TextBlock
   | GridCardSectionBlock
-  | DataTableBlock;
+  | DataTableBlock
+  | AccordionBlock
+  | SimpleDropdownBlock;
 
 // Fetch GenericPage data
 export async function fetchGenericPage(

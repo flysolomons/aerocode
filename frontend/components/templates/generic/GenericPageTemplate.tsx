@@ -9,6 +9,8 @@ import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
 import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import TableBlock from "@/components/ui/blocks/TableBlock";
+import AccordionBlock from "@/components/ui/blocks/AccordionBlock";
+import SimpleDropdownBlock from "@/components/ui/blocks/SimpleDropdownBlock";
 import { GenericPage } from "@/graphql/genericPageQuery";
 import parse from "html-react-parser";
 
@@ -43,7 +45,7 @@ export default function GenericPageTemplate({
       )}
 
       {/* Content blocks */}
-      <div className="space-y-8 sm:space-y-12 lg:space-y-16">
+      <div className="space-y-8 sm:space-y-12 lg:space-y-16 ">
         {initialPage.content.map((block, index) => {
           // Full width blocks don't need container
           if (block.blockType === "FullWidthImageBlock") {
@@ -57,7 +59,7 @@ export default function GenericPageTemplate({
           // All other blocks get wrapped in container
           return (
             <Container key={index}>
-              <div className="px-4 sm:px-6">
+              <div className="px-4 sm:px-6 pb-8">
                 {/* Section block */}
                 {block.blockType === "SectionBlock" && (
                   <SectionBlock
@@ -93,6 +95,16 @@ export default function GenericPageTemplate({
                 {/* Table block */}
                 {block.blockType === "DataTableBlock" && (
                   <TableBlock tableData={block.tableData} />
+                )}
+
+                {/* Accordion block */}
+                {block.blockType === "AccordionBlock" && (
+                  <AccordionBlock block={block} />
+                )}
+
+                {/* Simple dropdown block */}
+                {block.blockType === "SimpleDropdownBlock" && (
+                  <SimpleDropdownBlock block={block} />
                 )}
               </div>
             </Container>
