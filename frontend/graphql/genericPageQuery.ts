@@ -47,6 +47,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
                   image {
                     url
                   }
+                  url
                 }
               }
             }
@@ -92,6 +93,7 @@ interface GridCardBlock {
   heading?: string;
   text?: string;
   image?: ImageType;
+  url?: string;
 }
 
 interface ListBlock {

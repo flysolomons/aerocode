@@ -84,11 +84,18 @@ class GridCardBlock(StructBlock):
     heading = CharBlock(required=True, max_length=100)
     text = TextBlock(required=True)
     image = ImageChooserBlock(required=True)
+    url = RichTextBlock(
+        features=["link"],
+        blank=True,
+        help_text="A link that this card will point to.",
+        required=False,
+    )
 
     graphql_fields = [
         GraphQLString("heading", name="heading"),
         GraphQLString("text", name="text"),
         GraphQLImage("image", name="image"),
+        GraphQLString("url", name="url"),
     ]
 
     class Meta:

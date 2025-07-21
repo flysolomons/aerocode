@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import parse from "html-react-parser";
 
 interface GridCardBlockProps {
@@ -9,12 +10,29 @@ interface GridCardBlockProps {
     image?: {
       url: string;
     };
+    url?: string;
   };
 }
 
 export default function GridCardBlock({ item }: GridCardBlockProps) {
-  return (
-    <div className="bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105">
+  // Extract URL from rich text HTML
+  const extractUrlFromRichText = (richText: string): string | null => {
+    if (!richText) return null;
+
+    try {
+      // Use regex to extract href attribute from anchor tag
+      const hrefMatch = richText.match(/href="([^"]+)"/);
+      return hrefMatch ? hrefMatch[1] : null;
+    } catch (error) {
+      console.error("Error extracting URL from rich text:", error);
+      return null;
+    }
+  };
+
+  const extractedUrl = item.url ? extractUrlFromRichText(item.url) : null;
+
+  const cardContent = (
+    <>
       {item.image && (
         <div className="relative h-40 sm:h-48 lg:h-56 w-full">
           <Image
@@ -37,6 +55,22 @@ export default function GridCardBlock({ item }: GridCardBlockProps) {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
+
+  const cardClasses =
+    "bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105";
+
+  if (extractedUrl) {
+    return (
+      <Link
+        href={extractedUrl}
+        className={`${cardClasses} block cursor-pointer`}
+      >
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return <div className={cardClasses}>{cardContent}</div>;
 }
