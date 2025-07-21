@@ -7,6 +7,7 @@ export interface HomePage {
   carouselSlides: Array<{
     slide: {
       title: string;
+      subheading?: string | null;
       image: {
         url: string;
       };
@@ -69,6 +70,7 @@ export const GET_HOMEPAGE = gql`
         carouselSlides {
           slide {
             title
+            subheading
             image {
               url
             }
@@ -130,7 +132,9 @@ export async function fetchHomePage(): Promise<HomePageData> {
     // Filter out expired special routes and sort carousel slides
     const filteredPages = data.pages.map((page) => ({
       ...page,
-      carouselSlides: page.carouselSlides ? [...page.carouselSlides].sort((a, b) => a.sortOrder - b.sortOrder) : [],
+      carouselSlides: page.carouselSlides
+        ? [...page.carouselSlides].sort((a, b) => a.sortOrder - b.sortOrder)
+        : [],
       specialRouteItems:
         page.specialRouteItems?.filter(
           (item) => item.specialRoute.isExpired !== "true"

@@ -6,6 +6,7 @@ from grapple.models import (
     GraphQLCollection,
     GraphQLForeignKey,
     GraphQLString,
+    GraphQLRichText,
     GraphQLInt,
 )
 from core.models import BasePage
@@ -20,6 +21,12 @@ from wagtail.snippets.models import register_snippet
 @register_snippet
 class CarouselSlide(models.Model):
     title = models.CharField(max_length=200, help_text="Title for the carousel slide")
+    subheading = RichTextField(
+        features=["link"],
+        blank=True,
+        null=True,
+        help_text="Subheading for the carousel slide (can include links)",
+    )
     image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -33,11 +40,13 @@ class CarouselSlide(models.Model):
 
     panels = [
         FieldPanel("title"),
+        FieldPanel("subheading"),
         FieldPanel("image"),
     ]
 
     graphql_fields = [
         GraphQLString("title"),
+        GraphQLRichText("subheading"),
         GraphQLImage("image"),
     ]
 
