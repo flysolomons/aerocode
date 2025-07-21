@@ -118,7 +118,7 @@ export default function HomePageHero({
           {carouselSlides.length > 1 && (
             <>
               <button
-                className="absolute left-8 md:left-12 lg:left-16 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="hidden md:block absolute left-8 md:left-12 lg:left-16 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
                 onClick={scrollPrev}
                 disabled={!prevBtnEnabled}
                 aria-label="Previous slide"
@@ -135,7 +135,7 @@ export default function HomePageHero({
                 </svg>
               </button>
               <button
-                className="absolute right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="hidden md:block absolute right-8 md:right-12 lg:right-16 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
                 onClick={scrollNext}
                 disabled={!nextBtnEnabled}
                 aria-label="Next slide"
