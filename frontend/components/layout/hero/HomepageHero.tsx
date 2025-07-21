@@ -87,7 +87,7 @@ export default function HomePageHero({
               >
                 <div className="relative w-full h-full overflow-hidden">
                   <div
-                    className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-[15s] ease-linear ${
+                    className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all ease-linear ${
                       isActive ? "scale-110" : "scale-100"
                     }`}
                     style={{
@@ -161,7 +161,7 @@ export default function HomePageHero({
               isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
-            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl font-bold font-sans max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
+            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
               {carouselSlides[selectedIndex]?.slide.title ||
                 "Connecting the Hapi Isles"}
             </h1>

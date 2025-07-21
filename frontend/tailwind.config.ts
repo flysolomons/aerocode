@@ -12,6 +12,7 @@ export default {
       fontFamily: {
         sans: "var(--font-inter)",
         mono: "var(--font-rubik)",
+        veneer: ["Veneer", "serif"],
       },
       colors: {
         // background: 'hsl(var(--background))',
