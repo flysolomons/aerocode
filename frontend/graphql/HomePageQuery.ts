@@ -3,11 +3,16 @@ import client from "@/lib/apolloClient";
 
 // Interface for the HomePage itself
 export interface HomePage {
-  heroTitle: string;
-  heroImage: {
-    url: string;
-  };
   seoTitle: string;
+  carouselSlides: Array<{
+    slide: {
+      title: string;
+      image: {
+        url: string;
+      };
+    };
+    sortOrder: number;
+  }>;
   belamaImage: {
     url: string;
   };
@@ -60,11 +65,16 @@ export const GET_HOMEPAGE = gql`
   query Pages {
     pages(contentType: "home.HomePage") {
       ... on HomePage {
-        heroTitle
-        heroImage {
-          url
-        }
         seoTitle
+        carouselSlides {
+          slide {
+            title
+            image {
+              url
+            }
+          }
+          sortOrder
+        }
         belamaImage {
           url
         }
@@ -117,17 +127,19 @@ export async function fetchHomePage(): Promise<HomePageData> {
       throw new Error("No homepage data found");
     }
 
-    // Filter out expired special routes
-    const filteredPages = data.pages.map(page => ({
+    // Filter out expired special routes and sort carousel slides
+    const filteredPages = data.pages.map((page) => ({
       ...page,
-      specialRouteItems: page.specialRouteItems?.filter(
-        item => item.specialRoute.isExpired !== "true"
-      ) || []
+      carouselSlides: page.carouselSlides ? [...page.carouselSlides].sort((a, b) => a.sortOrder - b.sortOrder) : [],
+      specialRouteItems:
+        page.specialRouteItems?.filter(
+          (item) => item.specialRoute.isExpired !== "true"
+        ) || [],
     }));
 
     return {
       ...data,
-      pages: filteredPages
+      pages: filteredPages,
     };
   } catch (error) {
     console.error("Error fetching HomePage data:", error);

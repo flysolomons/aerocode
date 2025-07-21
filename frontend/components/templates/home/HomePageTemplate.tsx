@@ -2,13 +2,12 @@
 
 import { HomePage, HomePageData } from "@/graphql/HomePageQuery";
 import Container from "@/components/layout/Container";
-import PrimaryHero from "@/components/layout/hero/PrimaryHero";
+import HomePageHero from "@/components/layout/hero/HomepageHero";
 import InfoCard from "@/components/ui/cards/InfoCard";
 import Image from "next/image";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import Slider from "@/components/layout/Slider";
 import EmblaCarousel from "@/components/layout/carousel/Carousel";
-import MainCarousel from "@/components/layout/hero/MainCarousel";
 import RouteSpecialSectionHomepage from "@/components/layout/sections/RouteSpecialSectionHomepage";
 
 interface HomePageTemplateProps {
@@ -24,8 +23,7 @@ export default function HomePageTemplate({
   // console.log("Homepage data", homePage);
   return (
     <>
-      {/* <MainCarousel /> */}
-      <PrimaryHero title={homePage.heroTitle} image={homePage.heroImage.url} />
+      <HomePageHero carouselSlides={homePage.carouselSlides} />
       {homePage.specialRouteItems && homePage.specialRouteItems.length > 0 && (
         <Container>
           <div className="py-24 space-y-8 md:space-y-16">
