@@ -35,7 +35,7 @@ export default function HomePageHero({
       dragFree: false,
       containScroll: "trimSnaps",
     },
-    [Autoplay({ delay: 10000, stopOnInteraction: false })] // 10 second autoplay
+    [Autoplay({ delay: 7000, stopOnInteraction: false })] // 10 second autoplay
   );
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
