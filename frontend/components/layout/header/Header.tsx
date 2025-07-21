@@ -1055,6 +1055,7 @@ function Header({
                 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
+                {/* Desktop Logo */}
                 <Image
                   src={
                     isHovered || activeMegaMenu
@@ -1064,7 +1065,20 @@ function Header({
                   alt="Solomon Airlines Logo"
                   width={150}
                   height={40}
-                  className="h-6 w-auto"
+                  className="h-6 w-auto hidden xl:block"
+                />
+                
+                {/* Mobile Logo */}
+                <Image
+                  src={
+                    isHovered || activeMegaMenu
+                      ? "/logo-mobile.svg"
+                      : "/logo-mobile-white.svg"
+                  }
+                  alt="Solomon Airlines Logo"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 xl:hidden"
                 />
               </motion.div>
             </Link>
