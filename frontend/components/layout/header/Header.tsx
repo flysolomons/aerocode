@@ -244,11 +244,7 @@ function Header({
               whileHover={{
                 color: "#1d4ed8",
               }}
-              transition={{
-                duration: 0.25,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                color: { duration: 0.2 },
-              }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               aria-label="Select Currency"
             >
               <motion.svg
@@ -257,11 +253,7 @@ function Header({
                 animate={{
                   fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
                 }}
-                transition={{
-                  duration: 0.25,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  fill: { duration: 0.2 },
-                }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
                 viewBox="0 0 256 256"
               >
                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
@@ -273,11 +265,7 @@ function Header({
                   animate={{
                     color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
                   }}
-                  transition={{
-                    duration: 0.25,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                    color: { duration: 0.2 },
-                  }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   {selectedCurrency.currencyCode}
                 </motion.span>
@@ -431,11 +419,7 @@ function Header({
             whileHover={{
               color: "#1d4ed8",
             }}
-            transition={{
-              duration: 0.25,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              color: { duration: 0.2 },
-            }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
             aria-label="General"
           >
             <svg
@@ -497,12 +481,12 @@ function Header({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
+          exit={{ opacity: 0, y: -10 }}
           transition={{
-            duration: 0.25,
-            ease: [0.25, 0.46, 0.45, 0.94],
+            duration: 0.2,
+            ease: "easeOut",
           }}
           className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[344px] hidden xl:block"
         >
@@ -1049,11 +1033,7 @@ function Header({
               ? "rgba(255, 255, 255, 1)"
               : "rgba(255, 255, 255, 0)",
         }}
-        transition={{
-          duration: 0.25,
-          ease: [0.25, 0.46, 0.45, 0.94],
-          backgroundColor: { duration: 0.2 },
-        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
           setIsHovered(false);
@@ -1062,9 +1042,8 @@ function Header({
         style={{
           boxShadow:
             isHovered || activeMegaMenu
-              ? "0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px 0 rgba(0, 0, 0, 0.04)"
+              ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
               : "none",
-          transition: "box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8 xl:px-0 relative">
@@ -1074,7 +1053,7 @@ function Header({
                 animate={{
                   opacity: 1,
                 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
                 <Image
                   src={
@@ -1122,11 +1101,7 @@ function Header({
                     whileHover={{
                       color: "#2563eb",
                     }}
-                    transition={{
-                      duration: 0.25,
-                      ease: [0.25, 0.46, 0.45, 0.94],
-                      color: { duration: 0.2 },
-                    }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     {item.name}
                   </motion.span>
@@ -1180,11 +1155,7 @@ function Header({
               whileHover={{
                 color: "#1d4ed8",
               }}
-              transition={{
-                duration: 0.25,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                color: { duration: 0.2 },
-              }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
               aria-label="Contact"
             >
               <svg
@@ -1222,11 +1193,7 @@ function Header({
                     ? "rgba(0,0,0,0.1)"
                     : "rgba(255,255,255,0.1)",
               }}
-              transition={{
-                duration: 0.25,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                backgroundColor: { duration: 0.2 },
-              }}
+              transition={{ duration: 0.2 }}
               aria-label="Open menu"
             >
               <svg
@@ -1267,6 +1234,213 @@ function Header({
   // White header that appears when scrolling up
   return (
     <>
+      {/* Transparent Header */}
+      {/* <motion.header
+        className="w-full absolute top-0 z-50 bg-transparent"
+        animate={{
+          opacity: isWhiteHeader ? 0 : 1,
+        }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        style={{
+          pointerEvents: isWhiteHeader ? "none" : "auto",
+        }}
+      >
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
+          
+          <div className="flex items-center">
+            <Link href="/">
+              <Image
+                src={isHovered ? "/logo-white.svg" : "/logo.svg"}
+                alt="Solomon Airlines Logo"
+                width={150}
+                height={40}
+                className="h-6 w-auto"
+              />
+            </Link>
+          </div>
+          <nav className="flex items-center space-x-8 justify-between font-sans">
+            {[
+              { name: "Explore", path: "/explore" },
+              { name: "Experience", path: "/experience" },
+              { name: "Belama", path: "/belama" },
+            ].map((item) => (
+              <Link
+                key={item.name}
+                href={item.path}
+                className={`text-sm font-bold transition-colors ${
+                  isHovered ? "text-blue-500" : "text-white"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center justify-end gap-3 w-36">
+            <button
+              className={`transition-colors ${
+                isHovered ? "text-blue-500" : "text-white"
+              } hover:text-blue-700`}
+              aria-label="Information"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+            <button
+              className={`transition-colors ${
+                isHovered ? "text-blue-500" : "text-white"
+              } hover:text-blue-700`}
+              aria-label="Language"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="#212061"
+                viewBox="0 0 256 256"
+              >
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
+              </svg>
+            </button>
+
+            <button
+              className={`transition-colors ${
+                isHovered ? "text-blue-500" : "text-white"
+              } hover:text-blue-700`}
+              aria-label="Contact"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </motion.header> */}
+      {/* White Header */}
+      {/* <motion.header
+        className="w-full fixed top-0 z-50"
+        animate={{
+          opacity: isWhiteHeader ? 1 : 0,
+          y: isWhiteHeader ? 0 : -10,
+          backgroundColor: "rgba(255, 255, 255, 1)",
+        }}
+        transition={{
+          duration: isWhiteHeader ? 0.15 : 0.1,
+          ease: "easeInOut",
+        }}
+        style={{
+          pointerEvents: isWhiteHeader ? "auto" : "none",
+          boxShadow: isWhiteHeader
+            ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+            : "none",
+        }}
+      >
+        <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4">
+          
+          <div className="flex items-center">
+            <Link href="/">
+              <Image
+                src="/logo.svg"
+                alt="Solomon Airlines Logo"
+                width={150}
+                height={40}
+                className="h-6 w-auto"
+              />
+            </Link>
+          </div>
+          <nav className="flex items-center space-x-8 justify-between font-sans">
+            {[
+              { name: "Explore", path: "/explore" },
+              { name: "Experience", path: "/experience" },
+              { name: "Belama", path: "/belama" },
+            ].map((item) => (
+              <Link
+                key={item.name}
+                href={item.path}
+                className="text-blue-500 text-sm font-bold transition-colors"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center justify-end gap-3 w-36">
+            <button
+              className="text-blue-500 hover:text-blue-700 transition-colors"
+              aria-label="Information"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+            <button
+              className="text-blue-500 hover:text-blue-700 transition-colors"
+              aria-label="Language"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="#212061"
+                viewBox="0 0 256 256"
+              >
+                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
+              </svg>
+            </button>
+
+            <button
+              className="text-blue-500 hover:text-blue-700 transition-colors"
+              aria-label="Contact"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </motion.header> */}
+
       {/* Mobile Menu */}
       <MobileMenu />
     </>

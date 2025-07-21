@@ -99,7 +99,17 @@ export async function fetchActiveTravelAlert(): Promise<ActiveTravelAlertPage | 
   const { data } = await client.query({
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
   });
-  return data.pages?.[0] || null;
+  const page = data.pages?.[0] || null;
+  if (page && page.activeAlert) {
+    const createdAt = new Date(page.activeAlert.createdAt);
+    const now = new Date();
+    const diffDays =
+      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays > 3) {
+      return null;
+    }
+  }
+  return page;
 }
 
 // Server-side fetch function for active travel alert (doesn't use React hooks)
@@ -108,5 +118,15 @@ export async function fetchActiveTravelAlertServer(): Promise<ActiveTravelAlertP
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
     fetchPolicy: "no-cache", // Ensure fresh data on server
   });
-  return data.pages?.[0] || null;
+  const page = data.pages?.[0] || null;
+  if (page && page.activeAlert) {
+    const createdAt = new Date(page.activeAlert.createdAt);
+    const now = new Date();
+    const diffDays =
+      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays > 3) {
+      return null;
+    }
+  }
+  return page;
 }

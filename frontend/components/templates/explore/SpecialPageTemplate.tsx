@@ -11,6 +11,10 @@ import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBo
 import FlightSpecialInformation from "@/components/layout/sections/FlightSpecialInformation";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import ThumbnailCarouselSpecialCard from "@/components/layout/carousel/ThumbnailCarouselSpecialCard";
+import TableOfContents, {
+  TOCSection,
+} from "@/components/layout/TableOfContents";
+import { useTableOfContents } from "@/hooks/useTableOfContents";
 
 // Helper function to format dates in a readable format
 function formatDate(dateString: string): string {
@@ -39,6 +43,7 @@ export default function SpecialPageTemplate({
   loading = false,
 }: SpecialPageTemplateProps) {
   const [gradientStartColor, setGradientStartColor] = useState("transparent");
+
   // Handle loading state
   if (loading) {
     return (
@@ -91,6 +96,45 @@ export default function SpecialPageTemplate({
   // Check if the current special is expired using the isExpired field
   const isCurrentSpecialExpired = initialPage?.isExpired === "true";
 
+  // Define table of contents sections based on content
+  const sections: TOCSection[] = [
+    {
+      id: "booking-widget",
+      label: "Book Now",
+      hasContent: true,
+    },
+    {
+      id: "overview",
+      label: "Overview",
+      hasContent: Boolean(description),
+    },
+    {
+      id: "special-information",
+      label: "Special Information",
+      hasContent: true,
+    },
+    {
+      id: "associated-routes",
+      label: "Associated Routes",
+      hasContent: Boolean(specialRoutes && specialRoutes.length > 0),
+    },
+    {
+      id: "terms-conditions",
+      label: "Terms & Conditions",
+      hasContent: Boolean(termsAndConditions),
+    },
+    {
+      id: "more-specials",
+      label: "More Specials",
+      hasContent: Boolean(specials && specials.length > 0),
+    },
+  ].filter((section) => section.hasContent);
+
+  const { activeSection, scrollToSection } = useTableOfContents({
+    sections,
+    scrollOffset: 30,
+  });
+
   return (
     <>
       <SecondaryHero
@@ -99,12 +143,19 @@ export default function SpecialPageTemplate({
         breadcrumbs={url}
         onColorCalculated={setGradientStartColor}
       />
+
+      <TableOfContents
+        sections={sections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
+
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           <div className="space-y-8">
             <StrippedBookingWidget id="booking-widget" />
             {description && (
-              <div className="mx-auto w-full">
+              <div id="overview" className="mx-auto w-full">
                 <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                   {parse(description)}
                 </div>
@@ -113,7 +164,10 @@ export default function SpecialPageTemplate({
           </div>
 
           {/* Description with validity period */}
-          <div className="w-full mx-auto space-y-8 sm:space-y-8">
+          <div
+            id="special-information"
+            className="w-full mx-auto space-y-8 sm:space-y-8"
+          >
             {/* Show expired message or flight information */}
             {isCurrentSpecialExpired ? (
               <div className="w-full max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-xl p-6 text-center">
@@ -158,19 +212,21 @@ export default function SpecialPageTemplate({
 
           {/* Route specials section */}
           {specialRoutes && specialRoutes.length > 0 && (
-            <RouteSpecialSection
-              heading={`Associated Routes`}
-              description="Take advantage of our special fares on these popular routes."
-              specials={specialRoutes.map((special) => ({
-                ...special,
-                currency: special.currency,
-              }))}
-            />
+            <div id="associated-routes">
+              <RouteSpecialSection
+                heading={`Associated Routes`}
+                description="Take advantage of our special fares on these popular routes."
+                specials={specialRoutes.map((special) => ({
+                  ...special,
+                  currency: special.currency,
+                }))}
+              />
+            </div>
           )}
 
           {/* Terms and conditions section */}
           {termsAndConditions && (
-            <div className="w-full px-0">
+            <div id="terms-conditions" className="w-full px-0">
               <details className="group border border-gray-200 rounded-2xl bg-gray-50 shadow-lg w-full">
                 <summary className="flex flex-row items-center justify-between cursor-pointer px-6 py-4 focus:outline-none">
                   <h2 className="text-2xl sm:text-2xl lg:text-2xl font-bold text-blue-500 text-left w-full">
@@ -198,7 +254,10 @@ export default function SpecialPageTemplate({
 
           {/*This section will display specials carousel NOT route specials */}
           {specials && specials.length > 0 && (
-            <div className="w-full mx-auto text-center space-y-8">
+            <div
+              id="more-specials"
+              className="w-full mx-auto text-center space-y-8"
+            >
               <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
                 Browse More Flight Specials
               </h2>
@@ -209,7 +268,7 @@ export default function SpecialPageTemplate({
                   image: special.heroImage?.url,
                   url: special.url,
                   description: special.subTitle,
-                  expires: special.endDate,
+                  endDate: special.endDate,
                 }))}
               />
             </div>
