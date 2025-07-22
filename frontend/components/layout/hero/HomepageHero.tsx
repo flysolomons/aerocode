@@ -29,7 +29,9 @@ export default function HomePageHero({
 }: HomePageHeroProps) {
   const [isBookingModalActive, setIsBookingModalActive] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [resumeTimeoutId, setResumeTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [resumeTimeoutId, setResumeTimeoutId] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -80,31 +82,34 @@ export default function HomePageHero({
   }, [emblaApi]);
 
   // Handle subheading link clicks
-  const handleSubheadingClick = useCallback((e: React.MouseEvent) => {
-    // Check if clicked element is a link
-    if ((e.target as HTMLElement).tagName === 'A') {
-      if (!emblaApi) return;
-      
-      // Stop current autoplay
-      const autoplayPlugin = emblaApi.plugins().autoplay;
-      if (autoplayPlugin) {
-        autoplayPlugin.stop();
-        
-        // Clear any existing resume timeout
-        if (resumeTimeoutId) {
-          clearTimeout(resumeTimeoutId);
+  const handleSubheadingClick = useCallback(
+    (e: React.MouseEvent) => {
+      // Check if clicked element is a link
+      if ((e.target as HTMLElement).tagName === "A") {
+        if (!emblaApi) return;
+
+        // Stop current autoplay
+        const autoplayPlugin = emblaApi.plugins().autoplay;
+        if (autoplayPlugin) {
+          autoplayPlugin.stop();
+
+          // Clear any existing resume timeout
+          if (resumeTimeoutId) {
+            clearTimeout(resumeTimeoutId);
+          }
+
+          // Set new timeout to resume after 10 seconds
+          const timeoutId = setTimeout(() => {
+            autoplayPlugin.play();
+            setResumeTimeoutId(null);
+          }, 10000);
+
+          setResumeTimeoutId(timeoutId);
         }
-        
-        // Set new timeout to resume after 10 seconds
-        const timeoutId = setTimeout(() => {
-          autoplayPlugin.play();
-          setResumeTimeoutId(null);
-        }, 10000);
-        
-        setResumeTimeoutId(timeoutId);
       }
-    }
-  }, [emblaApi, resumeTimeoutId]);
+    },
+    [emblaApi, resumeTimeoutId]
+  );
 
   if (!carouselSlides.length) {
     return <div>No carousel slides available</div>;
@@ -206,8 +211,8 @@ export default function HomePageHero({
             </h1>
             {carouselSlides[selectedIndex]?.slide.subheading &&
               carouselSlides[selectedIndex].slide.subheading.trim() && (
-                <div 
-                  className="text-sm sm:text-base md:text-base lg:text-lg max-w-3xl lg:max-w-4xl mt-1 md:mt-0 opacity-90 font-sans [&_a]:underline"
+                <div
+                  className="text-sm sm:text-base md:text-base lg:text-base max-w-3xl lg:max-w-4xl mt-1 md:mt-0 opacity-90 font-sans [&_a]:underline"
                   onClick={handleSubheadingClick}
                 >
                   {parse(carouselSlides[selectedIndex].slide.subheading)}
