@@ -8,7 +8,9 @@ import InfoCard from "@/components/ui/cards/InfoCard";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import Recommendations from "@/components/layout/sections/Recommendations";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
-import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents";
+import TableOfContents, {
+  TOCSection,
+} from "@/components/layout/TableOfContents";
 import { useTableOfContents } from "@/hooks/useTableOfContents";
 import {
   DestinationPage,
@@ -20,11 +22,9 @@ interface DestinationTemplateProps {
   initialPage: DestinationPage;
 }
 
-
 export default function DestinationTemplate({
   initialPage,
 }: DestinationTemplateProps) {
-
   // Determine which sections have content and should be shown in navigation
   const navigationSections = useMemo(() => {
     const sections: TOCSection[] = [
@@ -36,19 +36,25 @@ export default function DestinationTemplate({
       {
         id: "specials",
         label: "Flight Specials",
-        hasContent: initialPage.rankedRoutes?.some(
-          (rankedRoute) => rankedRoute.route.specialRoutes && rankedRoute.route.specialRoutes.length > 0
-        ) || false,
+        hasContent:
+          initialPage.rankedRoutes?.some(
+            (rankedRoute) =>
+              rankedRoute.route.specialRoutes &&
+              rankedRoute.route.specialRoutes.length > 0
+          ) || false,
       },
       {
         id: "reasons",
         label: "Why Visit",
-        hasContent: initialPage.reasonsToVisit && initialPage.reasonsToVisit.length > 0,
+        hasContent:
+          initialPage.reasonsToVisit && initialPage.reasonsToVisit.length > 0,
       },
       {
         id: "requirements",
         label: "Travel Info",
-        hasContent: initialPage.travelRequirements && initialPage.travelRequirements.length > 0,
+        hasContent:
+          initialPage.travelRequirements &&
+          initialPage.travelRequirements.length > 0,
       },
       {
         id: "routes",
@@ -62,12 +68,12 @@ export default function DestinationTemplate({
       },
     ];
 
-    return sections.filter(section => section.hasContent);
+    return sections.filter((section) => section.hasContent);
   }, [initialPage]);
 
   // Use the table of contents hook
-  const { activeSection, scrollToSection } = useTableOfContents({ 
-    sections: navigationSections 
+  const { activeSection, scrollToSection } = useTableOfContents({
+    sections: navigationSections,
   });
 
   console.log("Initial Page Data:", initialPage);
@@ -80,7 +86,7 @@ export default function DestinationTemplate({
         widget="stripped"
         breadcrumbs={initialPage.url}
       />
-      
+
       <TableOfContents
         sections={navigationSections}
         activeSection={activeSection}
@@ -97,7 +103,9 @@ export default function DestinationTemplate({
             </div>
           )}
           {initialPage.rankedRoutes?.some(
-            (rankedRoute) => rankedRoute.route.specialRoutes && rankedRoute.route.specialRoutes.length > 0
+            (rankedRoute) =>
+              rankedRoute.route.specialRoutes &&
+              rankedRoute.route.specialRoutes.length > 0
           ) && (
             <div id="specials" className="scroll-mt-10">
               <RouteSpecialSection
@@ -144,7 +152,10 @@ export default function DestinationTemplate({
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
-              <div id="requirements" className="space-y-6 sm:space-y-8 scroll-mt-10">
+              <div
+                id="requirements"
+                className="space-y-6 sm:space-y-8 scroll-mt-10"
+              >
                 <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                   <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                     {initialPage.country} Travel Requirements

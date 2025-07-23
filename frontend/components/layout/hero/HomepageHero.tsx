@@ -74,12 +74,46 @@ export default function HomePageHero({
   }, [resumeTimeoutId]);
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      // Reset autoplay timer
+      const autoplayPlugin = emblaApi.plugins().autoplay;
+      if (autoplayPlugin) {
+        autoplayPlugin.stop();
+        autoplayPlugin.play();
+      }
+    }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      // Reset autoplay timer
+      const autoplayPlugin = emblaApi.plugins().autoplay;
+      if (autoplayPlugin) {
+        autoplayPlugin.stop();
+        autoplayPlugin.play();
+      }
+    }
   }, [emblaApi]);
+
+  // Handle navigation dot clicks
+  const handleDotClick = useCallback(
+    (index: number) => {
+      // Navigate to the selected slide
+      onDotButtonClick(index);
+      
+      if (!emblaApi) return;
+
+      // Reset autoplay timer
+      const autoplayPlugin = emblaApi.plugins().autoplay;
+      if (autoplayPlugin) {
+        autoplayPlugin.stop();
+        autoplayPlugin.play();
+      }
+    },
+    [emblaApi, onDotButtonClick]
+  );
 
   // Handle subheading link clicks
   const handleSubheadingClick = useCallback(
@@ -158,7 +192,7 @@ export default function HomePageHero({
             </div>
           </div>
 
-          {/* Navigation Arrows - moved closer to center */}
+          {/* Navigation Arrows */}
           {carouselSlides.length > 1 && (
             <>
               <button
@@ -198,10 +232,9 @@ export default function HomePageHero({
             </>
           )}
         </div>
-
         <div className="relative h-[calc(100vh)]">
           <div
-            className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0 transition-opacity duration-300 z-10 ${
+            className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0 transition-opacity duration-300 ${
               isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
@@ -212,20 +245,18 @@ export default function HomePageHero({
             {carouselSlides[selectedIndex]?.slide.subheading &&
               carouselSlides[selectedIndex].slide.subheading.trim() && (
                 <div
-                  className="text-sm sm:text-base md:text-base lg:text-base max-w-3xl lg:max-w-4xl mt-1 md:mt-0 opacity-90 font-sans [&_a]:underline"
+                  className="text-sm sm:text-base md:text-base lg:text-base max-w-3xl lg:max-w-4xl md:mt-0 opacity-90 font-sans [&_a]:underline"
                   onClick={handleSubheadingClick}
                 >
                   {parse(carouselSlides[selectedIndex].slide.subheading)}
                 </div>
               )}
           </div>
-
-          <div className="md:-mt-8 lg:-mt-10 xl:-mt-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0 z-10 relative">
+          <div className="md:-mt-8 lg:-mt-10 xl:-mt-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0">
             {showBookingWidget && (
               <BookingWidget onModalStateChange={setIsBookingModalActive} />
             )}
           </div>
-
           {/* Navigation Dots - centered on mobile, right on desktop */}
           {carouselSlides.length > 1 && (
             <div className="absolute bottom-20 md:bottom-16 left-1/2 md:left-auto md:right-8 transform -translate-x-1/2 md:transform-none z-10">
@@ -233,7 +264,7 @@ export default function HomePageHero({
                 {scrollSnaps.map((_, index) => (
                   <DotButton
                     key={index}
-                    onClick={() => onDotButtonClick(index)}
+                    onClick={() => handleDotClick(index)}
                     className={`w-3 h-3 rounded-full transition-all duration-200 ${
                       index === selectedIndex
                         ? "bg-white"
