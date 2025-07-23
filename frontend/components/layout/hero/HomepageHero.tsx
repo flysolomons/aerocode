@@ -226,9 +226,9 @@ export default function HomePageHero({
             )}
           </div>
 
-          {/* Navigation Dots - moved to right */}
+          {/* Navigation Dots - centered on mobile, right on desktop */}
           {carouselSlides.length > 1 && (
-            <div className="absolute bottom-20 md:bottom-16 right-8 z-10">
+            <div className="absolute bottom-20 md:bottom-16 left-1/2 md:left-auto md:right-8 transform -translate-x-1/2 md:transform-none z-10">
               <div className="flex space-x-2">
                 {scrollSnaps.map((_, index) => (
                   <DotButton
@@ -245,8 +245,8 @@ export default function HomePageHero({
             </div>
           )}
 
-          {/* Animated scroll down indicator */}
-          <div className="absolute bottom-16 md:bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce z-10">
+          {/* Animated scroll down indicator - hidden on mobile */}
+          <div className="hidden md:block absolute bottom-16 md:bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce z-10">
             <svg
               className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-6 xl:h-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
               fill="none"
