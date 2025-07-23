@@ -41,7 +41,7 @@ export default function PrimaryHero({
               isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
-            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl font-bold font-sans max-w-4xl lg:max-w-5xl">
+            <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
               {title}
             </h1>
             <div className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg">
@@ -65,7 +65,7 @@ export default function PrimaryHero({
             )}
           </div>
           {/* Animated scroll down indicator */}
-          <div className="absolute bottom-4 md:bottom-6 lg:bottom-8 xl:bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+          <div className="absolute bottom-16 md:bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce z-10">
             <svg
               className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-6 xl:h-6 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
               fill="none"
@@ -83,7 +83,7 @@ export default function PrimaryHero({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                d="M19 13l-7 7-7-7m14-8l-7 7-7-7"
               />
             </svg>
           </div>
