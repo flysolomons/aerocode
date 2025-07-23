@@ -28,6 +28,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "http",
+        hostname: "dev.solair.com.sb",
+      },
+      {
+        protocol: "http",
+        hostname: "test.solair.com.sb",
+      },
+      {
+        protocol: "http",
         hostname: "20.188.237.9", // replace with your CDN hostname
       },
 
