@@ -259,7 +259,7 @@ export default function HomePageHero({
           </div>
           {/* Navigation Dots - centered on mobile, right on desktop */}
           {carouselSlides.length > 1 && (
-            <div className="absolute bottom-20 md:bottom-16 left-1/2 md:left-auto md:right-8 transform -translate-x-1/2 md:transform-none z-10">
+            <div className="absolute bottom-8 md:bottom-16 left-1/2 md:left-auto md:right-8 transform -translate-x-1/2 md:transform-none z-10">
               <div className="flex space-x-2">
                 {scrollSnaps.map((_, index) => (
                   <DotButton
