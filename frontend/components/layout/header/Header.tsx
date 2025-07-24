@@ -168,18 +168,18 @@ function Header({
               >
                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
               </motion.svg>
-              {/* Display selected currency code next to icon for desktop */}
+              {/* Display selected currency code with smaller font and tighter spacing */}
               {selectedCurrency && (
                 <motion.span
-                  className="ml-2 text-xs lg:text-sm xl:text-sm font-medium"
+                  className="ml-1 text-[10px] font-medium -translate-y-0.5"
                   initial={{ color: "#ffffff" }}
                   animate={{
                     color: headerHovered || megaMenuActive ? "#212061" : "#ffffff",
                   }}
                   transition={{ 
-                duration: 0.25, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
-              }}
+                  duration: 0.25, 
+                  ease: [0.25, 0.46, 0.45, 0.94] 
+                }}
                 >
                   {selectedCurrency.currencyCode}
                 </motion.span>
@@ -977,7 +977,7 @@ function Header({
   // Memoized Desktop Action Buttons to prevent unnecessary re-renders but allow color changes
   const DesktopActionButtons = React.useMemo(() => (
     <div
-      className="hidden xl:flex items-center justify-end gap-3 lg:gap-4 xl:gap-3 w-36 lg:w-40 xl:w-36"
+      className="hidden xl:flex items-center justify-end gap-2 w-36 lg:w-40 xl:w-36"
       onMouseEnter={() => {
         // Clear any pending close timeout
         if (megaMenuCloseTimeout) {
@@ -1004,28 +1004,36 @@ function Header({
         megaMenuActive={isMegaMenuOpen} 
       />
       <motion.button
-        className="cursor-pointer p-1 lg:p-2 xl:p-1"
-        initial={{ color: "#ffffff" }}
-        animate={{
-          color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+        className="h-8 px-4 rounded-full text-sm font-medium transition-all duration-200 ease-out"
+        initial={{ 
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: "#ffffff",
+          borderColor: "rgba(255, 255, 255, 0.2)"
         }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
+        animate={{
+          backgroundColor: isHovered || isMegaMenuOpen 
+            ? "transparent" 
+            : "rgba(255, 255, 255, 0.1)",
+          color: isHovered || isMegaMenuOpen ? "#212061" : "#ffffff",
+          borderColor: isHovered || isMegaMenuOpen 
+            ? "#212061" 
+            : "rgba(255, 255, 255, 0.2)"
+        }}
+        whileHover={{
+          backgroundColor: isHovered || isMegaMenuOpen 
+            ? "rgba(33, 32, 97, 0.05)" 
+            : "rgba(255, 255, 255, 0.2)"
+        }}
+        transition={{ 
+          duration: 0.25, 
+          ease: [0.25, 0.46, 0.45, 0.94] 
+        }}
+        style={{
+          border: "2px solid"
+        }}
         aria-label="Contact"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
-          />
-        </svg>
+        Contact
       </motion.button>
     </div>
   ), [isHovered, isMegaMenuOpen, megaMenuCloseTimeout, selectedCurrency]); // Include dependencies for color changes and currency updates
