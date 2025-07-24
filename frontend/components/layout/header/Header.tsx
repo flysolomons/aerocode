@@ -24,6 +24,8 @@ function Header({
     useCurrency();
   const [isHovered, setIsHovered] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
+  const [megaMenuCloseTimeout, setMegaMenuCloseTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const [mobileMenuPage, setMobileMenuPage] = useState<"main" | string>("main"); // Track current page in mobile menu
@@ -45,6 +47,11 @@ function Header({
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Track boolean state of megamenu being open
+  useEffect(() => {
+    setIsMegaMenuOpen(!!activeMegaMenu);
+  }, [!!activeMegaMenu]);
 
   // Debug: Log the passed header menus
   // console.log("Header Menus received:", headerMenus);
@@ -118,6 +125,13 @@ function Header({
     megaMenuActive?: boolean;
   }) => {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Close dropdown when header becomes transparent
+    React.useEffect(() => {
+      if (!headerHovered && !megaMenuActive) {
+        setIsOpen(false);
+      }
+    }, [headerHovered, megaMenuActive]);
 
     if (isDesktop) {
       // Desktop: Use existing Popover
@@ -314,6 +328,14 @@ function Header({
     megaMenuActive?: boolean;
   }) => {
     const [isOpen, setIsOpen] = useState(false);
+    
+    // Close dropdown when header becomes transparent
+    React.useEffect(() => {
+      if (!headerHovered && !megaMenuActive) {
+        setIsOpen(false);
+      }
+    }, [headerHovered, megaMenuActive]);
+    
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
@@ -383,63 +405,101 @@ function Header({
     );
   });
 
-  // Mega Menu Component - Memoized to prevent re-renders
-  const MegaMenu = React.memo(({ data, isVisible }: { data: any; isVisible: boolean }) => (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{
-            duration: 0.2,
-            ease: "easeOut",
-          }}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[calc(16rem-4rem)] sm:max-h-[calc(20rem-4rem)] lg:max-h-[calc(25rem-4rem)] overflow-y-auto hidden xl:block"
-        >
-          <div className="max-w-[70.5rem] mx-auto py-4 px-4 sm:px-6 lg:px-8 xl:px-0">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
-              {data.title}
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {data.sections.map((section: any, index: number) => (
-                <div key={index} className="space-y-3">
-                  <h4 className="text-sm font-semibold uppercase text-blue-600">
-                    {section.title}
-                  </h4>
-                  <ul className="space-y-2">
-                    {section.items.map((item: any, itemIndex: number) => (
-                      <li key={itemIndex}>
-                        <Link
-                          href={item.href || "#"}
-                          className="group block p-1.5 rounded-lg hover:bg-yellow-50 transition-colors"
-                          onClick={() => {
-                            setActiveMegaMenu(null);
-                            setIsHovered(false);
-                          }}
-                        >
-                          <div className="text-sm text-gray-800 group-hover:text-blue-600">
-                            {item.name}
+  // Unified Mega Menu Component - Single container that changes content
+  const UnifiedMegaMenu = React.memo(() => {
+    const currentData = activeMegaMenu ? finalMegaMenuData[activeMegaMenu as keyof typeof finalMegaMenuData] : null;
+    const [isMegaMenuOpen, setIsMegaMenuOpen] = React.useState(false);
+    
+    // Track if ANY megamenu is open (boolean state instead of specific menu)
+    React.useEffect(() => {
+      setIsMegaMenuOpen(!!activeMegaMenu);
+    }, [!!activeMegaMenu]); // Only depend on boolean presence, not the specific value
+    
+    return (
+      <>
+        {/* Container - only animate based on boolean open/closed state */}
+        <AnimatePresence>
+          {isMegaMenuOpen && (
+            <motion.div
+              initial={{ 
+                opacity: 0, 
+                y: -8
+              }}
+              animate={{ 
+                opacity: 1, 
+                y: 0
+              }}
+              exit={{ 
+                opacity: 0, 
+                y: -8
+              }}
+              transition={{
+                duration: 0.25,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-100 z-40 max-h-[calc(16rem-4rem)] sm:max-h-[calc(20rem-4rem)] lg:max-h-[calc(25rem-4rem)] overflow-y-auto hidden xl:block"
+            >
+              <div className="max-w-[70.5rem] mx-auto py-4 px-4 sm:px-6 lg:px-8 xl:px-0">
+                {/* Content - animate only when switching between nav items */}
+                <AnimatePresence mode="wait">
+                  {currentData && (
+                    <motion.div
+                      key={activeMegaMenu}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{
+                        duration: 0.15,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <h3 className="text-xl font-bold text-gray-800 mb-4">
+                        {currentData.title}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {currentData.sections.map((section: any, index: number) => (
+                          <div key={index} className="space-y-3">
+                            <h4 className="text-sm font-semibold uppercase text-blue-600">
+                              {section.title}
+                            </h4>
+                            <ul className="space-y-2">
+                              {section.items.map((item: any, itemIndex: number) => (
+                                <li key={itemIndex}>
+                                  <Link
+                                    href={item.href || "#"}
+                                    className="group block p-1.5 rounded-lg hover:bg-yellow-50 transition-colors"
+                                    onClick={() => {
+                                      setActiveMegaMenu(null);
+                                      setIsHovered(false);
+                                    }}
+                                  >
+                                    <div className="text-sm text-gray-800 group-hover:text-blue-600">
+                                      {item.name}
+                                    </div>
+                                    {item.description && (
+                                      <div className="text-xs text-gray-500">
+                                        {item.description}
+                                      </div>
+                                    )}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-                          {item.description && (
-                            <div className="text-xs text-gray-500">
-                              {item.description}
-                            </div>
-                          )}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            {/* Horizontal line at bottom */}
-            <div className="border-b border-gray-200 mt-4"></div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  ));
+                        ))}
+                      </div>
+                      {/* Horizontal line at bottom */}
+                      <div className="border-b border-gray-200 mt-4"></div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  });
 
   // Mobile Menu Component
   const MobileMenu = () => (
@@ -905,192 +965,49 @@ function Header({
     };
   }, [isMobileMenuOpen]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (megaMenuCloseTimeout) {
+        clearTimeout(megaMenuCloseTimeout);
+      }
+    };
+  }, [megaMenuCloseTimeout]);
+
   // Memoized Desktop Action Buttons to prevent unnecessary re-renders but allow color changes
   const DesktopActionButtons = React.useMemo(() => (
     <div
       className="hidden xl:flex items-center justify-end gap-3 lg:gap-4 xl:gap-3 w-36 lg:w-40 xl:w-36"
       onMouseEnter={() => {
-        // Add a slight delay before hiding mega menu for smoother transition
-        setTimeout(() => {
-          setActiveMegaMenu(null);
-        }, 100);
+        // Clear any pending close timeout
+        if (megaMenuCloseTimeout) {
+          clearTimeout(megaMenuCloseTimeout);
+          setMegaMenuCloseTimeout(null);
+        }
+        setActiveMegaMenu(null);
       }}
       style={{
         // Prevent flickering by ensuring icons maintain stable states
         transition: "none"
       }}
     >
-      {/* General Dropdown - Inline to prevent flickering */}
-      <Popover>
-        <PopoverTrigger asChild>
-          <motion.button
-            className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
-            initial={{ color: "#ffffff" }}
-            animate={{
-              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-            }}
-            transition={{ 
-                duration: 0.25, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
-              }}
-            aria-label="General"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </motion.button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-48 p-2"
-          align="end"
-          side="bottom"
-          sideOffset={16}
-        >
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
-            General
-          </div>
-          <div className="flex flex-col gap-1">
-            <Link
-              href="/about"
-              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/news"
-              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
-            >
-              News
-            </Link>
-            <Link
-              href="/travel-alerts"
-              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
-            >
-              Travel Alerts
-            </Link>
-          </div>
-        </PopoverContent>
-      </Popover>
+      {/* General Dropdown - Use the component */}
+      <GeneralDropdown 
+        headerHovered={isHovered} 
+        megaMenuActive={isMegaMenuOpen} 
+      />
 
-      {/* Currency Dropdown - Inline to prevent flickering */}
-      <Popover>
-        <PopoverTrigger asChild>
-          <motion.button
-            className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
-            initial={{ color: "#ffffff" }}
-            animate={{
-              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-            }}
-            transition={{ 
-                duration: 0.25, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
-              }}
-            aria-label="Select Currency"
-          >
-            <motion.svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
-              initial={{ fill: "#ffffff" }}
-              animate={{
-                fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-              }}
-              transition={{ 
-                duration: 0.25, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
-              }}
-              viewBox="0 0 256 256"
-            >
-              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
-            </motion.svg>
-            {selectedCurrency && (
-              <motion.span
-                className="ml-2 text-xs lg:text-sm xl:text-sm font-medium"
-                initial={{ color: "#ffffff" }}
-                animate={{
-                  color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-                }}
-                transition={{ 
-                duration: 0.25, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
-              }}
-              >
-                {selectedCurrency.currencyCode}
-              </motion.span>
-            )}
-          </motion.button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-64 p-2"
-          align="end"
-          side="bottom"
-          sideOffset={16}
-        >
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
-            Select Currency
-          </div>
-          <div
-            className="max-h-48 overflow-y-auto overflow-x-hidden"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
-            {currencies.map((currency) => (
-              <button
-                key={currency.currencyCode}
-                onClick={() => {
-                  setSelectedCurrency(currency);
-                }}
-                className={`w-full text-left px-3 py-2 rounded-md hover:bg-yellow-50 transition-colors ${
-                  selectedCurrency?.currencyCode === currency.currencyCode
-                    ? "bg-yellow-200 text-yellow-900"
-                    : "text-gray-700"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium text-sm">
-                      {currency.currencyCode} - {currency.currencySymbol}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {currency.countryName}
-                    </div>
-                  </div>
-                  {selectedCurrency?.currencyCode === currency.currencyCode && (
-                    <svg
-                      className="w-4 h-4 text-yellow-900"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-        </PopoverContent>
-      </Popover>
+      {/* Currency Dropdown - Use the component */}
+      <CurrencyDropdown 
+        isDesktop={true}
+        headerHovered={isHovered} 
+        megaMenuActive={isMegaMenuOpen} 
+      />
       <motion.button
         className="cursor-pointer p-1 lg:p-2 xl:p-1"
         initial={{ color: "#ffffff" }}
         animate={{
           color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-        }}
-        whileHover={{
-          color: "#1d4ed8",
         }}
         transition={{ duration: 0.2, ease: "easeInOut" }}
         aria-label="Contact"
@@ -1111,7 +1028,7 @@ function Header({
         </svg>
       </motion.button>
     </div>
-  ), [isHovered, activeMegaMenu]); // Include dependencies for color changes
+  ), [isHovered, isMegaMenuOpen, megaMenuCloseTimeout, selectedCurrency]); // Include dependencies for color changes and currency updates
 
   return (
     <>
@@ -1150,7 +1067,12 @@ function Header({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
           setIsHovered(false);
-          setActiveMegaMenu(null);
+          // Add a small delay before closing megamenu to prevent flickering when moving between nav items
+          const timeout = setTimeout(() => {
+            setActiveMegaMenu(null);
+            setMegaMenuCloseTimeout(null);
+          }, 100);
+          setMegaMenuCloseTimeout(timeout);
         }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8 xl:px-0 relative">
@@ -1158,10 +1080,12 @@ function Header({
             <Link 
               href="/"
               onMouseEnter={() => {
-                // Add a slight delay before hiding mega menu for smoother transition
-                setTimeout(() => {
-                  setActiveMegaMenu(null);
-                }, 100);
+                // Clear any pending close timeout
+                if (megaMenuCloseTimeout) {
+                  clearTimeout(megaMenuCloseTimeout);
+                  setMegaMenuCloseTimeout(null);
+                }
+                setActiveMegaMenu(null);
               }}
             >
               <motion.div
@@ -1208,6 +1132,12 @@ function Header({
                 key={item.name}
                 className="relative"
                 onMouseEnter={() => {
+                  // Clear any pending close timeout
+                  if (megaMenuCloseTimeout) {
+                    clearTimeout(megaMenuCloseTimeout);
+                    setMegaMenuCloseTimeout(null);
+                  }
+                  
                   // Only activate mega menu if it has content and on desktop
                   if (
                     hasMegaMenuContent(item.key) &&
@@ -1304,20 +1234,8 @@ function Header({
             </motion.button>
           </div>
         </div>
-        {/* Mega Menu */}
-        {activeMegaMenu &&
-          finalMegaMenuData[
-            activeMegaMenu as keyof typeof finalMegaMenuData
-          ] && (
-            <MegaMenu
-              data={
-                finalMegaMenuData[
-                  activeMegaMenu as keyof typeof finalMegaMenuData
-                ]
-              }
-              isVisible={true}
-            />
-          )}
+        {/* Unified Mega Menu */}
+        <UnifiedMegaMenu />
         {/* Mobile Menu */}
         <MobileMenu />
       </motion.header>

@@ -175,7 +175,7 @@ class MegaMenuItemBlock(StructBlock):
 @register_streamfield_block
 class MegaMenuColumnBlock(StructBlock):
     column_title = CharBlock(required=True, max_length=100, help_text="Column title")
-    items = ListBlock(MegaMenuItemBlock())
+    items = ListBlock(MegaMenuItemBlock(), max_num=6, help_text="Maximum 6 items per column")
 
     # can add an image here
 
