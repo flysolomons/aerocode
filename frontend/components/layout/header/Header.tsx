@@ -107,8 +107,16 @@ function Header({
     { name: "Belama", path: "/belama", key: "belama" },
   ];
 
-  // Currency Dropdown Component
-  const CurrencyDropdown = ({ isDesktop = true }: { isDesktop?: boolean }) => {
+  // Currency Dropdown Component - Memoized to prevent re-renders
+  const CurrencyDropdown = React.memo(({ 
+    isDesktop = true, 
+    headerHovered = false, 
+    megaMenuActive = false 
+  }: { 
+    isDesktop?: boolean;
+    headerHovered?: boolean;
+    megaMenuActive?: boolean;
+  }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     if (isDesktop) {
@@ -125,7 +133,10 @@ function Header({
               whileHover={{
                 color: "#1d4ed8",
               }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
               aria-label="Select Currency"
             >
               <motion.svg
@@ -133,9 +144,12 @@ function Header({
                 className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
                 initial={{ fill: "#ffffff" }}
                 animate={{
-                  fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                  fill: headerHovered || megaMenuActive ? "#212061" : "#ffffff",
                 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
                 viewBox="0 0 256 256"
               >
                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
@@ -146,9 +160,12 @@ function Header({
                   className="ml-2 text-xs lg:text-sm xl:text-sm font-medium"
                   initial={{ color: "#ffffff" }}
                   animate={{
-                    color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                    color: headerHovered || megaMenuActive ? "#212061" : "#ffffff",
                   }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
                 >
                   {selectedCurrency.currencyCode}
                 </motion.span>
@@ -286,10 +303,16 @@ function Header({
         </PopoverContent>
       </Popover>
     );
-  };
+  });
 
-  // Desktop General Dropdown Component
-  const GeneralDropdown = () => {
+  // Desktop General Dropdown Component - Memoized to prevent re-renders
+  const GeneralDropdown = React.memo(({ 
+    headerHovered = false, 
+    megaMenuActive = false 
+  }: { 
+    headerHovered?: boolean;
+    megaMenuActive?: boolean;
+  }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -298,12 +321,12 @@ function Header({
             className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
             initial={{ color: "#ffffff" }}
             animate={{
-              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              color: headerHovered || megaMenuActive ? "#212061" : "#ffffff",
             }}
-            whileHover={{
-              color: "#1d4ed8",
-            }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
             aria-label="General"
           >
             <svg
@@ -358,10 +381,10 @@ function Header({
         </PopoverContent>
       </Popover>
     );
-  };
+  });
 
-  // Mega Menu Component
-  const MegaMenu = ({ data, isVisible }: { data: any; isVisible: boolean }) => (
+  // Mega Menu Component - Memoized to prevent re-renders
+  const MegaMenu = React.memo(({ data, isVisible }: { data: any; isVisible: boolean }) => (
     <AnimatePresence>
       {isVisible && (
         <motion.div
@@ -416,7 +439,7 @@ function Header({
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  ));
 
   // Mobile Menu Component
   const MobileMenu = () => (
@@ -882,6 +905,214 @@ function Header({
     };
   }, [isMobileMenuOpen]);
 
+  // Memoized Desktop Action Buttons to prevent unnecessary re-renders but allow color changes
+  const DesktopActionButtons = React.useMemo(() => (
+    <div
+      className="hidden xl:flex items-center justify-end gap-3 lg:gap-4 xl:gap-3 w-36 lg:w-40 xl:w-36"
+      onMouseEnter={() => {
+        // Add a slight delay before hiding mega menu for smoother transition
+        setTimeout(() => {
+          setActiveMegaMenu(null);
+        }, 100);
+      }}
+      style={{
+        // Prevent flickering by ensuring icons maintain stable states
+        transition: "none"
+      }}
+    >
+      {/* General Dropdown - Inline to prevent flickering */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <motion.button
+            className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
+            initial={{ color: "#ffffff" }}
+            animate={{
+              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+            }}
+            transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
+            aria-label="General"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </motion.button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-48 p-2"
+          align="end"
+          side="bottom"
+          sideOffset={16}
+        >
+          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
+            General
+          </div>
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/about"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              href="/news"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+            >
+              News
+            </Link>
+            <Link
+              href="/travel-alerts"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+            >
+              Travel Alerts
+            </Link>
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Currency Dropdown - Inline to prevent flickering */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <motion.button
+            className="cursor-pointer p-1 lg:p-2 xl:p-1 flex items-center"
+            initial={{ color: "#ffffff" }}
+            animate={{
+              color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+            }}
+            transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
+            aria-label="Select Currency"
+          >
+            <motion.svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
+              initial={{ fill: "#ffffff" }}
+              animate={{
+                fill: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+              }}
+              transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
+              viewBox="0 0 256 256"
+            >
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.62,87.62,0,0,1-6.4,32.94l-44.7-27.49a15.92,15.92,0,0,0-6.24-2.23l-22.82-3.08a16.11,16.11,0,0,0-16,7.86h-8.72l-3.8-7.86a15.91,15.91,0,0,0-11-8.67l-8-1.73L96.14,104h16.71a16.06,16.06,0,0,0,7.73-2l12.25-6.76a16.62,16.62,0,0,0,3-2.14l26.91-24.34A15.93,15.93,0,0,0,166,49.1l-.36-.65A88.11,88.11,0,0,1,216,128ZM143.31,41.34,152,56.9,125.09,81.24,112.85,88H96.14a16,16,0,0,0-13.88,8l-8.73,15.23L63.38,84.19,74.32,58.32a87.87,87.87,0,0,1,69-17ZM40,128a87.53,87.53,0,0,1,8.54-37.8l11.34,30.27a16,16,0,0,0,11.62,10l21.43,4.61L96.74,143a16.09,16.09,0,0,0,14.4,9h1.48l-7.23,16.23a16,16,0,0,0,2.86,17.37l.14.14L128,205.94l-1.94,10A88.11,88.11,0,0,1,40,128Zm102.58,86.78,1.13-5.81a16.09,16.09,0,0,0-4-13.9,1.85,1.85,0,0,1-.14-.14L120,174.74,133.7,144l22.82,3.08,45.72,28.12A88.18,88.18,0,0,1,142.58,214.78Z"></path>
+            </motion.svg>
+            {selectedCurrency && (
+              <motion.span
+                className="ml-2 text-xs lg:text-sm xl:text-sm font-medium"
+                initial={{ color: "#ffffff" }}
+                animate={{
+                  color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+                }}
+                transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
+              >
+                {selectedCurrency.currencyCode}
+              </motion.span>
+            )}
+          </motion.button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-64 p-2"
+          align="end"
+          side="bottom"
+          sideOffset={16}
+        >
+          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide px-3 py-2">
+            Select Currency
+          </div>
+          <div
+            className="max-h-48 overflow-y-auto overflow-x-hidden"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {currencies.map((currency) => (
+              <button
+                key={currency.currencyCode}
+                onClick={() => {
+                  setSelectedCurrency(currency);
+                }}
+                className={`w-full text-left px-3 py-2 rounded-md hover:bg-yellow-50 transition-colors ${
+                  selectedCurrency?.currencyCode === currency.currencyCode
+                    ? "bg-yellow-200 text-yellow-900"
+                    : "text-gray-700"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">
+                      {currency.currencyCode} - {currency.currencySymbol}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {currency.countryName}
+                    </div>
+                  </div>
+                  {selectedCurrency?.currencyCode === currency.currencyCode && (
+                    <svg
+                      className="w-4 h-4 text-yellow-900"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+      <motion.button
+        className="cursor-pointer p-1 lg:p-2 xl:p-1"
+        initial={{ color: "#ffffff" }}
+        animate={{
+          color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
+        }}
+        whileHover={{
+          color: "#1d4ed8",
+        }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        aria-label="Contact"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
+          />
+        </svg>
+      </motion.button>
+    </div>
+  ), [isHovered, activeMegaMenu]); // Include dependencies for color changes
+
   return (
     <>
       <motion.header
@@ -890,34 +1121,57 @@ function Header({
           top: hasTravelAlert ? "46px" : "0px",
           backgroundColor:
             isHovered || activeMegaMenu
-              ? "rgba(255, 255, 255, 1)"
+              ? "rgba(255, 255, 255, 0.98)"
               : "rgba(255, 255, 255, 0)",
+          backdropFilter: isHovered || activeMegaMenu ? "blur(8px)" : "blur(0px)",
         }}
         transition={{
-          duration: 0.4,
-          ease: "easeOut",
-          backgroundColor: { duration: 0.3, ease: "easeInOut" },
+          backgroundColor: { 
+            duration: 0.25, 
+            ease: [0.25, 0.46, 0.45, 0.94] // Premium easing curve
+          },
+          backdropFilter: { 
+            duration: 0.3, 
+            ease: "easeOut" 
+          },
+          top: { 
+            duration: 0.2, 
+            ease: "easeOut" 
+          }
+        }}
+        style={{
+          willChange: isHovered || activeMegaMenu ? "background-color, backdrop-filter, box-shadow" : "auto",
+          boxShadow:
+            isHovered || activeMegaMenu
+              ? "0 4px 20px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.06)"
+              : "0 0 0 0 rgba(0, 0, 0, 0)",
+          transition: "box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
           setIsHovered(false);
           setActiveMegaMenu(null);
         }}
-        style={{
-          boxShadow:
-            isHovered || activeMegaMenu
-              ? "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)"
-              : "none",
-        }}
       >
         <div className="max-w-[70.5rem] mx-auto flex items-center justify-between py-4 px-4 sm:px-6 lg:px-8 xl:px-0 relative">
           <div className="flex items-center">
-            <Link href="/">
+            <Link 
+              href="/"
+              onMouseEnter={() => {
+                // Add a slight delay before hiding mega menu for smoother transition
+                setTimeout(() => {
+                  setActiveMegaMenu(null);
+                }, 100);
+              }}
+            >
               <motion.div
                 animate={{
                   opacity: 1,
                 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                transition={{ 
+                duration: 0.25, 
+                ease: [0.25, 0.46, 0.45, 0.94] 
+              }}
               >
                 {/* Desktop Logo */}
                 <Image
@@ -948,7 +1202,7 @@ function Header({
             </Link>
           </div>
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center space-x-6 lg:space-x-8 xl:space-x-8 justify-between font-sans relative">
+          <nav className="hidden xl:flex items-center space-x-3 lg:space-x-4 xl:space-x-4 justify-between font-sans relative">
             {navigationItems.map((item: any) => (
               <div
                 key={item.name}
@@ -970,18 +1224,38 @@ function Header({
                     setActiveMegaMenu(null);
                     // Don't reset hover state since user is still hovering over header
                   }}
+                  className="relative block"
                 >
+                  {/* Active state background */}
+                  <motion.div
+                    className="absolute inset-0 rounded-lg"
+                    initial={{ 
+                      backgroundColor: "rgba(100, 116, 139, 0)",
+                      scale: 0.95 
+                    }}
+                    animate={{
+                      backgroundColor: activeMegaMenu === item.key 
+                        ? "rgba(100, 116, 139, 0.08)" 
+                        : "rgba(100, 116, 139, 0)",
+                      scale: activeMegaMenu === item.key ? 1 : 0.95
+                    }}
+                    transition={{
+                      duration: 0.2,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
+                  />
+                  
                   <motion.span
-                    className="text-sm lg:text-base xl:text-sm font-bold cursor-pointer"
+                    className="relative text-sm lg:text-base xl:text-sm font-bold cursor-pointer px-3 py-1 block"
                     initial={{ color: "#ffffff" }}
                     animate={{
                       color:
                         isHovered || activeMegaMenu ? "#212061" : "#ffffff",
                     }}
-                    whileHover={{
-                      color: "#2563eb",
+                    transition={{ 
+                      duration: 0.25, 
+                      ease: [0.25, 0.46, 0.45, 0.94] 
                     }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     {item.name}
                   </motion.span>
@@ -990,45 +1264,7 @@ function Header({
             ))}
           </nav>
           {/* Desktop Action Buttons */}
-          <div
-            className="hidden xl:flex items-center justify-end gap-3 lg:gap-4 xl:gap-3 w-36 lg:w-40 xl:w-36"
-            onMouseEnter={() => {
-              // Add a slight delay before hiding mega menu for smoother transition
-              setTimeout(() => {
-                setActiveMegaMenu(null);
-              }, 100);
-            }}
-          >
-            <GeneralDropdown />
-            <CurrencyDropdown isDesktop={true} />
-            <motion.button
-              className="cursor-pointer p-1 lg:p-2 xl:p-1"
-              initial={{ color: "#ffffff" }}
-              animate={{
-                color: isHovered || activeMegaMenu ? "#212061" : "#ffffff",
-              }}
-              whileHover={{
-                color: "#1d4ed8",
-              }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
-              aria-label="Contact"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 8V5z"
-                />
-              </svg>
-            </motion.button>
-          </div>
+          {DesktopActionButtons}
           {/* Mobile Menu Toggle */}
           <div className="xl:hidden flex items-center">
             <motion.button
