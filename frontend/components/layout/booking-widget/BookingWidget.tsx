@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BookATripForm from "./BookATripForm";
 import ManageBookingForm from "./ManageBookingForm";
-import FlightUpgradeForm from "./FlightUpgradeForm";
 
 interface BookingWidgetProps {
   onModalStateChange?: (isActive: boolean) => void;
@@ -91,7 +90,7 @@ export default function BookingWidget({
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-gray-700"
+                      className="h-5 w-5 text-gray-700"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -107,9 +106,9 @@ export default function BookingWidget({
                   </button>
                 </div>
               </div>
-              {/* Manage, Upgrade, Timetable - Same row */}
+              {/* Manage, Timetable - Same row */}
               <div className="w-full">
-                <div className="grid grid-cols-3 gap-3 w-full">
+                <div className="grid grid-cols-2 gap-3 w-full">
                   {/* Manage Booking */}
                   <div className="flex items-center justify-center h-14 rounded-full bg-white/80 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
                     <button
@@ -118,7 +117,7 @@ export default function BookingWidget({
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-gray-700 hidden xs:inline"
+                        className="h-5 w-5 text-gray-700"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -134,35 +133,6 @@ export default function BookingWidget({
                       </span>
                     </button>
                   </div>
-                  {/* Flight Upgrade */}
-                  <div className="flex items-center justify-center h-14 rounded-full bg-white/80 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
-                    <button
-                      className="flex flex-row items-center justify-center gap-2 w-full h-full text-gray-500 font-medium transition-colors duration-200"
-                      onClick={() => handleTabClick(2)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-gray-700 hidden xs:inline"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={1.5}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M12 2a10 10 0 0 1 7.38 16.75" />
-                        <path d="m16 12-4-4-4 4" />
-                        <path d="M12 16V8" />
-                        <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
-                        <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
-                        <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
-                        <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
-                      </svg>
-                      <span className="text-sm font-medium text-gray-700 text-center">
-                        Upgrade
-                      </span>
-                    </button>
-                  </div>
                   {/* Flight Timetable */}
                   <div className="flex items-center justify-center h-14 rounded-full bg-white/80 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
                     <button
@@ -171,7 +141,7 @@ export default function BookingWidget({
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-gray-700 hidden xs:inline"
+                        className="h-5 w-5 text-gray-700"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -259,43 +229,6 @@ export default function BookingWidget({
                   Manage Booking
                 </button>
               </div>
-              {/* Flight Upgrade */}
-              <div
-                className={`flex px-4 py-3 h-12 w-[11rem] rounded-none bg-white xl:shadow-none ${
-                  activeTab === 2
-                    ? "border-0 border-b-2 border-b-blue-500"
-                    : "border-0"
-                }`}
-              >
-                <button
-                  className={`text-sm font-semibold w-[11rem] text-center flex items-center justify-center gap-2 ${
-                    activeTab === 2
-                      ? "text-blue-500"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                  onClick={() => handleTabClick(2)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12 2a10 10 0 0 1 7.38 16.75" />
-                    <path d="m16 12-4-4-4 4" />
-                    <path d="M12 16V8" />
-                    <path d="M2.5 8.875a10 10 0 0 0-.5 3" />
-                    <path d="M2.83 16a10 10 0 0 0 2.43 3.4" />
-                    <path d="M4.636 5.235a10 10 0 0 1 .891-.857" />
-                    <path d="M8.644 21.42a10 10 0 0 0 7.631-.38" />
-                  </svg>
-                  Flight Upgrade
-                </button>
-              </div>
               {/* Flight Timetable */}
               <div
                 className={`flex px-4 py-3 h-12 w-[11rem] rounded-tr-[2rem] rounded-none bg-white xl:shadow-none ${
@@ -343,7 +276,6 @@ export default function BookingWidget({
               />
             )}
             {activeTab === 1 && <ManageBookingForm />}
-            {activeTab === 2 && <FlightUpgradeForm />}
           </div>
         </div>
       </div>
@@ -412,7 +344,6 @@ export default function BookingWidget({
                 <div className="flex-1 overflow-y-auto">
                   {activeTab === 0 && <BookATripForm />}
                   {activeTab === 1 && <ManageBookingForm />}
-                  {activeTab === 2 && <FlightUpgradeForm />}
                 </div>
               </div>
             </motion.div>
