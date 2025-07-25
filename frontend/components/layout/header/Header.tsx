@@ -955,7 +955,7 @@ function Header({
                             {hasMegaMenuContent(item.key) ? (
                               <button
                                 onClick={() => setMobileMenuPage(item.key)}
-                                className="w-full flex items-center justify-between text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-3"
+                                className="w-full flex items-center justify-between text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-0"
                               >
                                 <span>{item.name}</span>
                                 <svg
@@ -976,7 +976,7 @@ function Header({
                               <Link
                                 href={item.path}
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="block text-base font-sans font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-3"
+                                className="block text-base font-sans font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-0"
                               >
                                 {item.name}
                               </Link>
@@ -989,7 +989,7 @@ function Header({
                         <div className="flex flex-col items-start gap-6">
                           {/* General */}
                           <button
-                            className="flex flex-row items-center justify-start px-3 bg-transparent border-none focus:outline-none w-full"
+                            className="flex flex-row items-center justify-start px-0 bg-transparent border-none focus:outline-none w-full"
                             aria-label="General"
                             onClick={() => setMobileGeneralPage(true)}
                           >
@@ -1030,7 +1030,7 @@ function Header({
                           </button>
                           {/* Currency - now navigates to currency page */}
                           <button
-                            className="flex flex-row items-center justify-start px-3 bg-transparent border-none focus:outline-none w-full"
+                            className="flex flex-row items-center justify-start px-0 bg-transparent border-none focus:outline-none w-full"
                             aria-label="Currency"
                             onClick={() => setMobileCurrencyPage(true)}
                           >
@@ -1076,7 +1076,7 @@ function Header({
                           </button>
                           {/* Contact */}
                           <button
-                            className="flex flex-row items-center justify-start px-3 bg-transparent border-none focus:outline-none"
+                            className="flex flex-row items-center justify-start px-0 bg-transparent border-none focus:outline-none"
                             aria-label="Contact"
                           >
                             <span className="py-3 rounded-full text-gray-600 transition-colors">
@@ -1110,21 +1110,21 @@ function Header({
                       <Link
                         href="/about"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
+                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-0 rounded-lg"
                       >
                         About
                       </Link>
                       <Link
                         href="/news"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
+                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-0 rounded-lg"
                       >
                         News
                       </Link>
                       <Link
                         href="/travel-alerts"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-2 rounded-lg"
+                        className="block text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-0 rounded-lg"
                       >
                         Travel Alerts
                       </Link>
@@ -1204,7 +1204,7 @@ function Header({
                                 <Link
                                   href={section.items[0].href || "#"}
                                   onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block w-full text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg"
+                                  className="block w-full text-base text-gray-800 hover:text-blue-600 transition-colors py-2 px-0 rounded-lg"
                                 >
                                   <div>{section.items[0].name}</div>
                                   {section.items[0].description && (
@@ -1217,7 +1217,7 @@ function Header({
                                 // Otherwise, show the button to go to the column page
                                 <button
                                   onClick={() => setMobileMenuColumn(section)}
-                                  className="w-full flex items-center justify-between text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-3"
+                                  className="w-full flex items-center justify-between text-base font-medium text-gray-800 hover:text-blue-600 transition-colors py-2 px-0"
                                 >
                                   <span>{section.title}</span>
                                   <svg
@@ -1251,7 +1251,7 @@ function Header({
                             <Link
                               href={subItem.href || "#"}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-gray-900 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg"
+                              className="block text-gray-900 hover:text-blue-600 transition-colors py-2 px-0 rounded-lg"
                             >
                               <div>{subItem.name}</div>
                               {subItem.description && (
