@@ -5,6 +5,7 @@ from grapple.models import (
     GraphQLImage,
     GraphQLStreamfield,
     GraphQLString,
+    GraphQLBoolean,
 )
 from grapple.helpers import register_query_field
 from wagtail.fields import StreamField, RichTextField
@@ -113,13 +114,52 @@ class GenericPage(BasePage):
         help_text="Add and arrange content blocks to build the page.",
     )
 
+    # Widget inclusion fields - only one can be true at a time
+    include_manage_booking_widget = models.BooleanField(
+        default=False,
+    )
+
+    include_flight_upgrade_widget = models.BooleanField(
+        default=False,
+    )
+
     content_panels = BasePage.content_panels + [
+        FieldRowPanel(
+            [
+                FieldPanel(
+                    "include_manage_booking_widget",
+                    heading="Include Manage My Booking Widget",
+                ),
+                FieldPanel(
+                    "include_flight_upgrade_widget",
+                    heading="Include Flight Upgrade Widget",
+                ),
+            ],
+            heading="Widget Options (Only one can be selected)",
+        ),
         FieldPanel("content"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
         GraphQLStreamfield("content"),
+        GraphQLBoolean(
+            "include_manage_booking_widget", name="includeManageBookingWidget"
+        ),
+        GraphQLBoolean(
+            "include_flight_upgrade_widget", name="includeFlightUpgradeWidget"
+        ),
     ]
+
+    def clean(self):
+        super().clean()
+        # Validate that only one widget can be selected at a time
+        if self.include_manage_booking_widget and self.include_flight_upgrade_widget:
+            raise ValidationError(
+                {
+                    "include_manage_booking_widget": "Only one widget type can be selected at a time.",
+                    "include_flight_upgrade_widget": "Only one widget type can be selected at a time.",
+                }
+            )
 
     subpage_types = [
         "core.GenericPage",

@@ -14,6 +14,8 @@ export const GET_GENERIC_PAGE_QUERY = gql`
         url
       }
       url
+      includeFlightUpgradeWidget
+      includeManageBookingWidget
       content {
         blockType
         ... on SectionBlock {
@@ -98,6 +100,8 @@ export interface GenericPage {
     url: string;
   };
   url: string;
+  includeManageBookingWidget: boolean;
+  includeFlightUpgradeWidget: boolean;
   content: ContentBlock[];
 }
 

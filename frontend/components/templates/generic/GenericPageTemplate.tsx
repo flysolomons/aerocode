@@ -11,6 +11,8 @@ import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import TableBlock from "@/components/ui/blocks/TableBlock";
 import AccordionBlock from "@/components/ui/blocks/AccordionBlock";
 import SimpleDropdownBlock from "@/components/ui/blocks/SimpleDropdownBlock";
+import ManageMyBookingWidget from "@/components/layout/booking-widget/ManageMyBookingWidget";
+import FlightUpgradeWidget from "@/components/layout/booking-widget/FlightUpgradeWidget";
 import { GenericPage } from "@/graphql/genericPageQuery";
 import parse from "html-react-parser";
 
@@ -40,6 +42,16 @@ export default function GenericPageTemplate({
                 {parse(initialPage.description)}
               </div>
             </div>
+          </div>
+        </Container>
+      )}
+
+      {/* Widget section - appears before content */}
+      {(initialPage.includeManageBookingWidget || initialPage.includeFlightUpgradeWidget) && (
+        <Container>
+          <div className="px-4 sm:px-6">
+            {initialPage.includeManageBookingWidget && <ManageMyBookingWidget />}
+            {initialPage.includeFlightUpgradeWidget && <FlightUpgradeWidget />}
           </div>
         </Container>
       )}
