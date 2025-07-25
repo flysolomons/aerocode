@@ -20,6 +20,8 @@ interface NewsProps {
   initialPage: NewsIndexPage;
 }
 
+import parse from "html-react-parser";
+
 export default function NewsIndexTemplate({ initialPage }: NewsProps) {
   const [offset, setOffset] = useState(0);
   const [articles, setArticles] = useState<Article[]>([]);
@@ -83,18 +85,22 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
         <SkeletonSecondaryHero />
       )}
       <Container>
-        <div className="py-12 space-y-16">
+        <div className="py-6 sm:py-8 lg:py-12 px-4 sm:px-0 space-y-8 sm:space-y-12 lg:space-y-16">
           {initialPage.description && (
-            <div className="mx-auto w-full">
-              <p className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {initialPage.description}
-              </p>
+            <div className="mx-auto max-w-4xl">
+              <div className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+                {parse(initialPage.description)}
+              </div>
             </div>
           )}
-          <div className="grid grid-cols-3 gap-x-4 gap-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {newsArticles.map((article: any, index: number) =>
               article ? (
-                <a href={article.url} key={article.id}>
+                <a 
+                  href={article.url} 
+                  key={article.id}
+                  className="block transition-transform duration-200 hover:scale-105"
+                >
                   <NewsCard
                     headline={article.articleTitle}
                     image={article.heroImage.url}
@@ -103,7 +109,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
                   />
                 </a>
               ) : (
-                <div key={index} className="p-4">
+                <div key={index} className="w-full">
                   <SkeletonNewsCard />
                 </div>
               )
@@ -111,11 +117,11 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
           </div>
           {articlesLoading && articles.length === 0 ? (
             <div className="flex justify-center">
-              <div className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded h-10 w-40 animate-pulse"></div>
+              <div className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg h-10 sm:h-12 w-32 sm:w-40 animate-pulse"></div>
             </div>
           ) : (
             hasMore && (
-              <div className="flex justify-center">
+              <div className="flex justify-center pt-4 sm:pt-6">
                 <PrimaryButton
                   text="View More Articles"
                   onClick={loadMoreArticles}

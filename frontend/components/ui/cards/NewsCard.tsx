@@ -14,9 +14,10 @@ function NewsCard({ headline, image, date, description }: NewsCardProps) {
     month: "long",
     day: "numeric",
   });
+  
   return (
     <>
-      <div className="p-2 sm:p-3 lg:p-2 rounded-xl sm:rounded-2xl lg:rounded-2xl shadow-md bg-white h-[24rem] sm:h-[28rem] lg:h-[30rem] w-full">
+      <div className="p-2 sm:p-3 lg:p-2 rounded-xl sm:rounded-2xl lg:rounded-2xl shadow-md bg-white h-[24rem] sm:h-[28rem] lg:h-[30rem] w-full flex flex-col">
         <div className="relative mb-2 space-y-2">
           <div className="relative h-[12rem] sm:h-[14rem] lg:h-[15rem] rounded-xl sm:rounded-2xl lg:rounded-2xl overflow-hidden">
             <Image src={image} alt={headline} fill className="object-cover" />
@@ -26,11 +27,20 @@ function NewsCard({ headline, image, date, description }: NewsCardProps) {
             {formattedDate}
           </div>
         </div>
-        <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight">
+        <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight overflow-hidden" style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical'
+        }}>
           {headline}
         </h2>
-        <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed break-words overflow-hidden">
-          {parse(description)}
+        <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed flex-1 overflow-hidden">
+          <div className="h-full overflow-hidden" style={{
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical'
+          }}>
+            {parse(description)}
+          </div>
         </div>
       </div>
     </>

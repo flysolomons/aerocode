@@ -100,15 +100,6 @@ export async function fetchActiveTravelAlert(): Promise<ActiveTravelAlertPage | 
     query: GET_ACTIVE_TRAVEL_ALERT_QUERY,
   });
   const page = data.pages?.[0] || null;
-  if (page && page.activeAlert) {
-    const createdAt = new Date(page.activeAlert.createdAt);
-    const now = new Date();
-    const diffDays =
-      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
-    if (diffDays > 3) {
-      return null;
-    }
-  }
   return page;
 }
 
@@ -119,14 +110,5 @@ export async function fetchActiveTravelAlertServer(): Promise<ActiveTravelAlertP
     fetchPolicy: "no-cache", // Ensure fresh data on server
   });
   const page = data.pages?.[0] || null;
-  if (page && page.activeAlert) {
-    const createdAt = new Date(page.activeAlert.createdAt);
-    const now = new Date();
-    const diffDays =
-      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
-    if (diffDays > 3) {
-      return null;
-    }
-  }
   return page;
 }
