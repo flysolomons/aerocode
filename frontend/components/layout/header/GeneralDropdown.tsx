@@ -15,10 +15,7 @@ interface GeneralDropdownProps {
 
 // Desktop General Dropdown Component - Memoized to prevent re-renders
 const GeneralDropdown = React.memo(
-  ({
-    headerHovered = false,
-    megaMenuActive = false,
-  }: GeneralDropdownProps) => {
+  ({ headerHovered = false, megaMenuActive = false }: GeneralDropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Close dropdown when header becomes transparent

@@ -59,8 +59,7 @@ const CurrencyDropdown = React.memo(
                 className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6"
                 initial={{ fill: "#ffffff" }}
                 animate={{
-                  fill:
-                    headerHovered || megaMenuActive ? "#212061" : "#ffffff",
+                  fill: headerHovered || megaMenuActive ? "#212061" : "#ffffff",
                 }}
                 transition={{
                   duration: 0.25,
@@ -200,8 +199,7 @@ const CurrencyDropdown = React.memo(
                       {currency.countryName}
                     </div>
                   </div>
-                  {selectedCurrency?.currencyCode ===
-                    currency.currencyCode && (
+                  {selectedCurrency?.currencyCode === currency.currencyCode && (
                     <svg
                       className="w-4 h-4 text-yellow-900"
                       fill="currentColor"
