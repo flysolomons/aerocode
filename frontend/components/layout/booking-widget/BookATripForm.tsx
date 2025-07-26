@@ -1,9 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
-import { format } from "date-fns";
-import { motion, AnimatePresence } from "framer-motion";
 import RadioButton from "@/components/ui/buttons/RadioButton";
-import { Travelers } from "./TravelerDropDown";
 import { DateRangePicker } from "@/components/ui/date-picker";
 import {
   fetchAllAirports,
@@ -30,6 +27,12 @@ interface BookATripFormProps {
     arrivalAirport: string;
     arrivalAirportCode: string;
   };
+}
+
+export interface Travelers {
+  adults: number;
+  children: number;
+  infants: number;
 }
 
 const BookATripForm = memo(function BookATripForm({
@@ -135,10 +138,12 @@ const BookATripForm = memo(function BookATripForm({
         const airports = await fetchAllAirports();
         setAllAirports(airports);
         // Initialize arrival airports with all airports
-        setArrivalAirports(airports.map(airport => ({
-          arrivalAirport: airport.airport,
-          arrivalAirportCode: airport.airportCode,
-        })));
+        setArrivalAirports(
+          airports.map((airport) => ({
+            arrivalAirport: airport.airport,
+            arrivalAirportCode: airport.airportCode,
+          }))
+        );
       } catch (error) {
         console.error("Error fetching airports:", error);
       } finally {
@@ -149,29 +154,34 @@ const BookATripForm = memo(function BookATripForm({
   }, []);
 
   // Memoized function to fetch arrival destinations
-  const fetchArrivalsForOrigin = useCallback(async (departureAirport: string) => {
-    setIsLoadingArrivals(true);
-    try {
-      const arrivals = await fetchArrivalDestinationsForOrigin(departureAirport);
-      setArrivalAirports(arrivals);
-      
-      // Only clear selectedArrival if arrivals are not empty and current selection is not valid
-      if (arrivals.length > 0) {
-        if (
-          selectedArrival &&
-          !arrivals.some(
-            (a) => a.arrivalAirport === selectedArrival.arrivalAirport
-          )
-        ) {
-          setSelectedArrival(null);
+  const fetchArrivalsForOrigin = useCallback(
+    async (departureAirport: string) => {
+      setIsLoadingArrivals(true);
+      try {
+        const arrivals = await fetchArrivalDestinationsForOrigin(
+          departureAirport
+        );
+        setArrivalAirports(arrivals);
+
+        // Only clear selectedArrival if arrivals are not empty and current selection is not valid
+        if (arrivals.length > 0) {
+          if (
+            selectedArrival &&
+            !arrivals.some(
+              (a) => a.arrivalAirport === selectedArrival.arrivalAirport
+            )
+          ) {
+            setSelectedArrival(null);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching arrivals:", error);
+      } finally {
+        setIsLoadingArrivals(false);
       }
-    } catch (error) {
-      console.error('Error fetching arrivals:', error);
-    } finally {
-      setIsLoadingArrivals(false);
-    }
-  }, [selectedArrival]);
+    },
+    [selectedArrival]
+  );
 
   // When selectedDeparture changes, fetch arrival airports for that origin
   useEffect(() => {
@@ -204,12 +214,7 @@ const BookATripForm = memo(function BookATripForm({
         setSelectedArrival(preselectedArrivalAirport);
       }
     }
-  }, [
-    allAirports,
-    arrivalAirports,
-    preselectedDeparture,
-    preselectedArrival,
-  ]);
+  }, [allAirports, arrivalAirports, preselectedDeparture, preselectedArrival]);
 
   // Handle outside clicks for travelers mobile dropdown
   useEffect(() => {
@@ -347,22 +352,22 @@ const BookATripForm = memo(function BookATripForm({
   };
 
   // Memoized handler for traveler count changes
-  const handleChange = useCallback((
-    type: keyof Travelers,
-    action: "increment" | "decrement"
-  ) => {
-    setTravelers((prev) => {
-      const newTravelers = { ...prev };
+  const handleChange = useCallback(
+    (type: keyof Travelers, action: "increment" | "decrement") => {
+      setTravelers((prev) => {
+        const newTravelers = { ...prev };
 
-      if (action === "increment") {
-        newTravelers[type] += 1;
-      } else {
-        newTravelers[type] -= 1;
-      }
+        if (action === "increment") {
+          newTravelers[type] += 1;
+        } else {
+          newTravelers[type] -= 1;
+        }
 
-      return newTravelers;
-    });
-  }, []);
+        return newTravelers;
+      });
+    },
+    []
+  );
   // Memoized function to handle desktop modal activation
   const handleDesktopInputClick = useCallback(() => {
     if (window.innerWidth >= 768) {
@@ -485,24 +490,41 @@ const BookATripForm = memo(function BookATripForm({
     } else {
       setShowValidation(true);
     }
-  }, [selectedDeparture, selectedArrival, dateRange.from, dateRange.to, isOneWay, selectedCurrency]);
+  }, [
+    selectedDeparture,
+    selectedArrival,
+    dateRange.from,
+    dateRange.to,
+    isOneWay,
+    selectedCurrency,
+  ]);
 
   // Memoized validation flags for better performance
-  const isSearchFormValid = useMemo(() =>
-    selectedDeparture &&
-    selectedArrival &&
-    dateRange.from &&
-    (isOneWay || dateRange.to),
+  const isSearchFormValid = useMemo(
+    () =>
+      selectedDeparture &&
+      selectedArrival &&
+      dateRange.from &&
+      (isOneWay || dateRange.to),
     [selectedDeparture, selectedArrival, dateRange.from, dateRange.to, isOneWay]
   );
 
-  const isDepartureError = useMemo(() => showValidation && !selectedDeparture, [showValidation, selectedDeparture]);
-  const isArrivalError = useMemo(() => showValidation && !selectedArrival, [showValidation, selectedArrival]);
-  const isDatesError = useMemo(() =>
-    showValidation && (!dateRange.from || (!isOneWay && !dateRange.to)),
+  const isDepartureError = useMemo(
+    () => showValidation && !selectedDeparture,
+    [showValidation, selectedDeparture]
+  );
+  const isArrivalError = useMemo(
+    () => showValidation && !selectedArrival,
+    [showValidation, selectedArrival]
+  );
+  const isDatesError = useMemo(
+    () => showValidation && (!dateRange.from || (!isOneWay && !dateRange.to)),
     [showValidation, dateRange.from, dateRange.to, isOneWay]
   );
-  const isReturnDateMissing = useMemo(() => !isOneWay && dateRange.from && !dateRange.to, [isOneWay, dateRange.from, dateRange.to]);
+  const isReturnDateMissing = useMemo(
+    () => !isOneWay && dateRange.from && !dateRange.to,
+    [isOneWay, dateRange.from, dateRange.to]
+  );
   return (
     <>
       {/* Desktop Overlay */}
@@ -613,8 +635,7 @@ const BookATripForm = memo(function BookATripForm({
                     <PopoverContent
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
-                        maxHeight:
-                          allAirports.length > 5 ? "20rem" : "auto",
+                        maxHeight: allAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
@@ -1256,40 +1277,62 @@ const BookATripForm = memo(function BookATripForm({
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       align="start"
                     >
-                      <div className=" bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+                      <div className=" bg-white border border-gray-200 rounded-xl shadow-lg p-4">
                         {/* Adults */}
                         <div className="flex justify-between items-center mb-4">
                           <div>
                             <p className="text-sm font-semibold text-black">
                               Adults
                             </p>
-                            <p className="text-xs text-gray-500">
-                              Ages 13 or above
-                            </p>
+                            <p className="text-xs text-gray-500">Ages 13+</p>
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
                               disabled={travelers.adults <= 1}
                               aria-label="Decrease adults"
                             >
-                              -
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
-                            <span className="text-sm text-black font-medium">
+                            <span className="text-sm text-black font-medium min-w-[1.5rem] text-center">
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
                               disabled={travelers.adults >= 9}
                               aria-label="Increase adults"
                             >
-                              +
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -1304,27 +1347,51 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
                               disabled={travelers.children <= 0}
                               aria-label="Decrease children"
                             >
-                              -
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
-                            <span className="text-sm text-black font-medium">
+                            <span className="text-sm text-black font-medium min-w-[1.5rem] text-center">
                               {travelers.children}
                             </span>
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
                               disabled={travelers.children >= 9}
                               aria-label="Increase children"
                             >
-                              +
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -1339,27 +1406,51 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
                               disabled={travelers.infants <= 0}
                               aria-label="Decrease infants"
                             >
-                              -
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
-                            <span className="text-sm text-black font-medium">
+                            <span className="text-sm text-black font-medium min-w-[1.5rem] text-center">
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50"
+                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }
                               disabled={travelers.infants >= 9}
                               aria-label="Increase infants"
                             >
-                              +
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -1525,33 +1616,55 @@ const BookATripForm = memo(function BookATripForm({
                             <p className="text-base font-semibold text-black">
                               Adults
                             </p>
-                            <p className="text-sm text-gray-500">
-                              Ages 13 or above
-                            </p>
+                            <p className="text-sm text-gray-500">Ages 13+</p>
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
                               disabled={travelers.adults <= 1}
                               aria-label="Decrease adults"
                             >
-                              -
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
                             <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
                               disabled={travelers.adults >= 9}
                               aria-label="Increase adults"
                             >
-                              +
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -1566,27 +1679,51 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
                               disabled={travelers.children <= 0}
                               aria-label="Decrease children"
                             >
-                              -
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
                             <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                               {travelers.children}
                             </span>
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
                               disabled={travelers.children >= 9}
                               aria-label="Increase children"
                             >
-                              +
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -1601,27 +1738,51 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
                               disabled={travelers.infants <= 0}
                               aria-label="Decrease infants"
                             >
-                              -
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M20 12H4"
+                                />
+                              </svg>
                             </button>
                             <span className="text-lg text-black font-medium min-w-[2rem] text-center">
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full text-black disabled:opacity-50 hover:bg-gray-50 transition-colors"
+                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }
                               disabled={travelers.infants >= 9}
                               aria-label="Increase infants"
                             >
-                              +
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M12 4v16m8-8H4"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
