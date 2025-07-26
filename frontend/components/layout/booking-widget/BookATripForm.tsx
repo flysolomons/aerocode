@@ -1,15 +1,14 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import { Travelers } from "./TravelerDropDown";
 import { DateRangePicker } from "@/components/ui/date-picker";
 import {
-  fetchDepartureDestinations,
-  fetchArrivalDestinations,
+  fetchAllAirports,
   fetchArrivalDestinationsForOrigin,
-  fetchOriginsForArrivalDestination,
+  Airport,
   DepartureAirport,
   ArrivalAirport,
 } from "@/graphql/BookingWidgetQuery";
@@ -33,7 +32,7 @@ interface BookATripFormProps {
   };
 }
 
-export default function BookATripForm({
+const BookATripForm = memo(function BookATripForm({
   onModalStateChange,
   preselectedDeparture,
   preselectedArrival,
@@ -59,9 +58,7 @@ export default function BookATripForm({
   });
 
   // State for departure and arrival airports
-  const [departureAirports, setDepartureAirports] = useState<
-    DepartureAirport[]
-  >([]);
+  const [allAirports, setAllAirports] = useState<Airport[]>([]);
   const [arrivalAirports, setArrivalAirports] = useState<ArrivalAirport[]>([]);
   const [selectedDeparture, setSelectedDeparture] =
     useState<DepartureAirport | null>(null);
@@ -135,10 +132,13 @@ export default function BookATripForm({
     const fetchAirports = async () => {
       try {
         setIsLoading(true);
-        const departures = await fetchDepartureDestinations();
-        const arrivals = await fetchArrivalDestinations();
-        setDepartureAirports(departures);
-        setArrivalAirports(arrivals);
+        const airports = await fetchAllAirports();
+        setAllAirports(airports);
+        // Initialize arrival airports with all airports
+        setArrivalAirports(airports.map(airport => ({
+          arrivalAirport: airport.airport,
+          arrivalAirportCode: airport.airportCode,
+        })));
       } catch (error) {
         console.error("Error fetching airports:", error);
       } finally {
@@ -148,41 +148,50 @@ export default function BookATripForm({
     fetchAirports();
   }, []);
 
+  // Memoized function to fetch arrival destinations
+  const fetchArrivalsForOrigin = useCallback(async (departureAirport: string) => {
+    setIsLoadingArrivals(true);
+    try {
+      const arrivals = await fetchArrivalDestinationsForOrigin(departureAirport);
+      setArrivalAirports(arrivals);
+      
+      // Only clear selectedArrival if arrivals are not empty and current selection is not valid
+      if (arrivals.length > 0) {
+        if (
+          selectedArrival &&
+          !arrivals.some(
+            (a) => a.arrivalAirport === selectedArrival.arrivalAirport
+          )
+        ) {
+          setSelectedArrival(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching arrivals:', error);
+    } finally {
+      setIsLoadingArrivals(false);
+    }
+  }, [selectedArrival]);
+
   // When selectedDeparture changes, fetch arrival airports for that origin
   useEffect(() => {
-    if (selectedDeparture) {
-      setIsLoadingArrivals(true);
-      fetchArrivalDestinationsForOrigin(
-        selectedDeparture.departureAirport
-      ).then((arrivals) => {
-        setArrivalAirports(arrivals);
-        // Only clear selectedArrival if arrivals are not empty and current selection is not valid
-        if (arrivals.length > 0) {
-          if (
-            selectedArrival &&
-            !arrivals.some(
-              (a) => a.arrivalAirport === selectedArrival.arrivalAirport
-            )
-          ) {
-            setSelectedArrival(null);
-          }
-        }
-        // If arrivals is empty, keep previous selection and show message in UI
-        setIsLoadingArrivals(false);
-      });
+    if (selectedDeparture?.departureAirport) {
+      fetchArrivalsForOrigin(selectedDeparture.departureAirport);
     }
-  }, [selectedDeparture]);
+  }, [selectedDeparture?.departureAirport, fetchArrivalsForOrigin]);
 
   // Handle preselected airports when data is loaded
   useEffect(() => {
-    if (departureAirports.length > 0 && preselectedDeparture) {
-      const preselectedDepartureAirport = departureAirports.find(
+    if (allAirports.length > 0 && preselectedDeparture) {
+      const preselectedDepartureAirport = allAirports.find(
         (airport) =>
-          airport.departureAirportCode ===
-          preselectedDeparture.departureAirportCode
+          airport.airportCode === preselectedDeparture.departureAirportCode
       );
       if (preselectedDepartureAirport) {
-        setSelectedDeparture(preselectedDepartureAirport);
+        setSelectedDeparture({
+          departureAirport: preselectedDepartureAirport.airport,
+          departureAirportCode: preselectedDepartureAirport.airportCode,
+        });
       }
     }
 
@@ -196,7 +205,7 @@ export default function BookATripForm({
       }
     }
   }, [
-    departureAirports,
+    allAirports,
     arrivalAirports,
     preselectedDeparture,
     preselectedArrival,
@@ -337,8 +346,8 @@ export default function BookATripForm({
     setDragOffset(0);
   };
 
-  // Handle changes to traveler counts
-  const handleChange = (
+  // Memoized handler for traveler count changes
+  const handleChange = useCallback((
     type: keyof Travelers,
     action: "increment" | "decrement"
   ) => {
@@ -353,9 +362,9 @@ export default function BookATripForm({
 
       return newTravelers;
     });
-  };
-  // Function to handle desktop modal activation
-  const handleDesktopInputClick = () => {
+  }, []);
+  // Memoized function to handle desktop modal activation
+  const handleDesktopInputClick = useCallback(() => {
     if (window.innerWidth >= 768) {
       // Only on desktop
       // Close all open dropdowns before activating modal
@@ -368,9 +377,9 @@ export default function BookATripForm({
       // Scroll to top when modal is activated
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  };
-  // Function to close desktop modal
-  const closeDesktopModal = () => {
+  }, [onModalStateChange]);
+  // Memoized function to close desktop modal
+  const closeDesktopModal = useCallback(() => {
     // Close all open dropdowns when closing modal
     setIsDeparturePopoverOpen(false);
     setIsArrivalPopoverOpen(false);
@@ -378,10 +387,10 @@ export default function BookATripForm({
 
     setIsDesktopModalActive(false);
     onModalStateChange?.(false);
-  };
+  }, [onModalStateChange]);
 
-  // Format travelers for display
-  const formatTravelers = (): string => {
+  // Memoized travelers formatter
+  const formatTravelers = useMemo((): string => {
     const parts: string[] = [];
 
     if (travelers.adults > 0) {
@@ -403,9 +412,10 @@ export default function BookATripForm({
     }
 
     return parts.length > 0 ? parts.join(", ") : "";
-  };
+  }, [travelers.adults, travelers.children, travelers.infants]);
 
-  const handleSearch = () => {
+  // Memoized search handler
+  const handleSearch = useCallback(() => {
     if (
       selectedDeparture &&
       selectedArrival &&
@@ -475,21 +485,24 @@ export default function BookATripForm({
     } else {
       setShowValidation(true);
     }
-  };
+  }, [selectedDeparture, selectedArrival, dateRange.from, dateRange.to, isOneWay, selectedCurrency]);
 
-  // Check if search form is valid
-  const isSearchFormValid =
+  // Memoized validation flags for better performance
+  const isSearchFormValid = useMemo(() =>
     selectedDeparture &&
     selectedArrival &&
     dateRange.from &&
-    (isOneWay || dateRange.to);
+    (isOneWay || dateRange.to),
+    [selectedDeparture, selectedArrival, dateRange.from, dateRange.to, isOneWay]
+  );
 
-  // Validation error flags
-  const isDepartureError = showValidation && !selectedDeparture;
-  const isArrivalError = showValidation && !selectedArrival;
-  const isDatesError =
-    showValidation && (!dateRange.from || (!isOneWay && !dateRange.to));
-  const isReturnDateMissing = !isOneWay && dateRange.from && !dateRange.to;
+  const isDepartureError = useMemo(() => showValidation && !selectedDeparture, [showValidation, selectedDeparture]);
+  const isArrivalError = useMemo(() => showValidation && !selectedArrival, [showValidation, selectedArrival]);
+  const isDatesError = useMemo(() =>
+    showValidation && (!dateRange.from || (!isOneWay && !dateRange.to)),
+    [showValidation, dateRange.from, dateRange.to, isOneWay]
+  );
+  const isReturnDateMissing = useMemo(() => !isOneWay && dateRange.from && !dateRange.to, [isOneWay, dateRange.from, dateRange.to]);
   return (
     <>
       {/* Desktop Overlay */}
@@ -601,7 +614,7 @@ export default function BookATripForm({
                       className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
                       style={{
                         maxHeight:
-                          departureAirports.length > 5 ? "20rem" : "auto",
+                          allAirports.length > 5 ? "20rem" : "auto",
                       }}
                       align="start"
                       side="bottom"
@@ -612,22 +625,25 @@ export default function BookATripForm({
                         <div className="text-gray-500 p-3">
                           Loading destinations...
                         </div>
-                      ) : departureAirports.length > 0 ? (
-                        departureAirports.map((airport, index) => (
+                      ) : allAirports.length > 0 ? (
+                        allAirports.map((airport, index) => (
                           <div
                             key={index}
                             className="hover:bg-gray-100 cursor-pointer p-3"
                             onClick={() => {
-                              setSelectedDeparture(airport);
+                              setSelectedDeparture({
+                                departureAirport: airport.airport,
+                                departureAirportCode: airport.airportCode,
+                              });
                               if (showValidation) setShowValidation(false);
                               setIsDeparturePopoverOpen(false);
                             }}
                           >
                             <div className="text-black text-sm">
-                              {airport.departureAirport}
+                              {airport.airport}
                             </div>
                             <div className="text-xs text-gray-500 mt-1">
-                              {airport.departureAirportCode}
+                              {airport.airportCode}
                             </div>
                           </div>
                         ))
@@ -817,16 +833,19 @@ export default function BookATripForm({
                                 Loading destinations...
                               </div>
                             </div>
-                          ) : departureAirports.length > 0 ? (
+                          ) : allAirports.length > 0 ? (
                             <div className="divide-y divide-gray-100">
-                              {departureAirports.map((airport, index) => (
+                              {allAirports.map((airport, index) => (
                                 <div
                                   key={index}
                                   className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    setSelectedDeparture(airport);
+                                    setSelectedDeparture({
+                                      departureAirport: airport.airport,
+                                      departureAirportCode: airport.airportCode,
+                                    });
                                     if (showValidation)
                                       setShowValidation(false);
                                     if (showValidation)
@@ -835,10 +854,10 @@ export default function BookATripForm({
                                   }}
                                 >
                                   <div className="text-gray-900 font-medium">
-                                    {airport.departureAirport}
+                                    {airport.airport}
                                   </div>
                                   <div className="text-sm text-gray-500 mt-1">
-                                    {airport.departureAirportCode}
+                                    {airport.airportCode}
                                   </div>
                                 </div>
                               ))}
@@ -1229,7 +1248,7 @@ export default function BookATripForm({
                           placeholder="Select travellers"
                           className="w-full text-sm outline-none text-gray-700 cursor-pointer"
                           readOnly
-                          value={formatTravelers()}
+                          value={formatTravelers}
                         />
                       </div>
                     </PopoverTrigger>
@@ -1376,7 +1395,7 @@ export default function BookATripForm({
                     placeholder="Select travellers"
                     className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
                     readOnly
-                    value={formatTravelers()}
+                    value={formatTravelers}
                   />
                   {/* Add traveler selected indicator */}
                   {travelers.adults + travelers.children + travelers.infants >
@@ -1692,4 +1711,6 @@ export default function BookATripForm({
       </div>
     </>
   );
-}
+});
+
+export default BookATripForm;
