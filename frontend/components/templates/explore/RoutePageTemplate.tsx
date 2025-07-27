@@ -76,12 +76,12 @@ export default function RoutePageTemplate({
       {
         id: "specials", 
         label: "Flight Specials",
-        hasContent: specialRoutes && specialRoutes.length > 0,
+        hasContent: (initialPage?.specialRoutes?.length || 0) > 0,
       },
       {
         id: "fares",
         label: "Year Round Fares", 
-        hasContent: fares && fares.length > 0,
+        hasContent: (initialPage?.fares?.length || 0) > 0,
       },
       {
         id: "flight-info",
@@ -91,7 +91,7 @@ export default function RoutePageTemplate({
       {
         id: "other-routes",
         label: "Other Routes",
-        hasContent: relatedRoutes.length > 0,
+        hasContent: (initialPage?.rankedRelatedRoutes?.length || 0) > 0,
       },
       {
         id: "destinations",
@@ -101,12 +101,28 @@ export default function RoutePageTemplate({
     ];
 
     return sections.filter(section => section.hasContent);
-  }, [initialPage, specialRoutes, fares, relatedRoutes]);
+  }, [
+    initialPage?.description,
+    initialPage?.specialRoutes?.length,
+    initialPage?.fares?.length, 
+    initialPage?.rankedRelatedRoutes?.length
+  ]);
 
   // Use the table of contents hook
   const { activeSection, scrollToSection } = useTableOfContents({ 
     sections: tocSections 
   });
+
+  // Memoize preselected objects to prevent re-renders
+  const preselectedDeparture = useMemo(() => ({
+    departureAirport: departureAirport,
+    departureAirportCode: departureAirportCode,
+  }), [departureAirport, departureAirportCode]);
+
+  const preselectedArrival = useMemo(() => ({
+    arrivalAirport: arrivalAirport,
+    arrivalAirportCode: arrivalAirportCode,
+  }), [arrivalAirport, arrivalAirportCode]);
 
   return (
     <>
@@ -128,14 +144,8 @@ export default function RoutePageTemplate({
           <div className="space-y-8">
             <StrippedBookingWidget
               id="booking-widget"
-              preselectedDeparture={{
-                departureAirport: departureAirport,
-                departureAirportCode: departureAirportCode,
-              }}
-              preselectedArrival={{
-                arrivalAirport: arrivalAirport,
-                arrivalAirportCode: arrivalAirportCode,
-              }}
+              preselectedDeparture={preselectedDeparture}
+              preselectedArrival={preselectedArrival}
             />
             {initialPage.description && (
               <div id="overview" className="mx-auto w-full scroll-mt-10">

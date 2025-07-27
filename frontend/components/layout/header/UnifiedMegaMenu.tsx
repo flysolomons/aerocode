@@ -82,13 +82,13 @@ const UnifiedMegaMenu = React.memo(
                                     <li key={itemIndex}>
                                       <Link
                                         href={item.href || "#"}
-                                        className="group block p-1.5 rounded-lg hover:bg-yellow-50 transition-colors"
+                                        className="group block rounded-lg hover:bg-yellow-50 transition-colors"
                                         onClick={() => {
                                           setActiveMegaMenu(null);
                                           setIsHovered(false);
                                         }}
                                       >
-                                        <div className="text-sm text-gray-800 group-hover:text-blue-600">
+                                        <div className="text-sm px-2 py-1.5 text-gray-800 group-hover:text-blue-600">
                                           {item.name}
                                         </div>
                                         {item.description && (

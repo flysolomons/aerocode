@@ -62,9 +62,9 @@ const DesktopActionButtons = React.memo(
           animate={{
             backgroundColor:
               isHovered || isMegaMenuOpen
-                ? "transparent"
+                ? "#212061"
                 : "rgba(255, 255, 255, 0.1)",
-            color: isHovered || isMegaMenuOpen ? "#212061" : "#ffffff",
+            color: isHovered || isMegaMenuOpen ? "#ffffff" : "#ffffff",
             borderColor:
               isHovered || isMegaMenuOpen
                 ? "#212061"
@@ -73,7 +73,7 @@ const DesktopActionButtons = React.memo(
           whileHover={{
             backgroundColor:
               isHovered || isMegaMenuOpen
-                ? "rgba(33, 32, 97, 0.05)"
+                ? "#1A1A4F"
                 : "rgba(255, 255, 255, 0.2)",
           }}
           transition={{

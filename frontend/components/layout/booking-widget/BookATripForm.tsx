@@ -180,7 +180,7 @@ const BookATripForm = memo(function BookATripForm({
         setIsLoadingArrivals(false);
       }
     },
-    [selectedArrival]
+    [selectedArrival?.arrivalAirport]
   );
 
   // When selectedDeparture changes, fetch arrival airports for that origin
@@ -214,7 +214,12 @@ const BookATripForm = memo(function BookATripForm({
         setSelectedArrival(preselectedArrivalAirport);
       }
     }
-  }, [allAirports, arrivalAirports, preselectedDeparture, preselectedArrival]);
+  }, [
+    allAirports.length, 
+    arrivalAirports.length, 
+    preselectedDeparture?.departureAirportCode, 
+    preselectedArrival?.arrivalAirportCode
+  ]);
 
   // Handle outside clicks for travelers mobile dropdown
   useEffect(() => {
