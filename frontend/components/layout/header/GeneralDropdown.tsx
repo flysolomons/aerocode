@@ -18,12 +18,19 @@ const GeneralDropdown = React.memo(
   ({ headerHovered = false, megaMenuActive = false }: GeneralDropdownProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    // Close dropdown when header becomes transparent
+    // Close dropdown when header becomes transparent OR when mega menu opens
     React.useEffect(() => {
       if (!headerHovered && !megaMenuActive) {
         setIsOpen(false);
       }
     }, [headerHovered, megaMenuActive]);
+
+    // Close dropdown immediately when mega menu becomes active
+    React.useEffect(() => {
+      if (megaMenuActive) {
+        setIsOpen(false);
+      }
+    }, [megaMenuActive]);
 
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
