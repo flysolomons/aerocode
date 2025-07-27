@@ -1,14 +1,20 @@
 import Image from "next/image";
 import parse from "html-react-parser";
+import { useRouter } from "next/navigation";
 
 interface NewsCardProps {
   headline: string;
   image: string;
   date: string;
   description: string;
+  category?: {
+    name: string;
+    slug: string;
+  } | null;
+  url: string;
 }
 
-function NewsCard({ headline, image, date, description }: NewsCardProps) {
+function NewsCard({ headline, image, date, description, category, url }: NewsCardProps) {
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -19,21 +25,34 @@ function NewsCard({ headline, image, date, description }: NewsCardProps) {
     <>
       <div className="p-2 sm:p-3 lg:p-2 rounded-xl sm:rounded-2xl lg:rounded-2xl shadow-md bg-white h-[24rem] sm:h-[28rem] lg:h-[30rem] w-full flex flex-col">
         <div className="relative mb-2 space-y-2">
-          <div className="relative h-[12rem] sm:h-[14rem] lg:h-[15rem] rounded-xl sm:rounded-2xl lg:rounded-2xl overflow-hidden">
-            <Image src={image} alt={headline} fill className="object-cover" />
-          </div>
+          <a href={url} className="block relative h-[12rem] sm:h-[14rem] lg:h-[15rem] rounded-xl sm:rounded-2xl lg:rounded-2xl overflow-hidden group">
+            <Image src={image} alt={headline} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+          </a>
 
-          <div className="text-xs sm:text-sm lg:text-sm text-gray-500">
-            {formattedDate}
+          <div className="text-xs sm:text-sm lg:text-sm text-gray-500 flex items-center gap-2">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 6v6l4 2"/>
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            <span>{formattedDate}</span>
+            {category && (
+              <>
+                <span>•</span>
+                <a 
+                  href={`/news/category/${category.slug}`}
+                  className="text-blue-500 hover:underline"
+                >
+                  {category.name}
+                </a>
+              </>
+            )}
           </div>
         </div>
-        <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight overflow-hidden" style={{
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical'
-        }}>
-          {headline}
-        </h2>
+        <a href={url}>
+          <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight">
+            {headline}
+          </h2>
+        </a>
         <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed flex-1 overflow-hidden">
           <div className="h-full overflow-hidden" style={{
             display: '-webkit-box',

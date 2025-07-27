@@ -2,10 +2,8 @@
 "use client";
 
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
-import SkeletonSecondaryHero from "@/components/layout/skeleton/SkeletonSecondaryHero";
 import Container from "@/components/layout/Container";
 import NewsCard from "@/components/ui/cards/NewsCard";
-import SkeletonNewsCard from "@/components/layout/skeleton/SkeletonNewsCard";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import { useQuery } from "@apollo/client";
 import client from "@/lib/apolloClient";
@@ -13,7 +11,9 @@ import { useState } from "react";
 import {
   Article,
   NewsIndexPage,
+  NewsCategory,
   GET_NEWS_ARTICLES,
+  GET_NEWS_CATEGORIES,
 } from "@/graphql/NewsPageQuery";
 
 interface NewsProps {
@@ -26,7 +26,13 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
   const [offset, setOffset] = useState(0);
   const [articles, setArticles] = useState<Article[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const limit = 6;
+
+  // Fetch categories
+  const { data: categoriesData } = useQuery(GET_NEWS_CATEGORIES, {
+    client,
+  });
 
   const {
     loading: articlesLoading,
@@ -68,66 +74,124 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
     });
   };
 
-  const newsArticles =
-    articlesLoading && articles.length === 0
-      ? Array.from({ length: limit })
-      : articles;
+  // Filter articles by selected category
+  const filteredArticles = selectedCategory
+    ? articles.filter((article) => article.category?.slug === selectedCategory)
+    : articles;
+
+  const categories = categoriesData?.newsCategories || [];
+
+  const handleCategoryFilter = (categorySlug: string | null) => {
+    setSelectedCategory(categorySlug);
+  };
 
   return (
     <>
-      {initialPage ? (
-        <SecondaryHero
-          title={initialPage.heroTitle}
-          image={initialPage.heroImage?.url || "/default-hero.jpg"}
-          breadcrumbs={initialPage.url}
-        />
-      ) : (
-        <SkeletonSecondaryHero />
-      )}
+      <SecondaryHero
+        title={initialPage.heroTitle}
+        image={initialPage.heroImage?.url || "/default-hero.jpg"}
+        breadcrumbs={initialPage.url}
+      />
       <Container>
         <div className="py-6 sm:py-8 lg:py-12 px-4 sm:px-0 space-y-8 sm:space-y-12 lg:space-y-16">
           {initialPage.description && (
-            <div className="mx-auto max-w-4xl">
-              <div className="text-sm sm:text-base lg:text-lg text-center text-gray-700 leading-relaxed">
+            <div className="mx-auto w-full">
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-            {newsArticles.map((article: any, index: number) =>
-              article ? (
-                <a 
-                  href={article.url} 
-                  key={article.id}
-                  className="block transition-transform duration-200 hover:scale-105"
-                >
-                  <NewsCard
-                    headline={article.articleTitle}
-                    image={article.heroImage.url}
-                    date={article.firstPublishedAt}
-                    description={article.body}
-                  />
-                </a>
-              ) : (
-                <div key={index} className="w-full">
-                  <SkeletonNewsCard />
-                </div>
-              )
-            )}
-          </div>
-          {articlesLoading && articles.length === 0 ? (
-            <div className="flex justify-center">
-              <div className="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg h-10 sm:h-12 w-32 sm:w-40 animate-pulse"></div>
-            </div>
-          ) : (
-            hasMore && (
-              <div className="flex justify-center pt-4 sm:pt-6">
-                <PrimaryButton
-                  text="View More Articles"
-                  onClick={loadMoreArticles}
-                />
+
+          {/* Category Filter Cards */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-xs sm:text-sm font-medium text-gray-600">
+                Filter by Topic
               </div>
-            )
+              <div className="text-xs text-gray-400 sm:hidden">Swipe →</div>
+            </div>
+            <div
+              className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              <button
+                onClick={() => handleCategoryFilter(null)}
+                className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap ${
+                  selectedCategory === null
+                    ? "border-yellow-500 bg-yellow-50 text-yellow-700"
+                    : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400"
+                }`}
+              >
+                <div className="text-xs sm:text-sm font-medium">All Topics</div>
+                {selectedCategory === null && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </button>
+              {categories.map((category: NewsCategory) => (
+                <button
+                  key={category.slug}
+                  onClick={() => handleCategoryFilter(category.slug)}
+                  className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap ${
+                    selectedCategory === category.slug
+                      ? "border-yellow-500 bg-yellow-50 text-yellow-700"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400"
+                  }`}
+                >
+                  <div className="text-xs sm:text-sm font-medium">
+                    {category.name}
+                  </div>
+                  {selectedCategory === category.slug && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {filteredArticles.map((article: any) => (
+              <NewsCard
+                key={article.id}
+                headline={article.articleTitle}
+                image={article.heroImage.url}
+                date={article.firstPublishedAt}
+                description={article.body}
+                category={article.category}
+                url={article.url}
+              />
+            ))}
+          </div>
+          {hasMore && (
+            <div className="flex justify-center pt-4 sm:pt-6">
+              <PrimaryButton
+                text="View More Articles"
+                onClick={loadMoreArticles}
+              />
+            </div>
           )}
         </div>
       </Container>

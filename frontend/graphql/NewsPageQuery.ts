@@ -37,6 +37,10 @@ export interface Article {
   heroImage: {
     url: string;
   };
+  category?: {
+    name: string;
+    slug: string;
+  } | null;
 }
 
 // Modify the GET_NEWS_ARTICLES query
@@ -52,6 +56,24 @@ export const GET_NEWS_ARTICLES = gql`
       heroImage {
         url
       }
+      category {
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export interface NewsCategory {
+  name: string;
+  slug: string;
+}
+
+export const GET_NEWS_CATEGORIES = gql`
+  query GetNewsCategories {
+    newsCategories {
+      name
+      slug
     }
   }
 `;
@@ -99,6 +121,10 @@ export interface NewsArticle {
     src: string;
     url: string;
   };
+  category?: {
+    name: string;
+    slug: string;
+  } | null;
 }
 
 export const GET_ARTICLE = gql`
@@ -118,6 +144,10 @@ export const GET_ARTICLE = gql`
         height
         src
         url
+      }
+      category {
+        name
+        slug
       }
     }
   }
@@ -148,6 +178,7 @@ export async function fetchNewsArticlePage(
           src: "",
           url: "/default-hero.jpg",
         },
+        category: null,
       }
     );
   } catch (error) {
@@ -168,6 +199,7 @@ export async function fetchNewsArticlePage(
         src: "",
         url: "/default-hero.jpg",
       },
+      category: null,
     };
   }
 }
