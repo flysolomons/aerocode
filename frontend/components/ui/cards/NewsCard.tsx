@@ -23,9 +23,9 @@ function NewsCard({ headline, image, date, description, category, url }: NewsCar
   
   return (
     <>
-      <div className="p-2 sm:p-3 lg:p-2 rounded-xl sm:rounded-2xl lg:rounded-2xl shadow-md bg-white h-[24rem] sm:h-[28rem] lg:h-[30rem] w-full flex flex-col">
-        <div className="relative mb-2 space-y-2">
-          <a href={url} className="block relative h-[12rem] sm:h-[14rem] lg:h-[15rem] rounded-xl sm:rounded-2xl lg:rounded-2xl overflow-hidden group">
+      <div className="p-2 sm:p-3 lg:p-2 rounded-xl sm:rounded-2xl lg:rounded-2xl shadow-md bg-white h-[21rem] sm:h-[23rem] lg:h-[25rem] w-full flex flex-col">
+        <div className="relative mb-3 space-y-2">
+          <a href={url} className="block relative h-[10rem] sm:h-[11rem] lg:h-[12rem] rounded-xl sm:rounded-2xl lg:rounded-2xl overflow-hidden group">
             <Image src={image} alt={headline} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
           </a>
 
@@ -39,7 +39,7 @@ function NewsCard({ headline, image, date, description, category, url }: NewsCar
               <>
                 <span>•</span>
                 <a 
-                  href={`/news/category/${category.slug}`}
+                  href={`/news/${category.slug}`}
                   className="text-blue-500 hover:underline"
                 >
                   {category.name}
@@ -49,15 +49,12 @@ function NewsCard({ headline, image, date, description, category, url }: NewsCar
           </div>
         </div>
         <a href={url}>
-          <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-2 hover:underline break-words leading-tight">
+          <h2 className="text-base sm:text-lg lg:text-lg font-bold text-blue-500 uppercase mb-3 hover:underline break-words leading-tight line-clamp-2">
             {headline}
           </h2>
         </a>
-        <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed flex-1 overflow-hidden">
-          <div className="h-full overflow-hidden" style={{
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical'
-          }}>
+        <div className="text-gray-700 text-xs sm:text-sm lg:text-sm leading-relaxed flex-1">
+          <div className="line-clamp-4">
             {parse(description)}
           </div>
         </div>

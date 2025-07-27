@@ -72,12 +72,26 @@ export default function BreadcrumbNav({
 
   // Helper function to format labels
   const formatLabel = (part: string, index: number) => {
-    const isAfterNews =
-      breadcrumbParts.includes("news") &&
-      index > breadcrumbParts.indexOf("news");
-    return isAfterNews
-      ? "Article"
-      : part.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    const newsIndex = breadcrumbParts.indexOf("news");
+    const isAfterNews = breadcrumbParts.includes("news") && index > newsIndex;
+    
+    if (isAfterNews) {
+      // For news URLs: /news/category-slug/article-slug/
+      // - First part after news (index = newsIndex + 1) is category → show category name
+      // - Second part after news (index = newsIndex + 2) is article → show "Article"
+      const positionAfterNews = index - newsIndex;
+      
+      if (positionAfterNews === 1) {
+        // This is the category slug, show formatted category name
+        return part.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+      } else if (positionAfterNews === 2) {
+        // This is the article slug, show "Article"
+        return "Article";
+      }
+    }
+    
+    // Default formatting for other parts
+    return part.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
   }; // If we don't need to collapse, show all (desktop only with few items)
   if (!shouldCollapse && breadcrumbParts.length <= 3 && !isMobile) {
     return (

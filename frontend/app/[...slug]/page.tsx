@@ -2,6 +2,7 @@
 import { notFound } from "next/navigation";
 import GenericPageTemplate from "@/components/templates/generic/GenericPageTemplate";
 import NewsIndexTemplate from "@/components/templates/news/NewsIndexTemplate";
+import NewsCategoryTemplate from "@/components/templates/news/NewsCategoryTemplate";
 import NewsArticleTemplate from "@/components/templates/news/NewsArticleTemplate";
 import ExperienceIndexTemplate from "@/components/templates/experience/ExperienceIndexTemplate";
 import ExploreIndexTemplate from "@/components/templates/explore/ExploreIndexTemplate";
@@ -20,7 +21,10 @@ import TravelAlertsPageTemplate from "@/components/templates/travel-alerts/Trave
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
 import { fetchGenericPage } from "@/graphql/genericPageQuery";
-import { fetchNewsIndexPage } from "@/graphql/NewsPageQuery";
+import {
+  fetchNewsIndexPage,
+  fetchNewsCategoryPage,
+} from "@/graphql/NewsPageQuery";
 import { fetchNewsArticlePage } from "@/graphql/NewsPageQuery";
 import { fetchExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
 import { fetchExploreIndexPage } from "@/graphql/ExplorePageQuery";
@@ -38,8 +42,48 @@ import {
 } from "@/graphql/BelamaPageQuery";
 import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
 
+// Helper function to detect if this is a news category page URL
+function isNewsCategoryUrl(fullPath: string): boolean {
+  // Pattern: news/category-slug/ (but not news/category-slug/article-slug/)
+  const newsPattern = /^news\/[^\/]+\/?$/;
+  return newsPattern.test(fullPath);
+}
+
+// Helper function to detect if this is a news article under category URL
+function isNewsArticleUnderCategoryUrl(fullPath: string): boolean {
+  // Pattern: news/category-slug/article-slug/
+  const newsArticlePattern = /^news\/[^\/]+\/[^\/]+\/?$/;
+  return newsArticlePattern.test(fullPath);
+}
+
 // Fetch page data based on __typename
 async function fetchPageData(slug: string, fullPath: string) {
+  // Check for new category page structure first
+  if (isNewsCategoryUrl(fullPath)) {
+    try {
+      const categoryData = await fetchNewsCategoryPage(slug);
+      if (categoryData && categoryData.id) {
+        return { ...categoryData, __typename: "NewsCategoryPage" };
+      }
+    } catch (error) {
+      console.log(`⚠️ Category page not found, falling back to legacy routing`);
+    }
+  }
+
+  // Check for article under category structure
+  if (isNewsArticleUnderCategoryUrl(fullPath)) {
+    // Try to fetch as article first, the backend will handle URL resolution
+    try {
+      const articleData = await fetchNewsArticlePage(slug);
+      if (articleData && articleData.id) {
+        return articleData;
+      }
+    } catch (error) {
+      console.log(`⚠️ Article under category not found, trying legacy routing`);
+    }
+  }
+
+  // Legacy system: Use page type detection
   const pageType = await fetchPageType(slug);
 
   if (!pageType) {
@@ -156,6 +200,8 @@ export default async function Page({
         return <GenericPageTemplate initialPage={page} />;
       case "NewsIndexPage":
         return <NewsIndexTemplate initialPage={page} />;
+      case "NewsCategoryPage":
+        return <NewsCategoryTemplate initialPage={page} />;
       case "NewsArticle":
         return <NewsArticleTemplate data={page} />;
       case "ExperienceIndexPage":
@@ -193,7 +239,7 @@ export default async function Page({
     // If we're dealing with a news article, we can show a loading state
     // We need to check the URL pattern or structure to determine page type
     if (fullPath.startsWith("news/") && fullPath !== "news/") {
-      return <NewsArticleTemplate loading={true} />;
+      return <NewsArticleTemplate />;
     }
 
     // For other page types, we'll trigger a 404

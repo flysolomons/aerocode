@@ -79,7 +79,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
     ? articles.filter((article) => article.category?.slug === selectedCategory)
     : articles;
 
-  const categories = categoriesData?.newsCategories || [];
+  const categories = categoriesData?.pages || [];
 
   const handleCategoryFilter = (categorySlug: string | null) => {
     setSelectedCategory(categorySlug);
@@ -150,7 +150,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
                   }`}
                 >
                   <div className="text-xs sm:text-sm font-medium">
-                    {category.name}
+                    {category.categoryName || category.title}
                   </div>
                   {selectedCategory === category.slug && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
@@ -185,7 +185,7 @@ export default function NewsIndexTemplate({ initialPage }: NewsProps) {
               />
             ))}
           </div>
-          {hasMore && (
+          {!articlesLoading && hasMore && filteredArticles.length > 0 && (
             <div className="flex justify-center pt-4 sm:pt-6">
               <PrimaryButton
                 text="View More Articles"

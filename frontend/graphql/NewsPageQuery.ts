@@ -34,6 +34,7 @@ export interface Article {
   body: string;
   firstPublishedAt: string;
   slug: string;
+  url: string;
   heroImage: {
     url: string;
   };
@@ -65,15 +66,85 @@ export const GET_NEWS_ARTICLES = gql`
 `;
 
 export interface NewsCategory {
-  name: string;
+  id: string;
+  title: string;
   slug: string;
+  categoryName: string;
 }
 
 export const GET_NEWS_CATEGORIES = gql`
   query GetNewsCategories {
-    newsCategories {
-      name
+    pages(contentType: "news.NewsCategoryPage") {
+      ... on NewsCategoryPage {
+        id
+        title
+        slug
+        categoryName
+      }
+    }
+  }
+`;
+
+// New interface for category pages
+export interface NewsCategoryPage {
+  id: string;
+  title: string;
+  slug: string;
+  url: string;
+  heroTitle: string;
+  heroImage: {
+    url: string;
+  };
+  categoryName: string;
+  categoryDescription: string;
+  subTitle: string;
+  description: string;
+}
+
+// Query for fetching a specific category page
+export const GET_CATEGORY_PAGE = gql`
+  query GetCategoryPage($slug: String!) {
+    newsCategoryPage(slug: $slug) {
+      id
+      title
       slug
+      url
+      heroTitle
+      heroImage {
+        url
+      }
+      categoryName
+      categoryDescription
+      subTitle
+      description
+    }
+  }
+`;
+
+// Query for fetching articles within a category page
+export const GET_CATEGORY_ARTICLES = gql`
+  query GetCategoryArticles($categorySlug: String!) {
+    newsCategoryPage(slug: $categorySlug) {
+      id
+      slug
+      title
+      children {
+        ... on NewsArticle {
+          id
+          articleTitle
+          body
+          firstPublishedAt
+          slug
+          url
+          heroImage {
+            url
+          }
+          category {
+            name
+            slug
+          }
+        }
+      }
     }
   }
 `;
@@ -201,5 +272,67 @@ export async function fetchNewsArticlePage(
       },
       category: null,
     };
+  }
+}
+
+// Fetch function for category pages
+export async function fetchNewsCategoryPage(slug: string): Promise<NewsCategoryPage | null> {
+  try {
+    const { data } = await client.query<{ newsCategoryPage: NewsCategoryPage | null }>({
+      query: GET_CATEGORY_PAGE,
+      variables: { slug },
+    });
+    
+    return data.newsCategoryPage || {
+      id: "",
+      title: "",
+      slug: "",
+      url: "",
+      heroTitle: "Category Not Found",
+      heroImage: {
+        url: "/default-hero.jpg",
+      },
+      categoryName: "",
+      categoryDescription: "",
+      subTitle: "",
+      description: "",
+    };
+  } catch (error) {
+    console.error("Error fetching NewsCategoryPage data:", error);
+    return {
+      id: "",
+      title: "",
+      slug: "",
+      url: "",
+      heroTitle: "Category Not Found",
+      heroImage: {
+        url: "/default-hero.jpg",
+      },
+      categoryName: "",
+      categoryDescription: "",
+      subTitle: "",
+      description: "",
+    };
+  }
+}
+
+// Fetch function for articles within a category
+export async function fetchCategoryArticles(
+  categorySlug: string,
+  limit: number = 6,
+  offset: number = 0
+): Promise<Article[]> {
+  try {
+    const { data } = await client.query<{ newsCategoryPage: { children: Article[] } }>({
+      query: GET_CATEGORY_ARTICLES,
+      variables: { categorySlug },
+    });
+    
+    // Apply pagination manually since GraphQL children field doesn't support limit/offset
+    const allChildren = data.newsCategoryPage?.children || [];
+    return allChildren.slice(offset, offset + limit);
+  } catch (error) {
+    console.error("Error fetching category articles:", error);
+    return [];
   }
 }
