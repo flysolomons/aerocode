@@ -1,7 +1,7 @@
 "use client";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
-import OtherNewsSection from "@/components/layout/sections/OtherNewsSection";
+import RelatedNewsSection from "@/components/layout/sections/RelatedNewsSection";
 import { NewsArticle } from "@/graphql/NewsPageQuery";
 import parse, { HTMLReactParserOptions, Element } from "html-react-parser";
 
@@ -12,7 +12,51 @@ interface NewsArticleProps {
 export default function NewsArticleTemplate({ data }: NewsArticleProps) {
   // Make sure data is available
   if (!data) {
-    return <div>Article not found</div>;
+    return (
+      <Container>
+        <div className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
+          <div className="text-center max-w-md mx-auto">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-blue-500 mb-4">
+              Article Not Found
+            </h1>
+            <p className="text-gray-600 mb-8 leading-relaxed">
+              We're sorry, but the article you're looking for doesn't exist or
+              may have been moved. Please check the URL or browse our latest
+              news articles.
+            </p>
+            <div className="space-y-3 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+              <a
+                href="/news"
+                className="inline-block w-full sm:w-auto px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200"
+              >
+                Browse All News
+              </a>
+              <a
+                href="/"
+                className="inline-block w-full sm:w-auto px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              >
+                Go to Homepage
+              </a>
+            </div>
+          </div>
+        </div>
+      </Container>
+    );
   }
 
   // Parser options to handle image URLs
@@ -23,15 +67,17 @@ export default function NewsArticleTemplate({ data }: NewsArticleProps) {
         if (src && src.startsWith("/media/")) {
           // Convert relative media URLs to absolute URLs
           const absoluteSrc = `${process.env.NEXT_PUBLIC_STORAGE_URL}${src}`;
-          
+
           // Extract attributes and convert class to className
           const { class: classAttr, ...otherAttribs } = domNode.attribs;
-          
+
           return (
             <img
               {...otherAttribs}
               src={absoluteSrc}
-              className={`${classAttr || ""} rounded-lg shadow-md w-full h-auto max-w-full mx-auto my-6`}
+              className={`${
+                classAttr || ""
+              } rounded-lg shadow-md w-full h-auto max-w-full mx-auto my-6`}
               loading="lazy"
               suppressHydrationWarning={true}
             />
@@ -107,6 +153,15 @@ export default function NewsArticleTemplate({ data }: NewsArticleProps) {
           </article>
         </div>
       </Container>
+      
+      {/* Related News Section */}
+      {data.category && (
+        <RelatedNewsSection
+          categorySlug={data.category.slug}
+          currentArticleSlug={data.slug}
+          categoryName={data.category.name}
+        />
+      )}
     </>
   );
 }

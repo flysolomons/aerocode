@@ -179,6 +179,7 @@ export async function fetchNewsIndexPage() {
 export interface NewsArticle {
   id: string;
   url: string;
+  slug: string;
   firstPublishedAt: string;
   articleTitle: string;
   body: string;
@@ -203,6 +204,7 @@ export const GET_ARTICLE = gql`
     newsArticle(slug: $slug) {
       id
       url
+      slug
       firstPublishedAt
       articleTitle
       body
@@ -236,6 +238,7 @@ export async function fetchNewsArticlePage(
       data.newsArticle || {
         id: "",
         url: "",
+        slug: "",
         firstPublishedAt: "",
         articleTitle: "",
         body: "",
@@ -257,6 +260,7 @@ export async function fetchNewsArticlePage(
     return {
       id: "",
       url: "",
+      slug: "",
       firstPublishedAt: "",
       articleTitle: "",
       body: "",
@@ -333,6 +337,58 @@ export async function fetchCategoryArticles(
     return allChildren.slice(offset, offset + limit);
   } catch (error) {
     console.error("Error fetching category articles:", error);
+    return [];
+  }
+}
+
+// Query for fetching related articles (same category, excluding current article)
+export const GET_RELATED_ARTICLES = gql`
+  query GetRelatedArticles($categorySlug: String!) {
+    newsCategoryPage(slug: $categorySlug) {
+      id
+      slug
+      title
+      children {
+        ... on NewsArticle {
+          id
+          articleTitle
+          slug
+          url
+          firstPublishedAt
+          heroImage {
+            url
+          }
+          category {
+            name
+            slug
+          }
+        }
+      }
+    }
+  }
+`;
+
+// Fetch function for related articles
+export async function fetchRelatedArticles(
+  categorySlug: string,
+  currentArticleSlug: string,
+  limit: number = 3
+): Promise<Article[]> {
+  try {
+    const { data } = await client.query<{ newsCategoryPage: { children: Article[] } }>({
+      query: GET_RELATED_ARTICLES,
+      variables: { categorySlug },
+    });
+    
+    // Filter out current article and limit results
+    const allChildren = data.newsCategoryPage?.children || [];
+    const relatedArticles = allChildren
+      .filter(article => article.slug !== currentArticleSlug)
+      .slice(0, limit);
+    
+    return relatedArticles;
+  } catch (error) {
+    console.error("Error fetching related articles:", error);
     return [];
   }
 }
