@@ -167,7 +167,7 @@ export default function ContactPageTemplate({
                                     )
                                 )
                                 .map((method, methodIndex) => (
-                                  <p key={methodIndex} className="text-sm mb-4">
+                                  <p key={methodIndex} className="text-sm">
                                     {getContactIcon(method.methodType)}
                                     {method.contactValue}
                                   </p>
