@@ -349,6 +349,7 @@ class ContactMethodBlock(StructBlock):
             ("email", "Email"),
             ("fax", "Fax"),
             ("address", "Physical Address"),
+            ("website", "Website URL"),
             ("hours", "Opening Hours"),
             ("closing", "Closing Times"),
             ("note", "Additional Note"),

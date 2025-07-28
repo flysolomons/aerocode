@@ -79,6 +79,24 @@ export default function ContactPageTemplate({
             <path d="M248,208H232V96a8,8,0,0,0,0-16H184V48a8,8,0,0,0,0-16H40a8,8,0,0,0,0-16V208H24a8,8,0,0,0,0,16H248a8,8,0,0,0,0-16Z"></path>
           </svg>
         );
+      case "website":
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline-block mr-2"
+            width="20"
+            height="20"
+            fill="none"
+            stroke={iconColor}
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            viewBox="0 0 24 24"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        );
       default:
         return null;
     }
@@ -169,7 +187,18 @@ export default function ContactPageTemplate({
                                 .map((method, methodIndex) => (
                                   <p key={methodIndex} className="text-sm">
                                     {getContactIcon(method.methodType)}
-                                    {method.contactValue}
+                                    {method.methodType === "website" ? (
+                                      <a 
+                                        href={method.contactValue.startsWith('http') ? method.contactValue : `https://${method.contactValue}`}
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 hover:text-blue-800 underline"
+                                      >
+                                        {method.contactValue}
+                                      </a>
+                                    ) : (
+                                      method.contactValue
+                                    )}
                                   </p>
                                 ))}
 
@@ -250,7 +279,18 @@ export default function ContactPageTemplate({
                               .map((method, methodIndex) => (
                                 <p key={methodIndex} className="text-sm">
                                   {getContactIcon(method.methodType)}
-                                  {method.contactValue}
+                                  {method.methodType === "website" ? (
+                                    <a 
+                                      href={method.contactValue.startsWith('http') ? method.contactValue : `https://${method.contactValue}`}
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 underline"
+                                    >
+                                      {method.contactValue}
+                                    </a>
+                                  ) : (
+                                    method.contactValue
+                                  )}
                                 </p>
                               ))
                           )}
