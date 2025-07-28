@@ -17,6 +17,7 @@ import AboutPageTemplate from "@/components/templates/about/AboutPageTemplate";
 import BelamaIndexPageTemplate from "@/components/templates/belama/BelamaIndexPageTemplate";
 import BelamaSignUpPageTemplate from "@/components/templates/belama/BelamaSignUpPageTemplate";
 import TravelAlertsPageTemplate from "@/components/templates/travel-alerts/TravelAlertsPageTemplate";
+import ContactPageTemplate from "@/components/templates/contact/ContactPageTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -41,6 +42,7 @@ import {
   fetchBelamaSignUpPage,
 } from "@/graphql/BelamaPageQuery";
 import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
+import { fetchContactPage } from "@/graphql/ContactPageQuery";
 
 // Helper function to detect if this is a news category page URL
 function isNewsCategoryUrl(fullPath: string): boolean {
@@ -128,6 +130,8 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchBelamaSignUpPage();
     case "TravelAlertPage":
       return fetchTravelAlertPage();
+    case "ContactPage":
+      return fetchContactPage();
     default:
       return null;
   }
@@ -230,6 +234,8 @@ export default async function Page({
         return <BelamaSignUpPageTemplate initialPage={page} />;
       case "TravelAlertPage":
         return <TravelAlertsPageTemplate initialPage={page} />;
+      case "ContactPage":
+        return <ContactPageTemplate initialPage={page} />;
       default:
         notFound();
     }

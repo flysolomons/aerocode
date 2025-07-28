@@ -175,7 +175,9 @@ class MegaMenuItemBlock(StructBlock):
 @register_streamfield_block
 class MegaMenuColumnBlock(StructBlock):
     column_title = CharBlock(required=True, max_length=100, help_text="Column title")
-    items = ListBlock(MegaMenuItemBlock(), max_num=6, help_text="Maximum 6 items per column")
+    items = ListBlock(
+        MegaMenuItemBlock(), max_num=6, help_text="Maximum 6 items per column"
+    )
 
     # can add an image here
 
@@ -335,3 +337,83 @@ class SimpleDropdownBlock(StructBlock):
     class Meta:
         graphql_type = "SimpleDropdownBlock"
         label = "Simple Dropdown"
+
+
+@register_streamfield_block
+class ContactMethodBlock(StructBlock):
+    """A single contact method block."""
+
+    method_type = ChoiceBlock(
+        choices=[
+            ("phone", "Phone"),
+            ("email", "Email"),
+            ("fax", "Fax"),
+            ("address", "Physical Address"),
+            ("hours", "Opening Hours"),
+            ("closing", "Closing Times"),
+            ("note", "Additional Note"),
+        ],
+        required=True,
+        help_text="Type of contact method",
+    )
+    contact_value = CharBlock(
+        required=True, help_text="Contact details (phone number, email, address, etc.)"
+    )
+
+    graphql_fields = [
+        GraphQLString("method_type", name="methodType"),
+        GraphQLString("contact_value", name="value"),
+    ]
+
+    class Meta:
+        graphql_type = "ContactMethodBlock"
+        icon = "phone"
+
+
+@register_streamfield_block
+class ContactSubcategoryBlock(StructBlock):
+    """A contact subcategory with multiple contact methods."""
+
+    subcategory_name = CharBlock(
+        required=True, max_length=100, help_text="Subcategory name"
+    )
+    contact_methods = ListBlock(
+        ContactMethodBlock(), help_text="Contact methods for this subcategory"
+    )
+
+    graphql_fields = [
+        GraphQLString("subcategory_name", name="name"),
+    ]
+
+    class Meta:
+        graphql_type = "ContactSubcategoryBlock"
+        icon = "folder-open-inverse"
+
+
+@register_streamfield_block
+class ContactCategoryBlock(StructBlock):
+    """A complete contact category block."""
+
+    category_name = CharBlock(
+        required=True,
+        max_length=100,
+        help_text="Category name",
+    )
+    category_description = CharBlock(
+        required=False, help_text="Brief description of this contact category"
+    )
+
+    # Subcategories with their contact methods
+    subcategories = ListBlock(
+        ContactSubcategoryBlock(),
+        help_text="Subcategories with their own contact methods",
+    )
+
+    graphql_fields = [
+        GraphQLString("category_name", name="name"),
+        GraphQLString("category_description", name="description"),
+    ]
+
+    class Meta:
+        graphql_type = "ContactCategoryBlock"
+        icon = "group"

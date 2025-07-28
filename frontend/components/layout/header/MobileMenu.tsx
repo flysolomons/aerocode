@@ -277,9 +277,11 @@ const MobileMenu = React.memo(
                           </span>
                         </button>
                         {/* Contact */}
-                        <button
+                        <Link
+                          href="/contact-us"
                           className="flex flex-row items-center justify-start px-0 bg-transparent border-none focus:outline-none"
                           aria-label="Contact"
+                          onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <span className="py-3 rounded-full text-gray-600 transition-colors">
                             <svg
@@ -297,10 +299,10 @@ const MobileMenu = React.memo(
                               />
                             </svg>
                           </span>
-                          <span className="ml-3 text-base font-medium text-gray-700">
+                          <span className="ml-3 text-base font-medium font-sans text-gray-700">
                             Contact Us
                           </span>
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </>

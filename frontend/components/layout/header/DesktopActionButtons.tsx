@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Currency } from "@/graphql/HeaderQuery";
 import GeneralDropdown from "./GeneralDropdown";
@@ -52,41 +53,43 @@ const DesktopActionButtons = React.memo(
           megaMenuActive={isMegaMenuOpen}
           currencies={currencies}
         />
-        <motion.button
-          className="h-8 px-4 rounded-full text-sm font-medium transition-all duration-200 ease-out"
-          initial={{
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            color: "#ffffff",
-            borderColor: "rgba(255, 255, 255, 0.2)",
-          }}
-          animate={{
-            backgroundColor:
-              isHovered || isMegaMenuOpen
-                ? "#212061"
-                : "rgba(255, 255, 255, 0.1)",
-            color: isHovered || isMegaMenuOpen ? "#ffffff" : "#ffffff",
-            borderColor:
-              isHovered || isMegaMenuOpen
-                ? "#212061"
-                : "rgba(255, 255, 255, 0.2)",
-          }}
-          whileHover={{
-            backgroundColor:
-              isHovered || isMegaMenuOpen
-                ? "#1A1A4F"
-                : "rgba(255, 255, 255, 0.2)",
-          }}
-          transition={{
-            duration: 0.25,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-          style={{
-            border: "2px solid",
-          }}
-          aria-label="Contact"
-        >
-          Contact
-        </motion.button>
+        <Link href="/contact-us">
+          <motion.button
+            className="h-8 px-4 rounded-full text-sm font-medium transition-all duration-200 ease-out"
+            initial={{
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              color: "#ffffff",
+              borderColor: "rgba(255, 255, 255, 0.2)",
+            }}
+            animate={{
+              backgroundColor:
+                isHovered || isMegaMenuOpen
+                  ? "#212061"
+                  : "rgba(255, 255, 255, 0.1)",
+              color: isHovered || isMegaMenuOpen ? "#ffffff" : "#ffffff",
+              borderColor:
+                isHovered || isMegaMenuOpen
+                  ? "#212061"
+                  : "rgba(255, 255, 255, 0.2)",
+            }}
+            whileHover={{
+              backgroundColor:
+                isHovered || isMegaMenuOpen
+                  ? "#1A1A4F"
+                  : "rgba(255, 255, 255, 0.2)",
+            }}
+            transition={{
+              duration: 0.25,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+            style={{
+              border: "2px solid",
+            }}
+            aria-label="Contact"
+          >
+            Contact
+          </motion.button>
+        </Link>
       </div>
     );
   }

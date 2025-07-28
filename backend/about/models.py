@@ -4,7 +4,11 @@ from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
 from grapple.models import GraphQLString, GraphQLStreamfield, GraphQLImage
 from wagtail.fields import StreamField
-from core.blocks import ValueCardBlock, JourneyItemBlock, StatBlock
+from core.blocks import (
+    ValueCardBlock,
+    JourneyItemBlock,
+    StatBlock,
+)
 
 
 class AboutIndexPage(BasePage):
