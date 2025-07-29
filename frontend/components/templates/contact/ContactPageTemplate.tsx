@@ -168,7 +168,7 @@ export default function ContactPageTemplate({
                             className={
                               hasMultipleContactMethods
                                 ? "text-xl text-blue-500 font-semibold" // Full heading for multiple contact methods
-                                : "font-bold text-blue-500" // Simple heading for single contact method
+                                : "text-lg text-blue-500 font-semibold" // Simple heading for single contact method
                             }
                           >
                             {subcategory.name}
