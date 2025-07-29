@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AboutIndexPage } from "@/graphql/AboutPageQuery";
 import parse from "html-react-parser";
+import GenericCardFull from "@/components/ui/cards/GenericCardVariants/GenericCardFull";
 
 interface AboutPageTemplateProps {
   initialPage: AboutIndexPage;
@@ -42,16 +43,26 @@ export default function AboutPageTemplate({
             <h2 className="font-semibold text-3xl text-center text-gray-700">
               60+ Years of Innovation and Excellence in Global Aviation
             </h2>
-            <div className="text-gray-800 text-center">
+            <div className="text-gray-800 text-center py-4">
               {parse(initialPage.description) ||
                 "Founded in 1962, Solomon Airlines has consistently contributed to the global aviation landscape. With 28 routes covering 6 countries, we have demonstrated resilience and innovation in a dynamic industry. Our fleet, comprising 6 modern aircraft, is equipped to meet evolving passenger expectations. Our team of dedicated professionals, currently numbering 250 strong, forms the backbone of our operational excellence."}
+            </div>
+            {/* Strategic Plan */}
+            <div className="border-t-2 border-gray-200 py-4 justify-items-center space-y-4">
+              <h2 className="text-lg font-bold text-gray-700">Strategic Plan 2024-2028</h2>
+              <p>On 19 January 2024, we released details our new four-year Strategic Plan setting a clear path for the National Carrier based on seven strategic goals.</p>
+              <div className="bg-blue-100 w-[200px] p-3 rounded-md text-white hover:bg-blue-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#fafafa" className="inline" viewBox="0 0 256 256"><path d="M224,152a8,8,0,0,1-8,8H192v16h16a8,8,0,0,1,0,16H192v16a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8h32A8,8,0,0,1,224,152ZM92,172a28,28,0,0,1-28,28H56v8a8,8,0,0,1-16,0V152a8,8,0,0,1,8-8H64A28,28,0,0,1,92,172Zm-16,0a12,12,0,0,0-12-12H56v24h8A12,12,0,0,0,76,172Zm88,8a36,36,0,0,1-36,36H112a8,8,0,0,1-8-8V152a8,8,0,0,1,8-8h16A36,36,0,0,1,164,180Zm-16,0a20,20,0,0,0-20-20h-8v40h8A20,20,0,0,0,148,180ZM40,112V40A16,16,0,0,1,56,24h96a8,8,0,0,1,5.66,2.34l56,56A8,8,0,0,1,216,88v24a8,8,0,0,1-16,0V96H152a8,8,0,0,1-8-8V40H56v72a8,8,0,0,1-16,0ZM160,80h28.69L160,51.31Z"></path></svg>
+                <span className="font-semibold px-1">Strategic Plan</span>
+                
+              </div>
             </div>
           </div>
         </Container>
       </div>
 
       {/* Mission & Vision Section */}
-      <div className="bg-blue-900">
+      <div className="bg-blue-700">
         <Container>
           <div
             id="missionSection"
@@ -116,17 +127,18 @@ export default function AboutPageTemplate({
       {/* End of Mission & Vision Section */}
 
       {/* Values Section */}
-      <div className="bg-white mt-12 mb-12">
+      <div className=" py-12 bg-white">
         <Container>
           <div className="text-center mb-12 space-y-3">
-            <h3 className="text-3xl lg:text-4xl font-bold mb-4">
+            <h3 className="text-3xl lg:text-4xl font-bold mb-4 text-blue-500">
               What We Value
             </h3>
-            <p className="text-lg sm:text-xl lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              The core principles that guide our commitment to excellence.
+            <p className="text-lg sm:text-xl lg:text-xl text-blue-500 max-w-2xl mx-auto leading-relaxed">
+            Our guiding stars that illuminate our path towards excellence. They shape every decision, inspire every
+            action, and define the essence of Solomon Airlines.
             </p>
           </div>
-
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-8">
             {initialPage.values && initialPage.values.length > 0 ? (
               initialPage.values.map((value, index) => (
@@ -144,10 +156,10 @@ export default function AboutPageTemplate({
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
-                    <h4 className="text-2xl md:text-xl lg:text-2xl font-bold mb-2 text-center">
+                    <h4 className="text-2xl md:text-xl lg:text-2xl font-bold mb-2 text-center text-blue-500">
                       {value.title}
                     </h4>
-                    <div className="text-gray-600 text-center text-sm sm:text-base lg:text-base leading-relaxed">
+                    <div className="text-blue-500 text-center text-sm sm:text-base lg:text-base leading-relaxed">
                       {parse(value.description)}
                     </div>
                   </div>
@@ -156,8 +168,9 @@ export default function AboutPageTemplate({
             ) : (
               // Fallback values if none provided
               <>
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                  <div className="h-36 sm:h-44 lg:h-48 bg-blue-500 relative overflow-hidden">
+              
+                <div className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl overflow-hidden">
+                  <div className="h-36 sm:h-44 lg:h-48 bg-gray-50 relative overflow-hidden ">
                     <Image
                       src="/images/safety-icon.jpg"
                       alt="Safety First"
@@ -166,18 +179,18 @@ export default function AboutPageTemplate({
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
-                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2">
+                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2 text-gray-800">
                       Safety First
                     </h4>
-                    <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                    <p className="text-gray-500 text-sm sm:text-base lg:text-base leading-relaxed">
                       The safety of our passengers and crew is our highest
                       priority, without compromise.
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
-                  <div className="h-36 sm:h-44 lg:h-48 bg-green-500 relative overflow-hidden">
+                <div className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl overflow-hidden ">
+                  <div className="h-36 sm:h-44 lg:h-48 bg-gray-50 relative overflow-hidden">
                     <Image
                       src="/images/sustainability-icon.jpg"
                       alt="Environmental Responsibility"
@@ -186,18 +199,18 @@ export default function AboutPageTemplate({
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
-                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2">
+                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2 text-gray-800">
                       Sustainability
                     </h4>
-                    <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                    <p className="text-gray-500 text-sm sm:text-base lg:text-base leading-relaxed">
                       We're committed to reducing our environmental footprint
                       and protecting the beautiful destinations we serve.
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 sm:col-span-2 lg:col-span-1">
-                  <div className="h-36 sm:h-44 lg:h-48 bg-purple-500 relative overflow-hidden">
+                <div className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 sm:col-span-2 lg:col-span-1">
+                  <div className="h-36 sm:h-44 lg:h-48 relative overflow-hidden">
                     <Image
                       src="/images/service-icon.jpg"
                       alt="Exceptional Service"
@@ -206,10 +219,10 @@ export default function AboutPageTemplate({
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
-                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2">
+                    <h4 className="text-xl sm:text-2xl lg:text-2xl font-bold mb-2 text-gray-800">
                       Exceptional Service
                     </h4>
-                    <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                    <p className="text-gray-500 text-sm sm:text-base lg:text-base leading-relaxed">
                       Our unique blend of hospitality reflects the warmth and
                       spirit of the islands we connect.
                     </p>
@@ -280,11 +293,11 @@ export default function AboutPageTemplate({
         </Container>
       </div>
       {/* Timeline - History - SpaceX/Tesla inspired */}
-      <div className="bg-gray-900 text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)]  bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover">
+      <div className="bg-blue-900 text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)]  bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover">
         <Container>
           <div id="timelineSection" className="px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
-              <h2 className="text-blue-100 text-3xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 lg:mb-4">
+              <h2 className="text-white text-3xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 lg:mb-4">
                 Our Journey
               </h2>
               <p className="text-lg sm:text-xl lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
