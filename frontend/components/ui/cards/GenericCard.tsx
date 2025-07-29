@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+// Card Types
+// Base: Basic card
+// Full: Image full cover with text align option 
 interface GenericCardProps {
   title: string;
   image: string;
