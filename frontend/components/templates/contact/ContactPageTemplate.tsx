@@ -93,8 +93,8 @@ export default function ContactPageTemplate({
             strokeLinejoin="round"
             viewBox="0 0 24 24"
           >
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
           </svg>
         );
       default:
@@ -168,7 +168,7 @@ export default function ContactPageTemplate({
                             className={
                               hasMultipleContactMethods
                                 ? "text-xl text-blue-500 font-semibold" // Full heading for multiple contact methods
-                                : "font-bold text-blue-400" // Simple heading for single contact method
+                                : "font-bold text-blue-500" // Simple heading for single contact method
                             }
                           >
                             {subcategory.name}
@@ -188,9 +188,13 @@ export default function ContactPageTemplate({
                                   <p key={methodIndex} className="text-sm">
                                     {getContactIcon(method.methodType)}
                                     {method.methodType === "website" ? (
-                                      <a 
-                                        href={method.contactValue.startsWith('http') ? method.contactValue : `https://${method.contactValue}`}
-                                        target="_blank" 
+                                      <a
+                                        href={
+                                          method.contactValue.startsWith("http")
+                                            ? method.contactValue
+                                            : `https://${method.contactValue}`
+                                        }
+                                        target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-blue-600 hover:text-blue-800 underline"
                                       >
@@ -262,8 +266,20 @@ export default function ContactPageTemplate({
                                   (method) => method.methodType === "note"
                                 )
                                 .map((method, methodIndex) => (
-                                  <p key={methodIndex} className="mt-4 text-xs py-4 text-blue-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#8d8cd9" viewBox="0 0 256 256" className="inline mr-1"><path d="M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z"></path></svg>
+                                  <p
+                                    key={methodIndex}
+                                    className="mt-4 text-xs py-4 text-blue-200"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      fill="#8d8cd9"
+                                      viewBox="0 0 256 256"
+                                      className="inline mr-1"
+                                    >
+                                      <path d="M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z"></path>
+                                    </svg>
                                     {method.contactValue}
                                   </p>
                                 ))}
@@ -281,9 +297,13 @@ export default function ContactPageTemplate({
                                 <p key={methodIndex} className="text-sm">
                                   {getContactIcon(method.methodType)}
                                   {method.methodType === "website" ? (
-                                    <a 
-                                      href={method.contactValue.startsWith('http') ? method.contactValue : `https://${method.contactValue}`}
-                                      target="_blank" 
+                                    <a
+                                      href={
+                                        method.contactValue.startsWith("http")
+                                          ? method.contactValue
+                                          : `https://${method.contactValue}`
+                                      }
+                                      target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-600 hover:text-blue-800 underline"
                                     >
@@ -319,7 +339,8 @@ export default function ContactPageTemplate({
                 Have a Question? We're Here to Help!
               </h2>
               <p className="text-lg sm:text-xl lg:text-2xl max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-8 leading-relaxed">
-                Reach out with your enquiry, and our team will get back to you promptly.
+                Reach out with your enquiry, and our team will get back to you
+                promptly.
               </p>
               <div className="space-x-2 sm:space-x-4 lg:space-x-4">
                 <button
@@ -359,7 +380,10 @@ export default function ContactPageTemplate({
               <h2 className="text-2xl font-bold text-blue-500 mb-4">
                 We'd love to hear from you
               </h2>
-              <p className="font-normal text-gray-500 text-sm mb-6">Please fill out the form below with your details and query, and our team will get back to you as soon as possible.</p>
+              <p className="font-normal text-gray-500 text-sm mb-6">
+                Please fill out the form below with your details and query, and
+                our team will get back to you as soon as possible.
+              </p>
               <ContactForm />
             </div>
           </div>
