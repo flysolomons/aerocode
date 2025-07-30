@@ -1,11 +1,19 @@
 FROM python:3.11-slim
 
+# Build args for Azure Storage
+ARG AEROCODE_TEST_STORAGE_ACCOUNT_NAME
+ARG AEROCODE_TEST_STORAGE_ACCOUNT_KEY
+
 # Set runtime environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
 # Set environment variable
 ENV DJANGO_SETTINGS_MODULE=backend.settings.test
+
+# Set Azure Storage environment variables for collectstatic
+ENV AEROCODE_TEST_STORAGE_ACCOUNT_NAME=$AEROCODE_TEST_STORAGE_ACCOUNT_NAME
+ENV AEROCODE_TEST_STORAGE_ACCOUNT_KEY=$AEROCODE_TEST_STORAGE_ACCOUNT_KEY
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
