@@ -1,8 +1,11 @@
 FROM python:3.11-slim
 
-# Build args for Azure Storage
+# Build args for Azure Storage and Superuser
 ARG AEROCODE_TEST_STORAGE_ACCOUNT_NAME
 ARG AEROCODE_TEST_STORAGE_ACCOUNT_KEY
+ARG AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME
+ARG AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL
+ARG AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD
 
 # Set runtime environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -11,9 +14,12 @@ ENV PYTHONUNBUFFERED=1 \
 # Set environment variable
 ENV DJANGO_SETTINGS_MODULE=backend.settings.test
 
-# Set Azure Storage environment variables for collectstatic
+# Set Azure Storage and Superuser environment variables
 ENV AEROCODE_TEST_STORAGE_ACCOUNT_NAME=$AEROCODE_TEST_STORAGE_ACCOUNT_NAME
 ENV AEROCODE_TEST_STORAGE_ACCOUNT_KEY=$AEROCODE_TEST_STORAGE_ACCOUNT_KEY
+ENV AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME=$AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME
+ENV AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL=$AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL
+ENV AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD=$AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -37,5 +43,5 @@ RUN python manage.py collectstatic --noinput
 # Expose port
 EXPOSE 8000
 
-# Run migrations and start server
-CMD ["sh", "-c", "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 backend.wsgi:application"]
+# Run migrations, create superuser if needed, and start server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py create_superuser_if_none_exists && gunicorn --bind 0.0.0.0:8000 backend.wsgi:application"]
