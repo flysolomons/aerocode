@@ -36,7 +36,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "http",
-        hostname: "20.188.237.9", // replace with your CDN hostname
+        hostname: "20.188.237.9",
+      },
+      {
+        protocol: "https",
+        hostname: "staerocodetest.blob.core.windows.net",
       },
 
       // add CDN here

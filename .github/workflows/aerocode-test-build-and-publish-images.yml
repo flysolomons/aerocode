@@ -26,11 +26,11 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: backend
-          file: backend/Dockerfile
+          file: backend/Dockerfile.test
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/backend:latest
-            ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/test-backend:latest
+            ghcr.io/${{ github.repository }}/test-backend:${{ github.sha }}
 
   build-and-publish-frontend:
     runs-on: ubuntu-latest
@@ -55,8 +55,8 @@ jobs:
           file: frontend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/frontend:latest
-            ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/test-frontend:latest
+            ghcr.io/${{ github.repository }}/test-frontend:${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.NEXT_PUBLIC_GRAPHQL_URL }}
-            GRAPHQL_URL=${{ secrets.GRAPHQL_URL }}
+            GRAPHQL_URL=${{ secrets.TEST_GRAPHQL_URL }}
