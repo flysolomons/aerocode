@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
 # Set environment variable
-ENV DJANGO_SETTINGS_MODULE=backend.settings.dev2
+ENV DJANGO_SETTINGS_MODULE=backend.settings.test
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
