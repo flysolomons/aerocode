@@ -11,6 +11,10 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://backend-aerocode-ause-001.azurewebsites.net",
+]
+
 EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
 
 # Azure Storage configuration for test environment
