@@ -1,34 +1,44 @@
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG") == "True"
+DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-a5_^a2v*j8_&3kqyw9!beypyr85z9*e0$@bn5h3p308mamf95"
+    "SECRET_KEY", "django-insecure-test-key-change-in-production"
 )
 
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
 
-# Local filesystem storage for development
+# Azure Storage configuration for test environment
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_name": os.environ.get("AEROCODE_TEST_STORAGE_ACCOUNT_NAME"),
+            "account_key": os.environ.get("AEROCODE_TEST_STORAGE_ACCOUNT_KEY"),
+            "azure_container": "media",
+        },
     },
     "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_name": os.environ.get("AEROCODE_TEST_STORAGE_ACCOUNT_NAME"),
+            "account_key": os.environ.get("AEROCODE_TEST_STORAGE_ACCOUNT_KEY"),
+            "azure_container": "static",
+        },
     },
 }
 
-# Local development URLs
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Azure Storage URLs for test environment
+STATIC_ROOT = ""
+STATIC_URL = f"https://{os.environ.get('AEROCODE_TEST_STORAGE_ACCOUNT_NAME')}.blob.core.windows.net/static/"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = ""
+MEDIA_URL = f"https://{os.environ.get('AEROCODE_TEST_STORAGE_ACCOUNT_KEY')}.blob.core.windows.net/media/"
 
 try:
     from .local import *
