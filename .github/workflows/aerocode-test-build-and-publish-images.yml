@@ -52,7 +52,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: frontend
-          file: frontend/Dockerfile
+          file: frontend/Dockerfile.test
           push: true
           tags: |
             ghcr.io/${{ github.repository }}/test-frontend:latest
