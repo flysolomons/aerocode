@@ -6,9 +6,9 @@ interface UseTableOfContentsProps {
   scrollOffset?: number;
 }
 
-export function useTableOfContents({ 
-  sections, 
-  scrollOffset = 40 
+export function useTableOfContents({
+  sections,
+  scrollOffset = 40,
 }: UseTableOfContentsProps) {
   const [activeSection, setActiveSection] = useState<string>("");
 
@@ -28,13 +28,13 @@ export function useTableOfContents({
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + scrollOffset;
-      
+
       for (const section of sections) {
         const element = document.getElementById(section.id);
         if (element) {
           const elementTop = element.offsetTop;
           const elementBottom = elementTop + element.offsetHeight;
-          
+
           if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
             setActiveSection(section.id);
             break;

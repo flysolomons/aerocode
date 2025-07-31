@@ -43,24 +43,26 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
  */
 async function getCachedRoutes(): Promise<any[]> {
   const now = Date.now();
-  
+
   // Return cached data if it's still fresh
-  if (routesCache.length > 0 && (now - cacheTimestamp) < CACHE_DURATION) {
+  if (routesCache.length > 0 && now - cacheTimestamp < CACHE_DURATION) {
     return routesCache;
   }
-  
+
+  console.log("Client URL is:", (client.link as any).options?.uri);
+
   // Fetch fresh data
   try {
     const { data } = await client.query({
       query: GET_ALL_ROUTES_QUERY,
-      fetchPolicy: 'cache-first', // Use Apollo cache when possible
+      fetchPolicy: "cache-first", // Use Apollo cache when possible
     });
-    
+
     routesCache = data.routes || [];
     cacheTimestamp = now;
     return routesCache;
   } catch (error) {
-    console.error('Error fetching routes:', error);
+    console.error("Error fetching routes:", error);
     return routesCache; // Return current cache (empty array if no data)
   }
 }
@@ -76,7 +78,7 @@ export async function fetchArrivalDestinationsForOrigin(
 ): Promise<ArrivalAirport[]> {
   try {
     const routes = await getCachedRoutes();
-    
+
     // Use a Map to track unique destination airports by their code
     const uniqueAirportsMap = new Map<string, ArrivalAirport>();
 
@@ -84,7 +86,7 @@ export async function fetchArrivalDestinationsForOrigin(
       // Case 1: Selected airport is departure airport → add arrival airport as destination
       if (
         (route.departureAirport === departureAirport ||
-         route.departureAirportCode === departureAirport) &&
+          route.departureAirportCode === departureAirport) &&
         route.arrivalAirportCode &&
         !uniqueAirportsMap.has(route.arrivalAirportCode)
       ) {
@@ -97,7 +99,7 @@ export async function fetchArrivalDestinationsForOrigin(
       // Case 2: Selected airport is arrival airport → add departure airport as destination (bidirectional)
       if (
         (route.arrivalAirport === departureAirport ||
-         route.arrivalAirportCode === departureAirport) &&
+          route.arrivalAirportCode === departureAirport) &&
         route.departureAirportCode &&
         !uniqueAirportsMap.has(route.departureAirportCode)
       ) {
@@ -117,7 +119,6 @@ export async function fetchArrivalDestinationsForOrigin(
   }
 }
 
-
 /**
  * Optimized function to fetch all airports (uses cached data)
  * @returns Promise with an array of distinct airports
@@ -125,7 +126,7 @@ export async function fetchArrivalDestinationsForOrigin(
 export async function fetchAllAirports(): Promise<Airport[]> {
   try {
     const routes = await getCachedRoutes();
-    
+
     // Use a Map to track unique airports by their code
     const uniqueAirportsMap = new Map<string, Airport>();
 
@@ -162,4 +163,3 @@ export async function fetchAllAirports(): Promise<Airport[]> {
     return [];
   }
 }
-
