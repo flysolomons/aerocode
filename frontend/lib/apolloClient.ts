@@ -13,6 +13,7 @@ const getGraphQLUrl = () => {
     return process.env.NEXT_PUBLIC_GRAPHQL_URL;
   }
   // Server-side: Use GRAPHQL_URL for Node.js requests
+  console.log("using process.env.GRAPHQL_URL: " + process.env.GRAPHQL_URL);
   return process.env.GRAPHQL_URL;
 };
 
