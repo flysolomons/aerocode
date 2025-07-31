@@ -48,7 +48,10 @@ async function getCachedRoutes(): Promise<any[]> {
   if (routesCache.length > 0 && now - cacheTimestamp < CACHE_DURATION) {
     return routesCache;
   }
-
+  console.log(
+    "Running on:",
+    typeof window !== "undefined" ? "CLIENT" : "SERVER"
+  );
   console.log("Client URL is:", (client.link as any).options?.uri);
 
   // Fetch fresh data
