@@ -102,7 +102,7 @@ export default function HomePageHero({
     (index: number) => {
       // Navigate to the selected slide
       onDotButtonClick(index);
-      
+
       if (!emblaApi) return;
 
       // Reset autoplay timer
