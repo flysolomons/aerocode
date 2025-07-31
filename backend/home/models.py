@@ -141,7 +141,7 @@ class HomePageSpecialRoute(models.Model):
         "explore.SpecialRoute",
         on_delete=models.CASCADE,
         related_name="home_page_specials",
-        limit_choices_to={"special__end_date__gte": date.today()},
+        help_text="All specials are listed, but only active specials will be displayed.",
     )
     panels = [
         FieldPanel("special_route"),
