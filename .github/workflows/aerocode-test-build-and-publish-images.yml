@@ -64,5 +64,6 @@ jobs:
             ghcr.io/${{ github.repository }}/test-frontend:latest
             ghcr.io/${{ github.repository }}/test-frontend:${{ github.sha }}
           build-args: |
-            NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.NEXT_PUBLIC_GRAPHQL_URL }}
-            GRAPHQL_URL=${{ secrets.TEST_GRAPHQL_URL }}
+            AEROCODE_TEST_NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.AEROCODE_TEST_NEXT_PUBLIC_GRAPHQL_URL }}
+            AEROCODE_TEST_GRAPHQL_URL=${{ secrets.AEROCODE_TEST_GRAPHQL_URL }}
+            AEROCODE_TEST_STORAGE_URL=${{ secrets.AEROCODE_TEST_STORAGE_URL }}
