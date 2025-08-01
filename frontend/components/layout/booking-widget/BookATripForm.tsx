@@ -215,10 +215,10 @@ const BookATripForm = memo(function BookATripForm({
       }
     }
   }, [
-    allAirports.length, 
-    arrivalAirports.length, 
-    preselectedDeparture?.departureAirportCode, 
-    preselectedArrival?.arrivalAirportCode
+    allAirports.length,
+    arrivalAirports.length,
+    preselectedDeparture?.departureAirportCode,
+    preselectedArrival?.arrivalAirportCode,
   ]);
 
   // Handle outside clicks for travelers mobile dropdown
@@ -436,9 +436,9 @@ const BookATripForm = memo(function BookATripForm({
       setIsSearching(true);
       setShowValidation(false);
 
-      // Build the GET URL for Amadeus booking engine with correct structure
+      // Submit POST request to Amadeus booking engine
       const baseUrl = "https://uat.digital.airline.amadeus.com/ie/booking";
-      // Build the search object
+
       // Helper to format date in Solomon Islands timezone (UTC+11) as ISO 8601 date string
       function formatSolomonDate(date: Date) {
         // Get UTC midnight for the selected date
@@ -467,6 +467,7 @@ const BookATripForm = memo(function BookATripForm({
           },
         ],
       };
+
       // Add return itinerary if round trip
       if (dateRange.to && !isOneWay) {
         searchObj.itineraries.push({
@@ -476,22 +477,39 @@ const BookATripForm = memo(function BookATripForm({
         });
       }
 
-      // Build portalFacts
+      // Build portalFacts (same format as before)
       const portalFacts = JSON.stringify([
         { key: "OfficeID", value: "HIRIE08AA" },
-        { key: "countryCode", value: selectedCurrency?.countryCode || "AU" }, // Use selected currency's country code
+        { key: "countryCode", value: selectedCurrency?.countryCode || "AU" },
       ]);
 
-      // Build query string
-      const params = new URLSearchParams({
-        lang: "en-GB",
-        search: encodeURIComponent(JSON.stringify(searchObj)),
-        portalFacts,
-        trace: "true",
-      });
+      // Create form and submit as POST request
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `${baseUrl}?lang=en-GB`; // lang as query parameter
+      form.style.display = "none";
 
-      // Redirect immediately
-      window.location.href = `${baseUrl}?${params.toString()}`;
+      // Create hidden inputs with original field names
+      const searchInput = document.createElement("input");
+      searchInput.type = "hidden";
+      searchInput.name = "search";
+      searchInput.value = JSON.stringify(searchObj);
+      form.appendChild(searchInput);
+
+      const portalFactsInput = document.createElement("input");
+      portalFactsInput.type = "hidden";
+      portalFactsInput.name = "portalFacts";
+      portalFactsInput.value = portalFacts;
+      form.appendChild(portalFactsInput);
+
+      const traceInput = document.createElement("input");
+      traceInput.type = "hidden";
+      traceInput.name = "trace";
+      traceInput.value = "true";
+      form.appendChild(traceInput);
+
+      document.body.appendChild(form);
+      form.submit();
     } else {
       setShowValidation(true);
     }
