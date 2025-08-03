@@ -194,7 +194,12 @@ export default function BookingWidget({
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}
                 </button>
-                
+
+                {/* Separator Dot */}
+                <div className="flex items-center px-2">
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                </div>
+
                 {/* Manage Booking */}
                 <button
                   className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
@@ -222,7 +227,12 @@ export default function BookingWidget({
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}
                 </button>
-                
+
+                {/* Separator Dot */}
+                <div className="flex items-center px-2">
+                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                </div>
+
                 {/* Flight Timetable */}
                 <button
                   className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
