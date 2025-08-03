@@ -41,6 +41,12 @@ function redirectToManageBooking(
   portalFactsInput.value = portalFacts;
   form.appendChild(portalFactsInput);
 
+  const traceInput = document.createElement("input");
+  traceInput.type = "hidden";
+  traceInput.name = "trace";
+  traceInput.value = "true";
+  form.appendChild(traceInput);
+
   document.body.appendChild(form);
   form.submit();
 }
