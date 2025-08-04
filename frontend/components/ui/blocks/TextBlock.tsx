@@ -10,9 +10,9 @@ export default function TextBlock({ block }: TextBlockProps) {
   return (
     <>
       {block.blockType === "TextBlock" && (
-        <div className="text-center w-full">
+        <div className="text-left w-full">
           {block.value && (
-            <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed px-4 sm:px-6 lg:px-0 max-w-4xl mx-auto">
+            <div className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed px-4 sm:px-6 lg:px-0 max-w-4xl mx-auto">
               {parse(block.value)}
             </div>
           )}

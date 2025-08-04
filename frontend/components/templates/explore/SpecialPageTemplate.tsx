@@ -15,6 +15,7 @@ import TableOfContents, {
   TOCSection,
 } from "@/components/layout/TableOfContents";
 import { useTableOfContents } from "@/hooks/useTableOfContents";
+import ReadyToFly from "@/components/layout/sections/ReadyToFly";
 
 // Helper function to format dates in a readable format
 function formatDate(dateString: string): string {
@@ -149,7 +150,7 @@ export default function SpecialPageTemplate({
         activeSection={activeSection}
         onSectionClick={scrollToSection}
       />
-
+    <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom">
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           <div className="space-y-8">
@@ -245,7 +246,7 @@ export default function SpecialPageTemplate({
                     </svg>
                   </span>
                 </summary>
-                <div className="prose prose-sm sm:prose lg:prose-lg max-w-none w-full px-6 pb-6 pt-2 text-left">
+                <div className="prose prose-sm sm:prose lg:prose-lg max-w-none w-full px-6 pb-6 pt-2 text-left text-gray-500">
                   <div>{parse(termsAndConditions)}</div>
                 </div>
               </details>
@@ -275,29 +276,17 @@ export default function SpecialPageTemplate({
           )}
 
           {/* Book Now CTA button */}
-          <div className="text-center space-y-6">
-            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
-              Ready to Fly?
-            </h2>
-            <div className="flex justify-center">
-              <PrimaryButton
-                text="Book Now"
-                onClick={() => {
-                  const widget = document.querySelector(
-                    ".stripped-booking-widget"
-                  );
-                  if (widget) {
-                    widget.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    // Fallback to scroll to top where the hero with booking widget is
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-              />
-            </div>
-          </div>
+          <ReadyToFly
+            buttonText="Book Now"
+          />
+
+          
+         
         </div>
       </Container>
+
+    </div>
+      
     </>
   );
 }

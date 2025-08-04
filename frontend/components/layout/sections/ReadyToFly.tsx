@@ -17,7 +17,7 @@ export default function ReadyToFly({
               Ready to Fly?
             </h2>
             {description && (<p className="text-white">{description}</p>)}
-            <div className="flex justify-center">
+            <div className="m-auto w-3/4 lg:flex lg:justify-center">
             
               <PrimaryButton
                 text={buttonText}
