@@ -6,7 +6,9 @@ import RadioButton from "@/components/ui/buttons/RadioButton";
 import Accordion from "@/components/ui/Accordion";
 import Recommendations from "@/components/layout/sections/Recommendations";
 import FlightTimetableWidget from "@/components/layout/booking-widget/FlightTimetableWidget";
-import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents";
+import TableOfContents, {
+  TOCSection,
+} from "@/components/layout/TableOfContents";
 
 import {
   ScheduleWithFlightData,
@@ -330,11 +332,15 @@ export default function FlightScheduleTemplate({
 
   // Table of Contents sections
   const tocSections: TOCSection[] = [
-    { id: "master-schedule", label: "Master Schedule", hasContent: hasSchedules && hasFilteredSchedule },
+    {
+      id: "master-schedule",
+      label: "Master Schedule",
+      hasContent: hasSchedules && hasFilteredSchedule,
+    },
     { id: "flight-timetable", label: "Flight Timetable", hasContent: true },
     { id: "our-destinations", label: "Our Destinations", hasContent: true },
   ];
-  
+
   // console.log(initialPage);
   return (
     <>
@@ -343,123 +349,123 @@ export default function FlightScheduleTemplate({
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
       />
-      
+
       {/* Table of Contents */}
-      <TableOfContents 
+      <TableOfContents
         sections={tocSections}
         activeSection={activeSection}
         onSectionClick={scrollToSection}
       />
-      
-      <Container>
+
       <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom bg-opacity-5">
         <Container>
-        <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
-          {initialPage.description && (
-            <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
-                {parse(initialPage.description)}
-              </div>
-            </div>
-          )}
-          {/* Filters Group: Schedule Cards + Flight Type Toggle */}
-          <div id="master-schedule" className="space-y-4">
-            {/* Schedule Date Filter Cards */}
-            {initialPage.schedules && initialPage.schedules.length > 0 && (
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs sm:text-sm font-medium text-gray-600">
-                    Select Period
-                  </div>
-                  <div className="text-xs text-gray-400 sm:hidden">Swipe →</div>
+          <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
+            {initialPage.description && (
+              <div className="mx-auto w-full">
+                <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
+                  {parse(initialPage.description)}
                 </div>
-                <div
-                  className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1"
-                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                >
-                  {initialPage.schedules.map((schedule) => (
-                    <button
-                      key={schedule.id}
-                      onClick={() => setSelectedScheduleId(schedule.id)}
-                      className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap ${
-                        selectedScheduleId === schedule.id
-                          ? "border-yellow-500 bg-yellow-50 text-yellow-700"
-                          : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400"
-                      }`}
-                    >
-                      <div className="text-xs sm:text-sm font-medium">
-                        {formatDate(schedule.startDate)} -{" "}
-                        {formatDate(schedule.endDate)}
-                      </div>
-                      {selectedScheduleId === schedule.id && (
-                        <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
-                          <svg
-                            className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+              </div>
+            )}
+            {/* Filters Group: Schedule Cards + Flight Type Toggle */}
+            <div id="master-schedule" className="space-y-4">
+              {/* Schedule Date Filter Cards */}
+              {initialPage.schedules && initialPage.schedules.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs sm:text-sm font-medium text-gray-600">
+                      Select Period
+                    </div>
+                    <div className="text-xs text-gray-400 sm:hidden">
+                      Swipe →
+                    </div>
+                  </div>
+                  <div
+                    className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1"
+                    style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                  >
+                    {initialPage.schedules.map((schedule) => (
+                      <button
+                        key={schedule.id}
+                        onClick={() => setSelectedScheduleId(schedule.id)}
+                        className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap ${
+                          selectedScheduleId === schedule.id
+                            ? "border-yellow-500 bg-yellow-50 text-yellow-700"
+                            : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400"
+                        }`}
+                      >
+                        <div className="text-xs sm:text-sm font-medium">
+                          {formatDate(schedule.startDate)} -{" "}
+                          {formatDate(schedule.endDate)}
                         </div>
-                      )}
-                    </button>
-                  ))}
+                        {selectedScheduleId === schedule.id && (
+                          <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Toggle between International and Domestic routes */}
-            <div className="flex justify-center">
-              <RadioButton
-                optionOne="International"
-                optionTwo="Domestic"
-                initialSelected="one"
-                onOptionChange={(option) =>
-                  setShowInternational(option === "one")
-                }
-              />
+              {/* Toggle between International and Domestic routes */}
+              <div className="flex justify-center">
+                <RadioButton
+                  optionOne="International"
+                  optionTwo="Domestic"
+                  initialSelected="one"
+                  onOptionChange={(option) =>
+                    setShowInternational(option === "one")
+                  }
+                />
+              </div>
+            </div>
+            {/* Flight schedule accordion section */}
+            <div>
+              {hasSchedules && hasFilteredSchedule ? (
+                <div>
+                  {scheduleItems.length > 0 ? (
+                    <Accordion items={scheduleItems} defaultOpen={0} />
+                  ) : (
+                    <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
+                      <p className="text-sm sm:text-base text-gray-600">
+                        No flights available for the selected filters.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
+                  <p className="text-sm sm:text-base text-gray-600">
+                    Please select a schedule to view available flights.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Flight Timetable Search Widget */}
+            <div id="flight-timetable">
+              <FlightTimetableWidget />
+            </div>
+
+            {/* Recommendation Section */}
+            <div id="our-destinations">
+              <Recommendations heading="Explore our destinations" />
             </div>
           </div>
-          {/* Flight schedule accordion section */}
-          <div>
-            {hasSchedules && hasFilteredSchedule ? (
-              <div>
-                {scheduleItems.length > 0 ? (
-                  <Accordion items={scheduleItems} defaultOpen={0} />
-                ) : (
-                  <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
-                    <p className="text-sm sm:text-base text-gray-600">
-                      No flights available for the selected filters.
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
-                <p className="text-sm sm:text-base text-gray-600">
-                  Please select a schedule to view available flights.
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Flight Timetable Search Widget */}
-          <div id="flight-timetable">
-            <FlightTimetableWidget />
-          </div>
-
-          {/* Recommendation Section */}
-          <div id="our-destinations">
-            <Recommendations heading="Explore our destinations" />
-          </div>
-        </div>
         </Container>
       </div>
-      
     </>
   );
 }
