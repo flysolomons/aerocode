@@ -49,33 +49,34 @@ export default function FareCard({
 
   return (
     <div
-      className="bg-white rounded-2xl sm:rounded-3xl lg:rounded-3xl p-3 sm:p-4 lg:p-4 shadow-lg w-full h-full"
-      style={{ border: `1px solid ${bgColor}` }}
+      className="bg-white bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-cover rounded-2xl sm:rounded-3xl lg:rounded-3xl p-3 sm:p-4 lg:p-4 shadow-lg w-full h-ful"
+      style={{  }}
     >
-      <div className="flex flex-col items-center gap-1 sm:gap-2 lg:gap-2 w-full">
+      <div className="flex flex-col items-center gap-1 lg:gap-2 w-full space-y-4 ">
         <span
-          className="font-semibold text-lg sm:text-xl lg:text-xl text-center break-words w-full rounded-xl"
+          className="font-semibold text-lg sm:text-xl lg:text-xl text-center break-words w-full"
           style={{
             backgroundColor: bgColor,
             color: "#fff",
             width: "100%",
             display: "block",
-            padding: 0,
+            padding: 6,
             margin: 0,
-            borderRadius: "1rem",
+            borderRadius: "2rem",
           }}
         >
           {family}
         </span>
         <div className="flex items-baseline gap-1">
-          <span className="text-base sm:text-lg lg:text-lg font-semibold">
+          <span className="text-base md:text-lg lg:text-2xl">
             {currency}
           </span>
-          <span className="text-base sm:text-lg lg:text-lg">
+          <span className="text-base md:text-lg lg:text-4xl font-bold" >
             {formatPrice(price)}
           </span>
         </div>
-        <p className="text-xs sm:text-sm lg:text-sm text-center break-words">
+        <p className="text-xs sm:text-sm lg:text-sm text-center break-words  p-2 text-slate-500">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" className="inline mr-2 -mt-2" viewBox="0 0 256 256"><path d="M221.66,181.66l-48,48a8,8,0,0,1-11.32-11.32L196.69,184H72a8,8,0,0,1-8-8V32a8,8,0,0,1,16,0V168H196.69l-34.35-34.34a8,8,0,0,1,11.32-11.32l48,48A8,8,0,0,1,221.66,181.66Z"></path></svg>
           {direction}
         </p>
       </div>
