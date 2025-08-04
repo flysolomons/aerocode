@@ -1,11 +1,21 @@
 "use client";
 import { useState } from "react";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import RadioButton from "@/components/ui/buttons/RadioButton";
 
 export default function FlightTimetableWidget() {
   const [departureLocation, setDepartureLocation] = useState("");
   const [arrivalLocation, setArrivalLocation] = useState("");
   const [travelDate, setTravelDate] = useState("");
+  const [tripType, setTripType] = useState<"one" | "two">("one"); // "one" = Round Trip, "two" = One Way
+  const [returnDate, setReturnDate] = useState("");
+
+  const handleTripTypeChange = (option: "one" | "two") => {
+    setTripType(option);
+    if (option === "two") {
+      setReturnDate(""); // Clear return date when switching to one-way
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,6 +24,8 @@ export default function FlightTimetableWidget() {
       departureLocation,
       arrivalLocation,
       travelDate,
+      tripType: tripType === "one" ? "Round Trip" : "One Way",
+      ...(tripType === "one" && { returnDate }),
     });
   };
 
@@ -29,6 +41,16 @@ export default function FlightTimetableWidget() {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+          {/* Trip Type Selection */}
+          <div className="flex justify-center">
+            <RadioButton
+              optionOne="Round Trip"
+              optionTwo="One Way"
+              initialSelected={tripType}
+              onOptionChange={handleTripTypeChange}
+            />
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label
@@ -65,13 +87,13 @@ export default function FlightTimetableWidget() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className={`grid gap-4 sm:gap-6 ${tripType === "two" ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"}`}>
             <div>
               <label
                 htmlFor="travel-date"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Travel Date
+                {tripType === "two" ? "Travel Date" : "Departure Date"}
               </label>
               <input
                 type="date"
@@ -81,6 +103,24 @@ export default function FlightTimetableWidget() {
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+            
+            {tripType === "one" && (
+              <div>
+                <label
+                  htmlFor="return-date"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Return Date
+                </label>
+                <input
+                  type="date"
+                  id="return-date"
+                  value={returnDate}
+                  onChange={(e) => setReturnDate(e.target.value)}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex justify-center pt-2 sm:pt-4">

@@ -87,21 +87,25 @@ export default function HomePageTemplate({
           <div className="space-y-6 md:space-y-8 md:px-4 w-full max-w-4xl">
             <div className="space-y-2">
               <p className="flex flex-col text-2xl lg:text-3xl text-left text-yellow-50 ">
-                Relax with 
-                <span className="text-yellow-500 font-bold text-5xl md:text-8xl lg:text-8xl ">Belama Membership</span>
+                Relax with
+                <span className="text-yellow-500 font-bold text-5xl md:text-8xl lg:text-8xl ">
+                  Belama Membership
+                </span>
               </p>
-              
-              <p className="text-white font-bold text-2xl md:text-4xl lg:text-4xl">Refresh and Fly in Style</p>
-              <span className="block text-left text-white text-md md:text-base lg:text-lg md:px-0 ">
-                Make every journey unforgettable with the Belama Business Lounge at Honiara International Airport! 
-                Perfect for solo adventurers, families, or groups of 10 or more, our lounge offers free snacks and drinks, 
-                fast Wi-Fi, and cozy seating infused with Solomon Islands charm. Whether you’re a Belama Club member, 
-                a Business Class traveler, or joining us with a day pass, this is your spot to recharge before takeoff.
 
+              <p className="text-white font-bold text-2xl md:text-4xl lg:text-4xl">
+                Refresh and Fly in Style
+              </p>
+              <span className="block text-left text-white text-md md:text-base lg:text-lg md:px-0 ">
+                Make every journey unforgettable with the Belama Business Lounge
+                at Honiara International Airport!
               </span>
             </div>
             <div className="flex justify-start">
-              <SecondaryButton href="/belama" text="Let's start your experience"/>
+              <SecondaryButton
+                href="/belama"
+                text="Let's start your experience"
+              />
             </div>
           </div>
         </div>
