@@ -25,7 +25,7 @@ function redirectToManageBooking(
   // Create hidden inputs with original field names
   const reclocInput = document.createElement("input");
   reclocInput.type = "hidden";
-  reclocInput.name = "recloc";
+  reclocInput.name = "recLoc";
   reclocInput.value = bookingReference;
   form.appendChild(reclocInput);
 
