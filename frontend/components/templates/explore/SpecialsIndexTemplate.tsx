@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import ReadyToFly from "@/components/layout/sections/ReadyToFly";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -52,7 +53,7 @@ export default function SpecialsIndexTemplate({
             <StrippedBookingWidget id="booking-widget" />
             {pageDescription && (
               <div className="mx-auto w-full">
-                <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                <div className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed">
                   {parse(pageDescription)}
                 </div>
               </div>
@@ -89,7 +90,7 @@ export default function SpecialsIndexTemplate({
                 <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-gray-600">
                   No special offers available at this time.
                 </h3>
-                <p className="mt-2 sm:mt-3 text-sm sm:text-base text-gray-500 max-w-md mx-auto">
+                <p className="mt-2 sm:mt-3 text-sm sm:text-base text-gray-600 max-w-md mx-auto">
                   Please check back later for new deals and promotions.
                 </p>
               </div>
@@ -117,29 +118,17 @@ export default function SpecialsIndexTemplate({
             />
           </div>
 
-          <div className="text-center space-y-6">
-            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
-              Ready to Fly?
-            </h2>
-            <div className="flex justify-center">
-              <PrimaryButton
-                text="Book Now"
-                onClick={() => {
-                  const widget = document.querySelector(
-                    ".stripped-booking-widget"
-                  );
-                  if (widget) {
-                    widget.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    // Fallback to scroll to top where the hero with booking widget is
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-              />
-            </div>
-          </div>
+        {/* Ready to fly section */}
+        <ReadyToFly
+          buttonText="Book Now"
+          description="Dont miss out on the specials, fares dropped so much that you pants cannot catch up"
+        />
+
+          
         </div>
       </Container>
+
+      
     </>
   );
 }

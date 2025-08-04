@@ -31,7 +31,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>

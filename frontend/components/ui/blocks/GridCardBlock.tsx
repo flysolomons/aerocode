@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import parse from "html-react-parser";
+import GenericCardFull from "../cards/GenericCardVariants/GenericCardFull";
 
 interface GridCardBlockProps {
   item: {
@@ -30,10 +31,23 @@ export default function GridCardBlock({ item }: GridCardBlockProps) {
   };
 
   const extractedUrl = item.url ? extractUrlFromRichText(item.url) : null;
-
+  const description = item.text ? parse(item.text) : null;
   const cardContent = (
     <>
-      {item.image && (
+
+      {item && (
+   
+        <GenericCardFull
+        title={item.heading || ""} 
+        image={item.image?.url || ""}
+        url={extractedUrl || ""}
+        subTitle={description}
+      />
+      )}
+      
+      {/* {item.image && (
+        
+        
         <div className="relative h-40 sm:h-48 lg:h-56 w-full">
           <Image
             src={item.image.url}
@@ -54,23 +68,23 @@ export default function GridCardBlock({ item }: GridCardBlockProps) {
             {parse(item.text)}
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 
-  const cardClasses =
-    "bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105";
+  // const cardClasses =
+  //   "bg-white rounded-lg sm:rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105";
 
   if (extractedUrl) {
     return (
       <Link
         href={extractedUrl}
-        className={`${cardClasses} block cursor-pointer`}
+        className={` block cursor-pointer`}
       >
         {cardContent}
       </Link>
     );
   }
 
-  return <div className={cardClasses}>{cardContent}</div>;
+  return <div>{cardContent}</div>;
 }

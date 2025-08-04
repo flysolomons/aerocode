@@ -7,7 +7,7 @@ import ReasonToVisitCard from "@/components/layout/sections/ReasonToVisit";
 import InfoCard from "@/components/ui/cards/InfoCard";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import Recommendations from "@/components/layout/sections/Recommendations";
-import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
+import ReadyToFly from "@/components/layout/sections/ReadyToFly";
 import TableOfContents, {
   TOCSection,
 } from "@/components/layout/TableOfContents";
@@ -92,16 +92,19 @@ export default function DestinationTemplate({
         activeSection={activeSection}
         onSectionClick={scrollToSection}
       />
-
+      <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom bg-opacity-5">
       <Container>
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
+          {/* Description section */}
           {initialPage.description && (
             <div id="overview" className="mx-auto w-full scroll-mt-10">
-              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>
           )}
+
+          {/* Route special section */}
           {initialPage.rankedRoutes?.some(
             (rankedRoute) =>
               rankedRoute.route.specialRoutes &&
@@ -123,6 +126,7 @@ export default function DestinationTemplate({
               />
             </div>
           )}
+      
           {/* Reasons to Visit */}
           {initialPage.reasonsToVisit &&
             initialPage.reasonsToVisit.length > 0 && (
@@ -131,7 +135,7 @@ export default function DestinationTemplate({
                   <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
                     Why Visit {initialPage.country}
                   </h2>
-                  <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  <p className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed">
                     Discover what makes {initialPage.country} a must-visit
                     destination.
                   </p>
@@ -149,6 +153,7 @@ export default function DestinationTemplate({
                 </div>
               </div>
             )}
+
           {/* Travel Requirements */}
           {initialPage.travelRequirements &&
             initialPage.travelRequirements.length > 0 && (
@@ -161,7 +166,7 @@ export default function DestinationTemplate({
                     {initialPage.country} Travel Requirements
                   </h2>
 
-                  <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+                  <p className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed">
                     Important information for travelers planning a trip to
                     {initialPage.country}.
                   </p>
@@ -187,7 +192,7 @@ export default function DestinationTemplate({
                 Our {initialPage.country} Routes
               </h2>
 
-              <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed">
                 We offer convenient flights to {initialPage.country} from
                 various locations.
               </p>
@@ -219,30 +224,16 @@ export default function DestinationTemplate({
               heading="Explore More Destinations"
             />
           </div>
-          {/* Ready to Fly Section */}
-          <div className="text-center space-y-6">
-            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
-              Ready to Fly?
-            </h2>
-            <div className="flex justify-center">
-              <PrimaryButton
-                text="Book Now"
-                onClick={() => {
-                  const widget = document.querySelector(
-                    ".stripped-booking-widget"
-                  );
-                  if (widget) {
-                    widget.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    // Fallback to scroll to top where the hero with booking widget is
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-              />
-            </div>
-          </div>
+         
+          {/* Ready to fly section */}
+        <ReadyToFly
+          buttonText="Book Now"
+          description="Dont miss out on the specials, fares dropped so much that you pants cannot catch up"
+        />
         </div>
       </Container>
+      </div>
+      
     </>
   );
 }

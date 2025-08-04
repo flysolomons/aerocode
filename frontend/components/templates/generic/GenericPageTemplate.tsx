@@ -24,7 +24,7 @@ export default function GenericPageTemplate({
   initialPage,
 }: GenericPageTemplateProps) {
   return (
-    <div>
+    <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom">
       {initialPage.heroTitle && initialPage.heroImage && (
         <SecondaryHero
           title={initialPage.heroTitle}

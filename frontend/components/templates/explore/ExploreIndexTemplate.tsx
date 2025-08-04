@@ -22,7 +22,7 @@ export default function ExploreIndexTemplate({ initialPage }: ExploreProps) {
 
           {initialPage.description && (
             <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
                 {parse(initialPage.description)}
               </div>
             </div>

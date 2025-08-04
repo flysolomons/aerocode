@@ -54,7 +54,7 @@ function InfoCard({ title, description, svg, url }: InfoCardProps) {
             {title}
           </h3>
         </div>
-        <div className="text-sm sm:text-base text-gray-700 text-left flex-1 overflow-hidden">
+        <div className="text-sm sm:text-base text-gray-600 text-left flex-1 overflow-hidden">
           {/* Mobile: use line clamping for overflow truncation */}
           <div className="sm:hidden line-clamp-3">
             {parse(description)}
