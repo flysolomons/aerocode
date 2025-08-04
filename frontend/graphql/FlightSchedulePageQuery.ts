@@ -57,14 +57,14 @@ export const GET_FLIGHT_SCHEDULE_PAGE_QUERY = gql`
 `;
 
 export const GET_SCHEDULES_QUERY = gql`
-  query GetSchedules {
+  query GetSchedules($limit: PositiveInt, $offset: PositiveInt) {
     schedules {
       id
       startDate
       endDate
       snippetType
       contentType
-      flights(limit: 1000) {
+      flights(limit: $limit, offset: $offset) {
         id
         day
         aircraft
@@ -81,11 +81,51 @@ export const GET_SCHEDULES_QUERY = gql`
 
 async function fetchAllSchedules() {
   try {
-    const result = await client.query({
-      query: GET_SCHEDULES_QUERY,
-    });
+    const allSchedules: Schedule[] = [];
+    const batchSize = 100;
+    let offset = 0;
+    let hasMoreData = true;
 
-    return result.data.schedules || [];
+    while (hasMoreData) {
+      const result = await client.query({
+        query: GET_SCHEDULES_QUERY,
+        variables: {
+          limit: batchSize,
+          offset: offset,
+        },
+      });
+
+      const schedules = result.data.schedules || [];
+      
+      if (schedules.length === 0) {
+        hasMoreData = false;
+      } else {
+        // Merge flights from this batch into existing schedules or add new schedules
+        for (const schedule of schedules) {
+          const existingScheduleIndex = allSchedules.findIndex(s => s.id === schedule.id);
+          if (existingScheduleIndex >= 0) {
+            // Merge flights into existing schedule by creating a new array
+            allSchedules[existingScheduleIndex] = {
+              ...allSchedules[existingScheduleIndex],
+              flights: [...allSchedules[existingScheduleIndex].flights, ...schedule.flights]
+            };
+          } else {
+            // Add new schedule
+            allSchedules.push({ ...schedule });
+          }
+        }
+        
+        // Check if we got fewer results than requested (indicates end of data)
+        const totalFlightsInBatch = schedules.reduce((sum: number, s: Schedule) => sum + s.flights.length, 0);
+        if (totalFlightsInBatch < batchSize) {
+          hasMoreData = false;
+        } else {
+          offset += batchSize;
+        }
+      }
+    }
+
+    return allSchedules;
   } catch (error) {
     console.error("Error fetching schedules:", error);
     return [];

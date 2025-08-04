@@ -124,6 +124,15 @@ export default function FlightScheduleTemplate({
                     flightsByAircraft[aircraft].push(flight);
                   });
 
+                  // Sort flights within each aircraft group by departure time
+                  Object.keys(flightsByAircraft).forEach(aircraft => {
+                    flightsByAircraft[aircraft].sort((a, b) => {
+                      const timeA = a.departureTime || "00:00";
+                      const timeB = b.departureTime || "00:00";
+                      return timeA.localeCompare(timeB);
+                    });
+                  });
+
                   // Render grouped flights with headers
                   return Object.entries(flightsByAircraft).map(
                     ([aircraft, aircraftFlights], groupIdx) => (
@@ -145,8 +154,8 @@ export default function FlightScheduleTemplate({
                           <tr
                             key={`${aircraft}-${flightIdx}`}
                             className={`transition-colors duration-200 ${
-                              flightIdx % 2 === 0 
-                                ? "bg-white hover:bg-blue-25" 
+                              flightIdx % 2 === 0
+                                ? "bg-white hover:bg-blue-25"
                                 : "bg-gray-25 hover:bg-blue-25"
                             }`}
                           >
@@ -202,7 +211,9 @@ export default function FlightScheduleTemplate({
                       <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                         <span className="text-gray-400 text-lg">✈</span>
                       </div>
-                      <span className="text-sm text-gray-500">No flights scheduled for this day</span>
+                      <span className="text-sm text-gray-500">
+                        No flights scheduled for this day
+                      </span>
                     </div>
                   </div>
                 );
@@ -218,6 +229,15 @@ export default function FlightScheduleTemplate({
                 flightsByAircraft[aircraft].push(flight);
               });
 
+              // Sort flights within each aircraft group by departure time
+              Object.keys(flightsByAircraft).forEach(aircraft => {
+                flightsByAircraft[aircraft].sort((a, b) => {
+                  const timeA = a.departureTime || "00:00";
+                  const timeB = b.departureTime || "00:00";
+                  return timeA.localeCompare(timeB);
+                });
+              });
+
               return Object.entries(flightsByAircraft).map(
                 ([aircraft, aircraftFlights], groupIdx) => (
                   <div key={`${aircraft}-${groupIdx}`} className="space-y-3">
@@ -225,10 +245,12 @@ export default function FlightScheduleTemplate({
                     <div className="bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        <span className="text-sm font-medium text-yellow-800">{aircraft} Flights</span>
+                        <span className="text-sm font-medium text-yellow-800">
+                          {aircraft} Flights
+                        </span>
                       </div>
                     </div>
-                    
+
                     {/* Aircraft flights as cards */}
                     <div className="space-y-2">
                       {aircraftFlights.map((flight, flightIdx) => (
@@ -248,12 +270,20 @@ export default function FlightScheduleTemplate({
                           </div>
                           <div className="grid grid-cols-2 gap-3 text-xs">
                             <div>
-                              <div className="text-gray-500 mb-0.5">Departure</div>
-                              <div className="font-medium text-gray-700">{flight.departureTime}</div>
+                              <div className="text-gray-500 mb-0.5">
+                                Departure
+                              </div>
+                              <div className="font-medium text-gray-700">
+                                {flight.departureTime}
+                              </div>
                             </div>
                             <div>
-                              <div className="text-gray-500 mb-0.5">Arrival</div>
-                              <div className="font-medium text-gray-700">{flight.arrivalTime}</div>
+                              <div className="text-gray-500 mb-0.5">
+                                Arrival
+                              </div>
+                              <div className="font-medium text-gray-700">
+                                {flight.arrivalTime}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -306,13 +336,11 @@ export default function FlightScheduleTemplate({
                   <div className="text-xs sm:text-sm font-medium text-gray-600">
                     Select Period
                   </div>
-                  <div className="text-xs text-gray-400 sm:hidden">
-                    Swipe →
-                  </div>
+                  <div className="text-xs text-gray-400 sm:hidden">Swipe →</div>
                 </div>
-                <div 
-                  className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1" 
-                  style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}
+                <div
+                  className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1"
+                  style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
                   {initialPage.schedules.map((schedule) => (
                     <button
@@ -325,7 +353,8 @@ export default function FlightScheduleTemplate({
                       }`}
                     >
                       <div className="text-xs sm:text-sm font-medium">
-                        {formatDate(schedule.startDate)} - {formatDate(schedule.endDate)}
+                        {formatDate(schedule.startDate)} -{" "}
+                        {formatDate(schedule.endDate)}
                       </div>
                       {selectedScheduleId === schedule.id && (
                         <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
