@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import BookATripForm from "./BookATripForm";
+import SecondaryButton from "@/components/ui/buttons/SecondaryButton";
 
 // Accept id as a prop with type
 interface StrippedBookingWidgetProps {
@@ -136,8 +137,9 @@ export default function StrippedBookingWidget({
       >
         <div className="w-full xl:w-[70.5rem]">
           {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
+          
           <div
-            className="flex px-4 py-3 h-12 w-full rounded-[2rem] bg-white shadow-md border-2 border-blue-500 cursor-pointer xl:hidden my-2"
+            className="flex mt-4 px-4 py-3 h-12 m-auto w-3/4 rounded-[2rem] bg-white shadow-md border-2 border-blue-100 cursor-pointer xl:hidden my-2"
             onClick={handleFormClick}
           >
             <button className="text-sm font-semibold w-full text-center text-blue-500">

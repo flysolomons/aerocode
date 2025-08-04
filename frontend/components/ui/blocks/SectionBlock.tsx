@@ -18,7 +18,7 @@ export default function SectionBlock({ block }: SectionBlockProps) {
 
   return (
     <div
-      className={`flex flex-col lg:flex-row w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-lg p-3 sm:p-4 lg:p-6 min-h-[20rem] sm:min-h-[22rem] lg:h-[24.5rem] ${
+      className={`flex flex-col lg:flex-row w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-lg p-3 sm:p-4 lg:p-6 min-h-[20rem] sm:min-h-[22rem] lg:h-auto ${
         imageOnLeft ? "lg:flex-row" : "lg:flex-row-reverse"
       }`}
     >
@@ -46,12 +46,12 @@ export default function SectionBlock({ block }: SectionBlockProps) {
         }`}
       >
         {block.heading && (
-          <h2 className="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-800 font-semibold leading-tight break-words">
+          <h2 className="text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-600 font-semibold leading-tight break-words">
             {block.heading}
           </h2>
         )}
         {block.text && (
-          <div className="text-sm sm:text-base lg:text-lg leading-relaxed text-gray-700 break-words whitespace-pre-wrap">
+          <div className="text-sm sm:text-base lg:text-md leading-relaxed text-gray-500 break-words whitespace-pre-wrap">
             {parse(block.text)}
           </div>
         )}

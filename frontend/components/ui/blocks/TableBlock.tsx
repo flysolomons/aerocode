@@ -41,15 +41,15 @@ const TableBlock: React.FC<TableBlockProps> = ({ tableData }) => {
       )}
 
       {/* Desktop Table View */}
-      <div className="hidden sm:block overflow-x-auto rounded-xl bg-white shadow-sm">
+      <div className="hidden sm:block overflow-x-auto rounded-xl bg-white shadow-md">
         <table className="min-w-full table-fixed">
           {headerRow && (
-            <thead className="bg-gradient-to-r from-blue-400 to-blue-500">
+            <thead className="bg-blue-50">
               <tr>
                 {headerRow.map((cell, index) => (
                   <th
                     key={index}
-                    className="px-6 py-4 text-center text-sm font-semibold text-white tracking-wide"
+                    className="px-6 py-4 text-left text-sm font-semibold text-blue-400 tracking-wide"
                     style={{ width: `${100 / headerRow.length}%` }}
                   >
                     {cell || ""}
@@ -75,7 +75,7 @@ const TableBlock: React.FC<TableBlockProps> = ({ tableData }) => {
                       className={`px-6 py-4 text-sm text-left ${
                         isFirstColumn
                           ? "font-semibold text-gray-900 bg-gray-50/80"
-                          : "text-gray-700"
+                          : "text-gray-600"
                       }`}
                       scope={isFirstColumn ? "row" : undefined}
                     >
