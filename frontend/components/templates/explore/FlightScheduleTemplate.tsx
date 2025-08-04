@@ -5,6 +5,8 @@ import Container from "@/components/layout/Container";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import Accordion from "@/components/ui/Accordion";
 import Recommendations from "@/components/layout/sections/Recommendations";
+import FlightTimetableWidget from "@/components/layout/booking-widget/FlightTimetableWidget";
+import TableOfContents, { TOCSection } from "@/components/layout/TableOfContents";
 
 import {
   ScheduleWithFlightData,
@@ -34,6 +36,21 @@ export default function FlightScheduleTemplate({
   const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(
     null
   );
+  const [activeSection, setActiveSection] = useState("master-schedule");
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100; // Account for fixed header
+      const elementPosition = element.offsetTop - offset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: "smooth",
+      });
+      setActiveSection(sectionId);
+    }
+  };
+
   // Set default schedule ID on component mount
   useEffect(() => {
     if (
@@ -125,7 +142,7 @@ export default function FlightScheduleTemplate({
                   });
 
                   // Sort flights within each aircraft group by departure time
-                  Object.keys(flightsByAircraft).forEach(aircraft => {
+                  Object.keys(flightsByAircraft).forEach((aircraft) => {
                     flightsByAircraft[aircraft].sort((a, b) => {
                       const timeA = a.departureTime || "00:00";
                       const timeB = b.departureTime || "00:00";
@@ -230,7 +247,7 @@ export default function FlightScheduleTemplate({
               });
 
               // Sort flights within each aircraft group by departure time
-              Object.keys(flightsByAircraft).forEach(aircraft => {
+              Object.keys(flightsByAircraft).forEach((aircraft) => {
                 flightsByAircraft[aircraft].sort((a, b) => {
                   const timeA = a.departureTime || "00:00";
                   const timeB = b.departureTime || "00:00";
@@ -310,6 +327,14 @@ export default function FlightScheduleTemplate({
       typeof item.content === "object" &&
       "props" in item.content
   );
+
+  // Table of Contents sections
+  const tocSections: TOCSection[] = [
+    { id: "master-schedule", label: "Master Schedule", hasContent: hasSchedules && hasFilteredSchedule },
+    { id: "flight-timetable", label: "Flight Timetable", hasContent: true },
+    { id: "our-destinations", label: "Our Destinations", hasContent: true },
+  ];
+  
   // console.log(initialPage);
   return (
     <>
@@ -318,6 +343,14 @@ export default function FlightScheduleTemplate({
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
       />
+      
+      {/* Table of Contents */}
+      <TableOfContents 
+        sections={tocSections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
+      
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
@@ -328,7 +361,7 @@ export default function FlightScheduleTemplate({
             </div>
           )}
           {/* Filters Group: Schedule Cards + Flight Type Toggle */}
-          <div className="space-y-4">
+          <div id="master-schedule" className="space-y-4">
             {/* Schedule Date Filter Cards */}
             {initialPage.schedules && initialPage.schedules.length > 0 && (
               <div>
@@ -411,8 +444,16 @@ export default function FlightScheduleTemplate({
               </div>
             )}
           </div>
+
+          {/* Flight Timetable Search Widget */}
+          <div id="flight-timetable">
+            <FlightTimetableWidget />
+          </div>
+
           {/* Recommendation Section */}
-          <Recommendations heading="Explore our destinations" />
+          <div id="our-destinations">
+            <Recommendations heading="Explore our destinations" />
+          </div>
         </div>
       </Container>
     </>

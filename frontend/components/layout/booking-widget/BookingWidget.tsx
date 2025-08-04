@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BookATripForm from "./BookATripForm";
 import ManageBookingForm from "./ManageBookingForm";
-import FlightTimetableForm from "./FlightTimetableForm";
 
 interface BookingWidgetProps {
   onModalStateChange?: (isActive: boolean) => void;
@@ -43,6 +42,12 @@ export default function BookingWidget({
   }, [showMobileForm]);
 
   const handleTabClick = (tabIndex: number) => {
+    // If clicking Flight Schedules (index 2), redirect to flight schedules page
+    if (tabIndex === 2) {
+      window.location.href = "/explore/flight-schedules";
+      return;
+    }
+
     setActiveTab(tabIndex);
 
     // Add haptic feedback for mobile
@@ -107,7 +112,7 @@ export default function BookingWidget({
                   </button>
                 </div>
               </div>
-              {/* Manage, Timetable - Same row */}
+              {/* Manage, Schedules - Same row */}
               <div className="w-full">
                 <div className="grid grid-cols-2 gap-3 w-full">
                   {/* Manage Booking */}
@@ -134,7 +139,7 @@ export default function BookingWidget({
                       </span>
                     </button>
                   </div>
-                  {/* Flight Timetable */}
+                  {/* Flight Schedules */}
                   <div className="flex items-center justify-center h-14 rounded-full bg-white/80 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out">
                     <button
                       className="flex flex-row items-center justify-center gap-2 w-full h-full text-gray-500 font-medium transition-colors duration-200"
@@ -157,7 +162,7 @@ export default function BookingWidget({
                         <path d="m9 16 2 2 4-4" />
                       </svg>
                       <span className="text-sm font-medium text-gray-700 text-center">
-                        Timetable
+                        Schedules
                       </span>
                     </button>
                   </div>
@@ -233,7 +238,7 @@ export default function BookingWidget({
                   <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
                 </div>
 
-                {/* Flight Timetable */}
+                {/* Flight Schedules */}
                 <button
                   className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
                     activeTab === 2
@@ -258,7 +263,7 @@ export default function BookingWidget({
                     <path d="M3 10h18" />
                     <path d="m9 16 2 2 4-4" />
                   </svg>
-                  Flight Timetable
+                  Flight Schedules
                   {activeTab === 2 && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}
@@ -274,7 +279,7 @@ export default function BookingWidget({
               />
             )}
             {activeTab === 1 && <ManageBookingForm />}
-            {activeTab === 2 && <FlightTimetableForm />}
+            {/* activeTab === 2 redirects to flight schedules page */}
           </div>
         </div>
       </div>
@@ -313,7 +318,7 @@ export default function BookingWidget({
                     <h1 className="text-lg font-semibold text-blue-500">
                       {activeTab === 0 && "Book a Trip"}
                       {activeTab === 1 && "Manage Booking"}
-                      {activeTab === 2 && "Flight Timetable"}
+                      {activeTab === 2 && "Flight Schedules"}
                     </h1>
                   </div>
                   {/* Close button */}
@@ -343,7 +348,7 @@ export default function BookingWidget({
                 <div className="flex-1 overflow-y-auto">
                   {activeTab === 0 && <BookATripForm />}
                   {activeTab === 1 && <ManageBookingForm />}
-                  {activeTab === 2 && <FlightTimetableForm />}
+                  {/* activeTab === 2 redirects to flight schedules page */}
                 </div>
               </div>
             </motion.div>
