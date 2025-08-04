@@ -10,21 +10,45 @@ function redirectToManageBooking(
   const baseUrl =
     "https://uat.digital.airline.amadeus.com/ie/booking/manage-booking/retrieve";
 
-  // Build portalFacts
+  // Build portalFacts (same format as before)
   const portalFacts = JSON.stringify([
     { key: "OfficeID", value: "HIRIE08AA" },
     { key: "countryCode", value: countryCode },
   ]);
 
-  // Build query string
-  const params = new URLSearchParams({
-    recloc: bookingReference,
-    lastName: lastName,
-    portalFacts: portalFacts,
-  });
+  // Create form and submit as POST request
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = baseUrl;
+  form.style.display = "none";
 
-  // Redirect to manage booking page
-  window.location.href = `${baseUrl}?${params.toString()}`;
+  // Create hidden inputs with original field names
+  const reclocInput = document.createElement("input");
+  reclocInput.type = "hidden";
+  reclocInput.name = "recLoc";
+  reclocInput.value = bookingReference;
+  form.appendChild(reclocInput);
+
+  const lastNameInput = document.createElement("input");
+  lastNameInput.type = "hidden";
+  lastNameInput.name = "lastName";
+  lastNameInput.value = lastName;
+  form.appendChild(lastNameInput);
+
+  const portalFactsInput = document.createElement("input");
+  portalFactsInput.type = "hidden";
+  portalFactsInput.name = "portalFacts";
+  portalFactsInput.value = portalFacts;
+  form.appendChild(portalFactsInput);
+
+  const traceInput = document.createElement("input");
+  traceInput.type = "hidden";
+  traceInput.name = "trace";
+  traceInput.value = "true";
+  form.appendChild(traceInput);
+
+  document.body.appendChild(form);
+  form.submit();
 }
 
 export default function ManageBookingForm() {

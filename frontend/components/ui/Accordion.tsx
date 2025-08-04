@@ -17,15 +17,32 @@ export default function Accordion({ items, defaultOpen }: AccordionProps) {
   const [openIndex, setOpenIndex] = React.useState<number | null>(
     defaultOpen ?? null
   );
+  const accordionRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
   const toggleAccordion = (index: number) => {
+    const isOpening = openIndex !== index;
     setOpenIndex(openIndex === index ? null : index);
+    
+    // Scroll to the accordion item when opening
+    if (isOpening && accordionRefs.current[index]) {
+      // Small delay to allow content to render first
+      setTimeout(() => {
+        accordionRefs.current[index]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
+    }
   };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       {items.map((item, index) => (
-        <div key={index} className={`${index !== 0 ? 'border-t border-gray-200' : ''}`}>
+        <div 
+          key={index} 
+          ref={(el) => (accordionRefs.current[index] = el)}
+          className={`${index !== 0 ? 'border-t border-gray-200' : ''}`}
+        >
           <button
             className="flex w-full justify-between items-center text-left px-4 sm:px-6 py-4 sm:py-5 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:bg-gray-50"
             onClick={() => toggleAccordion(index)}

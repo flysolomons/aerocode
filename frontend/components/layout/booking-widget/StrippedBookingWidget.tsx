@@ -70,62 +70,72 @@ export default function StrippedBookingWidget({
   const mobileFormModal = (
     <AnimatePresence>
       {showMobileForm && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 1, y: 20 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
-          className="fixed inset-0 z-[9999] bg-white xl:hidden flex flex-col"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: "100vw",
-            height: "100vh",
-            maxWidth: "100vw",
-            maxHeight: "100vh",
-            zIndex: 9999,
-          }}
-        >
-          {/* Header with logo and close button */}
-          <div className="flex justify-between items-center p-4 flex-shrink-0">
-            {/* Logo */}
-            <div className="flex items-center">
-              <img src="/logo.svg" alt="FlySolomons" className="h-6 w-auto" />
-            </div>
-            {/* Close button */}
-            <button
-              onClick={closeMobileForm}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-              aria-label="Close form"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black bg-opacity-60 z-40 xl:hidden"
+            onClick={closeMobileForm}
+          />
 
-          {/* Form content */}
-          <div className="flex-1 overflow-y-auto px-4 pb-4">
-            <BookATripForm
-              preselectedDeparture={preselectedDeparture}
-              preselectedArrival={preselectedArrival}
-            />
-          </div>
-        </motion.div>
+          {/* Modal content */}
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{
+              duration: 0.3,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+            className="fixed inset-x-0 bottom-0 z-50 xl:hidden"
+          >
+            <div className="w-full h-[80vh] bg-white rounded-t-3xl shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300 ease-out">
+              {/* Header with heading and close button */}
+              <div className="flex justify-between items-center p-4 flex-shrink-0 border-b border-gray-200">
+                {/* Empty space for balance */}
+                <div className="w-10"></div>
+                {/* Dynamic heading based on active tab - centered */}
+                <div className="flex-1 flex justify-center items-center">
+                  <h1 className="text-lg font-semibold text-blue-500">
+                    Book a Trip
+                  </h1>
+                </div>
+                {/* Close button */}
+                <button
+                  onClick={closeMobileForm}
+                  className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  aria-label="Close form"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Form content */}
+              <div className="flex-1 overflow-y-auto">
+                <BookATripForm
+                  preselectedDeparture={preselectedDeparture}
+                  preselectedArrival={preselectedArrival}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
@@ -137,14 +147,33 @@ export default function StrippedBookingWidget({
       >
         <div className="w-full xl:w-[70.5rem]">
           {/* Mobile clickable area - same styling as BookingWidget mobile tab */}
-          
-          <div
-            className="flex mt-4 px-4 py-3 h-12 m-auto w-3/4 rounded-[2rem] bg-white shadow-md border-2 border-blue-100 cursor-pointer xl:hidden my-2"
-            onClick={handleFormClick}
-          >
-            <button className="text-sm font-semibold w-full text-center text-blue-500">
-              Book a Trip
-            </button>
+
+          <div className="flex flex-col gap-3 w-full max-w-2xl mx-auto xl:hidden">
+            <div className="w-full">
+              <div
+                className="flex items-center justify-center h-14 rounded-full bg-white/80 backdrop-blur-xl border border-white/70 px-5 transition-all duration-200 ease-out cursor-pointer shadow-lg"
+                onClick={handleFormClick}
+              >
+                <button className="flex flex-row items-center justify-center gap-2 w-full h-full text-gray-500 font-medium transition-colors duration-200">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-700"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700 text-center">
+                    Book
+                  </span>
+                </button>
+              </div>
+            </div>
+
           </div>
 
           {/* Desktop content - direct form without background wrapper */}
