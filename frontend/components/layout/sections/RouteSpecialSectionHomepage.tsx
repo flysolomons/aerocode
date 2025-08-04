@@ -24,7 +24,7 @@ export default function RouteSpecialSectionHomepage({
               <h2 className="text-2xl md:text-3xl lg:text-3xl text-center font-bold text-blue-500">
                 {heading}
               </h2>
-              <p className="block text-center text-sm md:text-base lg:text-base text-gray-700 leading-relaxed mx-auto px-2 md:px-0">
+              <p className="block text-center text-sm md:text-base lg:text-base text-gray-600 leading-relaxed mx-auto px-2 md:px-0">
                 {description}
               </p>
             </>
