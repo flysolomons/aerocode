@@ -288,7 +288,8 @@ export default function FlightScheduleTemplate({
         image={initialPage.heroImage?.url || "/hero.jpg"}
         breadcrumbs={initialPage.url}
       />
-      <Container>
+      <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom bg-opacity-5">
+        <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
           {initialPage.description && (
             <div className="mx-auto w-full">
@@ -385,7 +386,9 @@ export default function FlightScheduleTemplate({
           {/* Recommendation Section */}
           <Recommendations heading="Explore our destinations" />
         </div>
-      </Container>
+        </Container>
+      </div>
+      
     </>
   );
 }

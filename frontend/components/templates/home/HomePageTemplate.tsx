@@ -9,6 +9,7 @@ import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import Slider from "@/components/layout/Slider";
 import EmblaCarousel from "@/components/layout/carousel/Carousel";
 import RouteSpecialSectionHomepage from "@/components/layout/sections/RouteSpecialSectionHomepage";
+import SecondaryButton from "@/components/ui/buttons/SecondaryButton";
 
 interface HomePageTemplateProps {
   initialPage: HomePageData;
@@ -29,7 +30,7 @@ export default function HomePageTemplate({
           <div className="py-24 space-y-8 md:space-y-16">
             <RouteSpecialSectionHomepage
               heading="Flight Specials"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+              description="Don’t miss out on these jaw-dropping flight deals! Pack your bags and jet off to your next adventure at prices that’ll make your heart soar! "
               specials={homePage.specialRouteItems.map((item) => ({
                 isExpired: item.specialRoute.isExpired,
                 special: {
@@ -58,7 +59,7 @@ export default function HomePageTemplate({
               <h2 className="discover-title text-2xl md:text-3xl text-center font-bold text-blue-500">
                 Discover New Horizons
               </h2>
-              <span className="block text-center text-sm md:text-base px-4 md:px-0">
+              <span className="block text-center text-sm md:text-base px-4 md:px-0 text-gray-600">
                 Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua
               </span>
@@ -78,23 +79,29 @@ export default function HomePageTemplate({
       )}
       {homePage.belamaImage && homePage.belamaImage.url && (
         <div
-          className="min-h-screen md:h-screen mt-24 space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-blue-700 bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0"
+          className="min-h-screen md:h-screen mt-24 space-y-8 md:space-y-16 bg-cover bg-center bg-no-repeat pt-8 md:pt-1 pb-8 md:pb-2 bg-black bg-opacity-80 bg-blend-overlay sm:bg-blend-overlay md:bg-blend-soft-light flex items-center justify-center px-4 md:px-0 "
           style={{
             backgroundImage: `url(${homePage.belamaImage.url})`,
           }}
         >
-          <div className="space-y-6 md:space-y-8 w-full max-w-4xl">
+          <div className="space-y-6 md:space-y-8 md:px-4 w-full max-w-4xl">
             <div className="space-y-2">
-              <h2 className="text-2xl md:text-3xl text-center font-bold text-white pt-2">
-                Belama
-              </h2>
-              <span className="block text-center text-white text-sm md:text-base px-4 md:px-0">
-                Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua
+              <p className="flex flex-col text-2xl lg:text-3xl text-left text-yellow-50 ">
+                Relax with 
+                <span className="text-yellow-500 font-bold text-5xl md:text-8xl lg:text-8xl ">Belama Membership</span>
+              </p>
+              
+              <p className="text-white font-bold text-2xl md:text-4xl lg:text-4xl">Refresh and Fly in Style</p>
+              <span className="block text-left text-white text-md md:text-base lg:text-lg md:px-0 ">
+                Make every journey unforgettable with the Belama Business Lounge at Honiara International Airport! 
+                Perfect for solo adventurers, families, or groups of 10 or more, our lounge offers free snacks and drinks, 
+                fast Wi-Fi, and cozy seating infused with Solomon Islands charm. Whether you’re a Belama Club member, 
+                a Business Class traveler, or joining us with a day pass, this is your spot to recharge before takeoff.
+
               </span>
             </div>
-            <div className="flex justify-center">
-              <PrimaryButton href="/belama" text="Join Now" />
+            <div className="flex justify-start">
+              <SecondaryButton href="/belama" text="Let's start your experience"/>
             </div>
           </div>
         </div>
@@ -108,7 +115,7 @@ export default function HomePageTemplate({
                   <h2 className="text-2xl md:text-3xl text-center font-bold text-blue-500">
                     All You Need
                   </h2>
-                  <span className="block text-center text-sm md:text-base px-4 md:px-0">
+                  <span className="block text-center text-sm md:text-base px-4 md:px-0 text-gray-600">
                     Lorem ipsum dolor sit amet, consectetusr adipiscing elit,
                     sed do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua

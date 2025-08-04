@@ -16,6 +16,7 @@ import {
 import Recommendations from "@/components/layout/sections/Recommendations";
 import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import parse from "html-react-parser";
+import ReadyToFly from "@/components/layout/sections/ReadyToFly";
 
 interface RoutePageTemplateProps {
   initialPage: RoutePage | null;
@@ -138,8 +139,8 @@ export default function RoutePageTemplate({
         activeSection={activeSection}
         onSectionClick={scrollToSection}
       />
-
-      <Container>
+      <div className="bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-bottom bg-opacity-5">
+        <Container>
         <div className="py-12 sm:py-12 lg:py-16 space-y-12 sm:space-y-16 lg:space-y-20 px-4 sm:px-6">
           <div className="space-y-8">
             <StrippedBookingWidget
@@ -188,15 +189,42 @@ export default function RoutePageTemplate({
                     : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
                 }`}
               >
-                {fares.map((fare, index) => (
-                  <FareCard
-                    key={index}
-                    family={fare.fareFamily}
-                    price={fare.price}
-                    currency={fare.currency}
-                    direction={fare.tripType}
-                  />
-                ))}
+                {fares.length === 1 && (
+                  <div
+                    className="bg-white w-full bg-[url(/traditional_ring_section.png)] bg-no-repeat bg-cover rounded-2xl lg:p-4 lg:rounded-s-2xl  shadow-lg h-full break-words  space-y-6 m-auto">
+                    <div className=" w-1/4 p-2 rounded-3xl h-auto text-center text-white bg-[#99471d] m-auto">
+                      <h2 className="text-lg font-bold">{fares[0].fareFamily}</h2>
+                    </div>
+
+                    <div className="text-center w-full">
+
+                        <span className="text-2xl mr-4">{fares[0].currency}</span> 
+                        <span className="text-4xl font-bold">{fares[0].price}</span>
+                        <p className="pt-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000" className="inline mr-2 -mt-2" viewBox="0 0 256 256"><path d="M221.66,181.66l-48,48a8,8,0,0,1-11.32-11.32L196.69,184H72a8,8,0,0,1-8-8V32a8,8,0,0,1,16,0V168H196.69l-34.35-34.34a8,8,0,0,1,11.32-11.32l48,48A8,8,0,0,1,221.66,181.66Z"></path></svg>
+                          {fares[0].tripType}</p>
+                       
+                    </div>
+                    
+                   
+                        
+
+                  </div>
+                )}
+                {fares.length > 1 && (
+
+                      fares.map((fare, index) => (
+                        <FareCard
+                          key={index}
+                          family={fare.fareFamily}
+                          price={fare.price}
+                          currency={fare.currency}
+                          direction={fare.tripType}
+                        />
+                      ))
+
+                )}
+                
               </div>
             </div>
           )}
@@ -206,8 +234,7 @@ export default function RoutePageTemplate({
                 Flight Information
               </h2>
               <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                Important details about your flight between {departureAirport}
-                and {arrivalAirport}.
+                Important details about your flight between {departureAirport} and {arrivalAirport}.
               </p>
             </div>
 
@@ -250,29 +277,14 @@ export default function RoutePageTemplate({
           </div>
 
           {/* Ready to Fly Section */}
-          <div className="text-center space-y-6">
-            <h2 className="text-xl sm:text-xl lg:text-2xl font-semibold text-blue-500">
-              Ready to Fly?
-            </h2>
-            <div className="flex justify-center">
-              <PrimaryButton
-                text="Book Now"
-                onClick={() => {
-                  const widget = document.querySelector(
-                    ".stripped-booking-widget"
-                  );
-                  if (widget) {
-                    widget.scrollIntoView({ behavior: "smooth" });
-                  } else {
-                    // Fallback to scroll to top where the hero with booking widget is
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
-                }}
-              />
-            </div>
-          </div>
+          <ReadyToFly
+            buttonText="Book Now"
+          />
+          
         </div>
-      </Container>
+        </Container>
+      </div>
+      
     </>
   );
 }
