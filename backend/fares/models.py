@@ -4,7 +4,6 @@ from grapple.models import GraphQLString, GraphQLFloat, GraphQLForeignKey
 from grapple.helpers import register_query_field
 
 
-@register_snippet
 @register_query_field("fare")
 class Fare(models.Model):
     fare_family = models.CharField(max_length=50)  # e.g., "Economy", "Business"

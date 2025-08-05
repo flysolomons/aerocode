@@ -182,17 +182,16 @@ def handle_fare_validation(request, instance):
                 return
 
 
-def register_fare_upload_menu_item():
-    return MenuItem(
-        label="Year Round Fares",
-        url=reverse("fare_upload"),
-        name="fare_upload",
-        icon_name="upload",
-        order=10001,
-    )
-
-
-hooks.register("register_admin_menu_item", register_fare_upload_menu_item)
+# Individual menu item replaced with grouped submenu in explore/wagtail_hooks.py
+# def register_fare_upload_menu_item():
+#     return MenuItem(
+#         label="Year Round Fares",
+#         url=reverse("fare_upload"),
+#         name="fare_upload",
+#         icon_name="upload",
+#         order=10001,
+#     )
+# hooks.register("register_admin_menu_item", register_fare_upload_menu_item)
 
 
 def register_fare_upload_urls():

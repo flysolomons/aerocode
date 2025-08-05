@@ -9,7 +9,6 @@ from grapple.models import (
 from grapple.helpers import register_query_field
 
 
-@register_snippet
 @register_query_field("schedule")
 class Schedule(models.Model):
     start_date = models.DateField()

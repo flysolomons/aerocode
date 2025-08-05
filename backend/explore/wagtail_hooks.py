@@ -1,5 +1,5 @@
 from wagtail import hooks
-from wagtail.admin.menu import MenuItem
+from wagtail.admin.menu import MenuItem, Menu, SubmenuMenuItem
 from django.urls import path, reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -224,17 +224,16 @@ def handle_special_route_validation(request, instance):
                 return
 
 
-def register_special_route_upload_menu_item():
-    return MenuItem(
-        label="Special Fares",
-        url=reverse("special_route_upload"),
-        name="special_route_upload",
-        icon_name="upload",
-        order=10002,
-    )
-
-
-hooks.register("register_admin_menu_item", register_special_route_upload_menu_item)
+# Individual menu items replaced with grouped submenu below
+# def register_special_route_upload_menu_item():
+#     return MenuItem(
+#         label="Special Fares",
+#         url=reverse("special_route_upload"),
+#         name="special_route_upload",
+#         icon_name="upload",
+#         order=10002,
+#     )
+# hooks.register("register_admin_menu_item", register_special_route_upload_menu_item)
 
 
 def register_special_route_upload_urls():
@@ -329,7 +328,7 @@ class PortPairManagementView(View):
             
             # Create new pairs for checked destinations
             for dest_port in paired_destinations:
-                PortPair.objects.create(
+                PortPair.objects.get_or_create(
                     origin_port_code=selected_port,
                     destination_port_code=dest_port
                 )
@@ -344,7 +343,7 @@ def register_port_pair_menu_item():
         url=reverse("port_pair_admin"),
         name="port_pair_admin",
         icon_name="redirect",
-        order=10003,
+        order=9003,  # After Menus (9000), Travel Alerts (9001), Carousel Slides (9002)
     )
 
 
@@ -359,4 +358,38 @@ def register_port_pair_urls():
 
 
 hooks.register("register_admin_menu_item", register_port_pair_menu_item)
+
+
+# Grouped Excel Data Upload submenu
+def register_excel_data_submenu():
+    submenu = Menu(items=[
+        MenuItem(
+            label="Flight Schedules",
+            url=reverse("schedule_upload"),
+            name="schedule_upload",
+            icon_name="doc-full-inverse",
+        ),
+        MenuItem(
+            label="Year Round Fares",
+            url=reverse("fare_upload"),
+            name="fare_upload",
+            icon_name="doc-full-inverse",
+        ),
+        MenuItem(
+            label="Special Fares",
+            url=reverse("special_route_upload"),
+            name="special_route_upload",
+            icon_name="doc-full-inverse",
+        ),
+    ])
+    
+    return SubmenuMenuItem(
+        label="Excel Data Upload",
+        menu=submenu,
+        icon_name="upload",
+        order=10000,
+    )
+
+
+hooks.register("register_admin_menu_item", register_excel_data_submenu)
 hooks.register("register_admin_urls", register_port_pair_urls)
