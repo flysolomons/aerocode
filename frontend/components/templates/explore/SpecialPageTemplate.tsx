@@ -42,8 +42,6 @@ export default function SpecialPageTemplate({
   initialPage,
   loading = false,
 }: SpecialPageTemplateProps) {
-  const [gradientStartColor, setGradientStartColor] = useState("transparent");
-
   // Handle loading state
   if (loading) {
     return (
@@ -141,7 +139,6 @@ export default function SpecialPageTemplate({
         title={heroTitle || name || "Special Offer"}
         image={heroImage?.url || "/hero.jpg"}
         breadcrumbs={url}
-        onColorCalculated={setGradientStartColor}
       />
 
       <TableOfContents
