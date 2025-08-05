@@ -18,7 +18,6 @@ from wagtail.fields import RichTextField
 from wagtail.snippets.models import register_snippet
 
 
-@register_snippet
 class CarouselSlide(models.Model):
     title = models.CharField(max_length=200, help_text="Title for the carousel slide")
     subheading = RichTextField(

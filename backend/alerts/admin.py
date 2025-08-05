@@ -13,6 +13,7 @@ class AlertAdmin(SnippetViewSet):
     list_display = ["title", "is_active", "created_at"]
     list_filter = ["is_active", "created_at"]
     search_fields = ["title", "content"]
+    add_to_admin_menu = False  # Hide from snippets menu
 
 
 register_snippet(TravelAlert, AlertAdmin)

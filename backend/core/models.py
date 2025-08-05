@@ -177,7 +177,6 @@ class GenericPage(BasePage):
 
 
 # header
-@register_snippet
 @register_query_field("header_menu")
 class HeaderMenu(models.Model):
     name = models.CharField(
@@ -217,7 +216,6 @@ class HeaderMenu(models.Model):
 
 
 # footer
-@register_snippet
 @register_query_field("footer_menu")
 class FooterMenu(models.Model):
     name = models.CharField(
@@ -256,7 +254,6 @@ class FooterMenu(models.Model):
         verbose_name_plural = "Footer Menu"
 
 
-@register_snippet
 @register_query_field("currency", "currencies")
 class Currency(models.Model):
     country_name = models.CharField(max_length=100, help_text="Name of the country")

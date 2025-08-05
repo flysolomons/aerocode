@@ -83,7 +83,7 @@
                 </div>
                 
                 <div style="margin-top: 20px; text-align: center;">
-                    <button type="submit" class="button bicolor icon icon-check">
+                    <button type="submit" class="button bicolor" id="submit-button">
                         Save Port Pairs
                     </button>
                 </div>
@@ -138,6 +138,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Prevent multiple form submissions
+    const form = document.querySelector('.port-pair-form');
+    const submitButton = document.getElementById('submit-button');
+    let isSubmitting = false;
+    
+    if (form && submitButton) {
+        form.addEventListener('submit', function(e) {
+            if (isSubmitting) {
+                e.preventDefault();
+                return false;
+            }
+            
+            isSubmitting = true;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="icon icon-spinner"></span> Saving...';
+            submitButton.style.opacity = '0.6';
+        });
+    }
 });
 </script>
 {% endblock %}

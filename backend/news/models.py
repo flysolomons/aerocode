@@ -33,39 +33,6 @@ class NewsArticleListType(graphene.ObjectType):
     pass
 
 
-@register_snippet
-@register_query_field("news_category", "news_categories")
-class NewsCategory(models.Model):
-    name = models.CharField(max_length=100, unique=True, help_text="Category name")
-    slug = models.SlugField(
-        max_length=100,
-        unique=True,
-        help_text="URL-friendly version of the category name",
-    )
-    description = models.TextField(
-        blank=True, help_text="Brief description of what this category covers"
-    )
-
-    panels = [
-        FieldPanel("name"),
-        FieldPanel("slug"),
-        FieldPanel("description"),
-    ]
-
-    graphql_fields = [
-        GraphQLString("name"),
-        GraphQLString("slug"),
-        GraphQLString("description"),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = "News Category"
-        verbose_name_plural = "News Categories"
-        ordering = ["name"]
-
 
 class NewsIndexPage(BasePage):
     max_count = 1

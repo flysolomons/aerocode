@@ -190,17 +190,16 @@ class ScheduleUploadView(View):
         )
 
 
-def register_schedule_upload_menu_item():
-    return MenuItem(
-        label="Flight Schedules",
-        url=reverse("schedule_upload"),
-        name="schedule_upload",
-        icon_name="upload",
-        order=10000,
-    )
-
-
-hooks.register("register_admin_menu_item", register_schedule_upload_menu_item)
+# Individual menu item replaced with grouped submenu in explore/wagtail_hooks.py
+# def register_schedule_upload_menu_item():
+#     return MenuItem(
+#         label="Flight Schedules",
+#         url=reverse("schedule_upload"),
+#         name="schedule_upload",
+#         icon_name="upload",
+#         order=10000,
+#     )
+# hooks.register("register_admin_menu_item", register_schedule_upload_menu_item)
 
 
 def register_schedule_upload_urls():
