@@ -7,7 +7,7 @@ from django.views.generic import View
 import pandas as pd
 import logging
 from django.db import IntegrityError
-from .models import SpecialRoute, Special, Route
+from .models import SpecialRoute, Special, Route, PortPair
 from core.models import Currency
 
 logger = logging.getLogger(__name__)
@@ -248,3 +248,115 @@ def register_special_route_upload_urls():
 
 
 hooks.register("register_admin_urls", register_special_route_upload_urls)
+
+
+class PortPairManagementView(View):
+    """Simple admin interface for managing port pairs"""
+    
+    def get(self, request):
+        """Display the port pair management interface"""
+        # Get all unique airports from existing Route pages
+        all_ports = set()
+        for route in Route.objects.all():
+            all_ports.add((route.departure_airport_code, route.departure_airport))
+            all_ports.add((route.arrival_airport_code, route.arrival_airport))
+        
+        # Convert to sorted list
+        ports = [(code, name) for code, name in all_ports]
+        ports.sort(key=lambda x: x[1])  # Sort by airport name
+        
+        # Get selected port if provided
+        selected_port = request.GET.get('port')
+        all_destinations = []
+        
+        if selected_port:
+            # Get all possible destination ports (excluding selected port) with country info
+            possible_destinations = []
+            for code, name in all_ports:
+                if code != selected_port:
+                    # Find the country for this airport code
+                    route = Route.objects.filter(arrival_airport_code=code).first()
+                    if not route:
+                        route = Route.objects.filter(departure_airport_code=code).first()
+                    
+                    country = "Unknown Country"
+                    if route and route.destination_country:
+                        country = route.destination_country.country
+                    
+                    possible_destinations.append((code, name, country))
+            
+            # Check which destinations are currently paired with selected port
+            existing_pairs = set(
+                PortPair.objects.filter(origin_port_code=selected_port)
+                .values_list('destination_port_code', flat=True)
+            )
+            
+            # Group destinations by country
+            countries_dict = {}
+            for dest_code, dest_name, country in possible_destinations:
+                if country not in countries_dict:
+                    countries_dict[country] = []
+                
+                countries_dict[country].append({
+                    'port_code': dest_code,
+                    'port_name': dest_name,
+                    'is_paired': dest_code in existing_pairs,
+                })
+            
+            # Sort countries alphabetically and sort ports within each country
+            all_destinations = []
+            for country in sorted(countries_dict.keys()):
+                countries_dict[country].sort(key=lambda x: x['port_name'])
+                all_destinations.append({
+                    'country': country,
+                    'ports': countries_dict[country]
+                })
+        
+        return render(request, 'explore/port_pair_admin.html', {
+            'ports': ports,
+            'selected_port': selected_port,
+            'all_destinations': all_destinations,
+        })
+
+    def post(self, request):
+        """Handle port pair updates"""
+        selected_port = request.POST.get('port')
+        paired_destinations = request.POST.getlist('paired_destinations')
+        
+        if selected_port:
+            # Remove all existing pairs for this origin port
+            PortPair.objects.filter(origin_port_code=selected_port).delete()
+            
+            # Create new pairs for checked destinations
+            for dest_port in paired_destinations:
+                PortPair.objects.create(
+                    origin_port_code=selected_port,
+                    destination_port_code=dest_port
+                )
+            
+        
+        return redirect(f'{request.path}?port={selected_port}')
+
+
+def register_port_pair_menu_item():
+    return MenuItem(
+        label="Port Pair Management",
+        url=reverse("port_pair_admin"),
+        name="port_pair_admin",
+        icon_name="redirect",
+        order=10003,
+    )
+
+
+def register_port_pair_urls():
+    return [
+        path(
+            "port-pairs/",
+            PortPairManagementView.as_view(),
+            name="port_pair_admin",
+        ),
+    ]
+
+
+hooks.register("register_admin_menu_item", register_port_pair_menu_item)
+hooks.register("register_admin_urls", register_port_pair_urls)

@@ -21,32 +21,41 @@ export interface Airport {
   __typename?: string;
 }
 
-// Single optimized query to fetch all route data
-export const GET_ALL_ROUTES_QUERY = gql`
-  query GetAllRoutes {
-    routes(limit: 1000) {
-      departureAirport
-      departureAirportCode
-      arrivalAirport
-      arrivalAirportCode
+// Interface for port pair data
+export interface PortPair {
+  originPortCode: string;
+  originPortName: string;
+  destinationPortCode: string;
+  destinationPortName: string;
+  __typename?: string;
+}
+
+// Query to fetch port pairs
+export const GET_PORT_PAIRS_QUERY = gql`
+  query GetPortPairs {
+    portPairs(limit: 100) {
+      originPortCode
+      destinationPortCode
+      originPortName
+      destinationPortName
     }
   }
 `;
 
-// Cache for routes data to avoid repeated API calls
-let routesCache: any[] = [];
+// Cache for port pairs data to avoid repeated API calls
+let portPairsCache: PortPair[] = [];
 let cacheTimestamp: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 /**
- * Internal function to get routes data with caching
+ * Internal function to get port pairs data with caching
  */
-async function getCachedRoutes(): Promise<any[]> {
+async function getCachedPortPairs(): Promise<PortPair[]> {
   const now = Date.now();
 
   // Return cached data if it's still fresh
-  if (routesCache.length > 0 && now - cacheTimestamp < CACHE_DURATION) {
-    return routesCache;
+  if (portPairsCache.length > 0 && now - cacheTimestamp < CACHE_DURATION) {
+    return portPairsCache;
   }
   // console.log(
   //   "Running on:",
@@ -57,16 +66,16 @@ async function getCachedRoutes(): Promise<any[]> {
   // Fetch fresh data
   try {
     const { data } = await client.query({
-      query: GET_ALL_ROUTES_QUERY,
+      query: GET_PORT_PAIRS_QUERY,
       fetchPolicy: "cache-first", // Use Apollo cache when possible
     });
 
-    routesCache = data.routes || [];
+    portPairsCache = data.portPairs || [];
     cacheTimestamp = now;
-    return routesCache;
+    return portPairsCache;
   } catch (error) {
-    console.error("Error fetching routes:", error);
-    return routesCache; // Return current cache (empty array if no data)
+    console.error("Error fetching port pairs:", error);
+    return portPairsCache; // Return current cache (empty array if no data)
   }
 }
 
@@ -80,35 +89,20 @@ export async function fetchArrivalDestinationsForOrigin(
   departureAirport: string
 ): Promise<ArrivalAirport[]> {
   try {
-    const routes = await getCachedRoutes();
+    const portPairs = await getCachedPortPairs();
 
     // Use a Map to track unique destination airports by their code
     const uniqueAirportsMap = new Map<string, ArrivalAirport>();
 
-    routes.forEach((route: any) => {
-      // Case 1: Selected airport is departure airport → add arrival airport as destination
+    portPairs.forEach((pair: PortPair) => {
+      // Find pairs that start from the selected airport (by code or name)
       if (
-        (route.departureAirport === departureAirport ||
-          route.departureAirportCode === departureAirport) &&
-        route.arrivalAirportCode &&
-        !uniqueAirportsMap.has(route.arrivalAirportCode)
+        pair.originPortCode === departureAirport ||
+        pair.originPortName === departureAirport
       ) {
-        uniqueAirportsMap.set(route.arrivalAirportCode, {
-          arrivalAirport: route.arrivalAirport,
-          arrivalAirportCode: route.arrivalAirportCode,
-        });
-      }
-
-      // Case 2: Selected airport is arrival airport → add departure airport as destination (bidirectional)
-      if (
-        (route.arrivalAirport === departureAirport ||
-          route.arrivalAirportCode === departureAirport) &&
-        route.departureAirportCode &&
-        !uniqueAirportsMap.has(route.departureAirportCode)
-      ) {
-        uniqueAirportsMap.set(route.departureAirportCode, {
-          arrivalAirport: route.departureAirport,
-          arrivalAirportCode: route.departureAirportCode,
+        uniqueAirportsMap.set(pair.destinationPortCode, {
+          arrivalAirport: pair.destinationPortName,
+          arrivalAirportCode: pair.destinationPortCode,
         });
       }
     });
@@ -128,31 +122,28 @@ export async function fetchArrivalDestinationsForOrigin(
  */
 export async function fetchAllAirports(): Promise<Airport[]> {
   try {
-    const routes = await getCachedRoutes();
+    const portPairs = await getCachedPortPairs();
 
     // Use a Map to track unique airports by their code
     const uniqueAirportsMap = new Map<string, Airport>();
 
-    // Add airports from both departure and arrival fields
-    routes.forEach((route: any) => {
-      // Add departure airport
-      if (
-        route.departureAirportCode &&
-        !uniqueAirportsMap.has(route.departureAirportCode)
-      ) {
-        uniqueAirportsMap.set(route.departureAirportCode, {
-          airport: route.departureAirport,
-          airportCode: route.departureAirportCode,
+    // Add airports from both origin and destination fields
+    portPairs.forEach((pair: PortPair) => {
+      // Add origin airport
+      if (pair.originPortCode && !uniqueAirportsMap.has(pair.originPortCode)) {
+        uniqueAirportsMap.set(pair.originPortCode, {
+          airport: pair.originPortName,
+          airportCode: pair.originPortCode,
         });
       }
-      // Add arrival airport
+      // Add destination airport
       if (
-        route.arrivalAirportCode &&
-        !uniqueAirportsMap.has(route.arrivalAirportCode)
+        pair.destinationPortCode &&
+        !uniqueAirportsMap.has(pair.destinationPortCode)
       ) {
-        uniqueAirportsMap.set(route.arrivalAirportCode, {
-          airport: route.arrivalAirport,
-          airportCode: route.arrivalAirportCode,
+        uniqueAirportsMap.set(pair.destinationPortCode, {
+          airport: pair.destinationPortName,
+          airportCode: pair.destinationPortCode,
         });
       }
     });

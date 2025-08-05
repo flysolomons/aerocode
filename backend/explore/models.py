@@ -436,7 +436,7 @@ class Route(BasePage):
                     WhereWeFlyInternationalRoute.objects.filter(
                         where_we_fly=where_we_fly_page, route=self
                     ).delete()
-                    
+
                     # Create domestic route ranking
                     domestic_route, created = (
                         WhereWeFlyDomesticRoute.objects.get_or_create(
@@ -462,7 +462,7 @@ class Route(BasePage):
                     WhereWeFlyDomesticRoute.objects.filter(
                         where_we_fly=where_we_fly_page, route=self
                     ).delete()
-                    
+
                     # Create international route ranking
                     international_route, created = (
                         WhereWeFlyInternationalRoute.objects.get_or_create(
@@ -906,6 +906,69 @@ class WhereWeFly(BasePage):
 
     class Meta:
         verbose_name = "Where We Fly Page"
+
+
+@register_query_field("portPair")
+class PortPair(models.Model):
+    """Model to track port pairings for the booking widget with live route data"""
+
+    origin_port_code = models.CharField(
+        max_length=3, help_text="IATA code for origin port"
+    )
+    destination_port_code = models.CharField(
+        max_length=3, help_text="IATA code for destination port"
+    )
+
+    class Meta:
+        verbose_name = "Port Pair"
+        verbose_name_plural = "Port Pairs"
+        unique_together = ["origin_port_code", "destination_port_code"]
+        indexes = [
+            models.Index(fields=["origin_port_code"]),
+        ]
+
+    @property
+    def origin_port_name(self):
+        """Get live origin port name from Route pages"""
+        route = Route.objects.filter(
+            models.Q(departure_airport_code=self.origin_port_code)
+            | models.Q(arrival_airport_code=self.origin_port_code)
+        ).first()
+        return (
+            route.departure_airport
+            if route and route.departure_airport_code == self.origin_port_code
+            else (
+                route.arrival_airport if route else f"Unknown ({self.origin_port_code})"
+            )
+        )
+
+    @property
+    def destination_port_name(self):
+        """Get live destination port name from Route pages"""
+        route = Route.objects.filter(
+            models.Q(departure_airport_code=self.destination_port_code)
+            | models.Q(arrival_airport_code=self.destination_port_code)
+        ).first()
+        return (
+            route.departure_airport
+            if route and route.departure_airport_code == self.destination_port_code
+            else (
+                route.arrival_airport
+                if route
+                else f"Unknown ({self.destination_port_code})"
+            )
+        )
+
+    # GraphQL fields for booking widget
+    graphql_fields = [
+        GraphQLString("origin_port_code", name="originPortCode"),
+        GraphQLString("destination_port_code", name="destinationPortCode"),
+        GraphQLString("origin_port_name", name="originPortName"),
+        GraphQLString("destination_port_name", name="destinationPortName"),
+    ]
+
+    def __str__(self):
+        return f"{self.origin_port_name} ({self.origin_port_code}) → {self.destination_port_name} ({self.destination_port_code})"
 
 
 class FlightSchedule(BasePage):

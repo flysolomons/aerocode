@@ -163,16 +163,18 @@ const BookATripForm = memo(function BookATripForm({
         );
         setArrivalAirports(arrivals);
 
-        // Only clear selectedArrival if arrivals are not empty and current selection is not valid
-        if (arrivals.length > 0) {
-          if (
-            selectedArrival &&
-            !arrivals.some(
-              (a) => a.arrivalAirport === selectedArrival.arrivalAirport
-            )
-          ) {
-            setSelectedArrival(null);
-          }
+        // Clear selectedArrival if:
+        // 1. No arrivals available for this origin, OR
+        // 2. Current selection is not valid for this origin
+        if (arrivals.length === 0) {
+          setSelectedArrival(null);
+        } else if (
+          selectedArrival &&
+          !arrivals.some(
+            (a) => a.arrivalAirport === selectedArrival.arrivalAirport
+          )
+        ) {
+          setSelectedArrival(null);
         }
       } catch (error) {
         console.error("Error fetching arrivals:", error);

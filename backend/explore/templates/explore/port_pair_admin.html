@@ -1,0 +1,143 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags %}
+
+{% block titletag %}Port Pair Management{% endblock %}
+
+{% block content %}
+<div class="nice-padding">
+    <header class="merged">
+        <div class="row">
+            <div class="left">
+                <h1 class="icon icon-redirect">Port Pair Management</h1>
+                <p>Manage port pairs for the booking widget. Select a port to see all possible destinations.</p>
+            </div>
+        </div>
+    </header>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="messages">
+                <div class="message-content">
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Port Selection -->
+    <div class="field">
+        <br/>
+        <label class="label">Select Port:</label>
+        <select id="port-select" class="input" onchange="loadPort(this.value)">
+            <option value="">Choose a port...</option>
+            {% for code, name in ports %}
+                <option value="{{ code }}" {% if code == selected_port %}selected{% endif %}>
+                    {{ name }} ({{ code }})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if selected_port %}
+        {% if all_destinations %}
+            <!-- Port Pair Management Form -->
+            <form method="post" class="port-pair-form" style="margin-top: 30px;">
+                {% csrf_token %}
+                <input type="hidden" name="port" value="{{ selected_port }}">
+                
+                <h2>Destinations from {{ selected_port }}</h2>
+                <p>Check the destinations you want to make available from {{ selected_port }}.</p>
+                
+                <div class="destination-list" style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                    {% for country_group in all_destinations %}
+                        <div class="country-section" style="margin-bottom: 30px;">
+                            <h3 style="color: #9ca3af; font-size: 18px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #4b5563;">
+                                {{ country_group.country }}
+                            </h3>
+                            <div class="destination-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px;">
+                                {% for destination in country_group.ports %}
+                                    <div class="destination-item" data-destination-code="{{ destination.port_code }}" style="border: 2px solid #374151; padding: 16px; border-radius: 8px; background-color: #1f2937; transition: all 0.2s ease; {% if destination.is_paired %}border-color: #3b82f6;{% endif %}">
+                                        <label class="checkbox-wrapper" style="display: flex; align-items: flex-start; cursor: pointer; width: 100%;">
+                                            <input 
+                                                type="checkbox" 
+                                                name="paired_destinations" 
+                                                value="{{ destination.port_code }}"
+                                                {% if destination.is_paired %}checked{% endif %}
+                                                style="margin-right: 12px; margin-top: 4px; width: 16px; height: 16px; accent-color: #3b82f6;"
+                                            />
+                                            <div class="destination-info" style="flex: 1;">
+                                                <div class="destination-main" style="font-weight: 600; font-size: 16px; color: #ffffff; margin-bottom: 6px;">
+                                                    {{ destination.port_name }} ({{ destination.port_code }})
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="help-block">
+                            <p>No destinations available for grouping.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button type="submit" class="button bicolor icon icon-check">
+                        Save Port Pairs
+                    </button>
+                </div>
+            </form>
+        {% else %}
+            <div class="help-block" style="margin-top: 30px;">
+                <p>No other ports found. Ports are created when Route pages are added.</p>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+<script>
+function loadPort(port) {
+    if (port) {
+        window.location.href = '?port=' + port;
+    } else {
+        window.location.href = window.location.pathname;
+    }
+}
+
+// Enhanced UX for checkbox interactions - dark theme
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('input[name="paired_destinations"]');
+    
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const item = this.closest('.destination-item');
+            
+            if (this.checked) {
+                // Checked state - blue border only, keep dark background
+                item.style.borderColor = '#3b82f6';
+                item.style.boxShadow = '0 0 0 1px #3b82f6';
+            } else {
+                // Unchecked state - dark border, keep dark background
+                item.style.borderColor = '#374151';
+                item.style.boxShadow = 'none';
+            }
+        });
+        
+        // Add hover effect - subtle border brightening
+        const item = checkbox.closest('.destination-item');
+        item.addEventListener('mouseenter', function() {
+            if (!checkbox.checked) {
+                this.style.borderColor = '#4b5563';
+            }
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            if (!checkbox.checked) {
+                this.style.borderColor = '#374151';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
