@@ -171,7 +171,7 @@ export default function BookingWidget({
             </div>
 
             {/* Desktop: Simple tabs with bottom border */}
-            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200">
+            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200 bg-gray-100 rounded-t-3xl">
               <div className="flex">
                 {/* Book a Trip */}
                 <button

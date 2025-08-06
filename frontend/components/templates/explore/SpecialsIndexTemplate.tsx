@@ -19,8 +19,6 @@ export default function SpecialsIndexTemplate({
   initialPage,
   loading = false,
 }: SpecialsIndexTemplateProps) {
-  const [gradientStartColor, setGradientStartColor] = useState("transparent");
-
   // Handle loading state
   if (loading) {
     return (
@@ -45,7 +43,6 @@ export default function SpecialsIndexTemplate({
         title={heroTitle}
         image={heroImage}
         breadcrumbs={breadcrumbs}
-        onColorCalculated={setGradientStartColor}
       />
       <Container>
         <div className="py-8 sm:py-12 lg:py-16 space-y-10 sm:space-y-12 lg:space-y-16 px-4 sm:px-6">
@@ -118,17 +115,13 @@ export default function SpecialsIndexTemplate({
             />
           </div>
 
-        {/* Ready to fly section */}
-        <ReadyToFly
-          buttonText="Book Now"
-          description="Dont miss out on the specials, fares dropped so much that you pants cannot catch up"
-        />
-
-          
+          {/* Ready to fly section */}
+          <ReadyToFly
+            buttonText="Book Now"
+            description="Dont miss out on the specials, fares dropped so much that you pants cannot catch up"
+          />
         </div>
       </Container>
-
-      
     </>
   );
 }

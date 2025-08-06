@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import BookingWidget from "../booking-widget/BookingWidget";
 import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
 import BreadcrumbNav from "../BreadcrumbNav";
+import HeroBottomFade from "./HeroBottomFade";
 
 interface PrimaryHeroProps {
   title: string;
@@ -34,6 +35,7 @@ export default function PrimaryHero({
             }}
           />
           <div className="absolute inset-0 bg-black/15"></div>
+          <HeroBottomFade color="#FFFFFF" />
         </div>
         <div className="relative h-[calc(100vh)]">
           <div

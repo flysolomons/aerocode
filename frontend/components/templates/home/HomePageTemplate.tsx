@@ -30,7 +30,8 @@ export default function HomePageTemplate({
           <div className="py-24 space-y-8 md:space-y-16">
             <RouteSpecialSectionHomepage
               heading="Flight Specials"
-              description="Don’t miss out on these jaw-dropping flight deals! Pack your bags and jet off to your next adventure at prices that’ll make your heart soar! "
+              description="Don’t miss out on our imited-time offers – book now and save on your next
+  adventure."
               specials={homePage.specialRouteItems.map((item) => ({
                 isExpired: item.specialRoute.isExpired,
                 special: {
@@ -60,8 +61,9 @@ export default function HomePageTemplate({
                 Discover New Horizons
               </h2>
               <span className="block text-center text-sm md:text-base px-4 md:px-0 text-gray-600">
-                Lorem ipsum dolor sit amet, consectetusr adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua
+                Embark on extraordinary journeys to breathtaking destinations
+                across the Pacific, from vibrant island cultures to pristine
+                natural wonders.
               </span>
             </div>
             <div className="h-auto">
@@ -120,9 +122,7 @@ export default function HomePageTemplate({
                     All You Need
                   </h2>
                   <span className="block text-center text-sm md:text-base px-4 md:px-0 text-gray-600">
-                    Lorem ipsum dolor sit amet, consectetusr adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua
+                    Everything for your perfect journey, all in one place.
                   </span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 text-slate-500 px-4 md:px-0">
