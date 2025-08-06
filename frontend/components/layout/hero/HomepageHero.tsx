@@ -6,6 +6,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { DotButton, useDotButton } from "../carousel/DotButton";
 import parse from "html-react-parser";
+import HeroBottomFade from "./HeroBottomFade";
 
 interface CarouselSlide {
   slide: {
@@ -177,6 +178,8 @@ export default function HomePageHero({
               </div>
             );
           })}
+          
+          <HeroBottomFade />
 
           {/* Hidden Embla for navigation logic */}
           <div
