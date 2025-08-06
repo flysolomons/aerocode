@@ -101,7 +101,7 @@ export default function ManageBookingForm() {
           </div>
         </div>
         {/* Search form */}
-        <div className="flex w-full items-center border border-gray-200 rounded-full px-2 shadow-md relative">
+        <div className="flex w-full items-center border border-gray-200 bg-white rounded-full px-2 shadow-md relative">
           <div className="flex-1 px-6 py-3">
             <div className="flex justify-between items-center">
               <label className="text-left text-xs text-black font-semibold">

@@ -77,7 +77,7 @@ export default function BookingWidget({
   return (
     <>
       <div className="relative flex flex-col items-center h-1/2 text-white animate__animated animate__fadeInUp -mt-8 xl:mt-0">
-        <div className="w-full xl:w-[70.5rem] xl:bg-white xl:rounded-3xl xl:shadow-lg">
+        <div className="w-full xl:w-[70.5rem] xl:bg-gray-100 xl:rounded-3xl xl:shadow-lg">
           <div
             className={`flex flex-col space-y-2 xl:space-y-0 xl:flex-row xl:bg-white xl:rounded-3xl transition-opacity duration-500 ease-in-out ${
               isDesktopModalActive
@@ -171,7 +171,7 @@ export default function BookingWidget({
             </div>
 
             {/* Desktop: Simple tabs with bottom border */}
-            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200 bg-gray-100 rounded-t-3xl">
+            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200 bg-gray-200 rounded-t-3xl">
               <div className="flex">
                 {/* Book a Trip */}
                 <button
