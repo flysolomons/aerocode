@@ -15,8 +15,4 @@ class Migration(migrations.Migration):
             name='name',
             field=models.CharField(blank=True, max_length=20, null=True, unique=True),
         ),
-        migrations.AlterUniqueTogether(
-            name='route',
-            unique_together={('departure_airport_code', 'arrival_airport_code')},
-        ),
     ]

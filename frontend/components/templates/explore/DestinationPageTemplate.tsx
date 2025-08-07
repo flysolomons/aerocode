@@ -203,8 +203,8 @@ export default function DestinationTemplate({
                 {initialPage.rankedRoutes.map((rankedRoute, index) => (
                   <RouteCard
                     key={index}
-                    origin={rankedRoute.route.departureAirport}
-                    destination={rankedRoute.route.arrivalAirport}
+                    origin={rankedRoute.route.originPort.city}
+                    destination={rankedRoute.route.destinationPort.city}
                     url={rankedRoute.route.url}
                   />
                 ))}

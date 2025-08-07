@@ -75,8 +75,8 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
                 {currentRoutes.map((rankedRoute, index) => (
                   <RouteCard
                     key={index}
-                    origin={rankedRoute.route.departureAirport}
-                    destination={rankedRoute.route.arrivalAirport}
+                    origin={rankedRoute.route.originPort.city}
+                    destination={rankedRoute.route.destinationPort.city}
                     url={rankedRoute.route.url || ""}
                   />
                 ))}

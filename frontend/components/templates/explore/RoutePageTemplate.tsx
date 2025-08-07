@@ -53,10 +53,8 @@ export default function RoutePageTemplate({
   const {
     heroTitle,
     heroImage,
-    departureAirport,
-    arrivalAirport,
-    departureAirportCode,
-    arrivalAirportCode,
+    originPort,
+    destinationPort,
     name,
     url,
     fares = [],
@@ -114,18 +112,18 @@ export default function RoutePageTemplate({
   // Memoize preselected objects to prevent re-renders
   const preselectedDeparture = useMemo(
     () => ({
-      departureAirport: departureAirport,
-      departureAirportCode: departureAirportCode,
+      departureAirport: originPort.city,
+      departureAirportCode: originPort.code,
     }),
-    [departureAirport, departureAirportCode]
+    [originPort.city, originPort.code]
   );
 
   const preselectedArrival = useMemo(
     () => ({
-      arrivalAirport: arrivalAirport,
-      arrivalAirportCode: arrivalAirportCode,
+      arrivalAirport: destinationPort.city,
+      arrivalAirportCode: destinationPort.code,
     }),
-    [arrivalAirport, arrivalAirportCode]
+    [destinationPort.city, destinationPort.code]
   );
 
   return (
@@ -160,7 +158,7 @@ export default function RoutePageTemplate({
             </div>
             <div id="specials" className="scroll-mt-10">
               <RouteSpecialSection
-                heading={`${departureAirport} to ${arrivalAirport} Specials`}
+                heading={`${originPort.city} to ${destinationPort.city} Specials`}
                 description="Check out our latest special fares for this route. Book early to secure the best prices."
                 specials={specialRoutes.map((special) => ({
                   ...special,
@@ -245,16 +243,18 @@ export default function RoutePageTemplate({
                   Flight Information
                 </h2>
                 <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                  Important details about your flight between {departureAirport}{" "}
-                  and {arrivalAirport}.
+                  Important details about your flight between {originPort.city}{" "}
+                  and {destinationPort.city}.
                 </p>
               </div>
 
               <FlightInfoCard
-                departureAirport={departureAirport}
-                departureAirportCode={departureAirportCode}
-                arrivalAirport={arrivalAirport}
-                arrivalAirportCode={arrivalAirportCode}
+                departureAirport={originPort.city}
+                departureAirportCode={originPort.code}
+                departureAirportName={originPort.name}
+                arrivalAirport={destinationPort.city}
+                arrivalAirportCode={destinationPort.code}
+                arrivalAirportName={destinationPort.name}
               />
             </div>
             {relatedRoutes.length > 0 && (
@@ -264,7 +264,7 @@ export default function RoutePageTemplate({
               >
                 <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4">
                   <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-blue-500">
-                    Other Routes to {initialPage?.arrivalAirport}
+                    Other Routes to {initialPage?.destinationPort?.city}
                   </h2>
                   <p className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
                     Explore other popular flight routes that might interest you.
@@ -275,8 +275,8 @@ export default function RoutePageTemplate({
                   {relatedRoutes.map((rankedRoute, index) => (
                     <RouteCard
                       key={index}
-                      origin={rankedRoute.relatedRoute.departureAirport}
-                      destination={rankedRoute.relatedRoute.arrivalAirport}
+                      origin={rankedRoute.relatedRoute.originPort.city}
+                      destination={rankedRoute.relatedRoute.destinationPort.city}
                       url={rankedRoute.relatedRoute.url || ""}
                     />
                   ))}
