@@ -304,17 +304,21 @@ class Route(BasePage):
         help_text="Scope of the flight route (International or Domestic)",
     )
 
-    departure_airport = models.CharField(
-        max_length=255, blank=False, help_text="Departure airport for the route"
+    origin_port = models.ForeignKey(
+        "core.Airport",
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name="origin_routes",
+        help_text="Origin port for the route",
     )
-    arrival_airport = models.CharField(
-        max_length=255, blank=False, help_text="Arrival airport for the route"
-    )
-    departure_airport_code = models.CharField(
-        max_length=3, blank=False, help_text="IATA code for the departure airport"
-    )
-    arrival_airport_code = models.CharField(
-        max_length=3, blank=False, help_text="IATA code for the arrival airport"
+    destination_port = models.ForeignKey(
+        "core.Airport",
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name="destination_routes",
+        help_text="Destination port for the route",
     )
 
     name = models.CharField(max_length=20, null=True, blank=True, unique=True)
@@ -324,10 +328,12 @@ class Route(BasePage):
 
     content_panels = BasePage.content_panels + [
         FieldPanel("flight_scope", heading="Flight Scope"),
-        FieldPanel("departure_airport", heading="Departure Airport"),
-        FieldPanel("arrival_airport", heading="Arrival Airport"),
-        FieldPanel("departure_airport_code", heading="Departure Airport Code"),
-        FieldPanel("arrival_airport_code", heading="Arrival Airport Code"),
+        FieldRowPanel(
+            [
+                FieldPanel("origin_port", heading="Origin Port"),
+                FieldPanel("destination_port", heading="Destination Port"),
+            ]
+        ),
         InlinePanel(
             "ranked_related_routes",
             label="Related Route Display Order",
@@ -337,8 +343,22 @@ class Route(BasePage):
     ]
 
     search_fields = BasePage.search_fields + [
-        index.SearchField("arrival_airport", partial_match=True),
-        index.SearchField("arrival_airport_code", partial_match=True),
+        index.RelatedFields(
+            "destination_port",
+            [
+                index.SearchField("name", partial_match=True),
+                index.SearchField("code", partial_match=True),
+                index.SearchField("city", partial_match=True),
+            ],
+        ),
+        index.RelatedFields(
+            "origin_port",
+            [
+                index.SearchField("name", partial_match=True),
+                index.SearchField("code", partial_match=True),
+                index.SearchField("city", partial_match=True),
+            ],
+        ),
         index.RelatedFields(
             "destination_country",
             [
@@ -349,10 +369,8 @@ class Route(BasePage):
     ]
 
     graphql_fields = BasePage.graphql_fields + [
-        GraphQLString("departure_airport", name="departureAirport"),
-        GraphQLString("arrival_airport", name="arrivalAirport"),
-        GraphQLString("departure_airport_code", name="departureAirportCode"),
-        GraphQLString("arrival_airport_code", name="arrivalAirportCode"),
+        GraphQLForeignKey("origin_port", "core.Airport"),
+        GraphQLForeignKey("destination_port", "core.Airport"),
         GraphQLForeignKey("destination_country", "explore.Destination"),
         GraphQLString("name", name="routeName"),
         GraphQLString("name_full", name="routeNameFull"),
@@ -369,15 +387,12 @@ class Route(BasePage):
 
     def clean(self):
         """
-        Validate that the combination of departure_airport_code and arrival_airport_code
-        is unique before saving.
+        Validate that the combination of origin and destination airports is unique before saving.
         """
         super().clean()
-        if self.departure_airport_code and self.arrival_airport_code:
+        if self.origin_port and self.destination_port:
             # Generate the name for validation
-            generated_name = (
-                f"{self.departure_airport_code}-{self.arrival_airport_code}"
-            )
+            generated_name = f"{self.origin_port.code}-{self.destination_port.code}"
             # Check for existing routes with the same name, excluding the current instance
             existing_routes = Route.objects.filter(name=generated_name).exclude(
                 pk=self.pk
@@ -385,8 +400,8 @@ class Route(BasePage):
             if existing_routes.exists():
                 raise ValidationError(
                     {
-                        "departure_airport_code": f"A route with {generated_name} already exists.",
-                        "arrival_airport_code": f"A route with {generated_name} already exists.",
+                        "origin_port": f"A route with {generated_name} already exists.",
+                        "destination_port": f"A route with {generated_name} already exists.",
                     }
                 )
 
@@ -398,10 +413,9 @@ class Route(BasePage):
                 self.destination_country = parent
 
         # Generate name and name_full
-        if self.departure_airport_code and self.arrival_airport_code:
-            self.name = f"{self.departure_airport_code}-{self.arrival_airport_code}"
-        if self.departure_airport and self.arrival_airport:
-            self.name_full = f"{self.departure_airport} to {self.arrival_airport}"
+        if self.origin_port and self.destination_port:
+            self.name = f"{self.origin_port.code}-{self.destination_port.code}"
+            self.name_full = f"{self.origin_port.city} to {self.destination_port.city}"
 
         # Run full validation (including clean) before saving
         self.full_clean()
@@ -491,10 +505,10 @@ class Route(BasePage):
 
     def populate_related_route_rankings(self):
         """Auto-create RouteRelatedRoute entries for all routes to the same destination"""
-        if self.arrival_airport_code:
+        if self.destination_port:
             # Get all routes that go to the same destination (excluding this route)
             related_routes = Route.objects.filter(
-                arrival_airport_code=self.arrival_airport_code
+                destination_port=self.destination_port
             ).exclude(pk=self.pk)
 
             # Create RouteRelatedRoute entries for any missing related routes
@@ -542,7 +556,7 @@ class Route(BasePage):
 
     class Meta:
         verbose_name = "Route Page"
-        unique_together = [["departure_airport_code", "arrival_airport_code"]]
+        # unique_together = [["origin_port", "destination_port"]]
 
 
 @register_query_field("special")
@@ -906,69 +920,6 @@ class WhereWeFly(BasePage):
 
     class Meta:
         verbose_name = "Where We Fly Page"
-
-
-@register_query_field("portPair")
-class PortPair(models.Model):
-    """Model to track port pairings for the booking widget with live route data"""
-
-    origin_port_code = models.CharField(
-        max_length=3, help_text="IATA code for origin port"
-    )
-    destination_port_code = models.CharField(
-        max_length=3, help_text="IATA code for destination port"
-    )
-
-    class Meta:
-        verbose_name = "Port Pair"
-        verbose_name_plural = "Port Pairs"
-        unique_together = ["origin_port_code", "destination_port_code"]
-        indexes = [
-            models.Index(fields=["origin_port_code"]),
-        ]
-
-    @property
-    def origin_port_name(self):
-        """Get live origin port name from Route pages"""
-        route = Route.objects.filter(
-            models.Q(departure_airport_code=self.origin_port_code)
-            | models.Q(arrival_airport_code=self.origin_port_code)
-        ).first()
-        return (
-            route.departure_airport
-            if route and route.departure_airport_code == self.origin_port_code
-            else (
-                route.arrival_airport if route else f"Unknown ({self.origin_port_code})"
-            )
-        )
-
-    @property
-    def destination_port_name(self):
-        """Get live destination port name from Route pages"""
-        route = Route.objects.filter(
-            models.Q(departure_airport_code=self.destination_port_code)
-            | models.Q(arrival_airport_code=self.destination_port_code)
-        ).first()
-        return (
-            route.departure_airport
-            if route and route.departure_airport_code == self.destination_port_code
-            else (
-                route.arrival_airport
-                if route
-                else f"Unknown ({self.destination_port_code})"
-            )
-        )
-
-    # GraphQL fields for booking widget
-    graphql_fields = [
-        GraphQLString("origin_port_code", name="originPortCode"),
-        GraphQLString("destination_port_code", name="destinationPortCode"),
-        GraphQLString("origin_port_name", name="originPortName"),
-        GraphQLString("destination_port_name", name="destinationPortName"),
-    ]
-
-    def __str__(self):
-        return f"{self.origin_port_name} ({self.origin_port_code}) → {self.destination_port_name} ({self.destination_port_code})"
 
 
 class FlightSchedule(BasePage):

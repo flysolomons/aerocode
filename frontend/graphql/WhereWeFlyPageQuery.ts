@@ -3,10 +3,14 @@ import client from "../lib/apolloClient";
 
 // Interface for the Route
 export interface Route {
-  departureAirport: string;
-  arrivalAirport: string;
-  departureAirportCode: string;
-  arrivalAirportCode: string;
+  originPort: {
+    city: string;
+    code: string;
+  };
+  destinationPort: {
+    city: string;
+    code: string;
+  };
   url: string;
   name: string;
   nameFull: string;
@@ -58,10 +62,14 @@ export const GET_WHERE_WE_FLY_PAGE_QUERY = gql`
         }
         rankedInternationalRoutes(limit: 100) {
           route {
-            departureAirport
-            arrivalAirport
-            departureAirportCode
-            arrivalAirportCode
+            originPort {
+              city
+              code
+            }
+            destinationPort {
+              city
+              code
+            }
             url
             name
             nameFull
@@ -69,10 +77,14 @@ export const GET_WHERE_WE_FLY_PAGE_QUERY = gql`
         }
         rankedDomesticRoutes(limit: 100) {
           route {
-            departureAirport
-            arrivalAirport
-            departureAirportCode
-            arrivalAirportCode
+            originPort {
+              city
+              code
+            }
+            destinationPort {
+              city
+              code
+            }
             url
             name
             nameFull
@@ -118,10 +130,14 @@ export async function fetchWhereWeFlyPage(): Promise<WhereWeFlyPage> {
       internationalRoutes: pageData.internationalRoutes || { url: "/image.jpg" },
       rankedInternationalRoutes: (pageData.rankedInternationalRoutes || []).map((rankedRoute: any) => ({
         route: {
-          departureAirport: rankedRoute.route?.departureAirport || "",
-          arrivalAirport: rankedRoute.route?.arrivalAirport || "",
-          departureAirportCode: rankedRoute.route?.departureAirportCode || "",
-          arrivalAirportCode: rankedRoute.route?.arrivalAirportCode || "",
+          originPort: {
+            city: rankedRoute.route?.originPort?.city || "",
+            code: rankedRoute.route?.originPort?.code || "",
+          },
+          destinationPort: {
+            city: rankedRoute.route?.destinationPort?.city || "",
+            code: rankedRoute.route?.destinationPort?.code || "",
+          },
           url: rankedRoute.route?.url || "",
           name: rankedRoute.route?.name || "",
           nameFull: rankedRoute.route?.nameFull || "",
@@ -129,10 +145,14 @@ export async function fetchWhereWeFlyPage(): Promise<WhereWeFlyPage> {
       })),
       rankedDomesticRoutes: (pageData.rankedDomesticRoutes || []).map((rankedRoute: any) => ({
         route: {
-          departureAirport: rankedRoute.route?.departureAirport || "",
-          arrivalAirport: rankedRoute.route?.arrivalAirport || "",
-          departureAirportCode: rankedRoute.route?.departureAirportCode || "",
-          arrivalAirportCode: rankedRoute.route?.arrivalAirportCode || "",
+          originPort: {
+            city: rankedRoute.route?.originPort?.city || "",
+            code: rankedRoute.route?.originPort?.code || "",
+          },
+          destinationPort: {
+            city: rankedRoute.route?.destinationPort?.city || "",
+            code: rankedRoute.route?.destinationPort?.code || "",
+          },
           url: rankedRoute.route?.url || "",
           name: rankedRoute.route?.name || "",
           nameFull: rankedRoute.route?.nameFull || "",

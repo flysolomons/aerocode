@@ -1,4 +1,5 @@
 from django.db import models
+import graphene
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel, FieldRowPanel
 from grapple.models import (
@@ -27,6 +28,9 @@ from wagtail.blocks import ListBlock
 from grapple.helpers import register_query_field
 from wagtail.snippets.models import register_snippet
 from django.core.exceptions import ValidationError
+from wagtail.search import index
+from django.db.models import QuerySet
+from wagtail.search.backends import get_search_backend
 
 
 class BasePage(Page):
@@ -300,3 +304,149 @@ class Currency(models.Model):
     class Meta:
         verbose_name = "Currency"
         verbose_name_plural = "Currencies"
+
+
+class AirportQuerySet(QuerySet):
+    def search(self, query, **kwargs):
+        """
+        Perform a search on the Airport model's indexed fields using the configured search backend.
+
+        Args:
+            query (str): The search term to query against indexed fields (e.g., 'code').
+            **kwargs: Additional arguments to pass to the search backend (e.g., fields, operator).
+
+        Returns:
+            QuerySet: A QuerySet containing Airport objects matching the search query.
+        """
+        return get_search_backend().search(query, self, **kwargs)
+
+
+@register_query_field("airport", "airports")
+class Airport(index.Indexed, models.Model):
+    code = models.CharField(
+        max_length=10, unique=True, help_text="Airport code (e.g., HIR, SYD, LAX)"
+    )
+    name = models.CharField(
+        max_length=200,
+        help_text="Full airport name (e.g., Honiara International Airport)",
+    )
+    city = models.CharField(
+        max_length=100, help_text="City where the airport is located"
+    )
+    country = models.CharField(
+        max_length=100, help_text="Country where the airport is located"
+    )
+    destination_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Image representing the destination/airport",
+    )
+
+    panels = [
+        FieldPanel("code"),
+        FieldPanel("name"),
+        FieldPanel("city"),
+        FieldPanel("country"),
+        FieldPanel("destination_image"),
+    ]
+
+    search_fields = [
+        index.SearchField("code", partial_match=True),
+    ]
+    graphql_fields = [
+        GraphQLString("code"),
+        GraphQLString("name"),
+        GraphQLString("city"),
+        GraphQLString("country"),
+        GraphQLImage("destination_image", name="destinationImage"),
+    ]
+    objects = AirportQuerySet.as_manager()
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
+    class Meta:
+        verbose_name = "Airport"
+        verbose_name_plural = "Airports"
+        ordering = ["code"]
+
+
+class PortPairQuerySet(QuerySet):
+    def search(self, query, **kwargs):
+        """
+        Perform a search on the PortPair model's indexed fields using the configured search backend.
+
+        Args:
+            query (str): The search term to query against indexed fields (e.g., 'origin_port_code').
+            **kwargs: Additional arguments to pass to the search backend (e.g., fields, operator).
+
+        Returns:
+            QuerySet: A QuerySet containing PortPair objects matching the search query.
+        """
+        return get_search_backend().search(query, self, **kwargs)
+
+
+@register_query_field("portPair", "portPairs")
+class PortPair(index.Indexed, models.Model):
+    """Model to track port pairings for the booking widget"""
+
+    origin_port = models.ForeignKey(
+        "Airport",
+        on_delete=models.CASCADE,
+        related_name="origin_port_pairs",
+        help_text="Origin airport for this port pair",
+    )
+    destination_port = models.ForeignKey(
+        "Airport",
+        on_delete=models.CASCADE,
+        related_name="destination_port_pairs",
+        help_text="Destination airport for this port pair",
+    )
+
+    class Meta:
+        verbose_name = "Port Pair"
+        verbose_name_plural = "Port Pairs"
+        unique_together = ["origin_port", "destination_port"]
+        indexes = [
+            models.Index(fields=["origin_port"]),
+        ]
+
+    @property
+    def origin_port_code(self):
+        """Get origin port code from Airport model"""
+        return self.origin_port.code if self.origin_port else ""
+
+    @property
+    def destination_port_code(self):
+        """Get destination port code from Airport model"""
+        return self.destination_port.code if self.destination_port else ""
+
+    @property
+    def origin_port_name(self):
+        """Get origin port name from Airport model"""
+        return self.origin_port.city if self.origin_port else ""
+
+    @property
+    def destination_port_name(self):
+        """Get destination port name from Airport model"""
+        return self.destination_port.city if self.destination_port else ""
+
+    search_fields = [
+        index.SearchField("origin_port_code"),
+    ]
+
+    # GraphQL fields for booking widget
+    graphql_fields = [
+        GraphQLString("origin_port_code", name="originPortCode"),
+        GraphQLString("destination_port_code", name="destinationPortCode"),
+        GraphQLString("origin_port_name", name="originPortName"),
+        GraphQLString("destination_port_name", name="destinationPortName"),
+    ]
+
+    objects = PortPairQuerySet.as_manager()
+
+    def __str__(self):
+        return f"{self.origin_port_name} ({self.origin_port_code}) → {self.destination_port_name} ({self.destination_port_code})"
