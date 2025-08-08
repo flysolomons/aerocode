@@ -40,7 +40,7 @@ class BasePage(Page):
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
-        blank=False,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
         help_text="Image that will be displayed on this page's hero section",

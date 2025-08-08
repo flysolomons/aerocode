@@ -49,6 +49,9 @@ export interface RoutePage {
     city: string;
     code: string;
     name: string;
+    destinationImage?: {
+      url: string;
+    };
   };
   fares?: Fare[];
   specialRoutes?: SpecialRoute[];
@@ -70,6 +73,9 @@ export interface RouteSearchResult {
     city: string;
     code: string;
     name: string;
+    destinationImage?: {
+      url: string;
+    };
   };
   url: string;
   name?: string;
@@ -97,6 +103,9 @@ export const GET_ROUTE_PAGE_QUERY = gql`
         city
         code
         name
+        destinationImage {
+          url
+        }
       }
       heroTitle
       heroImage {
@@ -251,6 +260,7 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
         city: route.destinationPort?.city || "",
         code: route.destinationPort?.code || "",
         name: route.destinationPort?.name || "",
+        destinationImage: route.destinationPort?.destinationImage || undefined,
       },
       fares: orderedFares,
       specialRoutes: route.specialRoutes
