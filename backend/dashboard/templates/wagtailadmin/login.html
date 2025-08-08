@@ -1,3 +1,10 @@
 {% extends "wagtailadmin/login.html" %}
+{% load static %}
+
+{% block branding_logo %}
+    <div style="text-align: center; padding: 25px 0;">
+        <img src="{% static 'images/ie-logo-white.svg' %}" alt="Solomon Airlines" style="height: 35px;" />
+    </div>
+{% endblock %}
 
 {% block branding_login %}Sign in to Solomon Airlines CMS{% endblock %}
