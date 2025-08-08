@@ -130,7 +130,7 @@ export default function RoutePageTemplate({
     <>
       <SecondaryHero
         title={heroTitle}
-        image={heroImage?.url || "/hero3.jpg"}
+        image={destinationPort.destinationImage?.url || heroImage?.url || "/hero3.jpg"}
         breadcrumbs={url}
       />
 
