@@ -4,29 +4,33 @@ from django.contrib.auth import get_user_model
 
 
 class Command(BaseCommand):
-    help = 'Create a superuser if none exists'
+    help = "Create a superuser if none exists"
 
     def handle(self, *args, **options):
         User = get_user_model()
-        
+
+        print(
+            "THE PASSWORD IS " + os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL")
+        )
+
         # Check if any superuser exists
         if User.objects.filter(is_superuser=True).exists():
             self.stdout.write(
-                self.style.SUCCESS('Superuser already exists. Skipping creation.')
+                self.style.SUCCESS("Superuser already exists. Skipping creation.")
             )
             return
 
         # Get credentials from environment variables
-        username = os.environ.get('AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME')
-        email = os.environ.get('AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL')
-        password = os.environ.get('AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD')
+        username = os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME")
+        email = os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL")
+        password = os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD")
 
         # Validate required environment variables
         if not all([username, email, password]):
             self.stdout.write(
                 self.style.ERROR(
-                    'Missing required environment variables: '
-                    'AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME, AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL, AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD'
+                    "Missing required environment variables: "
+                    "AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME, AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL, AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD"
                 )
             )
             return
@@ -34,14 +38,10 @@ class Command(BaseCommand):
         try:
             # Create superuser
             User.objects.create_superuser(
-                username=username,
-                email=email,
-                password=password
+                username=username, email=email, password=password
             )
             self.stdout.write(
                 self.style.SUCCESS(f'Superuser "{username}" created successfully.')
             )
         except Exception as e:
-            self.stdout.write(
-                self.style.ERROR(f'Error creating superuser: {e}')
-            )
+            self.stdout.write(self.style.ERROR(f"Error creating superuser: {e}"))
