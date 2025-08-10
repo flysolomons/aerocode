@@ -2,7 +2,7 @@ venv
 .env
 media
 docker-compose.yml
-nginx.conf
+docker-compose-test.yml
 
 # Python cache files
 __pycache__/
