@@ -13,6 +13,8 @@ ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://backend-aerocode-ause-001.azurewebsites.net",
+    "https://app-aerocode-test-ause-001.azurewebsites.net",
+    "https://test.solair.com.sb",
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.dummy.EmailBackend"
