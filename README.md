@@ -7,31 +7,23 @@ A modern content management and information website built for Solomon Airlines. 
 ### Backend
 
 - **Framework**: Django 5.2 with Wagtail CMS 6.4.1
+- **Language**: Python
 - **Database**: PostgreSQL 15
-- **API**: GraphQL with Graphene-Django
-- **File Storage**: Azure Blob Storage
-- **Server**: Gunicorn WSGI server
-- **Authentication**: Django authentication with JWT
+- **API**: GraphQL
 
 ### Frontend
 
 - **Framework**: Next.js 15.2.4 with React 19
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS 3.4.1
-- **State Management**: Zustand 5.0.5
-- **Data Fetching**: Apollo Client 3.13.6 (GraphQL)
-- **UI Components**: Radix UI primitives
-- **Animations**: Framer Motion 12.16.0
-- **Icons**: Lucide React
+- **Data Fetching**: Apollo Client 3.13.6
 
 ### Infrastructure
 
 - **Containerization**: Docker & Docker Compose
 - **Reverse Proxy**: Nginx
 - **CI/CD**: GitHub Actions
-- **Container Registry**: GitHub Container Registry (ghcr.io)
-- **Hosting**: Azure Web App
-- **Monitoring**: Azure Application Insights
+- **Container Registry**: GitHub Container Registry (ghcr.io), Azure Container Registry (ACR)
+- **Hosting**: Azure App Service
 
 ## Architecture
 
@@ -93,13 +85,13 @@ A modern content management and information website built for Solomon Airlines. 
  │   - AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL                  │
  │   - AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD               │
  │   - AEROCODE_TEST_WAGTAIL_SUPERUSER_USERNAME               │
- └────────┬────────────────────────────────────────────────────┘
+ └────────┬───────────────────────────────────────────────────┘
           │
           ▼
  ┌────────────────────────────────────────────────────────────┐
  │       Push to GitHub Container Registry (ghcr.io)          │
  │ - Auth via GitHub Token                                    │
- └────────┬────────────────────────────────────────────────────┘
+ └────────┬───────────────────────────────────────────────────┘
           │
           ▼
  ┌────────────────────────────────────────────────────────────┐
