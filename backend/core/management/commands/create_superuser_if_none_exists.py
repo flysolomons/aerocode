@@ -10,7 +10,8 @@ class Command(BaseCommand):
         User = get_user_model()
 
         print(
-            "THE PASSWORD IS " + os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_EMAIL")
+            "THE PASSWORD IS "
+            + os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD")
         )
 
         # Check if any superuser exists
