@@ -9,11 +9,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         User = get_user_model()
 
-        print(
-            "THE PASSWORD IS "
-            + os.environ.get("AEROCODE_TEST_WAGTAIL_SUPERUSER_PASSWORD")
-        )
-
         # Check if any superuser exists
         if User.objects.filter(is_superuser=True).exists():
             self.stdout.write(
