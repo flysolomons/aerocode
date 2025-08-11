@@ -1,6 +1,69 @@
-# website
+# Aerocode
 
-Solomon Airlines website
+A modern content management and information website built for Solomon Airlines. The platform allows the airline to manage flight information, destinations, special offers, news, and other content, while providing customers with comprehensive travel information and resources. Flight bookings are handled through integration with RefX.
+
+## Tech Stack
+
+### Backend
+
+- **Framework**: Django 5.2 with Wagtail CMS 6.4.1
+- **Database**: PostgreSQL 15
+- **API**: GraphQL with Graphene-Django
+- **File Storage**: Azure Blob Storage
+- **Server**: Gunicorn WSGI server
+- **Authentication**: Django authentication with JWT
+
+### Frontend
+
+- **Framework**: Next.js 15.2.4 with React 19
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 3.4.1
+- **State Management**: Zustand 5.0.5
+- **Data Fetching**: Apollo Client 3.13.6 (GraphQL)
+- **UI Components**: Radix UI primitives
+- **Animations**: Framer Motion 12.16.0
+- **Icons**: Lucide React
+
+### Infrastructure
+
+- **Containerization**: Docker & Docker Compose
+- **Reverse Proxy**: Nginx
+- **CI/CD**: GitHub Actions
+- **Container Registry**: GitHub Container Registry (ghcr.io)
+- **Hosting**: Azure Web App
+- **Monitoring**: Azure Application Insights
+
+## Architecture
+
+```
+    ╔══════════════════════════════════════════════════════════════╗
+    ║                      Docker Container                        ║
+    ║                                                              ║
+    ║                    ┌─────────────────┐                       ║
+    ║                    │     Nginx       │                       ║
+    ║                    │ Reverse Proxy   │                       ║
+    ║                    │   (Port 80)     │                       ║
+    ║                    └─────────┬───────┘                       ║
+    ║                              │                               ║
+    ║              ┌───────────────┼───────────────┐               ║
+    ║              ▼                               ▼               ║
+    ║    ┌─────────────────┐            ┌─────────────────┐        ║
+    ║    │   Next.js       │            │   Wagtail       │        ║
+    ║    │   Frontend      │◄───────────┤   Backend       │        ║
+    ║    │   (Port 3000)   │            │   (Port 8000)   │        ║
+    ║    └─────────────────┘            └─────────┬───────┘        ║
+    ║                                             │                ║
+    ╚═════════════════════════════════════════════┼════════════════╝
+                                                  │
+                           ┌──────────────────────┼──────────────────────┐
+                           ▼                                             ▼
+                   ┌─────────────┐                             ┌─────────────┐
+                   │   Azure     │                             │   Azure     │
+                   │ PostgreSQL  │                             │   Blob      │
+                   │  (External) │                             │  Storage    │
+                   └─────────────┘                             │ (External)  │
+                                                               └─────────────┘
+```
 
 ## Deployment flow
 
@@ -56,3 +119,74 @@ Solomon Airlines website
  │   - WAGTAILADMIN_BASE_URL                                  │
  └────────────────────────────────────────────────────────────┘
 ```
+
+## Getting Started
+
+### Prerequisites
+
+- **Docker** (20.10+ recommended)
+- **Docker Compose** (v2.0+ recommended)
+- **Git**
+- **Node.js** 18+ (for local development)
+- **Python** 3.11+ (for local development)
+
+### Local Development Setup
+
+#### Backend Setup
+
+1. **Navigate to backend directory**
+
+   ```bash
+   cd backend
+   ```
+
+2. **Create virtual environment**
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run migrations**
+
+   ```bash
+   python manage.py migrate
+   ```
+
+5. **Create superuser**
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+6. **Start development server**
+   ```bash
+   python manage.py runserver
+   ```
+
+#### Frontend Setup
+
+1. **Navigate to frontend directory**
+
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+_Built with ❤️ by Solomon Airlines for Solomon Airlines_
