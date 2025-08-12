@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "staerocodetest.blob.core.windows.net",
       },
+      {
+        protocol: "http",
+        hostname: "http://192.168.18.118/",
+      },
 
       // add CDN here
     ],
