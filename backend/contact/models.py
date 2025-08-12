@@ -9,6 +9,12 @@ from core.blocks import ContactCategoryBlock
 class ContactPage(BasePage):
     max_count = 1
 
+    email = models.EmailField(
+        blank=True,
+        help_text="Contact email address",
+        verbose_name="Email",
+    )
+
     contact_sections = StreamField(
         [("contact_category", ContactCategoryBlock())],
         use_json_field=True,
@@ -18,10 +24,12 @@ class ContactPage(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
+        FieldPanel("email"),
         FieldPanel("contact_sections", heading="Contact Information"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
+        GraphQLString("email", name="email"),
         GraphQLStreamfield("contact_sections", name="contactSections"),
     ]
 

@@ -225,6 +225,11 @@ class FooterMenu(models.Model):
     name = models.CharField(
         max_length=100, help_text="Name of the footer menu (e.g., Footer Menu)"
     )
+    email = models.EmailField(
+        blank=True,
+        help_text="Contact email address for the footer",
+        verbose_name="Email",
+    )
     menu_items = StreamField(
         [
             ("mega_menu_item", ListBlock(MegaMenuColumnBlock())),
@@ -235,11 +240,13 @@ class FooterMenu(models.Model):
 
     panels = [
         FieldPanel("name"),
+        FieldPanel("email"),
         FieldPanel("menu_items"),
     ]
 
     graphql_fields = [
         GraphQLString("name"),
+        GraphQLString("email", name="email"),
         GraphQLStreamfield("menu_items"),
     ]
 
