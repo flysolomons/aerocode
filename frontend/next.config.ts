@@ -35,6 +35,10 @@ const nextConfig: NextConfig = {
         hostname: "test.solair.com.sb",
       },
       {
+        protocol: "https",
+        hostname: "test.solair.com.sb",
+      },
+      {
         protocol: "http",
         hostname: "20.188.237.9",
       },
