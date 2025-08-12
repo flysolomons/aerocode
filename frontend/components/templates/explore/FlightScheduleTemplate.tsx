@@ -337,8 +337,7 @@ export default function FlightScheduleTemplate({
       label: "Master Schedule",
       hasContent: hasSchedules && hasFilteredSchedule,
     },
-    { id: "flight-timetable", label: "Flight Timetable", hasContent: true },
-    { id: "our-destinations", label: "Our Destinations", hasContent: true },
+    { id: "flight-timetable", label: "Live Timetable", hasContent: true },
   ];
 
   // console.log(initialPage);
@@ -457,11 +456,6 @@ export default function FlightScheduleTemplate({
             {/* Flight Timetable Search Widget */}
             <div id="flight-timetable">
               <FlightTimetableWidget />
-            </div>
-
-            {/* Recommendation Section */}
-            <div id="our-destinations">
-              <Recommendations heading="Explore our destinations" />
             </div>
           </div>
         </Container>
