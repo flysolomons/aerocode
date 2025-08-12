@@ -44,7 +44,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "http",
-        hostname: "http://192.168.18.118/",
+        hostname: "192.168.18.118",
       },
 
       // add CDN here
