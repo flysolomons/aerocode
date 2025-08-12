@@ -449,9 +449,26 @@ const BookATripForm = memo(function BookATripForm({
         );
         return utcDate.toISOString().slice(0, 10);
       }
+      // Build travelers array based on form selection
+      const travelersArray = [];
+
+      // Add adults
+      for (let i = 0; i < travelers.adults; i++) {
+        travelersArray.push({ passengerTypeCode: "ADT" });
+      }
+
+      // Add children
+      for (let i = 0; i < travelers.children; i++) {
+        travelersArray.push({ passengerTypeCode: "CHD" });
+      }
+
+      // Add infants
+      for (let i = 0; i < travelers.infants; i++) {
+        travelersArray.push({ passengerTypeCode: "INF" });
+      }
 
       const searchObj: any = {
-        travelers: [{ passengerTypeCode: "ADT" }],
+        travelers: travelersArray,
         commercialFareFamilies: ["CFFSOLO", "CFFSOLOBIS"],
         itineraries: [
           {
@@ -512,6 +529,7 @@ const BookATripForm = memo(function BookATripForm({
     dateRange.to,
     isOneWay,
     selectedCurrency,
+    travelers,
   ]);
 
   // Memoized validation flags for better performance
@@ -555,7 +573,7 @@ const BookATripForm = memo(function BookATripForm({
         {isDesktopModalActive && (
           <button
             onClick={closeDesktopModal}
-            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-[80]"
+            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white hover:bg-red-200 rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 z-[80]"
           >
             <svg
               className="w-5 h-5"
