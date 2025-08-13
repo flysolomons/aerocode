@@ -84,7 +84,7 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       seoTitle
       description
       country
-      reasonsToVisit(limit: 3) {
+      reasonsToVisit {
         ... on SectionBlock {
           heading
           text
@@ -156,7 +156,7 @@ export async function fetchDestinationPage(
       subTitle: data.destination.subTitle || "",
       description: data.destination.description || "",
       country: data.destination.country || "",
-      reasonsToVisit: data.destination.reasonsToVisit || [],
+      reasonsToVisit: (data.destination.reasonsToVisit || []).slice(0, 3),
       travelRequirements: data.destination.travelRequirements || [],
       rankedRoutes: (data.destination.rankedRoutes || []).map(
         (rankedRoute: any) => ({
