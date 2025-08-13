@@ -1,66 +1,25 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'; // Optional: for arrow icons
+import { ChevronLeft, ChevronRight } from 'lucide-react'; // For navigation arrows
+import { ImageBlock } from '@/graphql/AboutPageQuery';
 
-// Define the type for magazine data
+
+
 interface Magazine {
-  id: number;
-  title: string;
-  description: string;
-  coverImage: string;
-  link: string;
+  title?: string;
+  image?: ImageBlock;
+  document?: { url: string };
 }
 
-// Sample magazine data (replace with your actual data)
-const magazines: Magazine[] = [
-  {
-    id: 1,
-    title: 'Solomons Skies - July 2025',
-    description: 'Discover island adventures and local stories.',
-    coverImage: '/magazine-issue-94.png', // Replace with actual URL
-    link: '/magazines/solomons-skies-july-2025.pdf',
-  },
-  {
-    id: 2,
-    title: 'Solomon Islands Digital - Summer 2025',
-    description: 'Explore vibrant culture and stunning landscapes.',
-    coverImage: '/magazine-issue-93.png',
-    link: '/magazines/solomon-islands-summer-2025.pdf',
-  },
-  {
-    id: 3,
-    title: 'Solomons Skies - April 2025',
-    description: 'Stories of the Pacific await.',
-    coverImage: '/magazine-issue-92.png',
-    link: '/magazines/solomons-skies-april-2025.pdf',
-  },
-  {
-    id: 4,
-    title: 'Solomons Skies - April 2025',
-    description: 'Stories of the Pacific await.',
-    coverImage: '/magazine-issue-91.png',
-    link: '/magazines/solomons-skies-april-2025.pdf',
-  },
-  {
-    id: 6,
-    title: 'Solomons Skies - April 2025',
-    description: 'Stories of the Pacific await.',
-    coverImage: '/magazine-issue-90.png',
-    link: '/magazines/solomons-skies-april-2025.pdf',
-  },
-  {
-    id: 7,
-    title: 'Solomons Skies - April 2025',
-    description: 'Stories of the Pacific await.',
-    coverImage: '/magazine-issue-89.png',
-    link: '/magazines/solomons-skies-april-2025.pdf',
-  },
-];
+// Props for the MagazineCarousel component
+interface MagazineCarouselProps {
+  magazines?: Magazine[];
+}
 
-const MagazineCarousel: React.FC = () => {
+const MagazineCarousel: React.FC<MagazineCarouselProps> = ({magazines}) => {
   // Initialize Embla Carousel
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true, // Infinite loop
+    loop: true,
     slidesToScroll: 1,
     align: 'start',
     containScroll: 'trimSnaps',
@@ -76,36 +35,39 @@ const MagazineCarousel: React.FC = () => {
     // Example: gtag('event', 'magazine_click', { title });
   };
 
+  
   return (
-    <section className="py-14 px-4">
+
+    
+    <section className="py-10 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-blue-500 mb-6">
-          Our Stories in Flight
+        <h2 className="text-3xl lg:text-4xl font-bold text-center text-blue-500 mb-6">
+          Our Stories Inflight
         </h2>
         <p className="text-center text-gray-600 mb-8">
-          Explore the beauty and culture of the Solomon Islands through our vibrant
-          magazines.
+          Explore the beauty and culture of the Solomon Islands through our vibrant magazines.
         </p>
+        {/* Display magazine list if more than 0 */}
         <div className="relative">
           {/* Embla Carousel Container */}
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">
-              {magazines.map((magazine) => (
+              {magazines?.map((magazine) => (
                 <div
-                  key={magazine.id}
-                  className="flex-[0_0_25%] min-w-0 px-2 sm:flex-[0_0_50%] md:flex-[0_0_25%] "
+                  key={magazine.title}
+                  className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_33.33%] md:min-w-[calc(100%/3)] lg:flex-[0_0_25%] lg:min-w-[calc(100%/4)]"
                 >
                   <a
-                    href={magazine.link}
+                    href={magazine.document?.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block rounded-lg overflow-hidden shadow-md transform transition-transform hover:scale-105"
-                    onClick={() => trackClick(magazine.title)}
+                    onClick={() => trackClick(magazine.title || 'undefined')}
                   >
                     <img
-                      src={magazine.coverImage}
+                      src={magazine.image?.url}
                       alt={`Cover of ${magazine.title}`}
-                      className="w-full aspect-[3/4] object-cover  rounded-lg border-4 border-white"
+                      className="w-full aspect-[3/4] object-cover"
                       loading="lazy"
                     />
                   </a>

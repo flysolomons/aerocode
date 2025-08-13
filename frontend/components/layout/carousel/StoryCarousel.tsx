@@ -1,78 +1,43 @@
 import React from 'react';
 import Image from 'next/image';
 
-// Define the type for story data
-interface Story {
-  id: number;
+//Story data
+interface Story{
   title: string;
   subTitle?: string;
   image?: string; // Image for featured story; optional for others
-  link: string; // Link to magazine or specific article
+  link: string; // Link to digital magazine
+
+}
+// Story data
+interface StoryCarouselProps {
+  stories?: Story[];
+  
 }
 
-// Sample story data (replace with your actual data)
-const stories: Story[] = [
-  {
-    id: 1,
-    title: 'The Last Wild Island', // Featured story
-    subTitle: 'Tom Perry travels to the tiny remote island of Bellona, where men are men, caves are hotels and crayfish are plentiful.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=30',
-  },
-  {
-    id: 2,
-    title: 'Sleeping with the Anemone',
-    subTitle: 'Tom Perry travels to the tiny remote island of Bellona, where men are men, caves are hotels and crayfish are plentiful.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=10',
-  },
-  {
-    id: 3,
-    title: 'On Island Time',
-    subTitle: 'Finding solace is an easy task on a cruise that combines history, nature and culture.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=15',
-  },
-  {
-    id: 4,
-    title: 'Hunting for Headspace',
-    subTitle: 'Dave Cauldwell seeks solitude in a secluded in a part of the islands that has a cannibal past and a colourful present.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=20',
-  },
-  {
-    id: 5,
-    title: 'Island Duels',
-    subTitle: 'Tom Perry avoids being skewered at a festival that celebrates sorting out problems the old-fashioned way – by spear. ',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=25',
-  },
-  {
-    id: 6,
-    title: 'The Real Island Life',
-    subTitle: 'Choose your adventure: a holiday can be more than sitting in a hammock or by a hotel swimming pool all day.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=35',
-  },
-  {
-    id: 7,
-    title: 'Top Five Sol-id Stays',
-    subTitle: 'Tom Perry travels to the tiny remote island of Bellona, where men are men, caves are hotels and crayfish are plentiful.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=40',
-  },
-  {
-    id: 8,
-    title: 'The Mangrove Crab',
-    subTitle: 'Tom Perry travels to the tiny remote island of Bellona, where men are men, caves are hotels and crayfish are plentiful.',
-    image: '/sleeping-awesome.png', // Replace with actual URL
-    link: '/magazines/solomon-islands-digital.pdf#page=45',
-  },
-];
 
-const FeaturedStory: React.FC = () => {
+const storyCarousel: React.FC<StoryCarouselProps> = ({stories}) => {
+
+  // If stories is undefined or empty, render a fallback
+  if (!stories || stories.length === 0) {
+    return (
+      <section className="py-14 px-4">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-center text-blue-500 mb-6">
+            Solomon Islands Stories
+          </h2>
+          <p className="text-center text-gray-600 mb-8">
+            Dive into personal stories and incredible experiences from the Solomon
+            Islands.
+          </p>
+          <p className="text-center text-gray-500">No stories available.</p>
+        </div>
+      </section>
+    );
+  }
+
   // Featured story is the first in the array
-  const featuredStory = stories[0];
+  const featuredStory =stories[0];
   // Other stories for the accordion
   const otherStories = stories.slice(1);
 
@@ -80,12 +45,12 @@ const FeaturedStory: React.FC = () => {
   const trackClick = (title: string) => {
     console.log(`Clicked story: ${title}`);
     // gtag('event', 'story_click', { title });
-};
+  };
 
   return (
     <section className="py-14 px-4">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-blue-500 mb-6">
+        <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold text-center mx-auto text-blue-500 mb-6 w-3/4 md:w-full lg:w-full">
           Solomon Islands Stories
         </h2>
         <p className="text-center text-gray-600 mb-8">
@@ -125,7 +90,7 @@ const FeaturedStory: React.FC = () => {
           <div className="md:w-1/2 space-y-4">
             {otherStories.map((story) => (
               <div
-                key={story.id}
+                key={story.title}
                 className="bg-white rounded-lg shadow-md p-1"
                 role="region"
                 aria-label={`Story: ${story.title}`}
@@ -176,4 +141,4 @@ const FeaturedStory: React.FC = () => {
   );
 };
 
-export default FeaturedStory;
+export default storyCarousel;

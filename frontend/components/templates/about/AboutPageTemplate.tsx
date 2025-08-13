@@ -4,13 +4,75 @@ import React from "react";
 import PrimaryHero from "@/components/layout/hero/PrimaryHero";
 import Container from "@/components/layout/Container";
 import Image from "next/image";
-import Link from "next/link";
 import { AboutIndexPage } from "@/graphql/AboutPageQuery";
 import parse from "html-react-parser";
 import VideoHero from "@/components/layout/hero/VideoHero";
 import MagazineCarousel from "@/components/layout/carousel/MagazineCarousel";
 import StoryCarousel from "@/components/layout/carousel/StoryCarousel";
 import { beautifyHtml } from "@/lib/beautifyHtml";
+
+import { ImageBlock, MagazineBlock,StoryBlock } from '@/graphql/AboutPageQuery';
+
+
+interface Magazine {
+  title?: string;
+  image?: ImageBlock;
+  document?: { url: string };
+}
+
+interface Story{
+  title: string;
+  subTitle?: string;
+  image?: string;
+  link: string;
+}
+
+// Transform MagazineBlock[] to Magazine[] to pass into MagazineCarousel
+const transformMagazines = (magazines: MagazineBlock[]): Magazine[] => {
+  if (!magazines || !Array.isArray(magazines)) return [];
+
+  return magazines
+    .map((magazine) => {
+      if (!magazine.blocks || !Array.isArray(magazine.blocks)) return null;
+
+      let result: Magazine = {
+        title: undefined,
+        image: undefined,
+        document: undefined,
+      };
+
+      magazine.blocks.forEach((block) => {
+        if (block.title) result.title = block.title;
+        if (block.image) result.image = block.image;
+        if (block.document) result.document = block.document;
+      });
+
+      // Ensure the magazine has at least a title or document
+      if (!result.title && !result.document) return null;
+
+      return result;
+    })
+    .filter((magazine): magazine is Magazine => magazine !== null);
+};
+
+// Transform StoryBlock[] to Story[]
+const transformStories = (stories: StoryBlock[]): Story[] => {
+  if (!stories || !Array.isArray(stories)) return [];
+
+  return stories
+    .map((story) => {
+      return {
+        title: story.title || "Untitled Story",
+        subTitle: story.subtitle,
+        image: story.coverImage?.url,
+        link: story.url || "#",
+      };
+    })
+    .filter((story): story is Story => !!story.title && !!story.link);
+};
+
+
+
 
 interface AboutPageTemplateProps {
   initialPage: AboutIndexPage;
@@ -19,6 +81,15 @@ interface AboutPageTemplateProps {
 export default function AboutPageTemplate({
   initialPage,
 }: AboutPageTemplateProps) {
+
+  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
+
+  // Transform magazines
+  const magazines = transformMagazines(initialPage.magazines as MagazineBlock[]);
+  // Transform Stories
+  const stories = transformStories(initialPage.stories as StoryBlock[]);
+
+
   return (
     <div className="min-h-screen">
 
@@ -34,7 +105,7 @@ export default function AboutPageTemplate({
           
       : 
         <VideoHero 
-          videoSource={initialPage.heroVideo || "/about.mp4"}
+          videoSource={storageUrl + initialPage.heroVideo || "/about.mp4"}
           title={initialPage.heroTitle || "About Us"}
           subtitle={initialPage.subTitle || "Proudly Connecting the Solomon Islands Since 1962"}
           breadcrumbs={initialPage.url}
@@ -46,7 +117,7 @@ export default function AboutPageTemplate({
       {/* Introduction Section */}
       <div
         id="introductionSection"
-        className="py-12 md:py-16 lg:py-24 space-y-6 md:space-y-6 lg:space-y-4 px-4 md:px-6 justify-center bg-[#ffffff] h-screen"
+        className="py-12 md:py-16 lg:py-24 space-y-12 md:space-y-6 lg:space-y-4 px-4 md:px-6 justify-center bg-[#ffffff] h-auto lg:h-screen"
       >
         
         <Container>
@@ -60,7 +131,7 @@ export default function AboutPageTemplate({
               className="mb-3"
             /> */}
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#101f5c" viewBox="0 0 256 256"><path d="M224,56V90.06h0a44,44,0,1,0-56,67.88h0V192H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z" opacity="0.2"></path><path d="M128,136a8,8,0,0,1-8,8H72a8,8,0,0,1,0-16h48A8,8,0,0,1,128,136Zm-8-40H72a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm112,65.47V224A8,8,0,0,1,220,231l-24-13.74L172,231A8,8,0,0,1,160,224V200H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216a16,16,0,0,1,16,16V86.53a51.88,51.88,0,0,1,0,74.94ZM160,184V161.47A52,52,0,0,1,216,76V56H40V184Zm56-12a51.88,51.88,0,0,1-40,0v38.22l16-9.16a8,8,0,0,1,7.94,0l16,9.16Zm16-48a36,36,0,1,0-36,36A36,36,0,0,0,232,124Z"></path></svg>
-            <h2 className="font-semibold text-3xl text-center text-blue-500">
+            <h2 className="font-semibold text-4xl lg:text-3xl text-center text-blue-500">
               60+ Years of Innovation and Excellence in Global Aviation
             </h2>
             <div className="text-gray-500 text-center py-4">
@@ -98,12 +169,13 @@ export default function AboutPageTemplate({
                 </p>
 
           </div>
+        
         </Container>
         
       </div>
       
       {/* Mission & Vision Section */}
-      <div className="bg-rfex h-screen">
+      <div className="bg-rfex h-auto lg:h-screen">
         
         <Container>
           <div
@@ -126,7 +198,7 @@ export default function AboutPageTemplate({
                   alt="quote"
                   width={100}
                   height={100}
-                  className="absolute -mt-6 -ml-4"
+                  className="absolute -mt-6 -ml-2 lg:-ml-4  w-10 h-10 lg:w-28 lg:h-28"
                 >
 
                 </Image>
@@ -137,7 +209,7 @@ export default function AboutPageTemplate({
                   
                   WE ARE ON A MISSION
                 </h3>
-                <div className="text-black text-3xl  leading-relaxed text-center">
+                <div className="text-black text-2xl lg:text-3xl  leading-relaxed text-center">
                   {parse(initialPage.missionStatement) ||
                     "Connecting the Solomon Islands through safe, reliable, and exceptional air transport services."}
                 </div>
@@ -151,7 +223,7 @@ export default function AboutPageTemplate({
                   alt="quote"
                   width={100}
                   height={100}
-                  className="float-right transform -scale-x-100 -mt-12 -mr-12"
+                  className="float-right w-10 h-10 lg:w-28 lg:h-28 transform -scale-x-100 -mt-12 -mr-10 lg:-mr-12"
                 >
 
                 </Image>
@@ -159,7 +231,7 @@ export default function AboutPageTemplate({
                   
                   WITH THE VISION
                 </h3>
-                <div className="text-black text-3xl  leading-relaxed text-center">
+                <div className="text-black text-2xl lg:text-3xl  leading-relaxed text-center">
                   {parse(initialPage.visionStatement) ||
                     "To be the Pacific region's premier airline, setting the standard for safety, service, and sustainability."}
                 </div>
@@ -171,9 +243,9 @@ export default function AboutPageTemplate({
       {/* End of Mission & Vision Section */}
       
       {/* Values Section */}
-      <div className="bg-blue-800 h-screen flex items-center">
+      <div className="bg-blue-800 h-auto lg:h-screen flex items-center">
         <Container>
-          <div className="text-center mb-12 space-y-3">
+          <div className="text-center mb-12 space-y-3 pt-10">
             <h3 className="text-3xl lg:text-4xl font-bold mb-4 text-blue-100">
               What We Value
             </h3>
@@ -184,7 +256,7 @@ export default function AboutPageTemplate({
           </div>
 
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4  lg:gap-6  ">
+          <div className="grid  grid-cols-1 lg:grid-cols-3 gap-4  lg:gap-6  px-4 lg:px-0 pb-20 lg:pb-16">
             {initialPage.values && initialPage.values.length > 0 ? (
               initialPage.values.map((value, index) => (
                 
@@ -346,7 +418,7 @@ export default function AboutPageTemplate({
       </div>
       
 {/* Timeline - History - SpaceX/Tesla inspired */}
-<div className="bg-refx text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover h-screen flex items-center">
+<div className="bg-refx text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover  h-auto lg:h-screen flex items-center">
   <Container className="flex flex-col justify-center h-full">
     <div id="timelineSection" className="px-4 sm:px-6">
       <div className="text-center mb-12 sm:mb-16 lg:mb-16">
@@ -362,8 +434,8 @@ export default function AboutPageTemplate({
           initialPage.journey.map((journeyItem, index) => (
             <div key={index} className="flex flex-col lg:flex-row items-start">
               {/* Year (Left on large screens, aligned with title) */}
-              <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2 ">
-                <div className="text-2xl float-right text-center  sm:text-3xl lg:text-xl  text-white bg-gradient-to-l from-blue-500  to-[#4c447f] w-48 rounded-full p-2 lg:mx-0 shadow-lg">
+              <div className="w-full lg:w-1/3 text-center lg:text-right mb-4 justify-items-center  lg:mb-0 lg:pr-10 pt-2 ">
+                <div className="text-2xl  lg:float-right text-center  sm:text-3xl lg:text-xl  text-white bg-gradient-to-l from-blue-500  to-[#4c447f] w-48 rounded-full p-2 lg:mx-0 shadow-lg">
                   {journeyItem.year}
                 </div>
               </div>
@@ -379,16 +451,9 @@ export default function AboutPageTemplate({
                   </div>
                 </div>
                 {index < initialPage.journey.length - 1 && (
-                  <div className="absolute left-1/2 -ml-0.5 lg:hidden">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="62"
-                      height="62"
-                      className="-ml-8 mt-4"
-                      fill="#8D8CD9"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"></path>
+                  <div className="absolute lg:hidden left-1/3 ml-8 mt-2 md:ml-24 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#c7c7c7" viewBox="0 0 256 256">
+                      <path d="M231.39,132.94A8,8,0,0,0,224,128H184V104a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v24H32a8,8,0,0,0-5.66,13.66l96,96a8,8,0,0,0,11.32,0l96-96A8,8,0,0,0,231.39,132.94ZM128,220.69,51.31,144H80a8,8,0,0,0,8-8V112h80v24a8,8,0,0,0,8,8h28.69ZM72,40a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,40Zm0,32a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,72Z"></path>
                     </svg>
                   </div>
                 )}
@@ -486,12 +551,14 @@ export default function AboutPageTemplate({
 
 {/* Magazine Carousel */}
 <div className="bg-white">
-  <MagazineCarousel/>
+  <MagazineCarousel 
+    magazines={magazines}
+  />
 </div>
 
 {/* Story Courosel */}
 <div>
-  <StoryCarousel/>
+  <StoryCarousel stories={stories}/>
 
 </div>
 
