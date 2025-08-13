@@ -84,7 +84,7 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       seoTitle
       description
       country
-      reasonsToVisit {
+      reasonsToVisit(limit: 3) {
         ... on SectionBlock {
           heading
           text
