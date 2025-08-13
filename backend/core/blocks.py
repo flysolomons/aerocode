@@ -5,10 +5,12 @@ from wagtail.blocks import (
     RichTextBlock,
     StructBlock,
     StreamBlock,
+    URLBlock,
 )
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.blocks import PageChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
+from wagtail.documents.blocks import DocumentChooserBlock
 from grapple.helpers import register_streamfield_block
 from grapple.models import (
     GraphQLImage,
@@ -418,3 +420,45 @@ class ContactCategoryBlock(StructBlock):
     class Meta:
         graphql_type = "ContactCategoryBlock"
         icon = "group"
+
+
+@register_streamfield_block
+class MagazineBlock(StructBlock):
+    """A magazine block with document, cover image and title."""
+
+    title = CharBlock(required=True, max_length=100, help_text="Magazine title")
+    cover_image = ImageChooserBlock(required=True, help_text="Cover image for the magazine")
+    document = DocumentChooserBlock(required=True, help_text="Magazine document (PDF, etc.)")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLImage("cover_image", name="coverImage"),
+        GraphQLString("document", name="document"),
+    ]
+
+    class Meta:
+        graphql_type = "MagazineBlock"
+        icon = "doc-full"
+        label = "Magazine"
+
+
+@register_streamfield_block
+class StoryBlock(StructBlock):
+    """A story block with cover image, title, subtitle and URL."""
+
+    title = CharBlock(required=True, max_length=100, help_text="Story title")
+    subtitle = CharBlock(required=False, max_length=200, help_text="Story subtitle")
+    cover_image = ImageChooserBlock(required=True, help_text="Cover image for the story")
+    url = URLBlock(required=True, help_text="URL link to the full story")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("subtitle", name="subtitle"),
+        GraphQLImage("cover_image", name="coverImage"),
+        GraphQLString("url", name="url"),
+    ]
+
+    class Meta:
+        graphql_type = "StoryBlock"
+        icon = "link"
+        label = "Story"
