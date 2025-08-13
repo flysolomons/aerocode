@@ -5,7 +5,7 @@ import { DateRangePicker } from "@/components/ui/date-picker";
 import {
   fetchAllAirports,
   fetchArrivalDestinationsForOrigin,
-  Airport,
+  AirportData,
   DepartureAirport,
   ArrivalAirport,
 } from "@/graphql/BookingWidgetQuery";
@@ -61,7 +61,7 @@ const BookATripForm = memo(function BookATripForm({
   });
 
   // State for departure and arrival airports
-  const [allAirports, setAllAirports] = useState<Airport[]>([]);
+  const [allAirports, setAllAirports] = useState<AirportData[]>([]);
   const [arrivalAirports, setArrivalAirports] = useState<ArrivalAirport[]>([]);
   const [selectedDeparture, setSelectedDeparture] =
     useState<DepartureAirport | null>(null);
@@ -140,8 +140,8 @@ const BookATripForm = memo(function BookATripForm({
         // Initialize arrival airports with all airports
         setArrivalAirports(
           airports.map((airport) => ({
-            arrivalAirport: airport.airport,
-            arrivalAirportCode: airport.airportCode,
+            arrivalAirport: airport.city,
+            arrivalAirportCode: airport.code,
           }))
         );
       } catch (error) {
@@ -187,22 +187,21 @@ const BookATripForm = memo(function BookATripForm({
 
   // When selectedDeparture changes, fetch arrival airports for that origin
   useEffect(() => {
-    if (selectedDeparture?.departureAirport) {
-      fetchArrivalsForOrigin(selectedDeparture.departureAirport);
+    if (selectedDeparture?.departureAirportCode) {
+      fetchArrivalsForOrigin(selectedDeparture.departureAirportCode);
     }
-  }, [selectedDeparture?.departureAirport, fetchArrivalsForOrigin]);
+  }, [selectedDeparture?.departureAirportCode, fetchArrivalsForOrigin]);
 
   // Handle preselected airports when data is loaded
   useEffect(() => {
     if (allAirports.length > 0 && preselectedDeparture) {
       const preselectedDepartureAirport = allAirports.find(
-        (airport) =>
-          airport.airportCode === preselectedDeparture.departureAirportCode
+        (airport) => airport.code === preselectedDeparture.departureAirportCode
       );
       if (preselectedDepartureAirport) {
         setSelectedDeparture({
-          departureAirport: preselectedDepartureAirport.airport,
-          departureAirportCode: preselectedDepartureAirport.airportCode,
+          departureAirport: preselectedDepartureAirport.city,
+          departureAirportCode: preselectedDepartureAirport.code,
         });
       }
     }
@@ -434,32 +433,42 @@ const BookATripForm = memo(function BookATripForm({
       dateRange.from &&
       (isOneWay || dateRange.to)
     ) {
-      // Set searching state
       setIsSearching(true);
       setShowValidation(false);
 
-      // Submit POST request to Amadeus booking engine
       const baseUrl = "https://uat.digital.airline.amadeus.com/ie/booking";
 
-      // Helper to format date in Solomon Islands timezone (UTC+11) as ISO 8601 date string
       function formatSolomonDate(date: Date) {
-        // Get UTC midnight for the selected date
         const year = date.getFullYear();
         const month = date.getMonth();
         const day = date.getDate();
-        // Create a date at midnight local time
         const localMidnight = new Date(year, month, day, 0, 0, 0);
-        // Solomon Islands is UTC+11, so subtract the timezone offset to get the correct date in UTC
-        // This ensures the date is interpreted as the selected local date
         const solomonOffset = -11 * 60; // in minutes
         const utcDate = new Date(
           localMidnight.getTime() - solomonOffset * 60000
         );
         return utcDate.toISOString().slice(0, 10);
       }
+      // Build travelers array based on form selection
+      const travelersArray = [];
+
+      // Add adults
+      for (let i = 0; i < travelers.adults; i++) {
+        travelersArray.push({ passengerTypeCode: "ADT" });
+      }
+
+      // Add children
+      for (let i = 0; i < travelers.children; i++) {
+        travelersArray.push({ passengerTypeCode: "CHD" });
+      }
+
+      // Add infants
+      for (let i = 0; i < travelers.infants; i++) {
+        travelersArray.push({ passengerTypeCode: "INF" });
+      }
 
       const searchObj: any = {
-        travelers: [{ passengerTypeCode: "ADT" }],
+        travelers: travelersArray,
         commercialFareFamilies: ["CFFSOLO", "CFFSOLOBIS"],
         itineraries: [
           {
@@ -470,7 +479,6 @@ const BookATripForm = memo(function BookATripForm({
         ],
       };
 
-      // Add return itinerary if round trip
       if (dateRange.to && !isOneWay) {
         searchObj.itineraries.push({
           originLocationCode: selectedArrival.arrivalAirportCode,
@@ -479,7 +487,6 @@ const BookATripForm = memo(function BookATripForm({
         });
       }
 
-      // Build portalFacts (same format as before)
       const portalFacts = JSON.stringify([
         { key: "OfficeID", value: "HIRIE08AA" },
         { key: "countryCode", value: selectedCurrency?.countryCode || "AU" },
@@ -488,7 +495,7 @@ const BookATripForm = memo(function BookATripForm({
       // Create form and submit as POST request
       const form = document.createElement("form");
       form.method = "POST";
-      form.action = `${baseUrl}?lang=en-GB`; // lang as query parameter
+      form.action = `${baseUrl}?lang=en-GB`;
       form.style.display = "none";
 
       // Create hidden inputs with original field names
@@ -522,6 +529,7 @@ const BookATripForm = memo(function BookATripForm({
     dateRange.to,
     isOneWay,
     selectedCurrency,
+    travelers,
   ]);
 
   // Memoized validation flags for better performance
@@ -565,7 +573,7 @@ const BookATripForm = memo(function BookATripForm({
         {isDesktopModalActive && (
           <button
             onClick={closeDesktopModal}
-            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-colors duration-200 z-[80]"
+            className="hidden md:flex absolute right-4 top-4 w-8 h-8 bg-white hover:bg-red-200 rounded-full shadow-lg items-center justify-center text-gray-500 hover:text-gray-700 transition-all duration-200 z-[80]"
           >
             <svg
               className="w-5 h-5"
@@ -678,18 +686,18 @@ const BookATripForm = memo(function BookATripForm({
                             className="hover:bg-gray-100 cursor-pointer p-3"
                             onClick={() => {
                               setSelectedDeparture({
-                                departureAirport: airport.airport,
-                                departureAirportCode: airport.airportCode,
+                                departureAirport: airport.city,
+                                departureAirportCode: airport.code,
                               });
                               if (showValidation) setShowValidation(false);
                               setIsDeparturePopoverOpen(false);
                             }}
                           >
                             <div className="text-black text-sm">
-                              {airport.airport}
+                              {airport.city}
                             </div>
                             <div className="text-xs text-gray-500 mt-1">
-                              {airport.airportCode}
+                              {airport.code}
                             </div>
                           </div>
                         ))
@@ -889,8 +897,8 @@ const BookATripForm = memo(function BookATripForm({
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedDeparture({
-                                      departureAirport: airport.airport,
-                                      departureAirportCode: airport.airportCode,
+                                      departureAirport: airport.city,
+                                      departureAirportCode: airport.code,
                                     });
                                     if (showValidation)
                                       setShowValidation(false);
@@ -900,10 +908,10 @@ const BookATripForm = memo(function BookATripForm({
                                   }}
                                 >
                                   <div className="text-gray-900 font-medium">
-                                    {airport.airport}
+                                    {airport.city}
                                   </div>
                                   <div className="text-sm text-gray-500 mt-1">
-                                    {airport.airportCode}
+                                    {airport.code}
                                   </div>
                                 </div>
                               ))}

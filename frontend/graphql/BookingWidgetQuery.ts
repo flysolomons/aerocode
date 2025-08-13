@@ -21,95 +21,96 @@ export interface Airport {
   __typename?: string;
 }
 
-// Interface for port pair data
-export interface PortPair {
-  originPortCode: string;
-  originPortName: string;
-  destinationPortCode: string;
-  destinationPortName: string;
+// New interface for Airport model data
+export interface AirportData {
+  code: string;
+  name: string;
+  city: string;
   __typename?: string;
 }
 
-// Query to fetch port pairs
-export const GET_PORT_PAIRS_QUERY = gql`
-  query GetPortPairs {
-    portPairs(limit: 100) {
-      originPortCode
+// Query to fetch all airports directly from Airport model
+export const GET_ALL_AIRPORTS_QUERY = gql`
+  query GetAllAirports {
+    airports(limit: 100) {
+      code
+      name
+      city
+    }
+  }
+`;
+
+// Query to fetch destinations for a given port
+export const GET_DESTINATIONS_FOR_PORT_QUERY = gql`
+  query GetDestinationsForPort($searchQuery: String!) {
+    portPairs(searchQuery: $searchQuery, limit: 100) {
       destinationPortCode
-      originPortName
       destinationPortName
     }
   }
 `;
 
-// Cache for port pairs data to avoid repeated API calls
-let portPairsCache: PortPair[] = [];
-let cacheTimestamp: number = 0;
+// Cache for airports data to avoid repeated API calls
+let airportsCache: AirportData[] = [];
+let airportsCacheTimestamp: number = 0;
+
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 /**
- * Internal function to get port pairs data with caching
+ * Internal function to get airports data with caching
  */
-async function getCachedPortPairs(): Promise<PortPair[]> {
+async function getCachedAirports(): Promise<AirportData[]> {
   const now = Date.now();
 
   // Return cached data if it's still fresh
-  if (portPairsCache.length > 0 && now - cacheTimestamp < CACHE_DURATION) {
-    return portPairsCache;
+  if (
+    airportsCache.length > 0 &&
+    now - airportsCacheTimestamp < CACHE_DURATION
+  ) {
+    return airportsCache;
   }
-  // console.log(
-  //   "Running on:",
-  //   typeof window !== "undefined" ? "CLIENT" : "SERVER"
-  // );
-  // console.log("Client URL is:", (client.link as any).options?.uri);
 
   // Fetch fresh data
   try {
     const { data } = await client.query({
-      query: GET_PORT_PAIRS_QUERY,
+      query: GET_ALL_AIRPORTS_QUERY,
       fetchPolicy: "cache-first", // Use Apollo cache when possible
     });
 
-    portPairsCache = data.portPairs || [];
-    cacheTimestamp = now;
-    return portPairsCache;
+    airportsCache = data.airports || [];
+    airportsCacheTimestamp = now;
+    return airportsCache;
   } catch (error) {
-    console.error("Error fetching port pairs:", error);
-    return portPairsCache; // Return current cache (empty array if no data)
+    console.error("Error fetching airports:", error);
+    return airportsCache; // Return current cache (empty array if no data)
   }
 }
 
 /**
- * Optimized function to fetch arrival destinations for a given origin (supports bidirectional routing)
- * Uses cached route data to avoid repeated API calls
- * @param departureAirport - The departure airport name or code
- * @returns Promise with an array of distinct arrival airports for the given origin
+ * Function to fetch arrival destinations for a given origin airport
+ * @param departureAirport - The departure airport code
+ * @returns Promise with an array of arrival airports for the given origin
  */
 export async function fetchArrivalDestinationsForOrigin(
   departureAirport: string
 ): Promise<ArrivalAirport[]> {
   try {
-    const portPairs = await getCachedPortPairs();
-
-    // Use a Map to track unique destination airports by their code
-    const uniqueAirportsMap = new Map<string, ArrivalAirport>();
-
-    portPairs.forEach((pair: PortPair) => {
-      // Find pairs that start from the selected airport (by code or name)
-      if (
-        pair.originPortCode === departureAirport ||
-        pair.originPortName === departureAirport
-      ) {
-        uniqueAirportsMap.set(pair.destinationPortCode, {
-          arrivalAirport: pair.destinationPortName,
-          arrivalAirportCode: pair.destinationPortCode,
-        });
-      }
+    const { data } = await client.query({
+      query: GET_DESTINATIONS_FOR_PORT_QUERY,
+      variables: { searchQuery: departureAirport },
+      fetchPolicy: "cache-first",
     });
 
-    return Array.from(uniqueAirportsMap.values()).sort((a, b) =>
-      a.arrivalAirport.localeCompare(b.arrivalAirport)
-    );
+    const destinations = data.portPairs || [];
+
+    return destinations
+      .map((destination: any) => ({
+        arrivalAirport: destination.destinationPortName,
+        arrivalAirportCode: destination.destinationPortCode,
+      }))
+      .sort((a: ArrivalAirport, b: ArrivalAirport) =>
+        a.arrivalAirport.localeCompare(b.arrivalAirport)
+      );
   } catch (error) {
     console.error("Error fetching arrival destinations for origin:", error);
     return [];
@@ -117,41 +118,16 @@ export async function fetchArrivalDestinationsForOrigin(
 }
 
 /**
- * Optimized function to fetch all airports (uses cached data)
- * @returns Promise with an array of distinct airports
+ * Optimized function to fetch all airports from Airport model
+ * Uses cached data to avoid repeated API calls
+ * @returns Promise with an array of airports with code, name, and city
  */
-export async function fetchAllAirports(): Promise<Airport[]> {
+export async function fetchAllAirports(): Promise<AirportData[]> {
   try {
-    const portPairs = await getCachedPortPairs();
+    const airports = await getCachedAirports();
 
-    // Use a Map to track unique airports by their code
-    const uniqueAirportsMap = new Map<string, Airport>();
-
-    // Add airports from both origin and destination fields
-    portPairs.forEach((pair: PortPair) => {
-      // Add origin airport
-      if (pair.originPortCode && !uniqueAirportsMap.has(pair.originPortCode)) {
-        uniqueAirportsMap.set(pair.originPortCode, {
-          airport: pair.originPortName,
-          airportCode: pair.originPortCode,
-        });
-      }
-      // Add destination airport
-      if (
-        pair.destinationPortCode &&
-        !uniqueAirportsMap.has(pair.destinationPortCode)
-      ) {
-        uniqueAirportsMap.set(pair.destinationPortCode, {
-          airport: pair.destinationPortName,
-          airportCode: pair.destinationPortCode,
-        });
-      }
-    });
-
-    // Convert the Map values back to an array and sort alphabetically by airport name
-    return Array.from(uniqueAirportsMap.values()).sort((a, b) =>
-      a.airport.localeCompare(b.airport)
-    );
+    // Create a new array and sort alphabetically by city name
+    return [...airports].sort((a, b) => a.city.localeCompare(b.city));
   } catch (error) {
     console.error("Error fetching all airports:", error);
     return [];

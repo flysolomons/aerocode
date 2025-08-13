@@ -65,9 +65,19 @@ class BelamaIndexPage(BasePage):
 class BelamaSignUpPage(BasePage):
     max_count = 1
 
-    content_panels = BasePage.content_panels
+    email = models.EmailField(
+        blank=True,
+        help_text="Contact email address for Belama sign up",
+        verbose_name="Email",
+    )
 
-    graphql_fields = BasePage.graphql_fields
+    content_panels = BasePage.content_panels + [
+        FieldPanel("email"),
+    ]
+
+    graphql_fields = BasePage.graphql_fields + [
+        GraphQLString("email", name="email"),
+    ]
 
     parent_page_types = ["belama.BelamaIndexPage"]
 

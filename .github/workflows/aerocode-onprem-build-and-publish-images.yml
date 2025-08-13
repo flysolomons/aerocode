@@ -1,4 +1,4 @@
-name: Build and Publish Dev Docker Images
+name: Build and Publish On Prem Docker Images
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  build-and-publish-dev-backend:
+  build-and-publish-onprem-backend:
     runs-on: ubuntu-latest
     steps:
       # Checkout the repository
@@ -26,13 +26,13 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: backend
-          file: backend/Dockerfile.dev
+          file: backend/Dockerfile.onprem
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/dev-backend:latest
-            ghcr.io/${{ github.repository }}/dev-backend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/onprem-backend:latest
+            ghcr.io/${{ github.repository }}/onprem-backend:${{ github.sha }}
 
-  build-and-publish-dev-frontend:
+  build-and-publish-onprem-frontend:
     runs-on: ubuntu-latest
     steps:
       # Checkout the repository
@@ -52,12 +52,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: frontend
-          file: frontend/Dockerfile.dev
+          file: frontend/Dockerfile.onprem
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/dev-frontend:latest
-            ghcr.io/${{ github.repository }}/dev-frontend:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/onprem-frontend:latest
+            ghcr.io/${{ github.repository }}/onprem-frontend:${{ github.sha }}
           build-args: |
-            AEROCODE_DEV_NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.AEROCODE_DEV_NEXT_PUBLIC_GRAPHQL_URL }}
-            AEROCODE_DEV_GRAPHQL_URL=${{ secrets.AEROCODE_DEV_GRAPHQL_URL }}
-            AEROCODE_DEV_NEXT_PUBLIC_STORAGE_URL=${{ secrets.AEROCODE_DEV_NEXT_PUBLIC_STORAGE_URL }}
+            AEROCODE_ONPREM_NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.AEROCODE_ONPREM_NEXT_PUBLIC_GRAPHQL_URL }}
+            AEROCODE_ONPREM_GRAPHQL_URL=${{ secrets.AEROCODE_ONPREM_GRAPHQL_URL }}
+            AEROCODE_ONPREM_NEXT_PUBLIC_STORAGE_URL=${{ secrets.AEROCODE_ONPREM_NEXT_PUBLIC_STORAGE_URL }}

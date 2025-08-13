@@ -40,10 +40,19 @@ export interface RoutePage {
   description: string;
   name?: string;
   nameFull?: string;
-  departureAirport: string;
-  arrivalAirport: string;
-  departureAirportCode: string;
-  arrivalAirportCode: string;
+  originPort: {
+    city: string;
+    code: string;
+    name: string;
+  };
+  destinationPort: {
+    city: string;
+    code: string;
+    name: string;
+    destinationImage?: {
+      url: string;
+    };
+  };
   fares?: Fare[];
   specialRoutes?: SpecialRoute[];
   rankedRelatedRoutes?: RankedRelatedRoute[];
@@ -55,10 +64,19 @@ export interface RoutePage {
 
 // Interface for Route in search results
 export interface RouteSearchResult {
-  departureAirport: string;
-  arrivalAirport: string;
-  departureAirportCode: string;
-  arrivalAirportCode: string;
+  originPort: {
+    city: string;
+    code: string;
+    name: string;
+  };
+  destinationPort: {
+    city: string;
+    code: string;
+    name: string;
+    destinationImage?: {
+      url: string;
+    };
+  };
   url: string;
   name?: string;
   nameFull?: string;
@@ -76,10 +94,19 @@ export interface RankedRelatedRoute {
 export const GET_ROUTE_PAGE_QUERY = gql`
   query GetRoute($slug: String!) {
     route(slug: $slug) {
-      departureAirport
-      arrivalAirport
-      departureAirportCode
-      arrivalAirportCode
+      originPort {
+        city
+        code
+        name
+      }
+      destinationPort {
+        city
+        code
+        name
+        destinationImage {
+          url
+        }
+      }
       heroTitle
       heroImage {
         url
@@ -115,10 +142,14 @@ export const GET_ROUTE_PAGE_QUERY = gql`
       }
       rankedRelatedRoutes(limit: 100) {
         relatedRoute {
-          departureAirport
-          arrivalAirport
-          departureAirportCode
-          arrivalAirportCode
+          originPort {
+            city
+            code
+          }
+          destinationPort {
+            city
+            code
+          }
           url
           name
           nameFull
@@ -135,11 +166,15 @@ export const GET_ROUTE_PAGE_QUERY = gql`
 
 export const GET_ROUTES_BY_DESTINATION_CODE_QUERY = gql`
   query GetRoutesByDestinationCode($airportCode: String!) {
-    routes(searchQuery: $airportCode) {
-      departureAirport
-      arrivalAirport
-      departureAirportCode
-      arrivalAirportCode
+    routes(searchQuery: $airportCode, limit: 100) {
+      originPort {
+        city
+        code
+      }
+      destinationPort {
+        city
+        code
+      }
       url
       name
       nameFull
@@ -150,10 +185,14 @@ export const GET_ROUTES_BY_DESTINATION_CODE_QUERY = gql`
 export const GET_ROUTES_BY_FLIGHT_SCOPE_QUERY = gql`
   query GetRoutesByFlightScope($flightScope: String!) {
     routes(searchQuery: $flightScope) {
-      departureAirport
-      arrivalAirport
-      departureAirportCode
-      arrivalAirportCode
+      originPort {
+        city
+        code
+      }
+      destinationPort {
+        city
+        code
+      }
       url
       name
       nameFull
@@ -164,10 +203,14 @@ export const GET_ROUTES_BY_FLIGHT_SCOPE_QUERY = gql`
 export const GET_ROUTES_BY_COUNTRY_QUERY = gql`
   query GetRoutesByCountry($country: String!) {
     routes(searchQuery: $country) {
-      departureAirport
-      arrivalAirport
-      departureAirportCode
-      arrivalAirportCode
+      originPort {
+        city
+        code
+      }
+      destinationPort {
+        city
+        code
+      }
       url
       name
       nameFull
@@ -208,10 +251,17 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
       description: route.description || "",
       name: route.name || "",
       nameFull: route.nameFull || "",
-      departureAirport: route.departureAirport || "",
-      arrivalAirport: route.arrivalAirport || "",
-      departureAirportCode: route.departureAirportCode || "",
-      arrivalAirportCode: route.arrivalAirportCode || "",
+      originPort: {
+        city: route.originPort?.city || "",
+        code: route.originPort?.code || "",
+        name: route.originPort?.name || "",
+      },
+      destinationPort: {
+        city: route.destinationPort?.city || "",
+        code: route.destinationPort?.code || "",
+        name: route.destinationPort?.name || "",
+        destinationImage: route.destinationPort?.destinationImage || undefined,
+      },
       fares: orderedFares,
       specialRoutes: route.specialRoutes
         ? route.specialRoutes
@@ -236,17 +286,25 @@ export async function fetchRoutePage(slug: string): Promise<RoutePage | null> {
                 : undefined,
             }))
         : [],
-      rankedRelatedRoutes: (route.rankedRelatedRoutes || []).map((rankedRoute: any) => ({
-        relatedRoute: {
-          departureAirport: rankedRoute.relatedRoute?.departureAirport || "",
-          arrivalAirport: rankedRoute.relatedRoute?.arrivalAirport || "",
-          departureAirportCode: rankedRoute.relatedRoute?.departureAirportCode || "",
-          arrivalAirportCode: rankedRoute.relatedRoute?.arrivalAirportCode || "",
-          url: rankedRoute.relatedRoute?.url || "",
-          name: rankedRoute.relatedRoute?.name || "",
-          nameFull: rankedRoute.relatedRoute?.nameFull || "",
-        },
-      })),
+      rankedRelatedRoutes: (route.rankedRelatedRoutes || []).map(
+        (rankedRoute: any) => ({
+          relatedRoute: {
+            originPort: {
+              city: rankedRoute.relatedRoute?.originPort?.city || "",
+              code: rankedRoute.relatedRoute?.originPort?.code || "",
+              name: rankedRoute.relatedRoute?.originPort?.name || "",
+            },
+            destinationPort: {
+              city: rankedRoute.relatedRoute?.destinationPort?.city || "",
+              code: rankedRoute.relatedRoute?.destinationPort?.code || "",
+              name: rankedRoute.relatedRoute?.destinationPort?.name || "",
+            },
+            url: rankedRoute.relatedRoute?.url || "",
+            name: rankedRoute.relatedRoute?.name || "",
+            nameFull: rankedRoute.relatedRoute?.nameFull || "",
+          },
+        })
+      ),
       parent: route.parent ? { country: route.parent.country } : undefined,
       __typename: "Route",
     };

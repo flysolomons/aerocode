@@ -41,8 +41,12 @@ export interface DestinationSpecialRoute {
 
 // Interface for the Route
 export interface Route {
-  departureAirport: string;
-  arrivalAirport: string;
+  originPort: {
+    city: string;
+  };
+  destinationPort: {
+    city: string;
+  };
   url: string;
   specialRoutes?: DestinationSpecialRoute[];
 }
@@ -80,7 +84,7 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       seoTitle
       description
       country
-      reasonsToVisit {
+      reasonsToVisit(limit: 3) {
         ... on SectionBlock {
           heading
           text
@@ -101,8 +105,12 @@ export const GET_DESTINATION_PAGE_QUERY = gql`
       }
       rankedRoutes(limit: 100) {
         route {
-          departureAirport
-          arrivalAirport
+          originPort {
+            city
+          }
+          destinationPort {
+            city
+          }
           specialRoutes {
             isExpired
             special {
@@ -153,8 +161,12 @@ export async function fetchDestinationPage(
       rankedRoutes: (data.destination.rankedRoutes || []).map(
         (rankedRoute: any) => ({
           route: {
-            departureAirport: rankedRoute.route?.departureAirport || "",
-            arrivalAirport: rankedRoute.route?.arrivalAirport || "",
+            originPort: {
+              city: rankedRoute.route?.originPort?.city || "",
+            },
+            destinationPort: {
+              city: rankedRoute.route?.destinationPort?.city || "",
+            },
             url: rankedRoute.route?.url || "",
             specialRoutes: (rankedRoute.route?.specialRoutes || [])
               .filter((sr: any) => sr.isExpired !== "true")

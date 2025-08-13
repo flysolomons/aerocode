@@ -35,12 +35,20 @@ const nextConfig: NextConfig = {
         hostname: "test.solair.com.sb",
       },
       {
+        protocol: "https",
+        hostname: "test.solair.com.sb",
+      },
+      {
         protocol: "http",
         hostname: "20.188.237.9",
       },
       {
         protocol: "https",
         hostname: "staerocodetest.blob.core.windows.net",
+      },
+      {
+        protocol: "http",
+        hostname: "192.168.18.118",
       },
 
       // add CDN here

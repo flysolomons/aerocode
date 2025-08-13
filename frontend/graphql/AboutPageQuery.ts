@@ -26,10 +26,33 @@ export interface JourneyItemBlock {
   year: string;
 }
 
+// Interface for Magazine blocks (document, image, or text)
+export interface MagazineBlockItem {
+  title?: string;
+  image?: ImageBlock;
+  document?: {
+    url: string;
+  };
+}
+
+// Interface for MagazineBlock
+export interface MagazineBlock {
+  blocks: MagazineBlockItem[];
+}
+
+// Interface for StoryBlock
+export interface StoryBlock {
+  title: string;
+  subtitle: string;
+  coverImage: ImageBlock;
+  url: string;
+}
+
 // Interface for the AboutIndexPage
 export interface AboutIndexPage {
   heroTitle: string;
   heroImage: ImageBlock;
+  heroVideo: string; // will need storage url
   seoTitle: string;
   subTitle: string;
   url: string;
@@ -39,6 +62,8 @@ export interface AboutIndexPage {
   values: ValueCardBlock[];
   stats: StatBlock[];
   journey: JourneyItemBlock[];
+  magazines: MagazineBlock[];
+  stories: StoryBlock[];
   callToActionImage?: ImageBlock;
   __typename?: string;
 }
@@ -56,6 +81,7 @@ export const GET_ABOUT_PAGE_QUERY = gql`
         heroImage {
           url
         }
+        heroVideo
         seoTitle
         subTitle
         url
@@ -87,10 +113,56 @@ export const GET_ABOUT_PAGE_QUERY = gql`
         callToActionImage {
           url
         }
+        magazines {
+          ... on MagazineBlock {
+            blocks {
+              ... on DocumentChooserBlock {
+                document {
+                  url
+                }
+              }
+              ... on CharBlock {
+                value
+              }
+              ... on ImageChooserBlock {
+                image {
+                  url
+                }
+              }
+            }
+          }
+        }
+        stories {
+          ... on StoryBlock {
+            coverImage {
+              url
+            }
+            url
+            title
+            subtitle
+          }
+        }
       }
     }
   }
 `;
+
+/**
+ * Transform magazine blocks to make them more user-friendly
+ * Maps 'value' field to 'title' for better readability
+ */
+function transformMagazineBlocks(magazines: any[]): MagazineBlock[] {
+  if (!magazines || !Array.isArray(magazines)) return [];
+
+  return magazines.map((magazine) => ({
+    blocks:
+      magazine.blocks?.map((block: any) => ({
+        title: block.value || undefined, // Map 'value' to 'title'
+        image: block.image || undefined,
+        document: block.document || undefined,
+      })) || [],
+  }));
+}
 
 /**
  * Fetch About page data
@@ -114,6 +186,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       return {
         heroTitle: "About Us",
         heroImage: { url: "/default-hero.jpg" },
+        heroVideo: "",
         seoTitle: "About Us",
         subTitle: "",
         url: "/about",
@@ -123,6 +196,8 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
         values: [],
         stats: [],
         journey: [],
+        magazines: [],
+        stories: [],
         callToActionImage: undefined,
         __typename: "AboutIndexPage",
       };
@@ -131,6 +206,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
     return {
       heroTitle: aboutPage.heroTitle || "About Us",
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
+      heroVideo: aboutPage.heroVideo || "",
       seoTitle: aboutPage.seoTitle || "About Us",
       subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
@@ -140,6 +216,8 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       values: aboutPage.values || [],
       stats: aboutPage.stats || [],
       journey: aboutPage.journey || [],
+      magazines: transformMagazineBlocks(aboutPage.magazines),
+      stories: aboutPage.stories || [],
       callToActionImage: aboutPage.callToActionImage,
       __typename: "AboutIndexPage",
     };
@@ -148,6 +226,7 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
     return {
       heroTitle: "About Us",
       heroImage: { url: "/default-hero.jpg" },
+      heroVideo: "",
       seoTitle: "About Us",
       subTitle: "",
       url: "/about",
@@ -157,6 +236,8 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       values: [],
       stats: [],
       journey: [],
+      magazines: [],
+      stories: [],
       callToActionImage: undefined,
       __typename: "AboutIndexPage",
     };
@@ -186,6 +267,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       return {
         heroTitle: "About Us",
         heroImage: { url: "/default-hero.jpg" },
+        heroVideo: "",
         seoTitle: "About Us",
         subTitle: "",
         url: "/about",
@@ -195,6 +277,8 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
         values: [],
         stats: [],
         journey: [],
+        magazines: [],
+        stories: [],
         callToActionImage: undefined,
         __typename: "AboutIndexPage",
       };
@@ -203,6 +287,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
     return {
       heroTitle: aboutPage.heroTitle || "About Us",
       heroImage: aboutPage.heroImage || { url: "/default-hero.jpg" },
+      heroVideo: aboutPage.heroVideo || "",
       seoTitle: aboutPage.seoTitle || "About Us",
       subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
@@ -212,6 +297,8 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       values: aboutPage.values || [],
       stats: aboutPage.stats || [],
       journey: aboutPage.journey || [],
+      magazines: transformMagazineBlocks(aboutPage.magazines),
+      stories: aboutPage.stories || [],
       callToActionImage: aboutPage.callToActionImage,
       __typename: "AboutIndexPage",
     };
@@ -220,6 +307,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
     return {
       heroTitle: "About Us",
       heroImage: { url: "/default-hero.jpg" },
+      heroVideo: "",
       seoTitle: "About Us",
       subTitle: "",
       url: "/about",
@@ -229,6 +317,8 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       values: [],
       stats: [],
       journey: [],
+      magazines: [],
+      stories: [],
       callToActionImage: undefined,
       __typename: "AboutIndexPage",
     };
@@ -239,6 +329,7 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
 export const fallbackAboutPage: AboutIndexPage = {
   heroTitle: "About Us",
   heroImage: { url: "/default-hero.jpg" },
+  heroVideo: "",
   seoTitle: "About Us",
   subTitle: "",
   url: "/about",
@@ -275,6 +366,8 @@ export const fallbackAboutPage: AboutIndexPage = {
       year: "1999",
     },
   ],
+  magazines: [],
+  stories: [],
   callToActionImage: undefined,
   __typename: "AboutIndexPage",
 };

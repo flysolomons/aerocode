@@ -8,11 +8,20 @@ from core.blocks import (
     ValueCardBlock,
     JourneyItemBlock,
     StatBlock,
+    MagazineBlock,
+    StoryBlock,
 )
 
 
 class AboutIndexPage(BasePage):
     max_count = 1
+
+    hero_video = models.FileField(
+        upload_to="videos/",
+        blank=True,
+        null=True,
+        help_text="Hero video for the about page",
+    )
 
     mission_statement = RichTextField(
         features=["bold", "italic", "link"],
@@ -50,6 +59,22 @@ class AboutIndexPage(BasePage):
         verbose_name="Journey Timeline",
     )
 
+    magazines = StreamField(
+        [("magazine", MagazineBlock())],
+        use_json_field=True,
+        blank=True,
+        help_text="Add magazines with documents, cover images and titles.",
+        verbose_name="Magazines",
+    )
+
+    stories = StreamField(
+        [("story", StoryBlock())],
+        use_json_field=True,
+        blank=True,
+        help_text="Add stories with cover images, titles, subtitles and URLs.",
+        verbose_name="Stories",
+    )
+
     call_to_action_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -60,20 +85,26 @@ class AboutIndexPage(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
+        FieldPanel("hero_video", heading="Hero Video"),
         FieldPanel("mission_statement", heading="Mission Statement"),
         FieldPanel("vision_statement", heading="Vision Statement"),
         FieldPanel("values", heading="Values"),
         FieldPanel("stats", heading="Statistics"),
         FieldPanel("journey", heading="Journey"),
+        FieldPanel("magazines", heading="Magazines"),
+        FieldPanel("stories", heading="Stories"),
         FieldPanel("call_to_action_image", heading="Call to Action Image"),
     ]
 
     graphql_fields = BasePage.graphql_fields + [
+        GraphQLString("hero_video", name="heroVideo"),
         GraphQLString("mission_statement", name="missionStatement"),
         GraphQLString("vision_statement", name="visionStatement"),
         GraphQLStreamfield("values", name="values"),
         GraphQLStreamfield("stats", name="stats"),
         GraphQLStreamfield("journey", name="journey"),
+        GraphQLStreamfield("magazines", name="magazines"),
+        GraphQLStreamfield("stories", name="stories"),
         GraphQLImage("call_to_action_image", name="callToActionImage"),
     ]
 

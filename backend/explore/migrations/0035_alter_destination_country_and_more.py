@@ -18,26 +18,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='route',
-            name='arrival_airport',
-            field=models.CharField(help_text='Arrival airport for the route', max_length=255),
-        ),
-        migrations.AlterField(
-            model_name='route',
-            name='arrival_airport_code',
-            field=models.CharField(help_text='IATA code for the arrival airport', max_length=3),
-        ),
-        migrations.AlterField(
-            model_name='route',
-            name='departure_airport',
-            field=models.CharField(help_text='Departure airport for the route', max_length=255),
-        ),
-        migrations.AlterField(
-            model_name='route',
-            name='departure_airport_code',
-            field=models.CharField(help_text='IATA code for the departure airport', max_length=3),
-        ),
-        migrations.AlterField(
-            model_name='route',
             name='destination_country',
             field=models.ForeignKey(help_text='Destination country for the route', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='routes', to='explore.destination'),
         ),

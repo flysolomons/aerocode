@@ -178,7 +178,7 @@ export default function HomePageHero({
               </div>
             );
           })}
-          
+
           <HeroBottomFade />
 
           {/* Hidden Embla for navigation logic */}
@@ -241,7 +241,7 @@ export default function HomePageHero({
               isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
-            <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
+            <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
               {carouselSlides[selectedIndex]?.slide.title ||
                 "Connecting the Hapi Isles"}
             </h1>
