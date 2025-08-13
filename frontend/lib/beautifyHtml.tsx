@@ -1,6 +1,5 @@
 import parse, { domToReact, HTMLReactParserOptions, Element, DOMNode } from 'html-react-parser';
 import DOMPurify from 'dompurify';
-import { ChevronRight } from 'lucide-react';
 import * as React from 'react';
 
 // Custom SVG component for list item bullet
