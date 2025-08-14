@@ -116,7 +116,7 @@ export default function ManageBookingForm() {
             <input
               type="text"
               placeholder="Enter your booking reference"
-              className="w-full text-sm outline-none text-black"
+              className="w-full text-base sm:text-sm outline-none text-black"
               value={bookingReference}
               onChange={(e) => {
                 setBookingReference(e.target.value);
@@ -141,7 +141,7 @@ export default function ManageBookingForm() {
             <input
               type="text"
               placeholder="Enter your last name"
-              className="w-full text-sm outline-none text-black"
+              className="w-full text-base sm:text-sm outline-none text-black"
               value={lastName}
               onChange={(e) => {
                 setLastName(e.target.value);
@@ -221,7 +221,7 @@ export default function ManageBookingForm() {
               <input
                 type="text"
                 placeholder="Enter your booking reference"
-                className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+                className="w-full text-base sm:text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
                 value={bookingReference}
                 onChange={(e) => {
                   setBookingReference(e.target.value);
@@ -271,7 +271,7 @@ export default function ManageBookingForm() {
               <input
                 type="text"
                 placeholder="Enter your last name"
-                className="w-full text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
+                className="w-full text-base sm:text-sm outline-none text-gray-800 placeholder-gray-400 bg-transparent"
                 value={lastName}
                 onChange={(e) => {
                   setLastName(e.target.value);

@@ -693,7 +693,7 @@ const BookATripForm = memo(function BookATripForm({
                         <input
                           type="text"
                           placeholder="Select destination"
-                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer bg-transparent"
                           readOnly
                           value={
                             selectedDeparture
@@ -729,7 +729,7 @@ const BookATripForm = memo(function BookATripForm({
                                 onChange={(e) =>
                                   setDepartureSearchTerm(e.target.value)
                                 }
-                                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                                className="w-full pl-9 pr-3 py-2 text-base sm:text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
                                 autoFocus
                               />
                               <svg
@@ -818,7 +818,7 @@ const BookATripForm = memo(function BookATripForm({
                     )}
                   </div>
                   <div
-                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
+                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
                       isDepartureError ? "border-red-500" : "border-gray-300"
                     }`}
                     onClick={() => {
@@ -846,7 +846,7 @@ const BookATripForm = memo(function BookATripForm({
                       placeholder={
                         isLoading ? "Loading..." : "Select destination"
                       }
-                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 bg-transparent ${
                         isLoading ? "pl-8" : ""
                       }`}
                       readOnly
@@ -974,7 +974,7 @@ const BookATripForm = memo(function BookATripForm({
                               placeholder="Search destinations..."
                               value={departureSearchTerm}
                               onChange={(e) => setDepartureSearchTerm(e.target.value)}
-                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                              className="w-full pl-10 pr-3 py-3 text-base sm:text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
                             />
                             <svg
                               className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -1103,7 +1103,7 @@ const BookATripForm = memo(function BookATripForm({
                         <input
                           type="text"
                           placeholder="Select destination"
-                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer bg-transparent"
                           readOnly
                           value={
                             selectedArrival
@@ -1139,7 +1139,7 @@ const BookATripForm = memo(function BookATripForm({
                                 onChange={(e) =>
                                   setArrivalSearchTerm(e.target.value)
                                 }
-                                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                                className="w-full pl-9 pr-3 py-2 text-base sm:text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
                                 autoFocus
                               />
                               <svg
@@ -1223,7 +1223,7 @@ const BookATripForm = memo(function BookATripForm({
                     )}
                   </div>
                   <div
-                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
+                    className={`cursor-pointer rounded-3xl transition-all duration-300 ease-in-out bg-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none border ${
                       isArrivalError ? "border-red-500" : "border-gray-300"
                     }`}
                     onClick={() => {
@@ -1251,7 +1251,7 @@ const BookATripForm = memo(function BookATripForm({
                       placeholder={
                         isLoading ? "Loading..." : "Select destination"
                       }
-                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 ${
+                      className={`w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 bg-transparent ${
                         isLoading ? "pl-8" : ""
                       }`}
                       readOnly
@@ -1381,7 +1381,7 @@ const BookATripForm = memo(function BookATripForm({
                               placeholder="Search destinations..."
                               value={arrivalSearchTerm}
                               onChange={(e) => setArrivalSearchTerm(e.target.value)}
-                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                              className="w-full pl-10 pr-3 py-3 text-base sm:text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
                             />
                             <svg
                               className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
@@ -1534,7 +1534,7 @@ const BookATripForm = memo(function BookATripForm({
                         <input
                           type="text"
                           placeholder="Select travellers"
-                          className="w-full text-sm outline-none text-gray-700 cursor-pointer"
+                          className="w-full text-sm outline-none text-gray-700 cursor-pointer bg-transparent"
                           readOnly
                           value={formatTravelers}
                         />
@@ -1736,7 +1736,7 @@ const BookATripForm = memo(function BookATripForm({
                   Travelling with?
                 </label>
                 <div
-                  className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gradient-to-br from-white to-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
+                  className="cursor-pointer border border-gray-300 rounded-3xl transition-all duration-300 ease-in-out bg-gray-50 px-4 py-3 sm:px-4 sm:py-4 min-h-[50px] flex items-center relative shadow-md hover:shadow-lg md:shadow-none"
                   onClick={() => {
                     const newState = !isTravelersMobileOpen;
                     setIsTravelersMobileOpen(newState);
@@ -1754,7 +1754,7 @@ const BookATripForm = memo(function BookATripForm({
                   <input
                     type="text"
                     placeholder="Select travellers"
-                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400"
+                    className="w-full text-sm outline-none text-gray-800 cursor-pointer placeholder-gray-400 bg-transparent"
                     readOnly
                     value={formatTravelers}
                   />
