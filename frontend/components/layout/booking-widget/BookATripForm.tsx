@@ -964,11 +964,34 @@ const BookATripForm = memo(function BookATripForm({
                           >
                             Flying from?
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 mt-1 mb-4">
                             Select your departure destination
                           </p>
-                          {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                          {/* Search input */}
+                          <div className="relative mb-4">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              value={departureSearchTerm}
+                              onChange={(e) => setDepartureSearchTerm(e.target.value)}
+                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                            />
+                            <svg
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                          {/* Horizontal line after search input */}
+                          <div className="w-full h-px bg-gray-200"></div>
                         </div>
                         {/* Content */}
                         <div
@@ -983,12 +1006,12 @@ const BookATripForm = memo(function BookATripForm({
                                 Loading destinations...
                               </div>
                             </div>
-                          ) : allAirports.length > 0 ? (
+                          ) : filteredDepartureAirports.length > 0 ? (
                             <div className="divide-y divide-gray-100">
-                              {allAirports.map((airport, index) => (
+                              {filteredDepartureAirports.map((airport, index) => (
                                 <div
                                   key={index}
-                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150 flex items-center gap-3"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -998,16 +1021,32 @@ const BookATripForm = memo(function BookATripForm({
                                     });
                                     if (showValidation)
                                       setShowValidation(false);
-                                    if (showValidation)
-                                      setShowValidation(false);
+                                    setDepartureSearchTerm("");
                                     setIsDeparturePopoverOpen(false);
                                   }}
                                 >
-                                  <div className="text-gray-900 font-medium">
-                                    {airport.city}
-                                  </div>
-                                  <div className="text-sm text-gray-500 mt-1">
-                                    {airport.code}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400 flex-shrink-0"
+                                  >
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                  <div className="flex-1">
+                                    <div className="text-gray-900 font-medium">
+                                      {airport.city}
+                                    </div>
+                                    <div className="text-sm text-gray-500 mt-1">
+                                      {airport.code}
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -1015,7 +1054,7 @@ const BookATripForm = memo(function BookATripForm({
                           ) : (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
-                                No destinations found
+                                {departureSearchTerm ? 'No destinations match your search' : 'No destinations found'}
                               </div>
                             </div>
                           )}
@@ -1332,11 +1371,34 @@ const BookATripForm = memo(function BookATripForm({
                           >
                             Flying to?
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 mt-1 mb-4">
                             Select your arrival destination
                           </p>
-                          {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                          {/* Search input */}
+                          <div className="relative mb-4">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              value={arrivalSearchTerm}
+                              onChange={(e) => setArrivalSearchTerm(e.target.value)}
+                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                            />
+                            <svg
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                          {/* Horizontal line after search input */}
+                          <div className="w-full h-px bg-gray-200"></div>
                         </div>
 
                         {/* Content */}
@@ -1352,28 +1414,44 @@ const BookATripForm = memo(function BookATripForm({
                                 Loading destinations...
                               </div>
                             </div>
-                          ) : arrivalAirports.length > 0 ? (
+                          ) : filteredArrivalAirports.length > 0 ? (
                             <div className="divide-y divide-gray-100">
-                              {arrivalAirports.map((airport, index) => (
+                              {filteredArrivalAirports.map((airport, index) => (
                                 <div
                                   key={index}
-                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150 flex items-center gap-3"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedArrival(airport);
                                     if (showValidation)
                                       setShowValidation(false);
-                                    if (showValidation)
-                                      setShowValidation(false);
+                                    setArrivalSearchTerm("");
                                     setIsArrivalPopoverOpen(false);
                                   }}
                                 >
-                                  <div className="text-gray-900 font-medium">
-                                    {airport.arrivalAirport}
-                                  </div>
-                                  <div className="text-sm text-gray-500 mt-1">
-                                    {airport.arrivalAirportCode}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400 flex-shrink-0"
+                                  >
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                  <div className="flex-1">
+                                    <div className="text-gray-900 font-medium">
+                                      {airport.arrivalAirport}
+                                    </div>
+                                    <div className="text-sm text-gray-500 mt-1">
+                                      {airport.arrivalAirportCode}
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -1381,7 +1459,7 @@ const BookATripForm = memo(function BookATripForm({
                           ) : (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
-                                No destinations found
+                                {arrivalSearchTerm ? 'No destinations match your search' : 'No destinations found'}
                               </div>
                             </div>
                           )}
