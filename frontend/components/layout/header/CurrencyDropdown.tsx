@@ -141,10 +141,10 @@ const CurrencyDropdown = React.memo(
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-medium text-sm">
-                        {currency.currencyCode} - {currency.currencySymbol}
+                        {currency.currencyCode} - {currency.countryName}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {currency.countryName}
+                        {currency.currencyName} ({currency.currencySymbol})
                       </div>
                     </div>
                     {selectedCurrency?.currencyCode ===
@@ -210,10 +210,10 @@ const CurrencyDropdown = React.memo(
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-medium text-sm">
-                      {currency.currencyCode} - {currency.currencySymbol}
+                      {currency.currencyCode} - {currency.countryName}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {currency.countryName}
+                      {currency.currencyName} ({currency.currencySymbol})
                     </div>
                   </div>
                   {selectedCurrency?.currencyCode === currency.currencyCode && (
