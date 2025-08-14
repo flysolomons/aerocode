@@ -742,7 +742,7 @@ const BookATripForm = memo(function BookATripForm({
                     {/* Add loading indicator */}
                     {isLoading && (
                       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-[1.5px] border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
                     <input
@@ -1048,7 +1048,7 @@ const BookATripForm = memo(function BookATripForm({
                     {/* Add loading indicator */}
                     {isLoading && (
                       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-[1.5px] border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
                     <input
@@ -1321,7 +1321,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
@@ -1346,7 +1346,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
@@ -1380,7 +1380,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
@@ -1405,7 +1405,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.children}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
@@ -1439,7 +1439,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
@@ -1464,7 +1464,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }
@@ -1653,7 +1653,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
@@ -1678,7 +1678,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
@@ -1712,7 +1712,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
@@ -1737,7 +1737,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.children}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
@@ -1771,7 +1771,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
@@ -1796,7 +1796,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }
