@@ -171,30 +171,46 @@ export default function BookingWidget({
             </div>
 
             {/* Desktop: Simple tabs with bottom border */}
-            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200 bg-gray-200 rounded-t-3xl">
+            <div className="hidden xl:flex xl:w-full xl:justify-start xl:relative xl:border-b xl:border-gray-200 bg-white rounded-t-3xl">
               <div className="flex">
                 {/* Book a Trip */}
                 <button
-                  className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
+                  className={`flex items-center justify-center gap-2 px-6 py-2 text-sm font-medium transition-all duration-300 min-w-[10rem] relative`}
+                  onClick={() => handleTabClick(0)}
+                >
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     activeTab === 0
                       ? "text-blue-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`}
-                  onClick={() => handleTabClick(0)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-                  </svg>
-                  Book a Trip
+                  style={{
+                    backgroundColor: activeTab === 0 ? 'transparent' : 'rgba(100, 116, 139, 0)',
+                    transform: activeTab === 0 ? 'scale(1)' : 'scale(0.95)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 0) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0.08)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 0) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0)';
+                    }
+                  }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                    </svg>
+                    Book a Trip
+                  </div>
                   {activeTab === 0 && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}
@@ -207,27 +223,43 @@ export default function BookingWidget({
 
                 {/* Manage Booking */}
                 <button
-                  className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
+                  className={`flex items-center justify-center gap-2 px-6 py-2 text-sm font-medium transition-all duration-300 min-w-[10rem] relative`}
+                  onClick={() => handleTabClick(1)}
+                >
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     activeTab === 1
                       ? "text-blue-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`}
-                  onClick={() => handleTabClick(1)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
-                    <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-                  </svg>
-                  Manage Booking
+                  style={{
+                    backgroundColor: activeTab === 1 ? 'transparent' : 'rgba(100, 116, 139, 0)',
+                    transform: activeTab === 1 ? 'scale(1)' : 'scale(0.95)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 1) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0.08)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 1) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0)';
+                    }
+                  }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+                      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                    </svg>
+                    Manage Booking
+                  </div>
                   {activeTab === 1 && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}
@@ -240,30 +272,46 @@ export default function BookingWidget({
 
                 {/* Flight Schedules */}
                 <button
-                  className={`flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-300 min-w-[10rem] relative ${
+                  className={`flex items-center justify-center gap-2 px-6 py-2 text-sm font-medium transition-all duration-300 min-w-[10rem] relative`}
+                  onClick={() => handleTabClick(2)}
+                >
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     activeTab === 2
                       ? "text-blue-500"
                       : "text-gray-600 hover:text-gray-900"
                   }`}
-                  onClick={() => handleTabClick(2)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M8 2v4" />
-                    <path d="M16 2v4" />
-                    <rect width="18" height="18" x="3" y="4" rx="2" />
-                    <path d="M3 10h18" />
-                    <path d="m9 16 2 2 4-4" />
-                  </svg>
-                  Flight Schedules
+                  style={{
+                    backgroundColor: activeTab === 2 ? 'transparent' : 'rgba(100, 116, 139, 0)',
+                    transform: activeTab === 2 ? 'scale(1)' : 'scale(0.95)'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 2) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0.08)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 2) {
+                      e.currentTarget.style.backgroundColor = 'rgba(100, 116, 139, 0)';
+                    }
+                  }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M8 2v4" />
+                      <path d="M16 2v4" />
+                      <rect width="18" height="18" x="3" y="4" rx="2" />
+                      <path d="M3 10h18" />
+                      <path d="m9 16 2 2 4-4" />
+                    </svg>
+                    Flight Schedules
+                  </div>
                   {activeTab === 2 && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
                   )}

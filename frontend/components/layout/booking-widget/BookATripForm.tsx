@@ -85,7 +85,11 @@ const BookATripForm = memo(function BookATripForm({
   const [isTravelersMobileOpen, setIsTravelersMobileOpen] =
     useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [showValidation, setShowValidation] = useState<boolean>(false); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
+  const [showValidation, setShowValidation] = useState<boolean>(false);
+
+  // Search filter states
+  const [departureSearchTerm, setDepartureSearchTerm] = useState<string>("");
+  const [arrivalSearchTerm, setArrivalSearchTerm] = useState<string>(""); // Ref for travelers mobile dropdown to handle outside clicks and refs for form inputs
   const travelersMobileRef = useRef<HTMLDivElement>(null);
   const travelersInputRef = useRef<HTMLDivElement>(null);
 
@@ -396,6 +400,10 @@ const BookATripForm = memo(function BookATripForm({
     setIsArrivalPopoverOpen(false);
     setIsTravelersPopoverOpen(false);
 
+    // Clear search terms
+    setDepartureSearchTerm("");
+    setArrivalSearchTerm("");
+
     setIsDesktopModalActive(false);
     onModalStateChange?.(false);
   }, [onModalStateChange]);
@@ -532,6 +540,31 @@ const BookATripForm = memo(function BookATripForm({
     travelers,
   ]);
 
+  // Memoized filtered airports for search functionality
+  const filteredDepartureAirports = useMemo(() => {
+    if (!departureSearchTerm) return allAirports;
+    return allAirports.filter(
+      (airport) =>
+        airport.city
+          .toLowerCase()
+          .includes(departureSearchTerm.toLowerCase()) ||
+        airport.code.toLowerCase().includes(departureSearchTerm.toLowerCase())
+    );
+  }, [allAirports, departureSearchTerm]);
+
+  const filteredArrivalAirports = useMemo(() => {
+    if (!arrivalSearchTerm) return arrivalAirports;
+    return arrivalAirports.filter(
+      (airport) =>
+        airport.arrivalAirport
+          .toLowerCase()
+          .includes(arrivalSearchTerm.toLowerCase()) ||
+        airport.arrivalAirportCode
+          .toLowerCase()
+          .includes(arrivalSearchTerm.toLowerCase())
+    );
+  }, [arrivalAirports, arrivalSearchTerm]);
+
   // Memoized validation flags for better performance
   const isSearchFormValid = useMemo(
     () =>
@@ -638,6 +671,11 @@ const BookATripForm = memo(function BookATripForm({
                         handleDesktopInputClick();
                       }
                       setIsDeparturePopoverOpen(open);
+
+                      // Clear search term when closing
+                      if (!open && !selectedDeparture) {
+                        setDepartureSearchTerm("");
+                      }
                     }}
                   >
                     <PopoverTrigger asChild className="w-full">
@@ -666,9 +704,9 @@ const BookATripForm = memo(function BookATripForm({
                       </div>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      className="mt-1 p-0 w-[calc(var(--radix-popover-trigger-width)*1.5)] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-hidden z-[75]"
                       style={{
-                        maxHeight: allAirports.length > 5 ? "20rem" : "auto",
+                        maxHeight: "28rem",
                       }}
                       align="start"
                       side="bottom"
@@ -679,32 +717,90 @@ const BookATripForm = memo(function BookATripForm({
                         <div className="text-gray-500 p-3">
                           Loading destinations...
                         </div>
-                      ) : allAirports.length > 0 ? (
-                        allAirports.map((airport, index) => (
-                          <div
-                            key={index}
-                            className="hover:bg-gray-100 cursor-pointer p-3"
-                            onClick={() => {
-                              setSelectedDeparture({
-                                departureAirport: airport.city,
-                                departureAirportCode: airport.code,
-                              });
-                              if (showValidation) setShowValidation(false);
-                              setIsDeparturePopoverOpen(false);
-                            }}
-                          >
-                            <div className="text-black text-sm">
-                              {airport.city}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {airport.code}
+                      ) : (
+                        <>
+                          {/* Search input */}
+                          <div className="p-3 border-b border-gray-100 bg-gray-50">
+                            <div className="relative">
+                              <input
+                                type="text"
+                                placeholder="Search destinations..."
+                                value={departureSearchTerm}
+                                onChange={(e) =>
+                                  setDepartureSearchTerm(e.target.value)
+                                }
+                                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                                autoFocus
+                              />
+                              <svg
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                              </svg>
                             </div>
                           </div>
-                        ))
-                      ) : (
-                        <div className="text-gray-500 p-3">
-                          No destinations found
-                        </div>
+                          {/* Airports list */}
+                          <div className="max-h-80 overflow-y-auto">
+                            {filteredDepartureAirports.length > 0 ? (
+                              filteredDepartureAirports.map(
+                                (airport, index) => (
+                                  <div
+                                    key={index}
+                                    className="hover:bg-gray-100 cursor-pointer p-3 border-b border-gray-50 last:border-b-0 flex items-center gap-3"
+                                    onClick={() => {
+                                      setSelectedDeparture({
+                                        departureAirport: airport.city,
+                                        departureAirportCode: airport.code,
+                                      });
+                                      if (showValidation)
+                                        setShowValidation(false);
+                                      setDepartureSearchTerm("");
+                                      setIsDeparturePopoverOpen(false);
+                                    }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      className="text-gray-400 flex-shrink-0"
+                                    >
+                                      <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                      <circle cx="12" cy="10" r="3" />
+                                    </svg>
+                                    <div className="flex-1">
+                                      <div className="text-black text-sm font-medium">
+                                        {airport.city}
+                                      </div>
+                                      <div className="text-xs text-gray-500 mt-1">
+                                        {airport.code}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              )
+                            ) : (
+                              <div className="text-gray-500 p-3 text-center">
+                                {departureSearchTerm
+                                  ? "No destinations match your search"
+                                  : "No destinations found"}
+                              </div>
+                            )}
+                          </div>
+                        </>
                       )}
                     </PopoverContent>
                   </Popover>
@@ -742,7 +838,7 @@ const BookATripForm = memo(function BookATripForm({
                     {/* Add loading indicator */}
                     {isLoading && (
                       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-[1.5px] border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
                     <input
@@ -868,11 +964,34 @@ const BookATripForm = memo(function BookATripForm({
                           >
                             Flying from?
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 mt-1 mb-4">
                             Select your departure destination
                           </p>
-                          {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                          {/* Search input */}
+                          <div className="relative mb-4">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              value={departureSearchTerm}
+                              onChange={(e) => setDepartureSearchTerm(e.target.value)}
+                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                            />
+                            <svg
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                          {/* Horizontal line after search input */}
+                          <div className="w-full h-px bg-gray-200"></div>
                         </div>
                         {/* Content */}
                         <div
@@ -887,12 +1006,12 @@ const BookATripForm = memo(function BookATripForm({
                                 Loading destinations...
                               </div>
                             </div>
-                          ) : allAirports.length > 0 ? (
+                          ) : filteredDepartureAirports.length > 0 ? (
                             <div className="divide-y divide-gray-100">
-                              {allAirports.map((airport, index) => (
+                              {filteredDepartureAirports.map((airport, index) => (
                                 <div
                                   key={index}
-                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150 flex items-center gap-3"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -902,16 +1021,32 @@ const BookATripForm = memo(function BookATripForm({
                                     });
                                     if (showValidation)
                                       setShowValidation(false);
-                                    if (showValidation)
-                                      setShowValidation(false);
+                                    setDepartureSearchTerm("");
                                     setIsDeparturePopoverOpen(false);
                                   }}
                                 >
-                                  <div className="text-gray-900 font-medium">
-                                    {airport.city}
-                                  </div>
-                                  <div className="text-sm text-gray-500 mt-1">
-                                    {airport.code}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400 flex-shrink-0"
+                                  >
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                  <div className="flex-1">
+                                    <div className="text-gray-900 font-medium">
+                                      {airport.city}
+                                    </div>
+                                    <div className="text-sm text-gray-500 mt-1">
+                                      {airport.code}
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -919,7 +1054,7 @@ const BookATripForm = memo(function BookATripForm({
                           ) : (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
-                                No destinations found
+                                {departureSearchTerm ? 'No destinations match your search' : 'No destinations found'}
                               </div>
                             </div>
                           )}
@@ -946,6 +1081,11 @@ const BookATripForm = memo(function BookATripForm({
                         handleDesktopInputClick();
                       }
                       setIsArrivalPopoverOpen(open);
+
+                      // Clear search term when closing
+                      if (!open && !selectedArrival) {
+                        setArrivalSearchTerm("");
+                      }
                     }}
                   >
                     <PopoverTrigger asChild className="w-full">
@@ -974,10 +1114,9 @@ const BookATripForm = memo(function BookATripForm({
                       </div>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      className="mt-1 p-0 w-[calc(var(--radix-popover-trigger-width)*1.5)] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-hidden z-[75]"
                       style={{
-                        maxHeight:
-                          arrivalAirports.length > 5 ? "20rem" : "auto",
+                        maxHeight: "28rem",
                       }}
                       align="start"
                       side="bottom"
@@ -988,29 +1127,85 @@ const BookATripForm = memo(function BookATripForm({
                         <div className="text-gray-500 p-3">
                           Loading destinations...
                         </div>
-                      ) : arrivalAirports.length > 0 ? (
-                        arrivalAirports.map((airport, index) => (
-                          <div
-                            key={index}
-                            className="hover:bg-gray-100 cursor-pointer p-3"
-                            onClick={() => {
-                              setSelectedArrival(airport);
-                              if (showValidation) setShowValidation(false);
-                              setIsArrivalPopoverOpen(false);
-                            }}
-                          >
-                            <div className="text-black text-sm">
-                              {airport.arrivalAirport}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {airport.arrivalAirportCode}
+                      ) : (
+                        <>
+                          {/* Search input */}
+                          <div className="p-3 border-b border-gray-100 bg-gray-50">
+                            <div className="relative">
+                              <input
+                                type="text"
+                                placeholder="Search destinations..."
+                                value={arrivalSearchTerm}
+                                onChange={(e) =>
+                                  setArrivalSearchTerm(e.target.value)
+                                }
+                                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                                autoFocus
+                              />
+                              <svg
+                                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                              </svg>
                             </div>
                           </div>
-                        ))
-                      ) : (
-                        <div className="text-gray-500 p-3">
-                          No destinations found
-                        </div>
+                          {/* Airports list */}
+                          <div className="max-h-80 overflow-y-auto">
+                            {filteredArrivalAirports.length > 0 ? (
+                              filteredArrivalAirports.map((airport, index) => (
+                                <div
+                                  key={index}
+                                  className="hover:bg-gray-100 cursor-pointer p-3 border-b border-gray-50 last:border-b-0 flex items-center gap-3"
+                                  onClick={() => {
+                                    setSelectedArrival(airport);
+                                    if (showValidation)
+                                      setShowValidation(false);
+                                    setArrivalSearchTerm("");
+                                    setIsArrivalPopoverOpen(false);
+                                  }}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400 flex-shrink-0"
+                                  >
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                  <div className="flex-1">
+                                    <div className="text-black text-sm font-medium">
+                                      {airport.arrivalAirport}
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-1">
+                                      {airport.arrivalAirportCode}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-gray-500 p-3 text-center">
+                                {arrivalSearchTerm
+                                  ? "No destinations match your search"
+                                  : "No destinations found"}
+                              </div>
+                            )}
+                          </div>
+                        </>
                       )}
                     </PopoverContent>
                   </Popover>
@@ -1048,7 +1243,7 @@ const BookATripForm = memo(function BookATripForm({
                     {/* Add loading indicator */}
                     {isLoading && (
                       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-[1.5px] border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                       </div>
                     )}
                     <input
@@ -1176,11 +1371,34 @@ const BookATripForm = memo(function BookATripForm({
                           >
                             Flying to?
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 mt-1 mb-4">
                             Select your arrival destination
                           </p>
-                          {/* Horizontal line after header text */}
-                          <div className="w-full h-px bg-gray-200 mt-3"></div>
+                          {/* Search input */}
+                          <div className="relative mb-4">
+                            <input
+                              type="text"
+                              placeholder="Search destinations..."
+                              value={arrivalSearchTerm}
+                              onChange={(e) => setArrivalSearchTerm(e.target.value)}
+                              className="w-full pl-10 pr-3 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-200 focus:border-gray-200"
+                            />
+                            <svg
+                              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                              />
+                            </svg>
+                          </div>
+                          {/* Horizontal line after search input */}
+                          <div className="w-full h-px bg-gray-200"></div>
                         </div>
 
                         {/* Content */}
@@ -1196,28 +1414,44 @@ const BookATripForm = memo(function BookATripForm({
                                 Loading destinations...
                               </div>
                             </div>
-                          ) : arrivalAirports.length > 0 ? (
+                          ) : filteredArrivalAirports.length > 0 ? (
                             <div className="divide-y divide-gray-100">
-                              {arrivalAirports.map((airport, index) => (
+                              {filteredArrivalAirports.map((airport, index) => (
                                 <div
                                   key={index}
-                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150"
+                                  className="px-6 py-4 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150 flex items-center gap-3"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     setSelectedArrival(airport);
                                     if (showValidation)
                                       setShowValidation(false);
-                                    if (showValidation)
-                                      setShowValidation(false);
+                                    setArrivalSearchTerm("");
                                     setIsArrivalPopoverOpen(false);
                                   }}
                                 >
-                                  <div className="text-gray-900 font-medium">
-                                    {airport.arrivalAirport}
-                                  </div>
-                                  <div className="text-sm text-gray-500 mt-1">
-                                    {airport.arrivalAirportCode}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="text-gray-400 flex-shrink-0"
+                                  >
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                    <circle cx="12" cy="10" r="3" />
+                                  </svg>
+                                  <div className="flex-1">
+                                    <div className="text-gray-900 font-medium">
+                                      {airport.arrivalAirport}
+                                    </div>
+                                    <div className="text-sm text-gray-500 mt-1">
+                                      {airport.arrivalAirportCode}
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -1225,7 +1459,7 @@ const BookATripForm = memo(function BookATripForm({
                           ) : (
                             <div className="flex items-center justify-center h-32">
                               <div className="text-gray-500">
-                                No destinations found
+                                {arrivalSearchTerm ? 'No destinations match your search' : 'No destinations found'}
                               </div>
                             </div>
                           )}
@@ -1307,12 +1541,15 @@ const BookATripForm = memo(function BookATripForm({
                       </div>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="mt-1 p-0 w-[--radix-popover-trigger-width] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
-                      align="start"
+                      className="mt-1 p-0 w-[calc(var(--radix-popover-trigger-width)*1.5)] bg-white border text-sm border-gray-200 rounded-md shadow-lg overflow-auto z-[75]"
+                      style={{
+                        maxHeight: "28rem",
+                      }}
+                      align="end"
                     >
-                      <div className=" bg-white border border-gray-200 rounded-xl shadow-lg p-4">
+                      <div className=" bg-white border border-gray-200 rounded-xl shadow-lg p-6">
                         {/* Adults */}
-                        <div className="flex justify-between items-center mb-4">
+                        <div className="flex justify-between items-center mb-6">
                           <div>
                             <p className="text-sm font-semibold text-black">
                               Adults
@@ -1321,7 +1558,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
@@ -1346,7 +1583,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
@@ -1371,7 +1608,7 @@ const BookATripForm = memo(function BookATripForm({
                         </div>
 
                         {/* Children */}
-                        <div className="flex justify-between items-center mb-4">
+                        <div className="flex justify-between items-center mb-6">
                           <div>
                             <p className="text-sm font-semibold text-black">
                               Children
@@ -1380,7 +1617,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
@@ -1405,7 +1642,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.children}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
@@ -1430,7 +1667,7 @@ const BookATripForm = memo(function BookATripForm({
                         </div>
 
                         {/* Infants */}
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center mb-2">
                           <div>
                             <p className="text-sm font-semibold text-black">
                               Infants
@@ -1439,7 +1676,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
@@ -1464,7 +1701,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-9 h-9 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-9 h-9 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }
@@ -1653,7 +1890,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "decrement")
                               }
@@ -1678,7 +1915,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.adults}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("adults", "increment")
                               }
@@ -1712,7 +1949,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "decrement")
                               }
@@ -1737,7 +1974,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.children}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("children", "increment")
                               }
@@ -1771,7 +2008,7 @@ const BookATripForm = memo(function BookATripForm({
                           </div>
                           <div className="flex items-center space-x-3">
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "decrement")
                               }
@@ -1796,7 +2033,7 @@ const BookATripForm = memo(function BookATripForm({
                               {travelers.infants}
                             </span>
                             <button
-                              className="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-xl text-gray-600 hover:border-gray-400 hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
+                              className="w-11 h-11 flex items-center justify-center border-[1.5px] border-blue-500 rounded-xl text-blue-600 hover:border-blue-400 hover:bg-gray-100 active:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150"
                               onClick={() =>
                                 handleChange("infants", "increment")
                               }

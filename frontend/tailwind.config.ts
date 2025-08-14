@@ -13,6 +13,7 @@ export default {
         sans: "var(--font-inter)",
         mono: "var(--font-rubik)",
         veneer: ["Veneer", "serif"],
+        edmondsans: ["Edmondsans", "sans-serif"],
       },
       colors: {
         // background: 'hsl(var(--background))',

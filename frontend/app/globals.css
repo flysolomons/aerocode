@@ -16,6 +16,14 @@
   -webkit-font-smoothing: none;
 }
 
+@font-face {
+  font-family: 'Edmondsans';
+  src: url('/fonts/Edmondsans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 .font-veneer {
   font-family: 'Veneer', serif;
   /* Aggressive texture preservation */
@@ -71,6 +79,10 @@ h1.font-veneer {
   -moz-text-size-adjust: none;
 }
 
+.font-edmondsans {
+  font-family: 'Edmondsans', sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* --background: #ffffff; */
@@ -81,7 +93,8 @@ body {
   font-family: var(--font-rubik);
 }
 
-h1, h2, h3, h4, h5, h6, button {
+h1, h2, h3, h4, h5, h6, button{
+  /* font-family: 'Edmondsans', sans-serif; */
   font-family: var(--font-inter);
 }
 
