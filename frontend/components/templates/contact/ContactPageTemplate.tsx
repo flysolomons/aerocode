@@ -4,6 +4,9 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import ContactForm from "@/components/layout/ContactForm";
 import { useState } from "react";
+import TableOfContents, {
+  TOCSection,
+} from "@/components/layout/TableOfContents";
 
 interface ContactPageTemplateProps {
   initialPage: ContactPage | null;
@@ -13,9 +16,26 @@ export default function ContactPageTemplate({
   initialPage,
 }: ContactPageTemplateProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("master-schedule");
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100; // Account for fixed header
+      const elementPosition = element.offsetTop - offset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: "smooth",
+      });
+      setActiveSection(sectionId);
+    }
+  };
+  
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  
 
   // Handle loading or null data
   if (!initialPage) {
@@ -25,9 +45,36 @@ export default function ContactPageTemplate({
       </div>
     );
   }
+  //Helper function
+  function convergeTextWithDash(title: string | undefined): string {
+    // Return a fallback if title is undefined or empty
+    if (!title) return "contact-fallback";
+  
+    // Split title into words, filter out empty strings, and check word count
+    const words = title.trim().split(/\s+/).filter(word => word.length > 0);
+  
+    // If one word or empty, return lowercase title or fallback
+    if (words.length <= 1) return title.toLowerCase() || "contact-fallback";
+  
+    // Join multiple words with hyphens and convert to lowercase
+    return words.join("-").toLowerCase();
+  }
 
   // Organize contact data
   const organizedContactData = organizeContactData(initialPage.contactSections);
+
+  const contactTocSections = organizedContactData
+  .filter((contact) => contact.categoryName) // Skip entries with undefined sectionId or title
+  .map((contact) => ({
+    id: convergeTextWithDash(contact.categoryName), // Now guaranteed to be string
+    label: contact.categoryName, // Now guaranteed to be string
+    hasContent: true,
+  }));
+
+  // Table of Contents sections
+  const tocSections: TOCSection[] = [
+    ...contactTocSections,
+  ];
 
   // Helper function to get icon for contact method type
   const getContactIcon = (methodType: string) => {
@@ -112,6 +159,12 @@ export default function ContactPageTemplate({
       />
       {/* Header Section End */}
 
+       {/* Table of Contents */}
+       <TableOfContents
+        sections={tocSections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+      />
       {/* Page Content */}
       <div className="bg-refx">
         <Container>
@@ -121,7 +174,7 @@ export default function ContactPageTemplate({
               return (
                 <div
                   key={categoryIndex}
-                  id={`category-${categoryIndex}`}
+                  id={convergeTextWithDash(category.categoryName)}
                   className="space-y-6"
                 >
                   <div className="mb-8">
