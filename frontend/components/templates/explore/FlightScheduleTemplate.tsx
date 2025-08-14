@@ -14,6 +14,9 @@ import {
   ScheduleWithFlightData,
   Flight,
   Schedule,
+  ScheduleMetadata,
+  fetchScheduleFlights,
+  prefetchAdjacentSchedules,
 } from "@/graphql/FlightSchedulePageQuery";
 import parse from "html-react-parser";
 
@@ -39,6 +42,11 @@ export default function FlightScheduleTemplate({
     null
   );
   const [activeSection, setActiveSection] = useState("master-schedule");
+  const [schedules, setSchedules] = useState<Schedule[]>(initialPage.schedules);
+  const [loadingScheduleId, setLoadingScheduleId] = useState<string | null>(null);
+  const [loadedScheduleIds, setLoadedScheduleIds] = useState<Set<string>>(
+    new Set() // Start with empty set since no schedules are pre-loaded
+  );
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -53,16 +61,89 @@ export default function FlightScheduleTemplate({
     }
   };
 
-  // Set default schedule ID on component mount
+  // Set default schedule ID and load first schedule on component mount
   useEffect(() => {
     if (
-      initialPage.schedules &&
-      initialPage.schedules.length > 0 &&
+      schedules &&
+      schedules.length > 0 &&
       !selectedScheduleId
     ) {
-      setSelectedScheduleId(initialPage.schedules[0].id);
+      const firstScheduleId = schedules[0].id;
+      setSelectedScheduleId(firstScheduleId);
+      
+      // Load the first schedule if it doesn't have flights yet
+      const firstSchedule = schedules[0];
+      if (firstSchedule.flights.length === 0) {
+        handleScheduleSelection(firstScheduleId);
+      }
     }
-  }, [initialPage.schedules, selectedScheduleId]);
+  }, [schedules, selectedScheduleId]);
+  
+  // Function to handle schedule selection with lazy loading and prefetching
+  const handleScheduleSelection = async (scheduleId: string) => {
+    // Check if schedule already has flights loaded
+    const schedule = schedules.find(s => s.id === scheduleId);
+    
+    if (!schedule) return;
+    
+    // If schedule has flights or is already loading, just select it
+    if (schedule.flights.length > 0 || loadingScheduleId === scheduleId) {
+      setSelectedScheduleId(scheduleId);
+      
+      // Trigger background prefetching of adjacent schedules
+      if (schedule.flights.length > 0) {
+        const scheduleMetadata: ScheduleMetadata[] = schedules.map(s => ({
+          id: s.id,
+          startDate: s.startDate,
+          endDate: s.endDate,
+          snippetType: s.snippetType,
+          contentType: s.contentType,
+        }));
+        
+        prefetchAdjacentSchedules(scheduleMetadata, scheduleId, loadedScheduleIds);
+      }
+      
+      return;
+    }
+    
+    // Show loading state
+    setLoadingScheduleId(scheduleId);
+    
+    try {
+      // Fetch flights for this schedule (all flights, filtered client-side)
+      const scheduleWithFlights = await fetchScheduleFlights(scheduleId);
+      
+      if (scheduleWithFlights) {
+        // Update the schedules array with the loaded flights
+        setSchedules(prevSchedules => 
+          prevSchedules.map(s => 
+            s.id === scheduleId ? scheduleWithFlights : s
+          )
+        );
+        
+        // Track this schedule as loaded
+        setLoadedScheduleIds(prev => new Set([...prev, scheduleId]));
+        
+        // Select the schedule
+        setSelectedScheduleId(scheduleId);
+        
+        // Start background prefetching of adjacent schedules
+        const scheduleMetadata: ScheduleMetadata[] = schedules.map(s => ({
+          id: s.id,
+          startDate: s.startDate,
+          endDate: s.endDate,
+          snippetType: s.snippetType,
+          contentType: s.contentType,
+        }));
+        
+        prefetchAdjacentSchedules(scheduleMetadata, scheduleId, loadedScheduleIds);
+      }
+    } catch (error) {
+      console.error(`Failed to load schedule ${scheduleId}:`, error);
+    } finally {
+      setLoadingScheduleId(null);
+    }
+  };
 
   // Create schedule items from the data
   const createScheduleItems = (isInternational: boolean) => {
@@ -74,10 +155,10 @@ export default function FlightScheduleTemplate({
 
     // Find the selected schedule
     const filteredSchedules = selectedScheduleId
-      ? initialPage.schedules.filter(
+      ? schedules.filter(
           (schedule) => schedule.id === selectedScheduleId
         )
-      : initialPage.schedules;
+      : schedules;
 
     // Get flights from the filtered schedules
     filteredSchedules.forEach((schedule) => {
@@ -320,9 +401,9 @@ export default function FlightScheduleTemplate({
   const scheduleItems = createScheduleItems(showInternational);
 
   // Check if we have active schedules and flights
-  const hasSchedules =
-    initialPage.schedules && initialPage.schedules.length > 0;
+  const hasSchedules = schedules && schedules.length > 0;
   const hasFilteredSchedule = selectedScheduleId !== null;
+  const isLoadingCurrentSchedule = loadingScheduleId === selectedScheduleId;
   const hasFlights = Object.values(scheduleItems).some(
     (item) =>
       item.content &&
@@ -369,7 +450,7 @@ export default function FlightScheduleTemplate({
             {/* Filters Group: Schedule Cards + Flight Type Toggle */}
             <div id="master-schedule" className="space-y-4">
               {/* Schedule Date Filter Cards */}
-              {initialPage.schedules && initialPage.schedules.length > 0 && (
+              {schedules && schedules.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-xs sm:text-sm font-medium text-gray-600">
@@ -383,21 +464,31 @@ export default function FlightScheduleTemplate({
                     className="flex gap-2 sm:gap-3 overflow-x-auto sm:flex-wrap scrollbar-hide pt-1"
                     style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                   >
-                    {initialPage.schedules.map((schedule) => (
+                    {schedules.map((schedule) => (
                       <button
                         key={schedule.id}
-                        onClick={() => setSelectedScheduleId(schedule.id)}
-                        className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap ${
+                        onClick={() => handleScheduleSelection(schedule.id)}
+                        disabled={loadingScheduleId === schedule.id}
+                        className={`relative flex-shrink-0 px-3 py-2 sm:px-4 sm:py-3 rounded-lg border transition-all duration-200 whitespace-nowrap disabled:opacity-50 ${
                           selectedScheduleId === schedule.id
                             ? "border-yellow-500 bg-yellow-50 text-yellow-700"
-                            : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400"
+                            : "border-gray-200 bg-white text-gray-700 hover:border-yellow-400 disabled:hover:border-gray-200"
                         }`}
                       >
                         <div className="text-xs sm:text-sm font-medium">
                           {formatDate(schedule.startDate)} -{" "}
                           {formatDate(schedule.endDate)}
                         </div>
-                        {selectedScheduleId === schedule.id && (
+                        
+                        {/* Loading spinner */}
+                        {loadingScheduleId === schedule.id && (
+                          <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 border border-white border-t-transparent rounded-full animate-spin"></div>
+                          </div>
+                        )}
+                        
+                        {/* Selected indicator */}
+                        {selectedScheduleId === schedule.id && loadingScheduleId !== schedule.id && (
                           <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-yellow-500 rounded-full flex items-center justify-center">
                             <svg
                               className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
@@ -434,7 +525,71 @@ export default function FlightScheduleTemplate({
             <div>
               {hasSchedules && hasFilteredSchedule ? (
                 <div>
-                  {scheduleItems.length > 0 ? (
+                  {/* Enhanced loading state for current schedule */}
+                  {isLoadingCurrentSchedule ? (
+                    <div className="bg-white rounded-lg p-6 sm:p-8">
+                      {/* Loading header */}
+                      <div className="flex flex-col items-center gap-4 mb-6">
+                        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-sm sm:text-base text-gray-600">
+                          Loading flight schedule...
+                        </p>
+                      </div>
+                      
+                      {/* Skeleton content */}
+                      <div className="space-y-4">
+                        {/* Desktop skeleton */}
+                        <div className="hidden sm:block">
+                          <div className="bg-gray-100 rounded-lg overflow-hidden">
+                            {/* Table header skeleton */}
+                            <div className="bg-gray-200 h-12 mb-1"></div>
+                            {/* Table rows skeleton */}
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} className="flex animate-pulse">
+                                <div className="flex-1 h-12 bg-gray-50 border-b border-gray-100 flex items-center px-4">
+                                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                </div>
+                                <div className="flex-1 h-12 bg-gray-50 border-b border-gray-100 flex items-center px-4">
+                                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                                </div>
+                                <div className="flex-1 h-12 bg-gray-50 border-b border-gray-100 flex items-center px-4">
+                                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                                </div>
+                                <div className="flex-1 h-12 bg-gray-50 border-b border-gray-100 flex items-center px-4">
+                                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                </div>
+                                <div className="flex-1 h-12 bg-gray-50 border-b border-gray-100 flex items-center px-4">
+                                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* Mobile skeleton */}
+                        <div className="sm:hidden space-y-3">
+                          {[...Array(3)].map((_, i) => (
+                            <div key={i} className="bg-gray-50 rounded-lg p-4 animate-pulse">
+                              <div className="flex justify-between items-center mb-3">
+                                <div className="h-4 bg-gray-200 rounded w-20"></div>
+                                <div className="h-3 bg-gray-200 rounded w-16"></div>
+                              </div>
+                              <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                  <div className="h-3 bg-gray-200 rounded w-16 mb-1"></div>
+                                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                                </div>
+                                <div>
+                                  <div className="h-3 bg-gray-200 rounded w-12 mb-1"></div>
+                                  <div className="h-4 bg-gray-200 rounded w-12"></div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : scheduleItems.length > 0 ? (
                     <Accordion items={scheduleItems} defaultOpen={0} />
                   ) : (
                     <div className="bg-white rounded-lg p-6 sm:p-8 text-center">
