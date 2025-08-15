@@ -27,7 +27,7 @@ export default function ContactForm() {
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
-    } else if (formData.length < 2) {
+    } else if (formData.name.length < 2) {
       newErrors.name = "Name must be at least 2 characters long";
     }
 

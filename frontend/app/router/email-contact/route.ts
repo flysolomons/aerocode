@@ -5,70 +5,75 @@ import { contactCustomerTemplate } from "@/app/templates/contact-customer";
 import { contactOfficeTemplate } from "@/app/templates/contact-office";
 
 export async function POST(request: NextRequest) {
+  console.log("=== EMAIL API ROUTE STARTED ===");
+  
   try {
-    //const email ="gsaemane@flysolomons.com";
-
+    console.log("1. Parsing request JSON...");
     const { formData } = await request.json();
+    console.log("2. Form data received:", JSON.stringify(formData, null, 2));
 
-    // Configure Nodemailer transport for Microsoft 365
-    // const transporter = nodemailer.createTransport({
-    //     host: 'smtp.office365.com',
-    //     port: 587,
-    //     secure: false, // Use STARTTLS
-    //     auth: {
-    //       user: process.env.M365_EMAIL_USER, // Your M365 email address
-    //       pass: process.env.M365_EMAIL_PASS, // Your M365 password or app-specific password
-    //     },
-    //     tls: {
-    //       ciphers: 'SSLv3', // Required for some M365 configurations
-    //     },
-    // });
+    console.log("3. Checking environment variables...");
+    console.log("MAIL_HOST:", process.env.MAIL_HOST);
+    console.log("MAIL_PORT:", process.env.MAIL_PORT);
+    console.log("M365_EMAIL_USER:", process.env.M365_EMAIL_USER ? "Set" : "Not set");
+    console.log("M365_EMAIL_PASS:", process.env.M365_EMAIL_PASS ? "Set" : "Not set");
 
-    //Ethereal Mail
+    if (!process.env.MAIL_HOST || !process.env.M365_EMAIL_USER) {
+      throw new Error("Missing required environment variables");
+    }
+
+    console.log("4. Creating nodemailer transporter...");
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
-      secure: false, // true for 465, false for other ports
+      port: parseInt(process.env.MAIL_PORT || "587"),
+      secure: false,
       auth: {
         user: process.env.M365_EMAIL_USER,
         pass: process.env.M365_EMAIL_PASS,
       },
     });
 
-    // Customer email
+    console.log("5. Testing template imports...");
+    const customerHtml = contactCustomerTemplate(
+      formData.name,
+      formData.email,
+      formData.message,
+      formData.referenceId
+    );
+    console.log("Customer template generated successfully");
+
+    const officeHtml = contactOfficeTemplate(
+      formData.name,
+      formData.phone,
+      formData.email,
+      formData.subject,
+      formData.message,
+      formData.referenceId
+    );
+    console.log("Office template generated successfully");
+
+    console.log("6. Preparing email options...");
     const customerMailOptions = {
       from: process.env.M365_EMAIL_USER,
       to: formData.email,
       subject: "Thank You for Your Message",
-      html: contactCustomerTemplate(
-        formData.name,
-        formData.email,
-        formData.message,
-        formData.referenceId
-      ),
+      html: customerHtml,
     };
 
-    // Office email
     const officeMailOptions = {
       from: process.env.M365_EMAIL_USER,
-      to: process.env.OFFICE_EMAIL || "skoito@flysolomons.com", // Define OFFICE_EMAIL in .env.local
+      to: process.env.OFFICE_EMAIL || "skoito@flysolomons.com",
       subject: "New Contact Form Submission",
-      html: contactOfficeTemplate(
-        formData.name,
-        formData.phone,
-        formData.email,
-        formData.subject,
-        formData.message,
-        formData.referenceId
-      ),
+      html: officeHtml,
     };
 
-    // Send email to customer and office
+    console.log("7. Sending emails...");
     await Promise.all([
       transporter.sendMail(customerMailOptions),
       transporter.sendMail(officeMailOptions),
     ]);
 
+    console.log("8. Emails sent successfully!");
     return new Response(
       JSON.stringify({ message: "Email sent successfully" }),
       {
@@ -77,10 +82,20 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.log(error);
-    return new Response(JSON.stringify({ message: "Error sending email" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    console.error("=== EMAIL API ERROR ===");
+    console.error("Error details:", error);
+    console.error("Error message:", error instanceof Error ? error.message : String(error));
+    console.error("Stack trace:", error instanceof Error ? error.stack : "No stack trace");
+    
+    return new Response(
+      JSON.stringify({ 
+        message: "Error sending email",
+        error: error instanceof Error ? error.message : String(error)
+      }), 
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
