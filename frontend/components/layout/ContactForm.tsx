@@ -71,7 +71,7 @@ export default function ContactForm() {
       formData.referenceId = referenceId;
       formData.message = message;
 
-      const res = await fetch("/api/email-contact", {
+      const res = await fetch("/api/email-contact/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ formData }),
