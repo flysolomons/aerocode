@@ -41,11 +41,11 @@ const TeamsSection = ({ departments = [] }: TeamsSectionProps) => {
   return (
     <section className="py-16 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-blue-500 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-edmondsans text-blue-500 mb-4">
             Find Your Team
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base sm:text-lg text-gray-600 px-4">
             Discover where your skills can take flight
           </p>
         </div>

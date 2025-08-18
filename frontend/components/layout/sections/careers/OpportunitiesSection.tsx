@@ -17,7 +17,9 @@ interface OpportunitiesSectionProps {
   jobVacancies?: JobVacancy[];
 }
 
-const OpportunitiesSection = ({ jobVacancies = [] }: OpportunitiesSectionProps) => {
+const OpportunitiesSection = ({
+  jobVacancies = [],
+}: OpportunitiesSectionProps) => {
   // Fallback data if no job vacancies are provided
   const defaultVacancies = [
     {
@@ -25,22 +27,8 @@ const OpportunitiesSection = ({ jobVacancies = [] }: OpportunitiesSectionProps) 
       departmentName: "Flight Operations",
       location: "Honiara",
       closingDate: "2024-12-31",
-      document: { url: "/pilot-vacancy.pdf" }
+      document: { url: "/pilot-vacancy.pdf" },
     },
-    {
-      positionTitle: "Aircraft Maintenance Engineer",
-      departmentName: "Engineering & Maintenance",
-      location: "Honiara",
-      closingDate: "2024-12-15",
-      document: { url: "/engineer-vacancy.pdf" }
-    },
-    {
-      positionTitle: "Customer Service Representative",
-      departmentName: "Customer Service",
-      location: "Honiara",
-      closingDate: "2025-01-15",
-      document: { url: "/customer-service-vacancy.pdf" }
-    }
   ];
 
   const vacancies = jobVacancies.length > 0 ? jobVacancies : defaultVacancies;
@@ -49,10 +37,10 @@ const OpportunitiesSection = ({ jobVacancies = [] }: OpportunitiesSectionProps) 
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     } catch {
       return dateString;
@@ -63,24 +51,26 @@ const OpportunitiesSection = ({ jobVacancies = [] }: OpportunitiesSectionProps) 
     return (
       <section className="py-16 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-blue-500 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-edmondsans text-blue-500 mb-4">
               Opportunities
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600 px-4">
               Current openings across our operations
             </p>
           </div>
 
-          <div className="text-center py-12">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+          <div className="text-center py-8 sm:py-12">
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
               No Current Openings
             </h3>
-            <p className="text-lg text-gray-600 mb-6">
-              We don't have any open positions at the moment, but we're always looking for talented individuals to join our team.
+            <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 px-4">
+              We don't have any open positions at the moment, but we're always
+              looking for talented individuals to join our team.
             </p>
-            <p className="text-gray-600">
-              Please check back regularly for new opportunities or connect with us on LinkedIn to stay updated.
+            <p className="text-sm sm:text-base text-gray-600 px-4">
+              Please check back regularly for new opportunities or connect with
+              us on LinkedIn to stay updated.
             </p>
           </div>
         </div>
@@ -91,53 +81,70 @@ const OpportunitiesSection = ({ jobVacancies = [] }: OpportunitiesSectionProps) 
   return (
     <section className="py-16 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-blue-500 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-edmondsans text-blue-500 mb-4">
             Opportunities
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base sm:text-lg text-gray-600 px-4">
             Current openings across our operations
           </p>
         </div>
 
         <div>
-          <ul className="space-y-4">
+          <ul className="space-y-4 sm:space-y-6">
             {vacancies.map((vacancy, index) => (
-              <li key={index} className={index < vacancies.length - 1 ? "border-b pb-4" : ""}>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-1">
+              <li
+                key={index}
+                className={
+                  index < vacancies.length - 1 ? "border-b pb-4 sm:pb-6" : ""
+                }
+              >
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 sm:mb-1">
                       {vacancy.positionTitle}
                     </h3>
-                    <p className="text-gray-600">
-                      {vacancy.departmentName} • {vacancy.location} • Closes: {formatDate(vacancy.closingDate)}
-                    </p>
-                  </div>
-                  {vacancy.document?.url ? (
-                    <a
-                      href={vacancy.document.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      View Details
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </a>
-                  ) : (
-                    <div className="text-gray-400 text-sm">
-                      Details coming soon
+                    <div className="text-sm sm:text-base text-gray-600 space-y-1 sm:space-y-0">
+                      <div className="sm:hidden">
+                        <span className="block">{vacancy.departmentName}</span>
+                        <span className="block">{vacancy.location}</span>
+                        <span className="block">
+                          Closes: {formatDate(vacancy.closingDate)}
+                        </span>
+                      </div>
+                      <p className="hidden sm:block">
+                        {vacancy.departmentName} • {vacancy.location} • Closes:{" "}
+                        {formatDate(vacancy.closingDate)}
+                      </p>
                     </div>
-                  )}
+                  </div>
+                  <div className="flex-shrink-0">
+                    {vacancy.document?.url ? (
+                      <a
+                        href={vacancy.document.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
+                      >
+                        View Details
+                        <svg
+                          className="w-3 h-3 sm:w-4 sm:h-4 ml-1"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </a>
+                    ) : (
+                      <div className="text-gray-400 text-xs sm:text-sm">
+                        Details coming soon
+                      </div>
+                    )}
+                  </div>
                 </div>
               </li>
             ))}

@@ -71,9 +71,11 @@ const CareersHero = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative z-30 text-center">
-          <h1 className="text-8xl font-veneer mb-6">{heroTitle}</h1>
+          <h1 className="text-6xl sm:text-6xl md:text-6xl lg:text-6xl lg:text-8xl font-veneer mb-4 sm:mb-6 leading-tight">
+            {heroTitle}
+          </h1>
           {subTitle && (
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto px-4">
               {subTitle}
             </p>
           )}

@@ -76,9 +76,9 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
           <div className="embla__container">
             {teams.map((team, index) => (
               <div className="embla__slide" key={index}>
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[32rem] lg:h-[36rem] flex">
-                  {/* Image - 3/4 width */}
-                  <div className="relative w-3/4 group overflow-hidden">
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[28rem] sm:h-[32rem] lg:h-[36rem] flex flex-col sm:flex-row">
+                  {/* Image - full width on mobile, 3/4 on larger screens */}
+                  <div className="relative w-full sm:w-3/4 h-72 sm:h-auto group overflow-hidden">
                     <Image
                       src={team.imageSrc}
                       alt={team.imageAlt}
@@ -87,12 +87,12 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
                     />
                   </div>
 
-                  {/* Text Content - 1/4 width */}
-                  <div className="w-1/4 p-6 lg:p-8 flex flex-col justify-center bg-gray-50">
-                    <h3 className="text-lg lg:text-xl xl:text-2xl font-bold text-gray-800 mb-3 lg:mb-4 leading-tight">
+                  {/* Text Content - full width on mobile, 1/4 on larger screens */}
+                  <div className="w-full sm:w-1/4 p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
+                    <h3 className="text-lg sm:text-lg lg:text-xl xl:text-2xl font-edmondsans text-gray-800 mb-2 sm:mb-3 lg:mb-4 leading-tight">
                       {team.title}
                     </h3>
-                    <div className="text-sm lg:text-base text-gray-600 leading-relaxed">
+                    <div className="text-sm sm:text-sm lg:text-base text-gray-600 leading-relaxed">
                       {parse(team.description)}
                     </div>
                   </div>
