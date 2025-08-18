@@ -122,7 +122,7 @@ export async function fetchCareersPage(): Promise<{
     const { data } = await client.query<CareersPageData>({
       query: GET_CAREERS_PAGE_QUERY,
       errorPolicy: "all",
-      fetchPolicy: "cache-first",
+      fetchPolicy: "no-cache",
     });
 
     // Find the CareersPage from the pages array

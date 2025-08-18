@@ -15,24 +15,18 @@ interface CareersPageTemplateProps {
 const CareersPageTemplate = ({ initialPage }: CareersPageTemplateProps) => {
   return (
     <div className="min-h-screen">
-      <CareersHero 
+      <CareersHero
         heroTitle={initialPage.heroTitle}
         heroImage={initialPage.heroImage}
         heroVideo={initialPage.heroVideo}
         subTitle={initialPage.subTitle}
       />
-      <LifeAtSolomonAirlinesSection 
+      <LifeAtSolomonAirlinesSection
         cultureHighlights={initialPage.cultureHighlights}
       />
-      <TeamsSection 
-        departments={initialPage.departments}
-      />
-      <BenefitsSection 
-        benefits={initialPage.benefits}
-      />
-      <OpportunitiesSection 
-        jobVacancies={initialPage.jobVacancies}
-      />
+      <TeamsSection departments={initialPage.departments} />
+      <BenefitsSection benefits={initialPage.benefits} />
+      <OpportunitiesSection jobVacancies={initialPage.jobVacancies} />
       <CallToActionSection />
     </div>
   );
