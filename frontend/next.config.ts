@@ -73,12 +73,6 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
-  
-  // Experimental features for better performance
-  experimental: {
-    optimizePackageImports: ['@apollo/client', 'framer-motion'],
-    optimizeCss: true,
-  },
 };
 
 export default nextConfig;
