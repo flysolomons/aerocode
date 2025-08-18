@@ -2,14 +2,20 @@ from django.db import models
 from core.models import BasePage
 from wagtail.fields import RichTextField
 from wagtail.admin.panels import FieldPanel
-from grapple.models import GraphQLString, GraphQLStreamfield, GraphQLImage
+from grapple.models import GraphQLString, GraphQLStreamfield, GraphQLImage, GraphQLDocument
+from grapple.helpers import register_query_field
 from wagtail.fields import StreamField
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet
 from core.blocks import (
     ValueCardBlock,
     JourneyItemBlock,
     StatBlock,
     MagazineBlock,
     StoryBlock,
+    CompanyCultureHighlightBlock,
+    DepartmentBlock,
+    BenefitBlock,
 )
 
 
@@ -112,3 +118,119 @@ class AboutIndexPage(BasePage):
 
     class Meta:
         verbose_name = "About Index Page"
+
+
+class CareersPage(BasePage):
+    max_count = 1
+
+    hero_video = models.FileField(
+        upload_to="videos/",
+        blank=True,
+        null=True,
+        help_text="Hero video for the careers page",
+    )
+
+    culture_highlights = StreamField(
+        [("culture_highlight", CompanyCultureHighlightBlock())],
+        use_json_field=True,
+        blank=True,
+        max_num=3,
+        help_text="Company culture highlights with image, title and description (maximum 3)",
+        verbose_name="Company Culture Highlights",
+    )
+
+    departments = StreamField(
+        [("department", DepartmentBlock())],
+        use_json_field=True,
+        blank=True,
+        help_text="Departments with name, description and image",
+        verbose_name="Departments",
+    )
+
+    benefits = StreamField(
+        [("benefit", BenefitBlock())],
+        use_json_field=True,
+        blank=True,
+        help_text="Benefits with title and description",
+        verbose_name="Benefits",
+    )
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel("hero_video", heading="Hero Video"),
+        FieldPanel("culture_highlights", heading="Company Culture Highlights"),
+        FieldPanel("departments", heading="Departments"),
+        FieldPanel("benefits", heading="Benefits"),
+    ]
+
+    graphql_fields = BasePage.graphql_fields + [
+        GraphQLString("hero_video", name="heroVideo"),
+        GraphQLStreamfield("culture_highlights", name="cultureHighlights"),
+        GraphQLStreamfield("departments", name="departments"),
+        GraphQLStreamfield("benefits", name="benefits"),
+    ]
+
+    parent_page_types = ["home.HomePage"]
+
+    class Meta:
+        verbose_name = "Careers Page"
+
+
+@register_query_field("jobVacancy", "jobVacancies")
+class JobVacancy(models.Model):
+    position_title = models.CharField(
+        max_length=200,
+        help_text="Job position title"
+    )
+    department_name = models.CharField(
+        max_length=100,
+        help_text="Department name"
+    )
+    location = models.CharField(
+        max_length=100,
+        help_text="Job location"
+    )
+    closing_date = models.DateField(
+        help_text="Application closing date"
+    )
+    document = models.ForeignKey(
+        "wagtaildocs.Document",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        help_text="Job vacancy document (PDF)"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    panels = [
+        FieldPanel("position_title"),
+        FieldPanel("department_name"),
+        FieldPanel("location"),
+        FieldPanel("closing_date"),
+        FieldPanel("document"),
+    ]
+
+    graphql_fields = [
+        GraphQLString("position_title", name="positionTitle"),
+        GraphQLString("department_name", name="departmentName"),
+        GraphQLString("location", name="location"),
+        GraphQLString("closing_date", name="closingDate"),
+        GraphQLDocument("document", name="document"),
+    ]
+
+    def __str__(self):
+        return f"{self.position_title} - {self.department_name}"
+
+    class Meta:
+        verbose_name = "Job Vacancy"
+        verbose_name_plural = "Job Vacancies"
+        ordering = ["-created_at"]
+
+
+class JobVacancyAdmin(SnippetViewSet):
+    model = JobVacancy
+    add_to_admin_menu = False  # Hide from snippets menu
+
+
+register_snippet(JobVacancy, JobVacancyAdmin)

@@ -18,6 +18,7 @@ import BelamaIndexPageTemplate from "@/components/templates/belama/BelamaIndexPa
 import BelamaSignUpPageTemplate from "@/components/templates/belama/BelamaSignUpPageTemplate";
 import TravelAlertsPageTemplate from "@/components/templates/travel-alerts/TravelAlertsPageTemplate";
 import ContactPageTemplate from "@/components/templates/contact/ContactPageTemplate";
+import CareersPageTemplate from "@/components/templates/careers/CareersPageTemplate";
 
 // import functions to fetch data
 import { fetchPageType } from "@/graphql/pageTypeQuery";
@@ -43,6 +44,7 @@ import {
 } from "@/graphql/BelamaPageQuery";
 import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
 import { fetchContactPage } from "@/graphql/ContactPageQuery";
+import { fetchCareersPage } from "@/graphql/CareersPageQuery";
 
 // Helper function to detect if this is a news category page URL
 function isNewsCategoryUrl(fullPath: string): boolean {
@@ -132,6 +134,9 @@ async function fetchPageData(slug: string, fullPath: string) {
       return fetchTravelAlertPage();
     case "ContactPage":
       return fetchContactPage();
+    case "CareersPage":
+      const careersData = await fetchCareersPage();
+      return { ...careersData.careersPage, jobVacancies: careersData.jobVacancies };
     default:
       return null;
   }
@@ -236,6 +241,8 @@ export default async function Page({
         return <TravelAlertsPageTemplate initialPage={page} />;
       case "ContactPage":
         return <ContactPageTemplate initialPage={page} />;
+      case "CareersPage":
+        return <CareersPageTemplate initialPage={page} />;
       default:
         notFound();
     }
