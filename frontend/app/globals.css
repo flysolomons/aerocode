@@ -7,7 +7,7 @@
   src: url('/fonts/VENEER.OTF') format('opentype');
   font-weight: normal;
   font-style: normal;
-  font-display: block; /* Changed from 'swap' to 'block' for texture preservation */
+  font-display: swap;
   /* Preserve all font features */
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "salt" 1;
   font-variant-ligatures: common-ligatures discretionary-ligatures;
