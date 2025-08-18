@@ -88,7 +88,7 @@ export default function AboutPageTemplate({
     }
     // If it's a relative path, construct the absolute URL
     const baseUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
-    return `${baseUrl}/media/${videoPath}`;
+    return `${baseUrl}media/${videoPath}`;
   };
 
   // Transform magazines
