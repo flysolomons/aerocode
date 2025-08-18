@@ -73,7 +73,7 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
         </button>
 
         <div className="embla__viewport" ref={emblaRef}>
-          <div className="embla__container">
+          <div className="embla__container px-4 sm:px-0">
             {teams.map((team, index) => (
               <div className="embla__slide" key={index}>
                 <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[28rem] sm:h-[32rem] lg:h-[36rem] flex flex-col sm:flex-row">
@@ -140,22 +140,29 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
         .embla__container {
           display: flex;
           flex-direction: row;
-          gap: 1rem;
         }
         .embla__slide {
           min-width: 0;
           margin-left: 0 !important;
           background: transparent !important;
           border: none !important;
-          flex: 0 0 calc(100% - 1rem);
+          flex: 0 0 calc(100% - 2rem);
+          margin-right: 1rem;
+        }
+        .embla__slide:last-child {
+          margin-right: 0;
         }
         
         @media (min-width: 640px) {
-          .embla__slide {
-            flex: 0 0 100%;
-          }
           .embla__container {
             gap: 1rem;
+          }
+          .embla__slide {
+            flex: 0 0 100%;
+            margin-right: 0;
+          }
+          .embla__slide:last-child {
+            margin-right: 0;
           }
         }
       `}</style>
