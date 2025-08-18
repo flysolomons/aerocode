@@ -147,7 +147,16 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
           margin-left: 0 !important;
           background: transparent !important;
           border: none !important;
-          flex: 0 0 100%;
+          flex: 0 0 calc(100% - 1rem);
+        }
+        
+        @media (min-width: 640px) {
+          .embla__slide {
+            flex: 0 0 100%;
+          }
+          .embla__container {
+            gap: 1rem;
+          }
         }
       `}</style>
     </section>
