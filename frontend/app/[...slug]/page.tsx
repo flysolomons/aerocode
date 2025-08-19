@@ -384,7 +384,6 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       "NewsIndexPage",
       "ExploreIndexPage",
       "ExperienceIndexPage",
-      "ContactPage",
       "CareersPage",
       "DestinationIndexPage",
       "Destination",
