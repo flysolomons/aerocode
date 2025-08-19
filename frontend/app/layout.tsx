@@ -42,11 +42,6 @@ const veneer = localFont({
 
 const edmondsans = localFont({
   src: [
-    // {
-    //   path: "../public/fonts/Edmondsans-Regular.otf",
-    //   weight: "400",
-    //   style: "normal",
-    // },
     {
       path: "../public/fonts/Edmondsans-Medium.otf",
       weight: "500",
