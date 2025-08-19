@@ -380,7 +380,7 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
     // Define important page types for static generation
     const importantTypes = [
       "HomePage",
-      "AboutIndexPage",
+      // "AboutIndexPage",
       "NewsIndexPage",
       "ExploreIndexPage",
       "ExperienceIndexPage",
@@ -389,7 +389,7 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       "BelamaIndexPage",
       "BelamaSignUpPage",
       "DestinationIndexPage",
-      "DestinationPage",
+      "Destination",
       "SpecialsIndexPage",
       "TravelAlertPage",
       "WhereWeFly",
@@ -398,11 +398,6 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
 
     const staticParams = allPages
       .filter((page) => {
-        // Basic filtering - exclude admin and home
-        if (!page.url || page.url === "/" || page.url.includes("admin")) {
-          return false;
-        }
-
         // Only include pages with important types
         return importantTypes.includes(page.__typename);
       })
