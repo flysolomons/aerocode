@@ -1,5 +1,6 @@
 // import templates
 import { notFound } from "next/navigation";
+import { unstable_cache } from "next/cache";
 import GenericPageTemplate from "@/components/templates/generic/GenericPageTemplate";
 import NewsIndexTemplate from "@/components/templates/news/NewsIndexTemplate";
 import NewsCategoryTemplate from "@/components/templates/news/NewsCategoryTemplate";
@@ -21,6 +22,8 @@ import ContactPageTemplate from "@/components/templates/contact/ContactPageTempl
 import CareersPageTemplate from "@/components/templates/careers/CareersPageTemplate";
 
 // import functions to fetch data
+import { gql } from "@apollo/client";
+import client from "@/lib/apolloClient";
 import { fetchPageType } from "@/graphql/pageTypeQuery";
 import { fetchGenericPage } from "@/graphql/genericPageQuery";
 import {
@@ -45,6 +48,71 @@ import {
 import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
 import { fetchContactPage } from "@/graphql/ContactPageQuery";
 import { fetchCareersPage } from "@/graphql/CareersPageQuery";
+
+// Cache page data content with granular cache keys
+async function getCachedPageContent(pageType: string, slug: string) {
+  // Create specific cache function for this page type and slug
+  const cacheKey = [`page-content-${pageType}`, slug];
+  const cacheTags = [
+    `page-content`,
+    `page-content-${pageType}`,
+    `page-${slug}`,
+  ];
+
+  return await unstable_cache(
+    async () => {
+      switch (pageType) {
+        case "GenericPage":
+          return fetchGenericPage(slug);
+        case "NewsIndexPage":
+          return fetchNewsIndexPage();
+        case "NewsArticle":
+          return fetchNewsArticlePage(slug);
+        case "ExperienceIndexPage":
+          return fetchExperienceIndexPage();
+        case "ExploreIndexPage":
+          return fetchExploreIndexPage();
+        case "DestinationIndexPage":
+          return fetchDestinationIndexPage();
+        case "Destination":
+          return fetchDestinationPage(slug);
+        case "WhereWeFly":
+          return fetchWhereWeFlyPage();
+        case "FlightSchedule":
+          return fetchFlightSchedulePage();
+        case "Route":
+          return fetchRoutePage(slug);
+        case "SpecialsIndexPage":
+          return fetchSpecialsIndexPage();
+        case "Special":
+          return fetchSpecialPage(slug);
+        case "AboutIndexPage":
+          return fetchAboutPage();
+        case "BelamaIndexPage":
+          return fetchBelamaPage();
+        case "BelamaSignUpPage":
+          return fetchBelamaSignUpPage();
+        case "TravelAlertPage":
+          return fetchTravelAlertPage();
+        case "ContactPage":
+          return fetchContactPage();
+        case "CareersPage":
+          const careersData = await fetchCareersPage();
+          return {
+            ...careersData.careersPage,
+            jobVacancies: careersData.jobVacancies,
+          };
+        default:
+          return null;
+      }
+    },
+    cacheKey,
+    {
+      revalidate: 300, // Cache heavy content for 5 minutes
+      tags: cacheTags,
+    }
+  )();
+}
 
 // Helper function to detect if this is a news category page URL
 function isNewsCategoryUrl(fullPath: string): boolean {
@@ -87,7 +155,7 @@ async function fetchPageData(slug: string, fullPath: string) {
     }
   }
 
-  // Legacy system: Use page type detection
+  // Always fetch fresh page type to avoid stale routing
   const pageType = await fetchPageType(slug);
 
   if (!pageType) {
@@ -99,47 +167,8 @@ async function fetchPageData(slug: string, fullPath: string) {
     return null;
   }
 
-  switch (pageType.__typename) {
-    case "GenericPage":
-      return fetchGenericPage(slug);
-    case "NewsIndexPage":
-      return fetchNewsIndexPage();
-    case "NewsArticle":
-      return fetchNewsArticlePage(slug);
-    case "ExperienceIndexPage":
-      return fetchExperienceIndexPage();
-    case "ExploreIndexPage":
-      return fetchExploreIndexPage();
-    case "DestinationIndexPage":
-      return fetchDestinationIndexPage();
-    case "Destination":
-      return fetchDestinationPage(slug);
-    case "WhereWeFly":
-      return fetchWhereWeFlyPage();
-    case "FlightSchedule":
-      return fetchFlightSchedulePage();
-    case "Route":
-      return fetchRoutePage(slug);
-    case "SpecialsIndexPage":
-      return fetchSpecialsIndexPage();
-    case "Special":
-      return fetchSpecialPage(slug);
-    case "AboutIndexPage":
-      return fetchAboutPage();
-    case "BelamaIndexPage":
-      return fetchBelamaPage();
-    case "BelamaSignUpPage":
-      return fetchBelamaSignUpPage();
-    case "TravelAlertPage":
-      return fetchTravelAlertPage();
-    case "ContactPage":
-      return fetchContactPage();
-    case "CareersPage":
-      const careersData = await fetchCareersPage();
-      return { ...careersData.careersPage, jobVacancies: careersData.jobVacancies };
-    default:
-      return null;
-  }
+  // Use cached content fetching for performance
+  return getCachedPageContent(pageType.__typename, slug);
 }
 
 // Generate metadata
@@ -152,6 +181,7 @@ export async function generateMetadata({
   const fullPath = resolvedParams.slug.join("/"); // Full path for urlPath comparison
   const slug = resolvedParams.slug[resolvedParams.slug.length - 1] || ""; // Last segment as slug
 
+  // Always fetch fresh page type for accurate metadata
   const pageType = await fetchPageType(slug);
 
   // Return default title if pageType is null
@@ -260,26 +290,55 @@ export default async function Page({
   }
 }
 
-// Optional: Generate static params for SSG
-// export async function generateStaticParams() {
-//   const GET_ALL_SLUGS_QUERY = gql`
-//     query GetAllSlugs {
-//       pages {
-//         slug
-//         urlPath
-//       }
-//     }
-//   `;
+// Generate static params for SSG
+export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+  const GET_ALL_SLUGS_QUERY = gql`
+    query GetAllSlugs {
+      pages {
+        slug
+        url
+        urlPath
+        __typename
+      }
+    }
+  `;
 
-//   try {
-//     const { data } = await client.query<{ pages: { slug: string; urlPath: string }[] }>({
-//       query: GET_ALL_SLUGS_QUERY,
-//     });
-//     return data.pages.map((page) => ({
-//       slug: page.url.split('/').filter(Boolean), // Use urlPath to generate full path segments
-//     }));
-//   } catch (error) {
-//     console.error('Error fetching slugs:', error);
-//     return [];
-//   }
-// }
+  try {
+    const { data } = await client.query<{
+      pages: {
+        slug: string;
+        url: string;
+        urlPath: string;
+        __typename: string;
+      }[];
+    }>({
+      query: GET_ALL_SLUGS_QUERY,
+      fetchPolicy: "network-only", // Always fetch fresh data for build time
+    });
+
+    const staticParams = data.pages
+      .filter((page) => {
+        // Filter out pages that shouldn't be statically generated
+        // For example, exclude admin-only pages or dynamic pages
+        return page.url && page.url !== "/" && !page.url.includes("admin");
+      })
+      .map((page) => {
+        // Convert URL path to slug array
+        // e.g., "/news/article-1/" becomes ["news", "article-1"]
+        const segments = page.url.split("/").filter(Boolean); // Remove empty strings
+
+        return {
+          slug: segments,
+        };
+      })
+      .filter((param) => param.slug.length > 0); // Ensure we have valid slugs
+
+    console.log(`Generated ${staticParams.length} static params for SSG`);
+    return staticParams;
+  } catch (error) {
+    console.error("Error fetching slugs for static generation:", error);
+    // Return empty array to allow build to continue
+    // Pages will be generated on-demand
+    return [];
+  }
+}

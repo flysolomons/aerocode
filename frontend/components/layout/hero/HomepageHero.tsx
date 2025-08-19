@@ -7,7 +7,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { DotButton, useDotButton } from "../carousel/DotButton";
 import parse from "html-react-parser";
 import HeroBottomFade from "./HeroBottomFade";
-import Image from "next/image";
 
 interface CarouselSlide {
   slide: {
@@ -153,22 +152,11 @@ export default function HomePageHero({
 
   return (
     <main>
-      {/* Preload the first few images */}
-      {carouselSlides.slice(0, 2).map((slideData, index) => (
-        <link
-          key={`preload-${index}`}
-          rel="preload"
-          as="image"
-          href={slideData.slide.image.url}
-          type="image/jpeg"
-        />
-      ))}
       <div className="relative">
         <div className="absolute inset-0">
           {/* Fade Transition Slides */}
           {carouselSlides.map((slideData, index) => {
             const isActive = index === selectedIndex;
-            const isFirst = index === 0;
             return (
               <div
                 key={index}
@@ -177,19 +165,15 @@ export default function HomePageHero({
                 }`}
               >
                 <div className="relative w-full h-full overflow-hidden">
-                  <Image
-                    src={slideData.slide.image.url}
-                    alt={slideData.slide.title}
-                    fill
-                    className={`object-cover transition-all ease-linear ${
+                  <div
+                    className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all ease-linear ${
                       isActive ? "scale-110" : "scale-100"
                     }`}
-                    priority={isFirst}
-                    quality={85}
-                    sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
-                    loading={isFirst ? "eager" : "lazy"}
+                    style={{
+                      backgroundImage: `url(${slideData.slide.image.url})`,
+                    }}
                   />
-                  <div className="absolute inset-0 bg-black/15 z-10"></div>
+                  <div className="absolute inset-0 bg-black/15"></div>
                 </div>
               </div>
             );

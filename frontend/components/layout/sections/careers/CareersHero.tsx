@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 
 interface ImageBlock {
   url: string;
@@ -47,14 +46,9 @@ const CareersHero = ({
           Your browser does not support the video tag.
         </video>
       ) : heroImage ? (
-        <Image
-          src={heroImage.url}
-          alt={heroTitle}
-          fill
-          className="absolute inset-0 w-full h-full object-cover z-10"
-          priority
-          quality={85}
-          sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
+        <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-10"
+          style={{ backgroundImage: `url(${heroImage.url})` }}
         />
       ) : (
         <video

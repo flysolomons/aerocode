@@ -5,7 +5,6 @@ import BookingWidget from "../booking-widget/BookingWidget";
 import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
 import BreadcrumbNav from "../BreadcrumbNav";
 import HeroBottomFade from "./HeroBottomFade";
-import Image from "next/image";
 
 interface PrimaryHeroProps {
   title: string;
@@ -29,16 +28,13 @@ export default function PrimaryHero({
     <main>
       <div className="relative">
         <div className="absolute inset-0">
-          <Image
-            src={image}
-            alt={title}
-            fill
-            className="absolute inset-0 object-cover"
-            priority
-            quality={85}
-            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: `url(${image})`,
+            }}
           />
-          <div className="absolute inset-0 bg-black/15 z-10"></div>
+          <div className="absolute inset-0 bg-black/15"></div>
           <HeroBottomFade color="#FFFFFF" />
         </div>
         <div className="relative h-[calc(100vh)]">

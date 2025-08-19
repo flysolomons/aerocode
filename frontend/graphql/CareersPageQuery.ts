@@ -185,7 +185,6 @@ export async function fetchCareersPage(): Promise<{
   }
 }
 
-
 /**
  * Server-side function to fetch Careers page data
  * Use this in getStaticProps, getServerSideProps, or server components
@@ -276,7 +275,8 @@ export const fallbackCareersPage: {
     cultureHighlights: [
       {
         title: "Island Paradise Workplace",
-        description: "Work in one of the most beautiful destinations in the world",
+        description:
+          "Work in one of the most beautiful destinations in the world",
         image: { url: "/default-culture.jpg" },
       },
       {
