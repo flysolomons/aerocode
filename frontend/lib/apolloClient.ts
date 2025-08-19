@@ -12,6 +12,13 @@ const getGraphQLUrl = () => {
     // Client-side: Use NEXT_PUBLIC_GRAPHQL_URL for browser requests
     return process.env.NEXT_PUBLIC_GRAPHQL_URL;
   }
+  
+  // Build-time: Check if we're in a build environment and prefer external URL
+  if (process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GRAPHQL_URL) {
+    console.log('🔧 Build-time: Using public GraphQL URL for static generation');
+    return process.env.NEXT_PUBLIC_GRAPHQL_URL;
+  }
+  
   // Server-side: Use GRAPHQL_URL for Node.js requests
   return process.env.GRAPHQL_URL;
 };

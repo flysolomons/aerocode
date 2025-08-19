@@ -292,6 +292,16 @@ export default async function Page({
 
 // Generate static params for SSG
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
+  // Check if we have a GraphQL URL available for static generation
+  const graphqlUrl = process.env.NEXT_PUBLIC_GRAPHQL_URL || process.env.GRAPHQL_URL;
+  
+  if (!graphqlUrl) {
+    console.warn('⚠️ No GraphQL URL available for static generation, skipping SSG');
+    return [];
+  }
+
+  console.log(`🚀 Static generation using GraphQL endpoint: ${graphqlUrl}`);
+
   const GET_ALL_SLUGS_QUERY = gql`
     query GetAllSlugs {
       pages {
@@ -314,7 +324,16 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
     }>({
       query: GET_ALL_SLUGS_QUERY,
       fetchPolicy: "network-only", // Always fetch fresh data for build time
+      context: {
+        // Add timeout for build-time queries
+        timeout: 30000, // 30 seconds
+      },
     });
+
+    if (!data?.pages) {
+      console.warn('⚠️ No pages data received from GraphQL');
+      return [];
+    }
 
     const staticParams = data.pages
       .filter((page) => {
@@ -333,12 +352,25 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       })
       .filter((param) => param.slug.length > 0); // Ensure we have valid slugs
 
-    console.log(`Generated ${staticParams.length} static params for SSG`);
+    console.log(`✅ Generated ${staticParams.length} static params for SSG`);
+    
+    // Log first few params for debugging
+    if (staticParams.length > 0) {
+      console.log('📄 Sample static params:', staticParams.slice(0, 5));
+    }
+    
     return staticParams;
   } catch (error) {
-    console.error("Error fetching slugs for static generation:", error);
-    // Return empty array to allow build to continue
-    // Pages will be generated on-demand
+    console.error("❌ Error fetching slugs for static generation:", error);
+    
+    // In development, we might want to continue without static generation
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔄 Development mode: Continuing without static generation');
+      return [];
+    }
+    
+    // In production builds, we still want to continue but log the issue
+    console.warn('⚠️ Production build: Static generation failed, falling back to dynamic rendering');
     return [];
   }
 }
