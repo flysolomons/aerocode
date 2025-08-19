@@ -408,12 +408,18 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
           type: page.__typename,
         };
       })
+      .filter((param) => {
+        // Allow home page with empty slug array, but ensure other pages have valid slugs
+        if (param.type === "HomePage" && param.slug.length === 0) {
+          return true;
+        }
+        return param.slug.length > 0;
+      })
       .sort((a, b) => {
         // Sort alphabetically by URL path
         return a.slug.join("/").localeCompare(b.slug.join("/"));
       })
-      .map(({ slug }) => ({ slug })) // Remove extra properties
-      .filter((param) => param.slug.length > 0); // Ensure we have valid slugs
+      .map(({ slug }) => ({ slug })); // Remove extra properties
 
     console.log(`✅ Generated ${staticParams.length} static params for SSG`);
 
