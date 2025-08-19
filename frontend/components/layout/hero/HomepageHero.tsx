@@ -186,7 +186,7 @@ export default function HomePageHero({
                     }`}
                     priority={isFirst}
                     quality={85}
-                    sizes="100vw"
+                    sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
                     loading={isFirst ? "eager" : "lazy"}
                   />
                   <div className="absolute inset-0 bg-black/15 z-10"></div>

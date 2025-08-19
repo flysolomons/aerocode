@@ -54,7 +54,7 @@ const CareersHero = ({
           className="absolute inset-0 w-full h-full object-cover z-10"
           priority
           quality={85}
-          sizes="100vw"
+          sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
         />
       ) : (
         <video
