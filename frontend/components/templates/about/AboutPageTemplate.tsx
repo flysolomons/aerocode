@@ -71,7 +71,7 @@ const transformStories = (stories: StoryBlock[]): Story[] => {
         link: story.url || "#",
       };
     })
-    .filter((story): story is Story => !!story.title && !!story.link);
+    .filter((story) => Boolean(story.title && story.link));
 };
 
 interface AboutPageTemplateProps {
@@ -80,7 +80,7 @@ interface AboutPageTemplateProps {
 
 export default function AboutPageTemplate({
   initialPage,
-}: AboutPageTemplateProps) {
+}: AboutPageTemplateProps): React.JSX.Element {
   const getVideoUrl = (videoPath: string) => {
     // If it's already an absolute URL, return it as is
     if (videoPath.startsWith("http")) {
@@ -103,7 +103,7 @@ export default function AboutPageTemplate({
       {initialPage.heroImage?.url === null ? (
         <PrimaryHero
           title={initialPage.heroTitle || "Our Journey Above the Clouds"}
-          subtitle={initialPage.subTitle || "We are awsome"}
+          subtitle={initialPage.subTitle || "We are awesome"}
           image={initialPage.heroImage?.url || "/hero.jpg"}
           breadcrumbs={initialPage.url}
           showBookingWidget={false}
@@ -189,23 +189,31 @@ export default function AboutPageTemplate({
             <h2 className="font-semibold text-3xl text-center text-blue-500">
               Where we are today
             </h2>
-            <p className="text-gray-500 text-center">
-              {beautifyHtml(
-                "Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji , Nadi. We operate:<li>The Airbus A320-200 “Spirit of Solomons” for international routes</li>	<li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>	With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development."
-              )}
-            </p>
+            <div className="text-gray-500 text-center">
+              {parse(initialPage.description || "Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji, Nadi.")}
+              <ul className="mt-4 space-y-2 text-left max-w-2xl mx-auto">
+                <li>The Airbus A320-200 "Spirit of Solomons" for international routes</li>
+                <li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>
+              </ul>
+              <p className="mt-4">
+                With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.
+              </p>
+            </div>
 
-            <p className="py-4">
-              {beautifyHtml(
-                'Discover our roadmap for the future in our  <a href="#">Strategic Plan Document</a>'
-              )}
-            </p>
+            <div className="py-4">
+              <p>
+                Discover our roadmap for the future in our{" "}
+                <a href="#" className="text-blue-500 hover:text-blue-700 underline">
+                  Strategic Plan Document
+                </a>
+              </p>
+            </div>
           </div>
         </Container>
       </div>
 
       {/* Mission & Vision Section */}
-      <div className="bg-rfex h-auto lg:h-screen">
+      <div className="bg-gray-50 h-auto lg:h-screen">
         <Container>
           <div
             id="missionSection"
@@ -221,14 +229,14 @@ export default function AboutPageTemplate({
               </p>
             </div>
 
-            <div className="grid mb-16 grid-cols-1 gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-1 lg:gap-16 b">
+            <div className="grid mb-16 grid-cols-1 gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-1 lg:gap-16">
               <Image
                 src={"/ic_qoutes.png"}
                 alt="quote"
                 width={100}
                 height={100}
                 className="absolute -mt-6 -ml-2 lg:-ml-4  w-10 h-10 lg:w-28 lg:h-28"
-              ></Image>
+              />
               {/* Mission */}
               <div className="bg-white rounded-xl border-2 border-blue-50 shadow-lg p-6 sm:p-8 lg:p-8">
                 <h3 className="text-lg  font-bold mb-4 text-black text-center">
@@ -248,7 +256,7 @@ export default function AboutPageTemplate({
                   width={100}
                   height={100}
                   className="float-right w-10 h-10 lg:w-28 lg:h-28 transform -scale-x-100 -mt-12 -mr-10 lg:-mr-12"
-                ></Image>
+                />
                 <h3 className="text-lg  font-bold mb-4 text-black text-center">
                   WITH THE VISION
                 </h3>
@@ -312,8 +320,8 @@ export default function AboutPageTemplate({
                     <Image
                       src="/images/safety-icon.jpg"
                       alt="Safety First"
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
@@ -351,8 +359,8 @@ export default function AboutPageTemplate({
                     <Image
                       src="/images/service-icon.jpg"
                       alt="Exceptional Service"
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
@@ -431,7 +439,7 @@ export default function AboutPageTemplate({
       </div>
 
       {/* Timeline - History - SpaceX/Tesla inspired */}
-      <div className="bg-refx text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover  h-auto lg:h-screen flex items-center">
+      <div className="bg-gray-100 text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover h-auto lg:h-screen flex items-center">
         <Container className="flex flex-col justify-center h-full">
           <div id="timelineSection" className="px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-16 lg:mb-16">
@@ -586,43 +594,11 @@ export default function AboutPageTemplate({
         <MagazineCarousel magazines={magazines} />
       </div>
 
-      {/* Story Courosel */}
+      {/* Story Carousel */}
       <div>
         <StoryCarousel stories={stories} />
       </div>
 
-      {/* Call to Action - Tesla/SpaceX inspired with dramatic imagery */}
-      {/* <div
-        className="relative h-[300px] sm:h-[400px] lg:h-[500px] bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${
-            initialPage.callToActionImage?.url ||
-            initialPage.heroImage?.url ||
-            "/hero.jpg"
-          })`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-          <div className="text-center text-white px-4 sm:px-6 lg:px-4">
-            
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 lg:mb-6">
-              Latest Inflight Magazines
-            </h2>
-            <p className="text-lg sm:text-xl lg:text-2xl max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-8 leading-relaxed">
-              Join us as we connect the Pacific and create unforgettable
-              journeys.
-            </p>
-            <div className="space-x-2 sm:space-x-4 lg:space-x-4">
-              <Link
-                href="/explore/destinations"
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 sm:py-3 lg:py-3 px-6 sm:px-8 lg:px-8 rounded-full transition-colors duration-300 text-sm sm:text-base lg:text-base"
-              >
-                Explore Destinations
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
