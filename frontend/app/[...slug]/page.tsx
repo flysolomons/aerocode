@@ -293,18 +293,21 @@ export default async function Page({
 // Generate static params for SSG
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   // Check if we have a GraphQL URL available for static generation
-  const graphqlUrl = process.env.NEXT_PUBLIC_GRAPHQL_URL || process.env.GRAPHQL_URL;
-  
+  const graphqlUrl =
+    process.env.NEXT_PUBLIC_GRAPHQL_URL || process.env.GRAPHQL_URL;
+
   if (!graphqlUrl) {
-    console.warn('⚠️ No GraphQL URL available for static generation, skipping SSG');
+    console.warn(
+      "⚠️ No GraphQL URL available for static generation, skipping SSG"
+    );
     return [];
   }
 
   console.log(`🚀 Static generation using GraphQL endpoint: ${graphqlUrl}`);
 
   const GET_ALL_SLUGS_QUERY = gql`
-    query GetAllSlugs {
-      pages {
+    query GetAllSlugs($limit: Int, $offset: Int) {
+      pages(limit: $limit, offset: $offset) {
         slug
         url
         urlPath
@@ -314,32 +317,94 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   `;
 
   try {
-    const { data } = await client.query<{
-      pages: {
-        slug: string;
-        url: string;
-        urlPath: string;
-        __typename: string;
-      }[];
-    }>({
-      query: GET_ALL_SLUGS_QUERY,
-      fetchPolicy: "network-only", // Always fetch fresh data for build time
-      context: {
-        // Add timeout for build-time queries
-        timeout: 30000, // 30 seconds
-      },
-    });
+    // Fetch all pages with pagination
+    let allPages: {
+      slug: string;
+      url: string;
+      urlPath: string;
+      __typename: string;
+    }[] = [];
 
-    if (!data?.pages) {
-      console.warn('⚠️ No pages data received from GraphQL');
+    let offset = 0;
+    const limit = 100;
+    let hasMore = true;
+    let pageCount = 0;
+
+    console.log("🔄 Fetching all pages with pagination...");
+
+    while (hasMore && pageCount < 50) {
+      // Safety limit: max 50 requests (5000 pages)
+      pageCount++;
+      console.log(`   📄 Fetching batch ${pageCount} (offset: ${offset})`);
+
+      const { data } = await client.query<{
+        pages: {
+          slug: string;
+          url: string;
+          urlPath: string;
+          __typename: string;
+        }[];
+      }>({
+        query: GET_ALL_SLUGS_QUERY,
+        variables: { limit, offset },
+        fetchPolicy: "network-only", // Always fetch fresh data for build time
+        context: {
+          // Add timeout for build-time queries
+          timeout: 30000, // 30 seconds
+        },
+      });
+
+      if (!data?.pages || data.pages.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      allPages = allPages.concat(data.pages);
+      offset += limit;
+
+      // If we got fewer pages than the limit, we've reached the end
+      if (data.pages.length < limit) {
+        hasMore = false;
+      }
+    }
+
+    console.log(
+      `✅ Fetched ${allPages.length} total pages in ${pageCount} batches`
+    );
+
+    if (allPages.length === 0) {
+      console.warn("⚠️ No pages data received from GraphQL");
       return [];
     }
 
-    const staticParams = data.pages
+    // Define important page types for static generation
+    const importantTypes = [
+      "HomePage",
+      "AboutIndexPage",
+      "NewsIndexPage",
+      "ExploreIndexPage",
+      "ExperienceIndexPage",
+      "ContactPage",
+      "CareersPage",
+      "BelamaIndexPage",
+      "BelamaSignUpPage",
+      "DestinationIndexPage",
+      "DestinationPage",
+      "SpecialsIndexPage",
+      "TravelAlertPage",
+      "WhereWeFly",
+      "FlightSchedule",
+    ];
+
+    const staticParams = allPages
       .filter((page) => {
-        // Filter out pages that shouldn't be statically generated
-        // For example, exclude admin-only pages or dynamic pages
-        return page.url && page.url !== "/" && !page.url.includes("admin");
+        // Basic filtering - exclude admin and home
+        if (!page.url || page.url === "/" || page.url.includes("admin")) {
+          return false;
+        }
+
+        // Only include pages with important types
+        return importantTypes.includes(page.__typename);
       })
       .map((page) => {
         // Convert URL path to slug array
@@ -348,29 +413,42 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
 
         return {
           slug: segments,
+          type: page.__typename,
         };
       })
+      .sort((a, b) => {
+        // Sort alphabetically by URL path
+        return a.slug.join("/").localeCompare(b.slug.join("/"));
+      })
+      .map(({ slug }) => ({ slug })) // Remove extra properties
       .filter((param) => param.slug.length > 0); // Ensure we have valid slugs
 
     console.log(`✅ Generated ${staticParams.length} static params for SSG`);
-    
-    // Log first few params for debugging
+
+    // Log breakdown for debugging
     if (staticParams.length > 0) {
-      console.log('📄 Sample static params:', staticParams.slice(0, 5));
+      console.log(`📊 Static generation summary:`);
+      console.log(`   🎯 Only generating important page types`);
+      console.log(
+        `   📄 Generated pages:`,
+        staticParams.map((p) => `/${p.slug.join("/")}`)
+      );
     }
-    
+
     return staticParams;
   } catch (error) {
     console.error("❌ Error fetching slugs for static generation:", error);
-    
+
     // In development, we might want to continue without static generation
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔄 Development mode: Continuing without static generation');
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔄 Development mode: Continuing without static generation");
       return [];
     }
-    
+
     // In production builds, we still want to continue but log the issue
-    console.warn('⚠️ Production build: Static generation failed, falling back to dynamic rendering');
+    console.warn(
+      "⚠️ Production build: Static generation failed, falling back to dynamic rendering"
+    );
     return [];
   }
 }

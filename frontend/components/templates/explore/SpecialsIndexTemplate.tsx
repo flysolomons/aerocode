@@ -35,7 +35,7 @@ export default function SpecialsIndexTemplate({
   const breadcrumbs = pageMetadata?.url || "Home > Explore > Specials";
   const pageDescription = pageMetadata?.description || "";
 
-  console.log("Initial Page Data:", initialPage);
+  // console.log("Initial Page Data:", initialPage);
 
   return (
     <>
