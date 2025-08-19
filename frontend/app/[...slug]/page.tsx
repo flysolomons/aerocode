@@ -306,7 +306,7 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   console.log(`🚀 Static generation using GraphQL endpoint: ${graphqlUrl}`);
 
   const GET_ALL_SLUGS_QUERY = gql`
-    query GetAllSlugs($limit: Int, $offset: Int) {
+    query GetAllSlugs($limit: PositiveInt, $offset: PositiveInt) {
       pages(limit: $limit, offset: $offset) {
         slug
         url
