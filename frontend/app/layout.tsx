@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
+import localFont from "next/font/local";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import TravelAlertsBanner from "@/components/layout/banner/TravelAlertsBanner";
@@ -29,6 +30,31 @@ const rubik = Rubik({
   variable: "--font-rubik",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+// Local fonts with Next.js optimization
+const veneer = localFont({
+  src: "../public/fonts/VENEER.otf",
+  variable: "--font-veneer",
+  display: "swap",
+  preload: true, // Preload this font since it's used in hero sections
+});
+
+const edmondsans = localFont({
+  src: [
+    // {
+    //   path: "../public/fonts/Edmondsans-Regular.otf",
+    //   weight: "400",
+    //   style: "normal",
+    // },
+    {
+      path: "../public/fonts/Edmondsans-Medium.otf",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-edmondsans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -82,7 +108,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${rubik.variable} antialiased`}>
+      <body
+        className={`${inter.variable} ${rubik.variable} ${veneer.variable} ${edmondsans.variable} antialiased`}
+      >
         <ClientProviders initialCurrencies={headerData.currencies}>
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header

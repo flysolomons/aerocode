@@ -1,6 +1,7 @@
 // HomePage Hero with Embla Carousel
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
+import Image from "next/image";
 import BookingWidget from "../booking-widget/BookingWidget";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -24,7 +25,7 @@ interface HomePageHeroProps {
   showBookingWidget?: boolean;
 }
 
-export default function HomePageHero({
+const HomePageHero = React.memo(function HomePageHero({
   carouselSlides,
   showBookingWidget = true,
 }: HomePageHeroProps) {
@@ -33,15 +34,24 @@ export default function HomePageHero({
   const [resumeTimeoutId, setResumeTimeoutId] = useState<NodeJS.Timeout | null>(
     null
   );
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0])); // Preload first image
+
+  // Memoize autoplay plugin to avoid recreation
+  const autoplayPlugin = useMemo(() => {
+    return Autoplay({ delay: 7000, stopOnInteraction: false });
+  }, []);
+
+  // Memoize embla config to avoid recreation
+  const emblaConfig = useMemo(() => ({
+    loop: true,
+    duration: 0,
+    dragFree: false,
+    containScroll: "trimSnaps" as const,
+  }), []);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      loop: true,
-      duration: 0, // Instant slide change
-      dragFree: false,
-      containScroll: "trimSnaps",
-    },
-    [Autoplay({ delay: 7000, stopOnInteraction: false })] // 10 second autoplay
+    emblaConfig,
+    [autoplayPlugin]
   );
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -54,16 +64,23 @@ export default function HomePageHero({
   useEffect(() => {
     if (!emblaApi) return;
     const onSelect = () => {
+      const newIndex = emblaApi.selectedScrollSnap();
       setPrevBtnEnabled(emblaApi.canScrollPrev());
       setNextBtnEnabled(emblaApi.canScrollNext());
-      setCurrentSlideIndex(emblaApi.selectedScrollSnap());
+      setCurrentSlideIndex(newIndex);
+      
+      // Preload next and previous images
+      const nextIndex = (newIndex + 1) % carouselSlides.length;
+      const prevIndex = (newIndex - 1 + carouselSlides.length) % carouselSlides.length;
+      
+      setLoadedImages(prev => new Set([...prev, newIndex, nextIndex, prevIndex]));
     };
     emblaApi.on("select", onSelect);
     onSelect();
     return () => {
       emblaApi.off("select", onSelect);
     };
-  }, [emblaApi]);
+  }, [emblaApi, carouselSlides.length]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -157,6 +174,8 @@ export default function HomePageHero({
           {/* Fade Transition Slides */}
           {carouselSlides.map((slideData, index) => {
             const isActive = index === selectedIndex;
+            const shouldLoad = loadedImages.has(index) || index === 0; // Always load first image
+            
             return (
               <div
                 key={index}
@@ -165,14 +184,23 @@ export default function HomePageHero({
                 }`}
               >
                 <div className="relative w-full h-full overflow-hidden">
-                  <div
-                    className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all ease-linear ${
-                      isActive ? "scale-110" : "scale-100"
-                    }`}
-                    style={{
-                      backgroundImage: `url(${slideData.slide.image.url})`,
-                    }}
-                  />
+                  {shouldLoad && (
+                    <Image
+                      src={slideData.slide.image.url}
+                      alt={slideData.slide.title}
+                      fill
+                      className={`object-cover transition-transform duration-[7000ms] ease-linear ${
+                        isActive ? "scale-110" : "scale-100"
+                      }`}
+                      priority={index === 0} // Priority load for first image
+                      quality={85} // Optimize quality vs size
+                      sizes="100vw"
+                      onLoad={() => {
+                        // Mark image as loaded for smoother transitions
+                        setLoadedImages(prev => new Set([...prev, index]));
+                      }}
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/15"></div>
                 </div>
               </div>
@@ -321,4 +349,6 @@ export default function HomePageHero({
       `}</style>
     </main>
   );
-}
+});
+
+export default HomePageHero;

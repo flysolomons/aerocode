@@ -12,8 +12,8 @@ export default {
       fontFamily: {
         sans: "var(--font-inter)",
         mono: "var(--font-rubik)",
-        veneer: ["Veneer", "serif"],
-        edmondsans: ["Edmondsans", "sans-serif"],
+        veneer: "var(--font-veneer)",
+        edmondsans: "var(--font-edmondsans)",
       },
       colors: {
         // background: 'hsl(var(--background))',

@@ -2,30 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Veneer';
-  src: url('/fonts/VENEER.OTF') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-  /* Preserve all font features */
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "salt" 1;
-  font-variant-ligatures: common-ligatures discretionary-ligatures;
-  /* Ensure texture is not optimized away during loading */
-  font-smooth: never;
-  -webkit-font-smoothing: none;
-}
-
-@font-face {
-  font-family: 'Edmondsans';
-  src: url('/fonts/Edmondsans-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
+/* Local fonts now loaded via Next.js next/font/local in layout.tsx */
+/* CSS variables are automatically generated: --font-veneer, --font-edmondsans */
 
 .font-veneer {
-  font-family: 'Veneer', serif;
+  font-family: var(--font-veneer), serif;
   /* Aggressive texture preservation */
   -webkit-font-smoothing: none !important;
   -moz-osx-font-smoothing: unset !important;
@@ -80,7 +61,7 @@ h1.font-veneer {
 }
 
 .font-edmondsans {
-  font-family: 'Edmondsans', sans-serif;
+  font-family: var(--font-edmondsans), sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
