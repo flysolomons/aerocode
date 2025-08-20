@@ -42,17 +42,17 @@ const HomePageHero = React.memo(function HomePageHero({
   }, []);
 
   // Memoize embla config to avoid recreation
-  const emblaConfig = useMemo(() => ({
-    loop: true,
-    duration: 0,
-    dragFree: false,
-    containScroll: "trimSnaps" as const,
-  }), []);
-
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    emblaConfig,
-    [autoplayPlugin]
+  const emblaConfig = useMemo(
+    () => ({
+      loop: true,
+      duration: 0,
+      dragFree: false,
+      containScroll: "trimSnaps" as const,
+    }),
+    []
   );
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(emblaConfig, [autoplayPlugin]);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
     useDotButton(emblaApi);
@@ -68,12 +68,15 @@ const HomePageHero = React.memo(function HomePageHero({
       setPrevBtnEnabled(emblaApi.canScrollPrev());
       setNextBtnEnabled(emblaApi.canScrollNext());
       setCurrentSlideIndex(newIndex);
-      
+
       // Preload next and previous images
       const nextIndex = (newIndex + 1) % carouselSlides.length;
-      const prevIndex = (newIndex - 1 + carouselSlides.length) % carouselSlides.length;
-      
-      setLoadedImages(prev => new Set([...prev, newIndex, nextIndex, prevIndex]));
+      const prevIndex =
+        (newIndex - 1 + carouselSlides.length) % carouselSlides.length;
+
+      setLoadedImages(
+        (prev) => new Set([...prev, newIndex, nextIndex, prevIndex])
+      );
     };
     emblaApi.on("select", onSelect);
     onSelect();
@@ -175,7 +178,7 @@ const HomePageHero = React.memo(function HomePageHero({
           {carouselSlides.map((slideData, index) => {
             const isActive = index === selectedIndex;
             const shouldLoad = loadedImages.has(index) || index === 0; // Always load first image
-            
+
             return (
               <div
                 key={index}
@@ -189,15 +192,16 @@ const HomePageHero = React.memo(function HomePageHero({
                       src={slideData.slide.image.url}
                       alt={slideData.slide.title}
                       fill
-                      className={`object-cover transition-transform duration-[7000ms] ease-linear ${
+                      className={`object-cover transition-transform duration-&lsqb;9000ms&rsqb; ease-linear ${
                         isActive ? "scale-110" : "scale-100"
                       }`}
                       priority={index === 0} // Priority load for first image
+                      fetchPriority={index === 0 ? "high" : "auto"} // High priority for LCP image
                       quality={85} // Optimize quality vs size
                       sizes="100vw"
                       onLoad={() => {
                         // Mark image as loaded for smoother transitions
-                        setLoadedImages(prev => new Set([...prev, index]));
+                        setLoadedImages((prev) => new Set([...prev, index]));
                       }}
                     />
                   )}
