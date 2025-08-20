@@ -36,7 +36,7 @@ const rubik = Rubik({
 const veneer = localFont({
   src: [
     {
-      path: "../public/fonts/VENEER.OTF",
+      path: "../public/fonts/VENEER.otf",
       style: "normal",
     },
   ],
