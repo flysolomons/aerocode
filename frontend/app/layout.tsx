@@ -24,12 +24,16 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  preload: true,
 });
 
 const rubik = Rubik({
   variable: "--font-rubik",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  preload: true,
 });
 
 // Local fonts with Next.js optimization
@@ -70,41 +74,38 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch header data server-side (including menus and currencies)
-  let headerData = fallbackHeaderData;
+  // Fetch all layout data in parallel for better performance
+  const [headerResult, footerResult, alertResult] = await Promise.allSettled([
+    fetchHeaderDataServer(),
+    fetchFooterMenuServer(),
+    fetchActiveTravelAlertServer(),
+  ]);
 
-  try {
-    headerData = await fetchHeaderDataServer();
-  } catch (error) {
-    console.error(
-      "Failed to fetch header data in layout, using fallback:",
-      error
-    );
-  }
+  // Extract results with fallbacks
+  const headerData = headerResult.status === 'fulfilled' 
+    ? headerResult.value 
+    : (() => {
+        console.error("Failed to fetch header data in layout, using fallback:", 
+          headerResult.status === 'rejected' ? headerResult.reason : 'Unknown error');
+        return fallbackHeaderData;
+      })();
 
-  // Fetch footer menu data server-side
-  let footerMenus = fallbackFooterMenu;
+  const footerMenus = footerResult.status === 'fulfilled' 
+    ? footerResult.value 
+    : (() => {
+        console.error("Failed to fetch footer menu in layout, using fallback:", 
+          footerResult.status === 'rejected' ? footerResult.reason : 'Unknown error');
+        return fallbackFooterMenu;
+      })();
 
-  try {
-    footerMenus = await fetchFooterMenuServer();
-  } catch (error) {
-    console.error(
-      "Failed to fetch footer menu in layout, using fallback:",
-      error
-    );
-  }
-
-  // Fetch active travel alert data server-side
-  let activeTravelAlert = null;
-
-  try {
-    const alertData = await fetchActiveTravelAlertServer();
-    if (alertData?.activeAlert) {
-      activeTravelAlert = alertData;
-    }
-  } catch (error) {
-    console.error("Failed to fetch travel alert data in layout:", error);
-  }
+  const activeTravelAlert = alertResult.status === 'fulfilled' && alertResult.value?.activeAlert
+    ? alertResult.value
+    : (() => {
+        if (alertResult.status === 'rejected') {
+          console.error("Failed to fetch travel alert data in layout:", alertResult.reason);
+        }
+        return null;
+      })();
 
   return (
     <html lang="en">
