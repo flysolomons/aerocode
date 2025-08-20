@@ -109,6 +109,15 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/* DNS prefetch for better performance */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        
+        {/* Preconnect to font domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body
         className={`${inter.variable} ${rubik.variable} ${veneer.variable} ${edmondsans.variable} antialiased`}
       >

@@ -7,6 +7,10 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  // Optimize CSS for smaller bundles
+  corePlugins: {
+    preflight: true,
+  },
   theme: {
     extend: {
       fontFamily: {

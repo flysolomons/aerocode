@@ -73,6 +73,12 @@ const nextConfig: NextConfig = {
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
+  
+  // Optimize CSS loading
+  experimental: {
+    optimizeCss: true,
+    cssChunking: 'strict',
+  },
 };
 
 export default nextConfig;
