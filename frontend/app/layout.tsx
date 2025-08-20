@@ -42,7 +42,7 @@ const veneer = localFont({
   ],
   variable: "--font-veneer",
   display: "swap",
-  preload: true, // Preload this font since it's used in hero sections
+  preload: true, // Preload this font since it's used in hero sectionss
 });
 
 const edmondsans = localFont({
