@@ -34,7 +34,7 @@ const rubik = Rubik({
 
 // Local fonts with Next.js optimization
 const veneer = localFont({
-  src: "@/public/fonts/VENEER.OTF",
+  src: "./fonts/VENEER.OTF",
   variable: "--font-veneer",
   display: "swap",
   preload: true, // Preload this font since it's used in hero sections
@@ -43,7 +43,7 @@ const veneer = localFont({
 const edmondsans = localFont({
   src: [
     {
-      path: "@/public/fonts/Edmondsans-Medium.otf",
+      path: "./fonts/Edmondsans-Medium.otf",
       weight: "500",
       style: "normal",
     },
