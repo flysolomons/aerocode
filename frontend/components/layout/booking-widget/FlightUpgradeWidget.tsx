@@ -12,7 +12,7 @@ export default function FlightUpgradeWidget() {
     const jqueryUISrc = "https://code.jquery.com/ui/1.14.0/jquery-ui.min.js";
     const jqueryUICSS =
       "https://code.jquery.com/ui/1.14.0/themes/ui-lightness/jquery-ui.css";
-    const offerId = process.env.NEXT_PUBLIC_PLUSGRADE_OFFER_ID;
+    const offerId = process.env.NEXT_PUBLIC_PLUSGRADE_PID;
 
     if (!offerId) {
       console.error("NEXT_PUBLIC_PLUSGRADE_OFFER_ID is not configured");
@@ -201,11 +201,7 @@ export default function FlightUpgradeWidget() {
           <input name="pg_language" value="" type="hidden" />
 
           <div className="flex justify-center pt-2 sm:pt-4">
-            <PrimaryButton 
-              text="Check Offers" 
-              type="submit"
-              name="pg_submit"
-            />
+            <PrimaryButton text="Check Offers" type="submit" name="pg_submit" />
           </div>
         </form>
       </div>
