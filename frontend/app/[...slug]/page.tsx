@@ -390,7 +390,6 @@ export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
       "TravelAlertPage",
       "WhereWeFly",
       "FlightSchedule",
-      "ContactPage",
     ];
 
     const staticParams = allPages
