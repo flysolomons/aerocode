@@ -15,7 +15,7 @@ export default function FlightUpgradeWidget() {
     const offerId = process.env.NEXT_PUBLIC_PLUSGRADE_PID;
 
     if (!offerId) {
-      console.error("NEXT_PUBLIC_PLUSGRADE_OFFER_ID is not configured");
+      console.error("NEXT_PUBLIC_PLUSGRADE_PID is not configured");
       return;
     }
 
