@@ -5,8 +5,9 @@ import Container from "@/components/layout/Container";
 import ContactForm from "@/components/layout/ContactForm";
 import { useState } from "react";
 import TableOfContents, {
-  TOCSection,
+  TOCSection, 
 } from "@/components/layout/TableOfContents";
+import { useTableOfContents } from "@/hooks/useTableOfContents"; 
 
 interface ContactPageTemplateProps {
   initialPage: ContactPage | null;
@@ -16,21 +17,6 @@ export default function ContactPageTemplate({
   initialPage,
 }: ContactPageTemplateProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("master-schedule");
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 100; // Account for fixed header
-      const elementPosition = element.offsetTop - offset;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: "smooth",
-      });
-      setActiveSection(sectionId);
-    }
-  };
-  
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -71,11 +57,17 @@ export default function ContactPageTemplate({
     hasContent: true,
   }));
 
+   // Use the table of contents hook
+   const { activeSection, scrollToSection } = useTableOfContents({
+    sections: contactTocSections,
+  });
+
   // Table of Contents sections
   const tocSections: TOCSection[] = [
     ...contactTocSections,
   ];
 
+ 
   // Helper function to get icon for contact method type
   const getContactIcon = (methodType: string) => {
     const iconClass = "inline-block mr-2 w-5 h-5";
