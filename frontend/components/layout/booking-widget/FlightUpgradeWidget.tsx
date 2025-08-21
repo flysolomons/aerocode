@@ -14,8 +14,8 @@ export default function FlightUpgradeWidget() {
       "https://code.jquery.com/ui/1.14.0/themes/ui-lightness/jquery-ui.css";
     const offerId = process.env.NEXT_PUBLIC_PLUSGRADE_OFFER_PID;
 
-    console.log(offerId);
     if (!offerId) {
+      console.log(offerId);
       console.error("NEXT_PUBLIC_PLUSGRADE_OFFER_PID is not configured");
       return;
     }
