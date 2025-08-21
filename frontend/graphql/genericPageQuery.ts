@@ -220,6 +220,7 @@ export async function fetchGenericPage(
     }>({
       query: GET_GENERIC_PAGE_QUERY,
       variables: { slug },
+      fetchPolicy: "network-only", // Always fetch fresh data from the server
     });
 
     return data.genericPage || null;
