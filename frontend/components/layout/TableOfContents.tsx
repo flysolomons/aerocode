@@ -3,7 +3,7 @@ import Container from "@/components/layout/Container";
 
 export interface TOCSection {
   id: string;
-  label: string;
+  label: string | undefined;
   hasContent: boolean;
 }
 

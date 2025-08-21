@@ -15,7 +15,8 @@ export default function ContactForm(){
       email:"",
       subject:"",
       message:"",
-      referenceId:""
+      referenceId:"",
+      length:0
     });
     
     // validation
