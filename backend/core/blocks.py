@@ -462,3 +462,61 @@ class StoryBlock(StructBlock):
         graphql_type = "StoryBlock"
         icon = "link"
         label = "Story"
+
+
+@register_streamfield_block
+class CompanyCultureHighlightBlock(StructBlock):
+    """A block for company culture highlights with image, title and description."""
+
+    image = ImageChooserBlock(required=True, help_text="Image for the culture highlight")
+    title = CharBlock(required=True, max_length=100, help_text="Culture highlight title")
+    description = TextBlock(required=True, help_text="Culture highlight description")
+
+    graphql_fields = [
+        GraphQLImage("image", name="image"),
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+    ]
+
+    class Meta:
+        graphql_type = "CompanyCultureHighlightBlock"
+        icon = "group"
+        label = "Company Culture Highlight"
+
+
+@register_streamfield_block
+class DepartmentBlock(StructBlock):
+    """A block for departments with name, description and image."""
+
+    department_name = CharBlock(required=True, max_length=100, help_text="Department name")
+    description = TextBlock(required=True, help_text="Department description")
+    image = ImageChooserBlock(required=True, help_text="Department image")
+
+    graphql_fields = [
+        GraphQLString("department_name", name="departmentName"),
+        GraphQLString("description", name="description"),
+        GraphQLImage("image", name="image"),
+    ]
+
+    class Meta:
+        graphql_type = "DepartmentBlock"
+        icon = "group"
+        label = "Department"
+
+
+@register_streamfield_block
+class BenefitBlock(StructBlock):
+    """A block for benefits with title and description."""
+
+    title = CharBlock(required=True, max_length=100, help_text="Benefit title")
+    description = TextBlock(required=True, help_text="Benefit description")
+
+    graphql_fields = [
+        GraphQLString("title", name="title"),
+        GraphQLString("description", name="description"),
+    ]
+
+    class Meta:
+        graphql_type = "BenefitBlock"
+        icon = "list-ul"
+        label = "Benefit"

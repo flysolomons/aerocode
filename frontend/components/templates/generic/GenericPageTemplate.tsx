@@ -47,11 +47,22 @@ export default function GenericPageTemplate({
       )}
 
       {/* Widget section - appears before content */}
-      {(initialPage.includeManageBookingWidget || initialPage.includeFlightUpgradeWidget) && (
+      {(initialPage.includeManageBookingWidget ||
+        initialPage.includeFlightUpgradeWidget) && (
         <Container>
           <div className="px-4 sm:px-6">
-            {initialPage.includeManageBookingWidget && <ManageMyBookingWidget />}
-            {initialPage.includeFlightUpgradeWidget && <FlightUpgradeWidget />}
+            {initialPage.includeManageBookingWidget && (
+              <>
+                {console.log("Rendering ManageMyBookingWidget")}
+                <ManageMyBookingWidget />
+              </>
+            )}
+            {initialPage.includeFlightUpgradeWidget && (
+              <>
+                {console.log("Rendering FlightUpgradeWidget")}
+                <FlightUpgradeWidget />
+              </>
+            )}
           </div>
         </Container>
       )}

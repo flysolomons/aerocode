@@ -1,9 +1,9 @@
 // components/VideoHero.tsx
-import React, { useState } from 'react';
-import BookingWidget from '../booking-widget/BookingWidget';
-import StrippedBookingWidget from '../booking-widget/StrippedBookingWidget';
-import BreadcrumbNav from '../BreadcrumbNav';
-import HeroBottomFade from './HeroBottomFade';
+import React, { useState } from "react";
+import BookingWidget from "../booking-widget/BookingWidget";
+import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
+import BreadcrumbNav from "../BreadcrumbNav";
+import HeroBottomFade from "./HeroBottomFade";
 
 interface VideoHeroProps {
   title: string;
@@ -44,7 +44,7 @@ export default function VideoHero({
         <div className="relative h-screen">
           <div
             className={`relative flex flex-col items-center justify-center h-1/2 text-white text-center space-y-3 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0 transition-opacity duration-300 ${
-              isBookingModalActive ? 'xl:opacity-0' : 'opacity-100'
+              isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
             <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
@@ -62,7 +62,7 @@ export default function VideoHero({
           <div className="md:-mt-8 lg:-mt-10 xl:-mt-12 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-0">
             {showBookingWidget && (
               <>
-                {widget === 'stripped' ? (
+                {widget === "stripped" ? (
                   <StrippedBookingWidget />
                 ) : (
                   <BookingWidget onModalStateChange={setIsBookingModalActive} />
@@ -81,7 +81,7 @@ export default function VideoHero({
               onClick={() => {
                 window.scrollTo({
                   top: window.innerHeight,
-                  behavior: 'smooth',
+                  behavior: "smooth",
                 });
               }}
             >

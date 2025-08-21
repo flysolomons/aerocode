@@ -53,6 +53,10 @@ const nextConfig: NextConfig = {
 
       // add CDN here
     ],
+    formats: ["image/webp", "image/avif"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000, // 1 year
   },
   // Ignore ESLint and TypeScript errors during builds as requested
   eslint: {
@@ -65,6 +69,10 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   // Explicitly disable source maps in development
   // devtool: false,
+  
+  // Performance optimizations
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;

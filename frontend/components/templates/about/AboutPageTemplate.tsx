@@ -11,8 +11,11 @@ import MagazineCarousel from "@/components/layout/carousel/MagazineCarousel";
 import StoryCarousel from "@/components/layout/carousel/StoryCarousel";
 import { beautifyHtml } from "@/lib/beautifyHtml";
 
-import { ImageBlock, MagazineBlock,StoryBlock } from '@/graphql/AboutPageQuery';
-
+import {
+  ImageBlock,
+  MagazineBlock,
+  StoryBlock,
+} from "@/graphql/AboutPageQuery";
 
 interface Magazine {
   title?: string;
@@ -20,7 +23,7 @@ interface Magazine {
   document?: { url: string };
 }
 
-interface Story{
+interface Story {
   title: string;
   subTitle?: string;
   image?: string;
@@ -68,11 +71,8 @@ const transformStories = (stories: StoryBlock[]): Story[] => {
         link: story.url || "#",
       };
     })
-    .filter((story): story is Story => !!story.title && !!story.link);
+    .filter((story) => Boolean(story.title && story.link));
 };
-
-
-
 
 interface AboutPageTemplateProps {
   initialPage: AboutIndexPage;
@@ -80,46 +80,52 @@ interface AboutPageTemplateProps {
 
 export default function AboutPageTemplate({
   initialPage,
-}: AboutPageTemplateProps) {
-
-  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
+}: AboutPageTemplateProps): React.JSX.Element {
+  const getVideoUrl = (videoPath: string) => {
+    // If it's already an absolute URL, return it as is
+    if (videoPath.startsWith("http")) {
+      return videoPath;
+    }
+    // If it's a relative path, construct the absolute URL
+    const baseUrl = process.env.NEXT_PUBLIC_STORAGE_URL;
+    return `${baseUrl}media/${videoPath}`;
+  };
 
   // Transform magazines
-  const magazines = transformMagazines(initialPage.magazines as MagazineBlock[]);
+  const magazines = transformMagazines(
+    initialPage.magazines as MagazineBlock[]
+  );
   // Transform Stories
   const stories = transformStories(initialPage.stories as StoryBlock[]);
 
-
   return (
     <div className="min-h-screen">
-
-      {
-        initialPage.heroImage?.url === null?
+      {initialPage.heroImage?.url === null ? (
         <PrimaryHero
-            title={initialPage.heroTitle || "Our Journey Above the Clouds"}
-            subtitle={initialPage.subTitle || "We are awsome"}
-            image={initialPage.heroImage?.url || "/hero.jpg"}
-            breadcrumbs={initialPage.url}
-            showBookingWidget={false}
-        />
-          
-      : 
-        <VideoHero 
-          videoSource={storageUrl + initialPage.heroVideo || "/about.mp4"}
-          title={initialPage.heroTitle || "About Us"}
-          subtitle={initialPage.subTitle || "Proudly Connecting the Solomon Islands Since 1962"}
+          title={initialPage.heroTitle || "Our Journey Above the Clouds"}
+          subtitle={initialPage.subTitle || "We are awesome"}
+          image={initialPage.heroImage?.url || "/hero.jpg"}
           breadcrumbs={initialPage.url}
-          showBookingWidget={false}    
+          showBookingWidget={false}
         />
-        
-      }
-        
+      ) : (
+        <VideoHero
+          videoSource={getVideoUrl(initialPage.heroVideo) || "/about.mp4"}
+          title={initialPage.heroTitle || "About Us"}
+          subtitle={
+            initialPage.subTitle ||
+            "Proudly Connecting the Solomon Islands Since 1962"
+          }
+          breadcrumbs={initialPage.url}
+          showBookingWidget={false}
+        />
+      )}
+
       {/* Introduction Section */}
       <div
         id="introductionSection"
         className="py-12 md:py-16 lg:py-24 space-y-12 md:space-y-6 lg:space-y-4 px-4 md:px-6 justify-center bg-[#ffffff] h-auto lg:h-screen"
       >
-        
         <Container>
           {/* Solomon Airlines since 1962 */}
           <div className="text-center p-6 md:p-2 lg:p-0 justify-items-center lg:mb-14 lg:space-y-4">
@@ -130,7 +136,19 @@ export default function AboutPageTemplate({
               height="64"
               className="mb-3"
             /> */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#101f5c" viewBox="0 0 256 256"><path d="M224,56V90.06h0a44,44,0,1,0-56,67.88h0V192H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z" opacity="0.2"></path><path d="M128,136a8,8,0,0,1-8,8H72a8,8,0,0,1,0-16h48A8,8,0,0,1,128,136Zm-8-40H72a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm112,65.47V224A8,8,0,0,1,220,231l-24-13.74L172,231A8,8,0,0,1,160,224V200H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216a16,16,0,0,1,16,16V86.53a51.88,51.88,0,0,1,0,74.94ZM160,184V161.47A52,52,0,0,1,216,76V56H40V184Zm56-12a51.88,51.88,0,0,1-40,0v38.22l16-9.16a8,8,0,0,1,7.94,0l16,9.16Zm16-48a36,36,0,1,0-36,36A36,36,0,0,0,232,124Z"></path></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              fill="#101f5c"
+              viewBox="0 0 256 256"
+            >
+              <path
+                d="M224,56V90.06h0a44,44,0,1,0-56,67.88h0V192H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z"
+                opacity="0.2"
+              ></path>
+              <path d="M128,136a8,8,0,0,1-8,8H72a8,8,0,0,1,0-16h48A8,8,0,0,1,128,136Zm-8-40H72a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm112,65.47V224A8,8,0,0,1,220,231l-24-13.74L172,231A8,8,0,0,1,160,224V200H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216a16,16,0,0,1,16,16V86.53a51.88,51.88,0,0,1,0,74.94ZM160,184V161.47A52,52,0,0,1,216,76V56H40V184Zm56-12a51.88,51.88,0,0,1-40,0v38.22l16-9.16a8,8,0,0,1,7.94,0l16,9.16Zm16-48a36,36,0,1,0-36,36A36,36,0,0,0,232,124Z"></path>
+            </svg>
             <h2 className="font-semibold text-4xl lg:text-3xl text-center text-blue-500">
               60+ Years of Innovation and Excellence in Global Aviation
             </h2>
@@ -139,7 +157,6 @@ export default function AboutPageTemplate({
                 "Solomon Airlines has a proud legacy that began in 1962, when Mr. Laurie Crowly founded Megapode Airways, a small charter company. In 1968, the airline became Solomon Island Airways (SOLAIR) under Macair PNG, marking its place as the world’s smallest international airline at the time. The Solomon Islands Government acquired a 49% stake in 1979, and by 1984, took full ownership—rebranding the airline as Solomon Airlines Limited and laying the foundation for a new era of national pride, connectivity, and growth."}
             </div>
 
-            
             {/* Strategic Plan */}
             {/* <div className="border-t-2 border-gray-200 py-4 justify-items-center space-y-4">
               <h2 className="text-lg font-bold text-gray-700">Strategic Plan 2024-2028</h2>
@@ -152,31 +169,51 @@ export default function AboutPageTemplate({
             </div> */}
           </div>
 
-          <hr className="w-[60%] h-1 mx-auto my-4 bg-gray-100 border-0 rounded-sm md:my-10 dark:bg-gray-700"/>
+          <hr className="w-[60%] h-1 mx-auto my-4 bg-gray-100 border-0 rounded-sm md:my-10 dark:bg-gray-700" />
 
           {/* Solomon Airlines Today */}
           <div className="text-center p-6 md:p-2 lg:p-0 justify-items-center lg:mt-14 lg:space-y-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#101f5c" viewBox="0 0 256 256"><path d="M160,80a32,32,0,1,1-32-32A32,32,0,0,1,160,80Z" opacity="0.2"></path><path d="M215.12,123.64a8,8,0,1,0-14.24-7.28,79.58,79.58,0,0,1-33.08,33.5l-16.58-37.32A40,40,0,0,0,136,40.8V24a8,8,0,0,0-16,0V40.8a40,40,0,0,0-15.22,71.74L56.69,220.75a8,8,0,1,0,14.62,6.5l25.14-56.56A95.48,95.48,0,0,0,128,176a99.13,99.13,0,0,0,31.6-5.21l25.09,56.46a8,8,0,0,0,14.62-6.5l-25-56.25A95.81,95.81,0,0,0,215.12,123.64ZM128,56a24,24,0,1,1-24,24A24,24,0,0,1,128,56Zm0,104a79.52,79.52,0,0,1-25-4l16.42-36.94a39.81,39.81,0,0,0,17.2,0l16.48,37.06A83.21,83.21,0,0,1,128,160Z"></path></svg>
-                <h2 className="font-semibold text-3xl text-center text-blue-500">Where we are today</h2>
-                <p className="text-gray-500 text-center">
-                {beautifyHtml("Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji , Nadi. We operate:<li>The Airbus A320-200 “Spirit of Solomons” for international routes</li>	<li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>	With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.")}
-                </p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              fill="#101f5c"
+              viewBox="0 0 256 256"
+            >
+              <path
+                d="M160,80a32,32,0,1,1-32-32A32,32,0,0,1,160,80Z"
+                opacity="0.2"
+              ></path>
+              <path d="M215.12,123.64a8,8,0,1,0-14.24-7.28,79.58,79.58,0,0,1-33.08,33.5l-16.58-37.32A40,40,0,0,0,136,40.8V24a8,8,0,0,0-16,0V40.8a40,40,0,0,0-15.22,71.74L56.69,220.75a8,8,0,1,0,14.62,6.5l25.14-56.56A95.48,95.48,0,0,0,128,176a99.13,99.13,0,0,0,31.6-5.21l25.09,56.46a8,8,0,0,0,14.62-6.5l-25-56.25A95.81,95.81,0,0,0,215.12,123.64ZM128,56a24,24,0,1,1-24,24A24,24,0,0,1,128,56Zm0,104a79.52,79.52,0,0,1-25-4l16.42-36.94a39.81,39.81,0,0,0,17.2,0l16.48,37.06A83.21,83.21,0,0,1,128,160Z"></path>
+            </svg>
+            <h2 className="font-semibold text-3xl text-center text-blue-500">
+              Where we are today
+            </h2>
+            <div className="text-gray-500 text-center">
+              {parse(initialPage.description || "Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji, Nadi.")}
+              <ul className="mt-4 space-y-2 text-left max-w-2xl mx-auto">
+                <li>The Airbus A320-200 "Spirit of Solomons" for international routes</li>
+                <li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>
+              </ul>
+              <p className="mt-4">
+                With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.
+              </p>
+            </div>
 
-                <p className="py-4">
-                  {beautifyHtml("Discover our roadmap for the future in our  <a href=\"#\">Strategic Plan Document</a>")}  
-                  
-                  
-                </p>
-
+            <div className="py-4">
+              <p>
+                Discover our roadmap for the future in our{" "}
+                <a href="#" className="text-blue-500 hover:text-blue-700 underline">
+                  Strategic Plan Document
+                </a>
+              </p>
+            </div>
           </div>
-        
         </Container>
-        
       </div>
-      
+
       {/* Mission & Vision Section */}
-      <div className="bg-rfex h-auto lg:h-screen">
-        
+      <div className="bg-gray-50 h-auto lg:h-screen">
         <Container>
           <div
             id="missionSection"
@@ -187,26 +224,22 @@ export default function AboutPageTemplate({
                 Our Mission & Vision
               </h2> */}
               <p className="text-lg sm:text-xl lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              We do more than move people—we connect lives, cultures, and opportunities with true Solomon Islands hospitality.
+                We do more than move people—we connect lives, cultures, and
+                opportunities with true Solomon Islands hospitality.
               </p>
             </div>
 
-           
-            <div className="grid mb-16 grid-cols-1 gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-1 lg:gap-16 b">
-                <Image
-                  src={'/ic_qoutes.png'}
-                  alt="quote"
-                  width={100}
-                  height={100}
-                  className="absolute -mt-6 -ml-2 lg:-ml-4  w-10 h-10 lg:w-28 lg:h-28"
-                >
-
-                </Image>
+            <div className="grid mb-16 grid-cols-1 gap-8 md:gap-12 md:grid-cols-2 lg:grid-cols-1 lg:gap-16">
+              <Image
+                src={"/ic_qoutes.png"}
+                alt="quote"
+                width={100}
+                height={100}
+                className="absolute -mt-6 -ml-2 lg:-ml-4  w-10 h-10 lg:w-28 lg:h-28"
+              />
               {/* Mission */}
               <div className="bg-white rounded-xl border-2 border-blue-50 shadow-lg p-6 sm:p-8 lg:p-8">
-                
                 <h3 className="text-lg  font-bold mb-4 text-black text-center">
-                  
                   WE ARE ON A MISSION
                 </h3>
                 <div className="text-black text-2xl lg:text-3xl  leading-relaxed text-center">
@@ -215,20 +248,16 @@ export default function AboutPageTemplate({
                 </div>
               </div>
 
-              
               {/* Vision */}
               <div className="bg-white rounded-xl  border-2 border-blue-50 shadow-lg p-6 sm:p-8 lg:p-8">
-              <Image
-                  src={'/ic_qoutes.png'}
+                <Image
+                  src={"/ic_qoutes.png"}
                   alt="quote"
                   width={100}
                   height={100}
                   className="float-right w-10 h-10 lg:w-28 lg:h-28 transform -scale-x-100 -mt-12 -mr-10 lg:-mr-12"
-                >
-
-                </Image>
+                />
                 <h3 className="text-lg  font-bold mb-4 text-black text-center">
-                  
                   WITH THE VISION
                 </h3>
                 <div className="text-black text-2xl lg:text-3xl  leading-relaxed text-center">
@@ -241,7 +270,7 @@ export default function AboutPageTemplate({
         </Container>
       </div>
       {/* End of Mission & Vision Section */}
-      
+
       {/* Values Section */}
       <div className="bg-blue-800 h-auto lg:h-screen flex items-center">
         <Container>
@@ -250,21 +279,19 @@ export default function AboutPageTemplate({
               What We Value
             </h3>
             <p className="text-md  lg:text-lg text-blue-100   leading-relaxed">
-            Our guiding stars that illuminate our path towards excellence. They shape every decision, inspire every
-            action, and define the essence of Solomon Airlines.
+              Our guiding stars that illuminate our path towards excellence.
+              They shape every decision, inspire every action, and define the
+              essence of Solomon Airlines.
             </p>
           </div>
 
-          
           <div className="grid  grid-cols-1 lg:grid-cols-3 gap-4  lg:gap-6  px-4 lg:px-0 pb-20 lg:pb-16">
             {initialPage.values && initialPage.values.length > 0 ? (
               initialPage.values.map((value, index) => (
-                
                 <div
                   key={index}
                   className=" rounded-xl overflow-hidden hover:shadow hover:shadow-blue-400 transition-shadow  duration-300 border-2 border-blue-600 bg-blue-700 "
                 >
-                  
                   <div className="h-auto relative  overflow-hidden rounded-lg">
                     <Image
                       src={value.image?.url || "/images/default-value.jpg"}
@@ -274,7 +301,6 @@ export default function AboutPageTemplate({
                       loading="lazy"
                       className="w-[60px] h-[60px] rounded-lg pt-4 pl-4"
                     />
-                    
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
                     <h4 className="text-2xl md:text-xl lg:text-xl font-bold mb-2 text-left text-blue-50">
@@ -289,14 +315,13 @@ export default function AboutPageTemplate({
             ) : (
               // Fallback values if none provided
               <>
-              
                 <div className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl overflow-hidden">
                   <div className="h-36 sm:h-44 lg:h-48 bg-gray-50 relative overflow-hidden ">
                     <Image
                       src="/images/safety-icon.jpg"
                       alt="Safety First"
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
@@ -334,8 +359,8 @@ export default function AboutPageTemplate({
                     <Image
                       src="/images/service-icon.jpg"
                       alt="Exceptional Service"
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="p-4 sm:p-6 lg:p-6">
@@ -355,12 +380,8 @@ export default function AboutPageTemplate({
       </div>
       {/* End of Values Section */}
 
-
-
       {/* Key Stats - SpaceX inspired with counters */}
-      <div className="bg-blue-600 py-12 sm:py-16 lg:py-20"
-      
-      >
+      <div className="bg-blue-600 py-12 sm:py-16 lg:py-20">
         <Container>
           <div id="statsSection" className="px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-8 text-center">
@@ -416,184 +437,168 @@ export default function AboutPageTemplate({
           </div>
         </Container>
       </div>
-      
-{/* Timeline - History - SpaceX/Tesla inspired */}
-<div className="bg-refx text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover  h-auto lg:h-screen flex items-center">
-  <Container className="flex flex-col justify-center h-full">
-    <div id="timelineSection" className="px-4 sm:px-6">
-      <div className="text-center mb-12 sm:mb-16 lg:mb-16">
-        <h2 className="text-blue-500 text-3xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 lg:mb-4">
-          Our Journey
-        </h2>
-        <p className="text-lg sm:text-xl lg:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
-          From humble beginnings to becoming the Pacific's premier airline.
-        </p>
-      </div>
-      <div className="space-y-12 sm:space-y-16 lg:space-y-0">
-        {initialPage.journey && initialPage.journey.length > 0 ? (
-          initialPage.journey.map((journeyItem, index) => (
-            <div key={index} className="flex flex-col lg:flex-row items-start">
-              {/* Year (Left on large screens, aligned with title) */}
-              <div className="w-full lg:w-1/3 text-center lg:text-right mb-4 justify-items-center  lg:mb-0 lg:pr-10 pt-2 ">
-                <div className="text-2xl  lg:float-right text-center  sm:text-3xl lg:text-xl  text-white bg-gradient-to-l from-blue-500  to-[#4c447f] w-48 rounded-full p-2 lg:mx-0 shadow-lg">
-                  {journeyItem.year}
-                </div>
-              </div>
-              {/* Content (Right on large screens) */}
-              <div className="lg:w-2/3 lg:border-l-2 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
-                <div className="hidden lg:block absolute left-0 top-2 w-5 h-5 rounded-full bg-blue-500 -ml-2.5 mt-2 border-2 border-gray-400"></div>
-                <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
-                  {journeyItem.title}
-                </h3>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                  <div className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                    {parse(journeyItem.description)}
+
+      {/* Timeline - History - SpaceX/Tesla inspired */}
+      <div className="bg-gray-100 text-white py-12 sm:py-16 lg:py-20 bg-[url(/traditional_ring_blue.png)] bg-left-bottom bg-no-repeat md:bg-fill lg:bg-cover h-auto lg:h-screen flex items-center">
+        <Container className="flex flex-col justify-center h-full">
+          <div id="timelineSection" className="px-4 sm:px-6">
+            <div className="text-center mb-12 sm:mb-16 lg:mb-16">
+              <h2 className="text-blue-500 text-3xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 lg:mb-4">
+                Our Journey
+              </h2>
+              <p className="text-lg sm:text-xl lg:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                From humble beginnings to becoming the Pacific's premier
+                airline.
+              </p>
+            </div>
+            <div className="space-y-12 sm:space-y-16 lg:space-y-0">
+              {initialPage.journey && initialPage.journey.length > 0 ? (
+                initialPage.journey.map((journeyItem, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col lg:flex-row items-start"
+                  >
+                    {/* Year (Left on large screens, aligned with title) */}
+                    <div className="w-full lg:w-1/3 text-center lg:text-right mb-4 justify-items-center  lg:mb-0 lg:pr-10 pt-2 ">
+                      <div className="text-2xl  lg:float-right text-center  sm:text-3xl lg:text-xl  text-white bg-gradient-to-l from-blue-500  to-[#4c447f] w-48 rounded-full p-2 lg:mx-0 shadow-lg">
+                        {journeyItem.year}
+                      </div>
+                    </div>
+                    {/* Content (Right on large screens) */}
+                    <div className="lg:w-2/3 lg:border-l-2 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
+                      <div className="hidden lg:block absolute left-0 top-2 w-5 h-5 rounded-full bg-blue-500 -ml-2.5 mt-2 border-2 border-gray-400"></div>
+                      <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
+                        {journeyItem.title}
+                      </h3>
+                      <div className="rounded-lg p-4 bg-white shadow-lg">
+                        <div className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                          {parse(journeyItem.description)}
+                        </div>
+                      </div>
+                      {index < initialPage.journey.length - 1 && (
+                        <div className="absolute lg:hidden left-1/3 ml-8 mt-2 md:ml-24 ">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="64"
+                            height="64"
+                            fill="#c7c7c7"
+                            viewBox="0 0 256 256"
+                          >
+                            <path d="M231.39,132.94A8,8,0,0,0,224,128H184V104a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v24H32a8,8,0,0,0-5.66,13.66l96,96a8,8,0,0,0,11.32,0l96-96A8,8,0,0,0,231.39,132.94ZM128,220.69,51.31,144H80a8,8,0,0,0,8-8V112h80v24a8,8,0,0,0,8,8h28.69ZM72,40a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,40Zm0,32a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,72Z"></path>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                {index < initialPage.journey.length - 1 && (
-                  <div className="absolute lg:hidden left-1/3 ml-8 mt-2 md:ml-24 ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#c7c7c7" viewBox="0 0 256 256">
-                      <path d="M231.39,132.94A8,8,0,0,0,224,128H184V104a8,8,0,0,0-8-8H80a8,8,0,0,0-8,8v24H32a8,8,0,0,0-5.66,13.66l96,96a8,8,0,0,0,11.32,0l96-96A8,8,0,0,0,231.39,132.94ZM128,220.69,51.31,144H80a8,8,0,0,0,8-8V112h80v24a8,8,0,0,0,8,8h28.69ZM72,40a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,40Zm0,32a8,8,0,0,1,8-8h96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,72Z"></path>
-                    </svg>
+                ))
+              ) : (
+                // Fallback timeline if none provided from API
+                <>
+                  {/* Timeline Item 1 */}
+                  <div className="flex flex-col lg:flex-row items-start">
+                    <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
+                      <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
+                        1985
+                      </div>
+                    </div>
+                    <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
+                      <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
+                      <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
+                        Foundation
+                      </h3>
+                      <div className="rounded-lg p-4 bg-white shadow-lg">
+                        <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                          We began with just two aircraft, serving three
+                          destinations. Our founder's vision was to connect the
+                          isolated communities of the Solomon Islands.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          // Fallback timeline if none provided from API
-          <>
-            {/* Timeline Item 1 */}
-            <div className="flex flex-col lg:flex-row items-start">
-              <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
-                <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
-                  1985
-                </div>
-              </div>
-              <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
-                <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
-                <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
-                  Foundation
-                </h3>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                  <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                    We began with just two aircraft, serving three destinations. Our founder's vision was to connect the isolated communities of the Solomon Islands.
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* Timeline Item 2 */}
-            <div className="flex flex-col lg:flex-row items-start">
-              <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
-                <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
-                  1998
-                </div>
-              </div>
-              <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
-                <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
-                <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
-                  Regional Expansion
-                </h3>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                  <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                    We expanded services to neighboring countries, becoming the first choice for travel throughout the Pacific islands.
-                  </p>
-                </div>
-              </div>
-            </div>
+                  {/* Timeline Item 2 */}
+                  <div className="flex flex-col lg:flex-row items-start">
+                    <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
+                      <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
+                        1998
+                      </div>
+                    </div>
+                    <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
+                      <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
+                      <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
+                        Regional Expansion
+                      </h3>
+                      <div className="rounded-lg p-4 bg-white shadow-lg">
+                        <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                          We expanded services to neighboring countries,
+                          becoming the first choice for travel throughout the
+                          Pacific islands.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Timeline Item 3 */}
-            <div className="flex flex-col lg:flex-row items-start">
-              <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
-                <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
-                  2010
-                </div>
-              </div>
-              <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
-                <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
-                <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
-                  Fleet Modernization
-                </h3>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                  <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                    We began a comprehensive fleet renewal program, introducing more fuel-efficient aircraft and reducing our environmental impact.
-                  </p>
-                </div>
-              </div>
-            </div>
+                  {/* Timeline Item 3 */}
+                  <div className="flex flex-col lg:flex-row items-start">
+                    <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
+                      <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
+                        2010
+                      </div>
+                    </div>
+                    <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 pb-6 sm:pb-8 lg:pb-10 relative text-center lg:text-left">
+                      <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
+                      <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
+                        Fleet Modernization
+                      </h3>
+                      <div className="rounded-lg p-4 bg-white shadow-lg">
+                        <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                          We began a comprehensive fleet renewal program,
+                          introducing more fuel-efficient aircraft and reducing
+                          our environmental impact.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Timeline Item 4 */}
-            <div className="flex flex-col lg:flex-row items-start">
-              <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
-                <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
-                  2023
-                </div>
-              </div>
-              <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 relative text-center lg:text-left">
-                <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
-                <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
-                  Today & Tomorrow
-                </h3>
-                <div className="rounded-lg p-4 bg-white shadow-lg">
-                  <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
-                    Today, we operate the most extensive network in the Pacific region, while continuing to innovate with sustainable practices and enhanced passenger experiences.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  </Container>
-</div>
-
-{/* Magazine Carousel */}
-<div className="bg-white">
-  <MagazineCarousel 
-    magazines={magazines}
-  />
-</div>
-
-{/* Story Courosel */}
-<div>
-  <StoryCarousel stories={stories}/>
-
-</div>
-
-      {/* Call to Action - Tesla/SpaceX inspired with dramatic imagery */}
-      {/* <div
-        className="relative h-[300px] sm:h-[400px] lg:h-[500px] bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${
-            initialPage.callToActionImage?.url ||
-            initialPage.heroImage?.url ||
-            "/hero.jpg"
-          })`,
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-          <div className="text-center text-white px-4 sm:px-6 lg:px-4">
-            
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 lg:mb-6">
-              Latest Inflight Magazines
-            </h2>
-            <p className="text-lg sm:text-xl lg:text-2xl max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-8 leading-relaxed">
-              Join us as we connect the Pacific and create unforgettable
-              journeys.
-            </p>
-            <div className="space-x-2 sm:space-x-4 lg:space-x-4">
-              <Link
-                href="/explore/destinations"
-                className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 sm:py-3 lg:py-3 px-6 sm:px-8 lg:px-8 rounded-full transition-colors duration-300 text-sm sm:text-base lg:text-base"
-              >
-                Explore Destinations
-              </Link>
+                  {/* Timeline Item 4 */}
+                  <div className="flex flex-col lg:flex-row items-start">
+                    <div className="lg:w-1/3 text-center lg:text-right mb-4 sm:mb-6 lg:mb-0 lg:pr-10 pt-2">
+                      <div className="text-2xl sm:text-3xl lg:text-xl font-bold text-white bg-gradient-to-l from-blue-700 via-blue-950 to-gray-950 w-48 rounded-full p-2 border-2 border-blue-400 mx-auto lg:mx-0">
+                        2023
+                      </div>
+                    </div>
+                    <div className="lg:w-2/3 lg:border-l-4 border-blue-50 pl-0 lg:pl-10 pt-2 relative text-center lg:text-left">
+                      <div className="hidden lg:block absolute left-0 top-0 w-5 h-5 rounded-full bg-blue-50 -ml-2.5 mt-2"></div>
+                      <h3 className="text-blue-500 text-xl sm:text-2xl lg:text-xl font-bold mb-2">
+                        Today & Tomorrow
+                      </h3>
+                      <div className="rounded-lg p-4 bg-white shadow-lg">
+                        <p className="text-gray-600 text-sm sm:text-base lg:text-base leading-relaxed">
+                          Today, we operate the most extensive network in the
+                          Pacific region, while continuing to innovate with
+                          sustainable practices and enhanced passenger
+                          experiences.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
-        </div>
-      </div> */}
+        </Container>
+      </div>
+
+      {/* Magazine Carousel */}
+      <div className="bg-white">
+        <MagazineCarousel magazines={magazines} />
+      </div>
+
+      {/* Story Carousel */}
+      <div>
+        <StoryCarousel stories={stories} />
+      </div>
+
     </div>
   );
 }

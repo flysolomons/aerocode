@@ -1,3 +1,4 @@
+
 // app/api/send-email/route.ts
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -86,4 +87,5 @@ export async function POST(req: Request) {
     console.error("Error sending emails:", error);
     return NextResponse.json({ message: "Failed to send emails" }, { status: 500 });
   }
+
 }

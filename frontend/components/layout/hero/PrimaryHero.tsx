@@ -1,6 +1,7 @@
 // props: card title, image
 
 import React, { useState } from "react";
+import Image from "next/image";
 import BookingWidget from "../booking-widget/BookingWidget";
 import StrippedBookingWidget from "../booking-widget/StrippedBookingWidget";
 import BreadcrumbNav from "../BreadcrumbNav";
@@ -28,11 +29,15 @@ export default function PrimaryHero({
     <main>
       <div className="relative">
         <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url(${image})`,
-            }}
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+            priority
+            fetchPriority="high"
+            quality={85}
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/15"></div>
           <HeroBottomFade color="#FFFFFF" />

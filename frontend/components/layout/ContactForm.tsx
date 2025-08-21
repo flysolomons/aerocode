@@ -259,6 +259,4 @@ export default function ContactForm(){
         </form>
     )
     
-    
-    
 }

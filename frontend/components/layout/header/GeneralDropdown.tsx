@@ -75,6 +75,13 @@ const GeneralDropdown = React.memo(
           </div>
           <div className="flex flex-col gap-1">
             <Link
+              href="/travel-alerts"
+              className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Travel Alerts
+            </Link>
+            <Link
               href="/about"
               className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
               onClick={() => setIsOpen(false)}
@@ -89,11 +96,11 @@ const GeneralDropdown = React.memo(
               News
             </Link>
             <Link
-              href="/travel-alerts"
+              href="/careers"
               className="block px-3 py-2 rounded-md hover:bg-yellow-50 text-gray-700 text-sm font-medium transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              Travel Alerts
+              Careers
             </Link>
           </div>
         </PopoverContent>

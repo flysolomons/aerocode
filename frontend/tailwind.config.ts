@@ -7,13 +7,17 @@ export default {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  // Optimize CSS for smaller bundles
+  corePlugins: {
+    preflight: true,
+  },
   theme: {
     extend: {
       fontFamily: {
         sans: "var(--font-inter)",
         mono: "var(--font-rubik)",
-        veneer: ["Veneer", "serif"],
-        edmondsans: ["Edmondsans", "sans-serif"],
+        veneer: "var(--font-veneer)",
+        edmondsans: "var(--font-edmondsans)",
       },
       colors: {
         // background: 'hsl(var(--background))',

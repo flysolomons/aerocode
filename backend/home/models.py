@@ -167,6 +167,21 @@ class HomePage(Page):
         help_text="Image for the Belama section on the homepage",
     )
 
+    subpage_types = [
+        'about.AboutIndexPage',
+        'about.CareersPage',
+        'belama.BelamaIndexPage',
+        'belama.BelamaSignUpPage',
+        'contact.ContactPage',
+        'core.GenericPage',
+        'explore.DestinationIndexPage',
+        'explore.SpecialsIndexPage',
+        'explore.WhereWeFly',
+        'experience.ExperienceIndexPage',
+        'news.NewsIndexPage',
+        'alerts.TravelAlertPage',
+    ]
+
     content_panels = Page.content_panels + [
         InlinePanel("carousel_slides", label="Carousel Slides", max_num=5),
         InlinePanel("special_route_items", label="Flight Special", max_num=3),
