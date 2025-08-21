@@ -130,7 +130,9 @@ export default function BelamaSignUpTemplate({
         setFormData({}); // Reset form data
         setSeatSelection("");
         setPaymentMethod("");
+        
       } else {
+        
         const errorData = await response.json();
         iziToast.error({
           title: "Error",
