@@ -99,25 +99,15 @@ export default function ContactForm(){
             message: "Sorry!, Something went wrong",
           });
         }
-        
-        
-
-        
-        
       } catch (error) {
-
         iziToast.error({
           title: "Information",
           message: "Sorry!, Something went wrong"});
-
-        
       }finally {
         setLoading(false); // Stop loading animation
       }
-      
     };  
-
-    
+ 
     return(
         <form onSubmit={handleSubmit} noValidate>
             
