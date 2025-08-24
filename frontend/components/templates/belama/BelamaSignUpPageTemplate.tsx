@@ -100,7 +100,7 @@ export default function BelamaSignUpTemplate({
     //SUBMIT DATA TO EMAIL PLAYER HERE
     // TODO: code email player here
 
-    try{
+    try {
       // Prepare data to send
       const submissionData = {
         price,
@@ -113,7 +113,7 @@ export default function BelamaSignUpTemplate({
       };
 
       // Send data to the API route
-      const response = await fetch("/api/email-belama", {
+      const response = await fetch("/router/email-belama", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,30 +130,23 @@ export default function BelamaSignUpTemplate({
         setFormData({}); // Reset form data
         setSeatSelection("");
         setPaymentMethod("");
-        
       } else {
-        
         const errorData = await response.json();
         iziToast.error({
           title: "Error",
           message: errorData.message || "Failed to send email.",
         });
       }
-
-
-    }catch(error){
+    } catch (error) {
       console.log(error);
       iziToast.error({
         title: "Error",
         message: "An error occurred while sending the email.",
       });
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
 
-    
-    
     //Reset store after submission
     reset();
   };
@@ -1016,28 +1009,41 @@ export default function BelamaSignUpTemplate({
                 </div>
               </div>
               {/* Submit button */}
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                disabled={loading} // Disable button during loading
-                className={`submit-button ${loading ? 'sending' : ''} bg-blue-500 hover:bg-blue-600 p-3 w-1/2 text-center rounded-full text-white`}
-              >
-                {loading ? (
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  disabled={loading} // Disable button during loading
+                  className={`submit-button ${
+                    loading ? "sending" : ""
+                  } bg-blue-500 hover:bg-blue-600 p-3 w-1/2 text-center rounded-full text-white`}
+                >
+                  {loading ? (
                     <>
-                       <div className="absolute w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Please wait...
+                      <div className="absolute w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>{" "}
+                      Please wait...
                     </>
-                ) : 
-                  <p>
-                    
-                    Submit
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-icon lucide-send inline ml-1">
-                      <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/>
-                    </svg>
-                  </p>
-                }
-              </button>
-
-            </div>
+                  ) : (
+                    <p>
+                      Submit
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-send-icon lucide-send inline ml-1"
+                      >
+                        <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+                        <path d="m21.854 2.147-10.94 10.939" />
+                      </svg>
+                    </p>
+                  )}
+                </button>
+              </div>
               {/* <PrimaryButton
                 text="Sign Up"
                 onClick={() => {
