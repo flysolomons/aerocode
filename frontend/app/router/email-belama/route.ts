@@ -1,4 +1,3 @@
-
 // app/api/send-email/route.ts
 import { NextResponse } from "next/server";
 
@@ -52,7 +51,7 @@ export async function POST(req: Request) {
   });
 
   const customerMailOptions = {
-    from: process.env.EMAIL_USER,
+    from: process.env.M365_EMAIL_USER,
     to: email,
     subject: `Thank You for Your ${title || "Belama"} Membership Signup`,
     text: customerEmailContent.text,
@@ -60,7 +59,7 @@ export async function POST(req: Request) {
   };
 
   const officeMailOptions = {
-    from: process.env.EMAIL_USER,
+    from: process.env.M365_EMAIL_USER,
     to: "office@belama.com",
     subject: `New Membership Signup: ${title || "Membership Form"}`,
     text: officeEmailContent.text,
@@ -72,10 +71,15 @@ export async function POST(req: Request) {
       emailTransporter.sendMail(customerMailOptions),
       emailTransporter.sendMail(officeMailOptions),
     ]);
-    return NextResponse.json({ message: "Emails sent successfully" }, { status: 200 });
+    return NextResponse.json(
+      { message: "Emails sent successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error sending emails:", error);
-    return NextResponse.json({ message: "Failed to send emails" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to send emails" },
+      { status: 500 }
+    );
   }
-
 }

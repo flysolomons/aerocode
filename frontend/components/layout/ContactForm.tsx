@@ -28,7 +28,7 @@ export default function ContactForm() {
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
-    } else if (formData.length < 2) {
+    } else if (formData.name.length < 2) {
       newErrors.name = "Name must be at least 2 characters long";
     }
 
@@ -79,7 +79,7 @@ export default function ContactForm() {
       });
 
       if (res.status === 200) {
-        const data = res.json();
+        const data = await res.json();
         iziToast.success({
           title: "Information",
           message: "Email sent, the mail man is on his way",

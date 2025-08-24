@@ -56,7 +56,7 @@ export default function BelamaSignUpTemplate({
   // Set membershipType based on title when component mounts
   useEffect(() => {
     if (title && titleToMembershipType[title.toLowerCase()]) {
-      setMembershipType(titleToMembershipType[title.toLocaleLowerCase()]);
+      setMembershipType(titleToMembershipType[title.toLowerCase()]);
     }
   }, [title]); // Run when title changes
 
