@@ -84,7 +84,6 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
                       alt={team.imageAlt}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      placeholder="blur"
                     />
                   </div>
 

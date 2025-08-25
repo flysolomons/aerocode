@@ -62,7 +62,6 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               width={1128}
               height={770}
               className="w-full h-auto rounded-2xl sm:rounded-3xl shadow-lg"
-              placeholder="blur"
             />
           </div>
           {/* Routes Display */}

@@ -38,7 +38,6 @@ export default function PrimaryHero({
             fetchPriority="high"
             quality={85}
             sizes="100vw"
-            placeholder="blur"
           />
           <div className="absolute inset-0 bg-black/15"></div>
           <HeroBottomFade color="#FFFFFF" />

@@ -46,7 +46,6 @@ function SpecialCard({
             fill
             className="object-cover w-full h-full"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-            placeholder="blur"
           />
         </div>
         {/* Info section (bottom half) */}

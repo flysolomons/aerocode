@@ -106,7 +106,6 @@ const storyCarousel: React.FC<StoryCarouselProps> = ({ stories }) => {
                         width={80}
                         height={80}
                         className="inline mt-1 mr-4 w-[80px]  aspect-square rounded "
-                        placeholder="blur"
                       />
                     </div>
 

@@ -28,7 +28,6 @@ function ReasonToVisitCard({
             width={400}
             height={360}
             className="lg:absolute w-full  lg:w-52 h-full lg:h-52 rounded-2xl border-4 border-white object-cover shadow-md"
-            placeholder="blur"
           />
 
           <Image
@@ -37,7 +36,6 @@ function ReasonToVisitCard({
             width={400}
             height={360}
             className="absolute invisible lg:visible rotate-12 w-52 h-full lg:h-52 rounded-2xl border-4 border-white object-cover shadow-md"
-            placeholder="blur"
           />
         </div>
 

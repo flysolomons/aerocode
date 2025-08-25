@@ -24,7 +24,6 @@ function GenericCardFull({
         width={500}
         height={500}
         className="w-full h-full object-cover rounded-3xl"
-        placeholder="blur"
       />
 
       <div className="absolute text-white z-20 bottom-0 w-full rounded-b-2xl p-4 bg-gradient-to-t from-black to-transparent">

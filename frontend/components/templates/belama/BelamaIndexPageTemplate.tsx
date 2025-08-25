@@ -94,7 +94,6 @@ export default function BelamaIndexPageTemplate({
         width={4000}
         height={1000}
         className="w-full h-48 sm:h-64 lg:h-[30rem] object-cover"
-        placeholder="blur"
       />
       <Container>
         <div className=" py-8 sm:py-12 lg:py-12 space-y-12 sm:space-y-16 lg:space-y-16 px-4 sm:px-6 ">

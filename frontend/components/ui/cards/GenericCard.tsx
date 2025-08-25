@@ -22,7 +22,6 @@ function GenericCard({ title, subTitle, image, url }: GenericCardProps) {
           width={500}
           height={500}
           className="w-full h-full object-cover"
-          placeholder="blur"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-20 p-3 sm:p-4">
           <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-semibold text-center leading-tight">

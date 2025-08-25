@@ -22,7 +22,6 @@ function DestinationCard({ title, image, url }: DestinationCardProps) {
             height={500}
             className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-500"
             style={{ objectFit: "cover", width: "100%", height: "100%" }}
-            placeholder="blur"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent z-10 transition-all duration-500"></div>
           {/* Title aligned to the left */}

@@ -203,7 +203,6 @@ const HomePageHero = React.memo(function HomePageHero({
                         // Mark image as loaded for smoother transitions
                         setLoadedImages((prev) => new Set([...prev, index]));
                       }}
-                      placeholder="blur"
                     />
                   )}
                   <div className="absolute inset-0 bg-black/15"></div>
