@@ -3,26 +3,7 @@ import { notFound } from "next/navigation";
 import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 
-// Dynamically import templates to reduce bundle size
-const GenericPageTemplate = dynamic(() => import("@/components/templates/generic/GenericPageTemplate"));
-const NewsIndexTemplate = dynamic(() => import("@/components/templates/news/NewsIndexTemplate"));
-const NewsCategoryTemplate = dynamic(() => import("@/components/templates/news/NewsCategoryTemplate"));
-const NewsArticleTemplate = dynamic(() => import("@/components/templates/news/NewsArticleTemplate"));
-const ExperienceIndexTemplate = dynamic(() => import("@/components/templates/experience/ExperienceIndexTemplate"));
-const ExploreIndexTemplate = dynamic(() => import("@/components/templates/explore/ExploreIndexTemplate"));
-const DestinationIndexTemplate = dynamic(() => import("@/components/templates/explore/DestinationIndexTemplate"));
-const DestinationPageTemplate = dynamic(() => import("@/components/templates/explore/DestinationPageTemplate"));
-const WhereWeFlyTemplate = dynamic(() => import("@/components/templates/explore/WhereWeFlyTemplate"));
-const FlightScheduleTemplate = dynamic(() => import("@/components/templates/explore/FlightScheduleTemplate"));
-const RoutePageTemplate = dynamic(() => import("@/components/templates/explore/RoutePageTemplate"));
-const SpecialsIndexTemplate = dynamic(() => import("@/components/templates/explore/SpecialsIndexTemplate"));
-const SpecialPageTemplate = dynamic(() => import("@/components/templates/explore/SpecialPageTemplate"));
-const AboutPageTemplate = dynamic(() => import("@/components/templates/about/AboutPageTemplate"));
-const BelamaIndexPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaIndexPageTemplate"));
-const BelamaSignUpPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaSignUpPageTemplate"));
-const TravelAlertsPageTemplate = dynamic(() => import("@/components/templates/travel-alerts/TravelAlertsPageTemplate"));
-const ContactPageTemplate = dynamic(() => import("@/components/templates/contact/ContactPageTemplate"));
-const CareersPageTemplate = dynamic(() => import("@/components/templates/careers/CareersPageTemplate"));
+// Remove all static imports - load templates completely dynamically
 
 // import essential functions only
 import { gql } from "@apollo/client";
@@ -252,46 +233,86 @@ export default async function Page({
 
     // Determine the page type by checking multiple properties
     const pageType =
-      page.__typename || (page.schedules ? "FlightSchedule" : null); // Render based on determined page type
+      page.__typename || (page.schedules ? "FlightSchedule" : null);
+    
+    // Dynamically import and render the specific template needed
     switch (pageType) {
-      case "GenericPage":
+      case "GenericPage": {
+        const GenericPageTemplate = dynamic(() => import("@/components/templates/generic/GenericPageTemplate"));
         return <GenericPageTemplate initialPage={page} />;
-      case "NewsIndexPage":
+      }
+      case "NewsIndexPage": {
+        const NewsIndexTemplate = dynamic(() => import("@/components/templates/news/NewsIndexTemplate"));
         return <NewsIndexTemplate initialPage={page} />;
-      case "NewsCategoryPage":
+      }
+      case "NewsCategoryPage": {
+        const NewsCategoryTemplate = dynamic(() => import("@/components/templates/news/NewsCategoryTemplate"));
         return <NewsCategoryTemplate initialPage={page} />;
-      case "NewsArticle":
+      }
+      case "NewsArticle": {
+        const NewsArticleTemplate = dynamic(() => import("@/components/templates/news/NewsArticleTemplate"));
         return <NewsArticleTemplate data={page} />;
-      case "ExperienceIndexPage":
+      }
+      case "ExperienceIndexPage": {
+        const ExperienceIndexTemplate = dynamic(() => import("@/components/templates/experience/ExperienceIndexTemplate"));
         return <ExperienceIndexTemplate initialPage={page} />;
-      case "ExploreIndexPage":
+      }
+      case "ExploreIndexPage": {
+        const ExploreIndexTemplate = dynamic(() => import("@/components/templates/explore/ExploreIndexTemplate"));
         return <ExploreIndexTemplate initialPage={page} />;
-      case "DestinationIndexPage":
+      }
+      case "DestinationIndexPage": {
+        const DestinationIndexTemplate = dynamic(() => import("@/components/templates/explore/DestinationIndexTemplate"));
         return <DestinationIndexTemplate initialPage={page} />;
-      case "Destination":
+      }
+      case "Destination": {
+        const DestinationPageTemplate = dynamic(() => import("@/components/templates/explore/DestinationPageTemplate"));
         return <DestinationPageTemplate initialPage={page} />;
-      case "WhereWeFly":
+      }
+      case "WhereWeFly": {
+        const WhereWeFlyTemplate = dynamic(() => import("@/components/templates/explore/WhereWeFlyTemplate"));
         return <WhereWeFlyTemplate initialPage={page} />;
-      case "FlightSchedule":
+      }
+      case "FlightSchedule": {
+        const FlightScheduleTemplate = dynamic(() => import("@/components/templates/explore/FlightScheduleTemplate"));
         return <FlightScheduleTemplate initialPage={page} />;
-      case "Route":
+      }
+      case "Route": {
+        const RoutePageTemplate = dynamic(() => import("@/components/templates/explore/RoutePageTemplate"));
         return <RoutePageTemplate initialPage={page} />;
-      case "SpecialsIndexPage":
+      }
+      case "SpecialsIndexPage": {
+        const SpecialsIndexTemplate = dynamic(() => import("@/components/templates/explore/SpecialsIndexTemplate"));
         return <SpecialsIndexTemplate initialPage={page} />;
-      case "Special":
+      }
+      case "Special": {
+        const SpecialPageTemplate = dynamic(() => import("@/components/templates/explore/SpecialPageTemplate"));
         return <SpecialPageTemplate initialPage={page} />;
-      case "AboutIndexPage":
+      }
+      case "AboutIndexPage": {
+        const AboutPageTemplate = dynamic(() => import("@/components/templates/about/AboutPageTemplate"));
         return <AboutPageTemplate initialPage={page} />;
-      case "BelamaIndexPage":
+      }
+      case "BelamaIndexPage": {
+        const BelamaIndexPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaIndexPageTemplate"));
         return <BelamaIndexPageTemplate initialPage={page} />;
-      case "BelamaSignUpPage":
+      }
+      case "BelamaSignUpPage": {
+        const BelamaSignUpPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaSignUpPageTemplate"));
         return <BelamaSignUpPageTemplate initialPage={page} />;
-      case "TravelAlertPage":
+      }
+      case "TravelAlertPage": {
+        const TravelAlertsPageTemplate = dynamic(() => import("@/components/templates/travel-alerts/TravelAlertsPageTemplate"));
         return <TravelAlertsPageTemplate initialPage={page} />;
-      case "ContactPage":
+      }
+      case "ContactPage": {
+        const ContactPageTemplate = dynamic(() => import("@/components/templates/contact/ContactPageTemplate"));
         return <ContactPageTemplate initialPage={page} />;
-      case "CareersPage":
+      }
+      case "CareersPage": {
+        const CareersPageTemplate = dynamic(() => import("@/components/templates/careers/CareersPageTemplate"));
         return <CareersPageTemplate initialPage={page} />;
+      }
       default:
         notFound();
     }
@@ -301,6 +322,7 @@ export default async function Page({
     // If we're dealing with a news article, we can show a loading state
     // We need to check the URL pattern or structure to determine page type
     if (fullPath.startsWith("news/") && fullPath !== "news/") {
+      const NewsArticleTemplate = dynamic(() => import("@/components/templates/news/NewsArticleTemplate"));
       return <NewsArticleTemplate />;
     }
 
