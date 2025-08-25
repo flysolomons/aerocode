@@ -18,14 +18,20 @@ function OtherNewsCard({ headline, image, date }: OtherNewsCardProps) {
             alt={headline}
             fill
             className="object-cover"
+            placeholder="blur"
           />
         </div>
       </div>
       <div className="flex-1 min-w-0 flex flex-col justify-between">
-        <a href="#" className="block text-blue-500 hover:underline font-semibold text-sm sm:text-base lg:text-lg leading-tight mb-2 line-clamp-2 transition-colors duration-200">
+        <a
+          href="#"
+          className="block text-blue-500 hover:underline font-semibold text-sm sm:text-base lg:text-lg leading-tight mb-2 line-clamp-2 transition-colors duration-200"
+        >
           {headline}
         </a>
-        <div className="text-xs sm:text-sm text-gray-500 font-medium">{date}</div>
+        <div className="text-xs sm:text-sm text-gray-500 font-medium">
+          {date}
+        </div>
       </div>
     </div>
   );

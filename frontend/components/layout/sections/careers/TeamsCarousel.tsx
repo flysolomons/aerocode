@@ -84,6 +84,7 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
                       alt={team.imageAlt}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      placeholder="blur"
                     />
                   </div>
 
@@ -152,7 +153,7 @@ const TeamsCarousel: React.FC<PropType> = (props) => {
         .embla__slide:last-child {
           margin-right: 0;
         }
-        
+
         @media (min-width: 640px) {
           .embla__container {
             gap: 1rem;

@@ -24,6 +24,7 @@ export default function ImageBlock({ block }: ImageBlockProps) {
               height={600}
               className="mx-auto rounded-lg sm:rounded-2xl lg:rounded-3xl object-cover w-full max-w-xs sm:max-w-md lg:max-w-lg xl:max-w-xl h-auto"
               style={{ width: "auto", height: "auto" }}
+              placeholder="blur"
             />
           )}
           {block.caption && (

@@ -31,6 +31,7 @@ export default function SecondaryHero({
         fetchPriority="high"
         quality={85}
         sizes="100vw"
+        placeholder="blur"
       />
       <HeroBottomFade />
 

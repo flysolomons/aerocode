@@ -34,6 +34,7 @@ function RelatedNewsCard({ article }: RelatedNewsCardProps) {
               alt={article.articleTitle}
               fill
               className="object-cover"
+              placeholder="blur"
             />
           </div>
         </div>

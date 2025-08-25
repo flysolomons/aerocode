@@ -30,6 +30,7 @@ export default function SectionBlock({ block }: SectionBlockProps) {
             width={400}
             height={360}
             className="w-full h-48 sm:h-56 lg:h-full object-cover rounded-xl sm:rounded-2xl lg:rounded-3xl"
+            placeholder="blur"
           />
         </div>
       )}

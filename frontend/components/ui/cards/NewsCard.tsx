@@ -41,6 +41,7 @@ function NewsCard({
               alt={headline}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              placeholder="blur"
             />
           </a>
 

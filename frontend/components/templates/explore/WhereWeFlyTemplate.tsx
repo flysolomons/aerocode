@@ -14,9 +14,9 @@ interface WhereWeFlyProps {
 
 export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
   const [showInternational, setShowInternational] = useState(true);
-  
+
   // Get the appropriate routes based on the current selection
-  const currentRoutes = showInternational 
+  const currentRoutes = showInternational
     ? initialPage.rankedInternationalRoutes || []
     : initialPage.rankedDomesticRoutes || [];
 
@@ -62,6 +62,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
               width={1128}
               height={770}
               className="w-full h-auto rounded-2xl sm:rounded-3xl shadow-lg"
+              placeholder="blur"
             />
           </div>
           {/* Routes Display */}

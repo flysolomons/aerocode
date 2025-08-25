@@ -80,6 +80,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                       alt={`${slide.country} - Slide ${index + 1}`}
                       fill
                       className="object-cover rounded-lg transition-transform duration-500 group-hover:scale-110 border-4 border-white"
+                      placeholder="blur"
                     />
                     <div className="absolute bottom-4 left-4 bg-black bg-opacity-70 text-white px-4 py-3 rounded-lg">
                       <div className="text-xl md:text-2xl font-bold font-sans">

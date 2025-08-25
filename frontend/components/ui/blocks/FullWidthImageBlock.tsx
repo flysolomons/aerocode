@@ -27,6 +27,7 @@ export default function FullWidthImageBlock({
                 className="object-cover"
                 sizes="100vw"
                 priority
+                placeholder="blur"
               />
             </div>
           )}
