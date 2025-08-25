@@ -7,42 +7,9 @@
 
 .font-veneer {
   font-family: var(--font-veneer), serif;
-  /* Aggressive texture preservation */
-  -webkit-font-smoothing: none !important;
-  -moz-osx-font-smoothing: unset !important;
-  font-smooth: never !important;
-  text-rendering: geometricPrecision !important;
-  
-  /* Enable all possible OpenType features */
-  font-feature-settings: 
-    "kern" 1, 
-    "liga" 1, 
-    "clig" 1, 
-    "calt" 1, 
-    "dlig" 1, 
-    "swsh" 1, 
-    "salt" 1, 
-    "ss01" 1, 
-    "ss02" 1, 
-    "ss03" 1, 
-    "ss04" 1, 
-    "ss05" 1;
-  
-  /* Preserve font variations and stylistic sets */
-  font-variant-ligatures: common-ligatures discretionary-ligatures;
-  font-variant-caps: normal;
-  font-variant-alternates: stylistic(salt);
-  
-  /* Force sharp rendering */
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-  
-  /* Prevent any CSS transforms from affecting texture */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  /* Minimal critical properties only */
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeSpeed;
 }
 
 /* For very large text (hero titles) - ensure texture is visible */

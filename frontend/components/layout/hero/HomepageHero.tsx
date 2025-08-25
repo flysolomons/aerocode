@@ -215,12 +215,12 @@ const HomePageHero = React.memo(function HomePageHero({
 
           {/* Hidden Embla for navigation logic */}
           <div
-            className="homepage-hero-embla opacity-0 pointer-events-none"
+            className="overflow-hidden opacity-0 pointer-events-none"
             ref={emblaRef}
           >
-            <div className="homepage-hero-embla__container">
+            <div className="flex h-full">
               {carouselSlides.map((_, index) => (
-                <div key={index} className="homepage-hero-embla__slide">
+                <div key={index} className="flex-none w-full h-full min-w-0">
                   <div className="w-full h-full" />
                 </div>
               ))}
@@ -273,7 +273,7 @@ const HomePageHero = React.memo(function HomePageHero({
               isBookingModalActive ? "xl:opacity-0" : "opacity-100"
             }`}
           >
-            <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl transition-all duration-1000 ease-out transform">
+            <h1 className="text-5xl lg:text-6xl xl:text-7xl font-veneer max-w-4xl lg:max-w-5xl">
               {carouselSlides[selectedIndex]?.slide.title ||
                 "Connecting the Hapi Isles"}
             </h1>
@@ -337,20 +337,6 @@ const HomePageHero = React.memo(function HomePageHero({
         </div>
       </div>
 
-      <style jsx>{`
-        .homepage-hero-embla {
-          overflow: hidden;
-        }
-        .homepage-hero-embla__container {
-          display: flex;
-          height: 100%;
-        }
-        .homepage-hero-embla__slide {
-          flex: 0 0 100%;
-          min-width: 0;
-          height: 100%;
-        }
-      `}</style>
     </main>
   );
 });
