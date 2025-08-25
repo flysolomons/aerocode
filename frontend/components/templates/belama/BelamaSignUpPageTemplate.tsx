@@ -11,8 +11,6 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import iziToast, { IziToast } from "izitoast";
-import "izitoast/dist/css/iziToast.min.css";
 
 interface BelamaSignUpTemplateProps {
   initialPage: BelamaSignUpPage;
@@ -88,6 +86,7 @@ export default function BelamaSignUpTemplate({
     e.preventDefault();
     setLoading(true);
     if (!validateForm()) {
+      const { default: iziToast } = await import("izitoast");
       iziToast.warning({
         title: "Caution",
         message: "Please fill out all required fields correctly",
@@ -121,6 +120,8 @@ export default function BelamaSignUpTemplate({
         body: JSON.stringify(submissionData),
       });
 
+      const { default: iziToast } = await import("izitoast");
+      
       if (response.ok) {
         iziToast.success({
           title: "Success",
@@ -139,6 +140,7 @@ export default function BelamaSignUpTemplate({
       }
     } catch (error) {
       console.log(error);
+      const { default: iziToast } = await import("izitoast");
       iziToast.error({
         title: "Error",
         message: "An error occurred while sending the email.",

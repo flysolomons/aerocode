@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import iziToast from "izitoast";
+
+// Helper function to load iziToast dynamically
+const showToast = async (
+  type: "success" | "error" | "info" | "warning",
+  title: string,
+  message: string
+) => {
+  const { default: iziToast } = await import("izitoast");
+  iziToast[type]({ title, message });
+};
 
 export default function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -59,10 +68,11 @@ export default function ContactForm() {
     setErrors({});
     // Validate form before submission
     if (!validateForm()) {
-      iziToast.error({
-        title: "Missing information",
-        message: "The form is missing some data",
-      });
+      await showToast(
+        "error",
+        "Missing information",
+        "The form is missing some data"
+      );
       setLoading(false);
       return;
     }
@@ -80,26 +90,22 @@ export default function ContactForm() {
 
       if (res.status === 200) {
         const data = await res.json();
-        iziToast.success({
-          title: "Information",
-          message: "Email sent, the mail man is on his way",
-        });
+        await showToast(
+          "success",
+          "Information",
+          "Email sent, the mail man is on his way"
+        );
       } else if (res.status === 500) {
-        iziToast.error({
-          title: "System Error",
-          message: "Opps! something broke on our end",
-        });
+        await showToast(
+          "error",
+          "System Error",
+          "Opps! something broke on our end"
+        );
       } else {
-        iziToast.info({
-          title: "Failed",
-          message: "Sorry!, Something went wrong",
-        });
+        await showToast("info", "Failed", "Sorry!, Something went wrong");
       }
     } catch (error) {
-      iziToast.error({
-        title: "Information",
-        message: "Sorry!, Something went wrong",
-      });
+      await showToast("error", "Information", "Sorry!, Something went wrong");
     } finally {
       setLoading(false); // Stop loading animation
     }
