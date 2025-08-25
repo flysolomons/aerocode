@@ -1,53 +1,33 @@
-// import templates
+// Dynamic template imports for code splitting
 import { notFound } from "next/navigation";
 import { unstable_cache } from "next/cache";
-import GenericPageTemplate from "@/components/templates/generic/GenericPageTemplate";
-import NewsIndexTemplate from "@/components/templates/news/NewsIndexTemplate";
-import NewsCategoryTemplate from "@/components/templates/news/NewsCategoryTemplate";
-import NewsArticleTemplate from "@/components/templates/news/NewsArticleTemplate";
-import ExperienceIndexTemplate from "@/components/templates/experience/ExperienceIndexTemplate";
-import ExploreIndexTemplate from "@/components/templates/explore/ExploreIndexTemplate";
-import DestinationIndexTemplate from "@/components/templates/explore/DestinationIndexTemplate";
-import DestinationPageTemplate from "@/components/templates/explore/DestinationPageTemplate";
-import WhereWeFlyTemplate from "@/components/templates/explore/WhereWeFlyTemplate";
-import FlightScheduleTemplate from "@/components/templates/explore/FlightScheduleTemplate";
-import RoutePageTemplate from "@/components/templates/explore/RoutePageTemplate";
-import SpecialsIndexTemplate from "@/components/templates/explore/SpecialsIndexTemplate";
-import SpecialPageTemplate from "@/components/templates/explore/SpecialPageTemplate";
-import AboutPageTemplate from "@/components/templates/about/AboutPageTemplate";
-import BelamaIndexPageTemplate from "@/components/templates/belama/BelamaIndexPageTemplate";
-import BelamaSignUpPageTemplate from "@/components/templates/belama/BelamaSignUpPageTemplate";
-import TravelAlertsPageTemplate from "@/components/templates/travel-alerts/TravelAlertsPageTemplate";
-import ContactPageTemplate from "@/components/templates/contact/ContactPageTemplate";
-import CareersPageTemplate from "@/components/templates/careers/CareersPageTemplate";
+import dynamic from "next/dynamic";
 
-// import functions to fetch data
+// Dynamically import templates to reduce bundle size
+const GenericPageTemplate = dynamic(() => import("@/components/templates/generic/GenericPageTemplate"));
+const NewsIndexTemplate = dynamic(() => import("@/components/templates/news/NewsIndexTemplate"));
+const NewsCategoryTemplate = dynamic(() => import("@/components/templates/news/NewsCategoryTemplate"));
+const NewsArticleTemplate = dynamic(() => import("@/components/templates/news/NewsArticleTemplate"));
+const ExperienceIndexTemplate = dynamic(() => import("@/components/templates/experience/ExperienceIndexTemplate"));
+const ExploreIndexTemplate = dynamic(() => import("@/components/templates/explore/ExploreIndexTemplate"));
+const DestinationIndexTemplate = dynamic(() => import("@/components/templates/explore/DestinationIndexTemplate"));
+const DestinationPageTemplate = dynamic(() => import("@/components/templates/explore/DestinationPageTemplate"));
+const WhereWeFlyTemplate = dynamic(() => import("@/components/templates/explore/WhereWeFlyTemplate"));
+const FlightScheduleTemplate = dynamic(() => import("@/components/templates/explore/FlightScheduleTemplate"));
+const RoutePageTemplate = dynamic(() => import("@/components/templates/explore/RoutePageTemplate"));
+const SpecialsIndexTemplate = dynamic(() => import("@/components/templates/explore/SpecialsIndexTemplate"));
+const SpecialPageTemplate = dynamic(() => import("@/components/templates/explore/SpecialPageTemplate"));
+const AboutPageTemplate = dynamic(() => import("@/components/templates/about/AboutPageTemplate"));
+const BelamaIndexPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaIndexPageTemplate"));
+const BelamaSignUpPageTemplate = dynamic(() => import("@/components/templates/belama/BelamaSignUpPageTemplate"));
+const TravelAlertsPageTemplate = dynamic(() => import("@/components/templates/travel-alerts/TravelAlertsPageTemplate"));
+const ContactPageTemplate = dynamic(() => import("@/components/templates/contact/ContactPageTemplate"));
+const CareersPageTemplate = dynamic(() => import("@/components/templates/careers/CareersPageTemplate"));
+
+// import essential functions only
 import { gql } from "@apollo/client";
 import client from "@/lib/apolloClient";
 import { fetchPageType } from "@/graphql/pageTypeQuery";
-import { fetchGenericPage } from "@/graphql/genericPageQuery";
-import {
-  fetchNewsIndexPage,
-  fetchNewsCategoryPage,
-} from "@/graphql/NewsPageQuery";
-import { fetchNewsArticlePage } from "@/graphql/NewsPageQuery";
-import { fetchExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
-import { fetchExploreIndexPage } from "@/graphql/ExplorePageQuery";
-import { fetchDestinationIndexPage } from "@/graphql/DestinationIndexPageQuery";
-import { fetchDestinationPage } from "@/graphql/DestinationPageQuery";
-import { fetchRoutePage } from "@/graphql/RoutePageQuery";
-import { fetchWhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
-import { fetchFlightSchedulePage } from "@/graphql/FlightSchedulePageQuery";
-import { fetchSpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
-import { fetchSpecialPage } from "@/graphql/SpecialPageQuery";
-import { fetchAboutPage } from "@/graphql/AboutPageQuery";
-import {
-  fetchBelamaPage,
-  fetchBelamaSignUpPage,
-} from "@/graphql/BelamaPageQuery";
-import { fetchTravelAlertPage } from "@/graphql/TravelAlertPageQuery";
-import { fetchContactPage } from "@/graphql/ContactPageQuery";
-import { fetchCareersPage } from "@/graphql/CareersPageQuery";
 
 // Cache page data content with granular cache keys
 async function getCachedPageContent(pageType: string, slug: string) {
@@ -61,47 +41,84 @@ async function getCachedPageContent(pageType: string, slug: string) {
 
   return await unstable_cache(
     async () => {
+      // Dynamically import only the needed GraphQL fetcher
       switch (pageType) {
-        case "GenericPage":
+        case "GenericPage": {
+          const { fetchGenericPage } = await import("@/graphql/genericPageQuery");
           return fetchGenericPage(slug);
-        case "NewsIndexPage":
+        }
+        case "NewsIndexPage": {
+          const { fetchNewsIndexPage } = await import("@/graphql/NewsPageQuery");
           return fetchNewsIndexPage();
-        case "NewsArticle":
+        }
+        case "NewsArticle": {
+          const { fetchNewsArticlePage } = await import("@/graphql/NewsPageQuery");
           return fetchNewsArticlePage(slug);
-        case "ExperienceIndexPage":
+        }
+        case "ExperienceIndexPage": {
+          const { fetchExperienceIndexPage } = await import("@/graphql/ExperiencePageQuery");
           return fetchExperienceIndexPage();
-        case "ExploreIndexPage":
+        }
+        case "ExploreIndexPage": {
+          const { fetchExploreIndexPage } = await import("@/graphql/ExplorePageQuery");
           return fetchExploreIndexPage();
-        case "DestinationIndexPage":
+        }
+        case "DestinationIndexPage": {
+          const { fetchDestinationIndexPage } = await import("@/graphql/DestinationIndexPageQuery");
           return fetchDestinationIndexPage();
-        case "Destination":
+        }
+        case "Destination": {
+          const { fetchDestinationPage } = await import("@/graphql/DestinationPageQuery");
           return fetchDestinationPage(slug);
-        case "WhereWeFly":
+        }
+        case "WhereWeFly": {
+          const { fetchWhereWeFlyPage } = await import("@/graphql/WhereWeFlyPageQuery");
           return fetchWhereWeFlyPage();
-        case "FlightSchedule":
+        }
+        case "FlightSchedule": {
+          const { fetchFlightSchedulePage } = await import("@/graphql/FlightSchedulePageQuery");
           return fetchFlightSchedulePage();
-        case "Route":
+        }
+        case "Route": {
+          const { fetchRoutePage } = await import("@/graphql/RoutePageQuery");
           return fetchRoutePage(slug);
-        case "SpecialsIndexPage":
+        }
+        case "SpecialsIndexPage": {
+          const { fetchSpecialsIndexPage } = await import("@/graphql/SpecialsIndexPageQuery");
           return fetchSpecialsIndexPage();
-        case "Special":
+        }
+        case "Special": {
+          const { fetchSpecialPage } = await import("@/graphql/SpecialPageQuery");
           return fetchSpecialPage(slug);
-        case "AboutIndexPage":
+        }
+        case "AboutIndexPage": {
+          const { fetchAboutPage } = await import("@/graphql/AboutPageQuery");
           return fetchAboutPage();
-        case "BelamaIndexPage":
+        }
+        case "BelamaIndexPage": {
+          const { fetchBelamaPage } = await import("@/graphql/BelamaPageQuery");
           return fetchBelamaPage();
-        case "BelamaSignUpPage":
+        }
+        case "BelamaSignUpPage": {
+          const { fetchBelamaSignUpPage } = await import("@/graphql/BelamaPageQuery");
           return fetchBelamaSignUpPage();
-        case "TravelAlertPage":
+        }
+        case "TravelAlertPage": {
+          const { fetchTravelAlertPage } = await import("@/graphql/TravelAlertPageQuery");
           return fetchTravelAlertPage();
-        case "ContactPage":
+        }
+        case "ContactPage": {
+          const { fetchContactPage } = await import("@/graphql/ContactPageQuery");
           return fetchContactPage();
-        case "CareersPage":
+        }
+        case "CareersPage": {
+          const { fetchCareersPage } = await import("@/graphql/CareersPageQuery");
           const careersData = await fetchCareersPage();
           return {
             ...careersData.careersPage,
             jobVacancies: careersData.jobVacancies,
           };
+        }
         default:
           return null;
       }
@@ -133,6 +150,7 @@ async function fetchPageData(slug: string, fullPath: string) {
   // Check for new category page structure first
   if (isNewsCategoryUrl(fullPath)) {
     try {
+      const { fetchNewsCategoryPage } = await import("@/graphql/NewsPageQuery");
       const categoryData = await fetchNewsCategoryPage(slug);
       if (categoryData && categoryData.id) {
         return { ...categoryData, __typename: "NewsCategoryPage" };
@@ -146,6 +164,7 @@ async function fetchPageData(slug: string, fullPath: string) {
   if (isNewsArticleUnderCategoryUrl(fullPath)) {
     // Try to fetch as article first, the backend will handle URL resolution
     try {
+      const { fetchNewsArticlePage } = await import("@/graphql/NewsPageQuery");
       const articleData = await fetchNewsArticlePage(slug);
       if (articleData && articleData.id) {
         return articleData;
