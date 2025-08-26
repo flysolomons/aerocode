@@ -49,9 +49,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: new HttpLink({
     uri: getGraphQLUrl(), // Use dynamic URL
     fetchOptions: {
-      // Allow caching during build time for static generation
-      // Only use no-store for runtime requests that need fresh data
-      cache: typeof window !== "undefined" ? "no-store" : "default",
+      cache: "default", // Allow HTTP caching for better performance
     },
   }),
   cache,
@@ -59,12 +57,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     watchQuery: {
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-first",
-      pollInterval: 30000,
+      // Remove global polling - apply per query where needed
     },
     query: {
-      // Allow caching during build time for static generation
-      fetchPolicy:
-        typeof window !== "undefined" ? "network-only" : "cache-first",
+      fetchPolicy: "cache-first", // Better performance for static content
       errorPolicy: "all",
     },
     mutate: {
