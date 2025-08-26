@@ -44,7 +44,7 @@ const CurrencyDropdown = React.memo(
     megaMenuActive = false,
     currencies,
   }: CurrencyDropdownProps) => {
-    const { selectedCurrency, setSelectedCurrency } = useCurrency();
+    const { selectedCurrency, setSelectedCurrency, isCurrencyReady } = useCurrency();
     const [isOpen, setIsOpen] = useState(false);
 
     // Close dropdown when header becomes transparent OR when mega menu opens
@@ -95,7 +95,7 @@ const CurrencyDropdown = React.memo(
                 <CurrencyIcon className="h-5 w-5 lg:h-6 lg:w-6 xl:h-6 xl:w-6" />
               </motion.div>
               {/* Display selected currency code with smaller font and tighter spacing */}
-              {selectedCurrency && (
+              {isCurrencyReady && selectedCurrency && (
                 <motion.span
                   className="ml-1 text-xs font-medium"
                   initial={{ color: "#ffffff" }}

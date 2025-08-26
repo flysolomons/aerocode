@@ -14,6 +14,7 @@ interface CurrencyContextType {
   setSelectedCurrency: (currency: Currency) => void;
   currencies: Currency[];
   setCurrencies: (currencies: Currency[]) => void;
+  isCurrencyReady: boolean;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(
@@ -37,6 +38,7 @@ export function CurrencyProvider({
     null
   );
   const [isLocationLoaded, setIsLocationLoaded] = useState(false);
+  const [isCurrencyReady, setIsCurrencyReady] = useState(false);
 
   // Set currency based on server-provided country code (with client-side fallback for local development)
   useEffect(() => {
@@ -87,6 +89,7 @@ export function CurrencyProvider({
 
       setSelectedCurrency(currencyToSet);
       setIsLocationLoaded(true);
+      setIsCurrencyReady(true);
     };
 
     setInitialCurrency();
@@ -120,6 +123,7 @@ export function CurrencyProvider({
     setSelectedCurrency,
     currencies,
     setCurrencies,
+    isCurrencyReady,
   };
 
   return (
