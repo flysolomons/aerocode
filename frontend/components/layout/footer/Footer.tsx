@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TransformedFooterMenu } from "@/graphql/FooterQuery";
-import SignUP from "./SignUp";
 
 interface FooterProps {
   footerMenus?: TransformedFooterMenu[];
@@ -127,9 +126,9 @@ function Footer({ footerMenus }: FooterProps) {
                 <span className="sr-only">Facebook</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  className="sm:w-6 sm:h-6"
+                  width="32"
+                  height="32"
+                  className="sm:w-8 sm:h-8 lg:w-7 lg:h-7"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -144,9 +143,9 @@ function Footer({ footerMenus }: FooterProps) {
                 <span className="sr-only">Instagram</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  className="sm:w-6 sm:h-6"
+                  width="32"
+                  height="32"
+                  className="sm:w-8 sm:h-8 lg:w-7 lg:h-7"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -161,9 +160,9 @@ function Footer({ footerMenus }: FooterProps) {
                 <span className="sr-only">LinkedIn</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  className="sm:w-6 sm:h-6"
+                  width="32"
+                  height="32"
+                  className="sm:w-8 sm:h-8 lg:w-7 lg:h-7"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -178,9 +177,9 @@ function Footer({ footerMenus }: FooterProps) {
                 <span className="sr-only">YouTube</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  className="sm:w-6 sm:h-6"
+                  width="32"
+                  height="32"
+                  className="sm:w-8 sm:h-8 lg:w-7 lg:h-7"
                   fill="#fafafa"
                   viewBox="0 0 256 256"
                 >
@@ -189,10 +188,6 @@ function Footer({ footerMenus }: FooterProps) {
               </a>
             </div>
           </div>
-        </div>
-        {/**Sign up for newsletter section */}
-        <div className="w-full flex items-center justify-center mt-6 sm:mt-8 lg:mt-10">
-          <SignUP></SignUP>
         </div>
         {/* Insert Logo here-- */}
         <div className="w-full max-w-[500px] mt-8 sm:mt-10 lg:mt-12 mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
