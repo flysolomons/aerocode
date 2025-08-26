@@ -23,23 +23,14 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
 interface CurrencyProviderProps {
   children: ReactNode;
   initialCurrencies?: Currency[];
+  userCountryCode?: string | null;
 }
 
-// Function to get user's country code from GeoJS API
-const getUserCountryCode = async (): Promise<string | null> => {
-  try {
-    const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
-    const data = await response.json();
-    return data.country_code || null;
-  } catch (error) {
-    console.warn("Failed to get user location:", error);
-    return null;
-  }
-};
 
 export function CurrencyProvider({
   children,
   initialCurrencies = [],
+  userCountryCode,
 }: CurrencyProviderProps) {
   const [currencies, setCurrencies] = useState<Currency[]>(initialCurrencies);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
@@ -47,53 +38,59 @@ export function CurrencyProvider({
   );
   const [isLocationLoaded, setIsLocationLoaded] = useState(false);
 
-  // Set currency based on user's IP location
+  // Set currency based on server-provided country code (with client-side fallback for local development)
   useEffect(() => {
+    if (currencies.length === 0 || isLocationLoaded) return;
+
     const setInitialCurrency = async () => {
-      if (currencies.length === 0 || isLocationLoaded) return;
+      let currencyToSet: Currency | null = null;
 
-      try {
-        const userCountryCode = await getUserCountryCode();
-        let currencyToSet: Currency | null = null;
-
-        if (userCountryCode) {
-          // Try to find currency matching user's country
-          currencyToSet =
-            currencies.find(
-              (currency) =>
-                currency.countryCode.toUpperCase() ===
-                userCountryCode.toUpperCase()
-            ) || null;
+      if (userCountryCode) {
+        // Use server-provided country code
+        currencyToSet =
+          currencies.find(
+            (currency) =>
+              currency.countryCode.toUpperCase() ===
+              userCountryCode.toUpperCase()
+          ) || null;
+        console.log('Server-side country detection:', userCountryCode, 'Found currency:', currencyToSet);
+      } else {
+        // Fallback to client-side detection for local development
+        try {
+          const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
+          const data = await response.json();
+          const clientCountryCode = data.country_code;
+          
+          if (clientCountryCode) {
+            currencyToSet =
+              currencies.find(
+                (currency) =>
+                  currency.countryCode.toUpperCase() ===
+                  clientCountryCode.toUpperCase()
+              ) || null;
+            console.log('Client-side fallback country detection:', clientCountryCode, 'Found currency:', currencyToSet);
+          }
+        } catch (error) {
+          console.warn("Client-side country detection failed:", error);
         }
+      }
 
-        // Fallback to AU if no match found
-        if (!currencyToSet) {
-          currencyToSet =
-            currencies.find(
-              (currency) => currency.countryCode.toUpperCase() === "AU"
-            ) ||
-            currencies[0] ||
-            null;
-        }
-
-        setSelectedCurrency(currencyToSet);
-        setIsLocationLoaded(true);
-      } catch (error) {
-        console.warn("Error setting initial currency:", error);
-        // Fallback to AU or first currency
-        const fallbackCurrency =
+      // Final fallback to AU if no match found
+      if (!currencyToSet) {
+        currencyToSet =
           currencies.find(
             (currency) => currency.countryCode.toUpperCase() === "AU"
           ) ||
           currencies[0] ||
           null;
-        setSelectedCurrency(fallbackCurrency);
-        setIsLocationLoaded(true);
       }
+
+      setSelectedCurrency(currencyToSet);
+      setIsLocationLoaded(true);
     };
 
     setInitialCurrency();
-  }, [currencies, isLocationLoaded]);
+  }, [currencies, userCountryCode, isLocationLoaded]);
 
   // Update selected currency when currencies change (if current selection becomes invalid)
   useEffect(() => {

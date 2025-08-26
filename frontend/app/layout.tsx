@@ -18,6 +18,7 @@ import {
   fetchActiveTravelAlertServer,
   type ActiveTravelAlertPage,
 } from "@/graphql/TravelAlertPageQuery";
+import { getUserCountryCodeServer } from "@/lib/serverUtils";
 import "./globals.css";
 
 const inter = Inter({
@@ -75,10 +76,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Fetch all layout data in parallel for better performance
-  const [headerResult, footerResult, alertResult] = await Promise.allSettled([
+  const [headerResult, footerResult, alertResult, countryCodeResult] = await Promise.allSettled([
     fetchHeaderDataServer(),
     fetchFooterMenuServer(),
     fetchActiveTravelAlertServer(),
+    getUserCountryCodeServer(),
   ]);
 
   // Extract results with fallbacks
@@ -107,6 +109,15 @@ export default async function RootLayout({
         return null;
       })();
 
+  const userCountryCode = countryCodeResult.status === 'fulfilled' 
+    ? countryCodeResult.value
+    : (() => {
+        if (countryCodeResult.status === 'rejected') {
+          console.error("Failed to fetch user country code in layout:", countryCodeResult.reason);
+        }
+        return null;
+      })();
+
   return (
     <html lang="en">
       <head>
@@ -121,7 +132,10 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${rubik.variable} ${veneer.variable} ${edmondsans.variable} antialiased`}
       >
-        <ClientProviders initialCurrencies={headerData.currencies}>
+        <ClientProviders 
+          initialCurrencies={headerData.currencies}
+          userCountryCode={userCountryCode}
+        >
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header
             headerMenus={headerData.headerMenus}
