@@ -8,14 +8,12 @@ import { Currency } from "@/graphql/HeaderQuery";
 interface ClientProvidersProps {
   children: ReactNode;
   initialCurrencies: Currency[];
-  userCountryCode?: string | null;
 }
 
-export default function ClientProviders({ children, initialCurrencies, userCountryCode }: ClientProvidersProps) {
+export default function ClientProviders({ children, initialCurrencies }: ClientProvidersProps) {
   return (
     <CurrencyProvider 
       initialCurrencies={initialCurrencies}
-      userCountryCode={userCountryCode}
     >
       <TravelAlertProvider>
         {children}

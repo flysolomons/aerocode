@@ -24,14 +24,11 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
 interface CurrencyProviderProps {
   children: ReactNode;
   initialCurrencies?: Currency[];
-  userCountryCode?: string | null;
 }
-
 
 export function CurrencyProvider({
   children,
   initialCurrencies = [],
-  userCountryCode,
 }: CurrencyProviderProps) {
   const [currencies, setCurrencies] = useState<Currency[]>(initialCurrencies);
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
@@ -40,41 +37,28 @@ export function CurrencyProvider({
   const [isLocationLoaded, setIsLocationLoaded] = useState(false);
   const [isCurrencyReady, setIsCurrencyReady] = useState(false);
 
-  // Set currency based on server-provided country code (with client-side fallback for local development)
+  // Set currency based on client-side IP detection
   useEffect(() => {
     if (currencies.length === 0 || isLocationLoaded) return;
 
     const setInitialCurrency = async () => {
       let currencyToSet: Currency | null = null;
 
-      if (userCountryCode) {
-        // Use server-provided country code
-        currencyToSet =
-          currencies.find(
-            (currency) =>
-              currency.countryCode.toUpperCase() ===
-              userCountryCode.toUpperCase()
-          ) || null;
-        console.log('Server-side country detection:', userCountryCode, 'Found currency:', currencyToSet);
-      } else {
-        // Fallback to client-side detection for local development
-        try {
-          const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
-          const data = await response.json();
-          const clientCountryCode = data.country_code;
-          
-          if (clientCountryCode) {
-            currencyToSet =
-              currencies.find(
-                (currency) =>
-                  currency.countryCode.toUpperCase() ===
-                  clientCountryCode.toUpperCase()
-              ) || null;
-            console.log('Client-side fallback country detection:', clientCountryCode, 'Found currency:', currencyToSet);
-          }
-        } catch (error) {
-          console.warn("Client-side country detection failed:", error);
+      try {
+        const response = await fetch("https://get.geojs.io/v1/ip/geo.json");
+        const data = await response.json();
+        const clientCountryCode = data.country_code;
+
+        if (clientCountryCode) {
+          currencyToSet =
+            currencies.find(
+              (currency) =>
+                currency.countryCode.toUpperCase() ===
+                clientCountryCode.toUpperCase()
+            ) || null;
         }
+      } catch (error) {
+        console.warn("Client-side country detection failed:", error);
       }
 
       // Final fallback to AU if no match found
@@ -93,7 +77,7 @@ export function CurrencyProvider({
     };
 
     setInitialCurrency();
-  }, [currencies, userCountryCode, isLocationLoaded]);
+  }, [currencies, isLocationLoaded]);
 
   // Update selected currency when currencies change (if current selection becomes invalid)
   useEffect(() => {

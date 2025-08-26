@@ -18,7 +18,6 @@ import {
   fetchActiveTravelAlertServer,
   type ActiveTravelAlertPage,
 } from "@/graphql/TravelAlertPageQuery";
-import { getUserCountryCodeServer } from "@/lib/serverUtils";
 import "./globals.css";
 
 const inter = Inter({
@@ -70,17 +69,17 @@ export const metadata: Metadata = {
   description: "Solomon Airlines",
 };
 
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   // Fetch all layout data in parallel for better performance
-  const [headerResult, footerResult, alertResult, countryCodeResult] = await Promise.allSettled([
+  const [headerResult, footerResult, alertResult] = await Promise.allSettled([
     fetchHeaderDataServer(),
     fetchFooterMenuServer(),
     fetchActiveTravelAlertServer(),
-    getUserCountryCodeServer(),
   ]);
 
   // Extract results with fallbacks
@@ -109,14 +108,6 @@ export default async function RootLayout({
         return null;
       })();
 
-  const userCountryCode = countryCodeResult.status === 'fulfilled' 
-    ? countryCodeResult.value
-    : (() => {
-        if (countryCodeResult.status === 'rejected') {
-          console.error("Failed to fetch user country code in layout:", countryCodeResult.reason);
-        }
-        return null;
-      })();
 
   return (
     <html lang="en">
@@ -134,7 +125,6 @@ export default async function RootLayout({
       >
         <ClientProviders 
           initialCurrencies={headerData.currencies}
-          userCountryCode={userCountryCode}
         >
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header
