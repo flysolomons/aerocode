@@ -1,9 +1,8 @@
 // app/api/send-email/route.ts
 import { NextResponse } from "next/server";
-
 import { belamaCustomerTemplate } from "../../templates/belama-customer";
 import { belamaOfficeTemplate } from "../../templates/belama-staff";
-import emailTransporter from "@/lib/emailTransporter";
+import {sendEmail} from "@/lib/mailer";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -60,7 +59,7 @@ export async function POST(req: Request) {
 
   const officeMailOptions = {
     from: process.env.M365_EMAIL_USER,
-    to: "office@belama.com",
+    to: process.env.BELAMA_SIGNUP_RECIPIENT || '',
     subject: `New Membership Signup: ${title || "Membership Form"}`,
     text: officeEmailContent.text,
     html: officeEmailContent.html,
@@ -68,8 +67,8 @@ export async function POST(req: Request) {
 
   try {
     await Promise.all([
-      emailTransporter.sendMail(customerMailOptions),
-      emailTransporter.sendMail(officeMailOptions),
+      sendEmail(customerMailOptions),
+      sendEmail(officeMailOptions),
     ]);
     return NextResponse.json(
       { message: "Emails sent successfully" },
