@@ -49,18 +49,16 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: new HttpLink({
     uri: getGraphQLUrl(), // Use dynamic URL
     fetchOptions: {
-      cache: "default", // Allow HTTP caching for better performance
+      cache: "no-store", // No HTTP caching - always fresh
     },
   }),
   cache,
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-      // Remove global polling - apply per query where needed
+      fetchPolicy: "network-only",
     },
     query: {
-      fetchPolicy: "cache-first", // Better performance for static content
+      fetchPolicy: "network-only", // Always fetch fresh data
       errorPolicy: "all",
     },
     mutate: {
