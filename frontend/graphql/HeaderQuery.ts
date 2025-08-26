@@ -97,7 +97,7 @@ export const GET_HEADER_MENU = gql`
         }
       }
     }
-    currencies {
+    currencies(limit: 100) {
       countryName
       countryCode
       currencyName
