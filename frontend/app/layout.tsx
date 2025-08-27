@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import TravelAlertsBanner from "@/components/layout/banner/TravelAlertsBanner";
@@ -141,7 +142,9 @@ export default async function RootLayout({
         className={`${inter.variable} ${rubik.variable} ${veneer.variable} ${edmondsans.variable} antialiased`}
       >
         <ClientProviders initialCurrencies={headerData.currencies}>
-          <PageVisitTracker />
+          <Suspense fallback={<></>}>
+            <PageVisitTracker />
+          </Suspense>
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header
             headerMenus={headerData.headerMenus}
