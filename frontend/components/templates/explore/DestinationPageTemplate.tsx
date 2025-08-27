@@ -16,7 +16,8 @@ import {
   DestinationPage,
   DestinationSpecialRoute,
 } from "@/graphql/DestinationPageQuery";
-import parse from "html-react-parser";
+
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface DestinationTemplateProps {
   initialPage: DestinationPage;
@@ -99,7 +100,7 @@ export default function DestinationTemplate({
             {initialPage.description && (
               <div id="overview" className="mx-auto w-full scroll-mt-10">
                 <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
-                  {parse(initialPage.description)}
+                  {beautifyHtml(initialPage.description)}
                 </div>
               </div>
             )}

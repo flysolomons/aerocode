@@ -81,6 +81,23 @@ interface AboutPageTemplateProps {
 export default function AboutPageTemplate({
   initialPage,
 }: AboutPageTemplateProps): React.JSX.Element {
+
+  const whereWeAreToday = `
+  Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji, Nadi.
+              <ul className="mt-4 space-y-2 text-left max-w-2xl mx-auto">
+                <li>The Airbus A320-200 "Spirit of Solomons" for international routes</li>
+                <li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>
+              </ul>
+              <p className="mt-4">
+                With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.
+              </p> 
+              <br>
+              <p className="my-4" >
+              Discover our roadmap for the future in our <br/>
+              [doc]<a href="https://www.flysolomons.com/library/content/AboutFlySolomonPage/solomon-airlines-strategic-plan-2024-to-2028-lr.pdf">Strategic Plan Document</a>[/doc]
+              
+              </p>
+  `;
   const getVideoUrl = (videoPath: string) => {
     // If it's already an absolute URL, return it as is
     if (videoPath.startsWith("http")) {
@@ -153,7 +170,7 @@ export default function AboutPageTemplate({
               60+ Years of Innovation and Excellence in Global Aviation
             </h2>
             <div className="text-gray-500 text-center py-4">
-              {parse(initialPage.description) ||
+              {beautifyHtml(initialPage.description) ||
                 "Solomon Airlines has a proud legacy that began in 1962, when Mr. Laurie Crowly founded Megapode Airways, a small charter company. In 1968, the airline became Solomon Island Airways (SOLAIR) under Macair PNG, marking its place as the world’s smallest international airline at the time. The Solomon Islands Government acquired a 49% stake in 1979, and by 1984, took full ownership—rebranding the airline as Solomon Airlines Limited and laying the foundation for a new era of national pride, connectivity, and growth."}
             </div>
 
@@ -190,23 +207,8 @@ export default function AboutPageTemplate({
               Where we are today
             </h2>
             <div className="text-gray-500 text-center">
-              {parse(initialPage.description || "Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji, Nadi.")}
-              <ul className="mt-4 space-y-2 text-left max-w-2xl mx-auto">
-                <li>The Airbus A320-200 "Spirit of Solomons" for international routes</li>
-                <li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>
-              </ul>
-              <p className="mt-4">
-                With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.
-              </p>
-            </div>
-
-            <div className="py-4">
-              <p>
-                Discover our roadmap for the future in our{" "}
-                <a href="#" className="text-blue-500 hover:text-blue-700 underline">
-                  Strategic Plan Document
-                </a>
-              </p>
+              {beautifyHtml(whereWeAreToday)}
+              
             </div>
           </div>
         </Container>

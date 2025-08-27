@@ -1,21 +1,17 @@
 "use client";
-import { useState, useEffect } from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
-import RouteSpecialCard from "@/components/ui/cards/RouteSpecialCard";
 import RouteSpecialSection from "@/components/layout/sections/RouteSpecialSection";
-import Slider from "@/components/layout/Slider";
 import { SpecialPage } from "@/graphql/SpecialPageQuery";
-import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import FlightSpecialInformation from "@/components/layout/sections/FlightSpecialInformation";
-import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import ThumbnailCarouselSpecialCard from "@/components/layout/carousel/ThumbnailCarouselSpecialCard";
 import TableOfContents, {
   TOCSection,
 } from "@/components/layout/TableOfContents";
 import { useTableOfContents } from "@/hooks/useTableOfContents";
 import ReadyToFly from "@/components/layout/sections/ReadyToFly";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 // Helper function to format dates in a readable format
 function formatDate(dateString: string): string {
@@ -197,7 +193,7 @@ export default function SpecialPageTemplate({
                 {description && (
                   <div id="overview" className="mx-auto w-full">
                     <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                      {parse(description)}
+                      {beautifyHtml(description)}
                     </div>
                   </div>
                 )}
@@ -255,7 +251,7 @@ export default function SpecialPageTemplate({
                       </span>
                     </summary>
                     <div className="prose prose-sm sm:prose lg:prose-lg max-w-none w-full px-6 pb-6 pt-2 text-left text-gray-500">
-                      <div>{parse(termsAndConditions)}</div>
+                      <div>{beautifyHtml(termsAndConditions)}</div>
                     </div>
                   </details>
                 </div>

@@ -13,9 +13,8 @@ import TableOfContents, {
 import { useTableOfContents } from "@/hooks/useTableOfContents";
 import { RoutePage, SpecialRoute } from "@/graphql/RoutePageQuery";
 import Recommendations from "@/components/layout/sections/Recommendations";
-import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
-import parse from "html-react-parser";
 import ReadyToFly from "@/components/layout/sections/ReadyToFly";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface RoutePageTemplateProps {
   initialPage: RoutePage | null;
@@ -151,7 +150,7 @@ export default function RoutePageTemplate({
               {initialPage.description && (
                 <div id="overview" className="mx-auto w-full scroll-mt-10">
                   <div className="text-sm sm:text-base lg:text-base text-gray-700 leading-relaxed">
-                    {parse(initialPage.description)}
+                    {beautifyHtml(initialPage.description)}
                   </div>
                 </div>
               )}
