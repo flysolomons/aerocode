@@ -26,7 +26,7 @@ export default function GridCardSectionBlock({
       {block.blockType === "GridCardSectionBlock" && (
         <div className="w-full space-y-6 sm:space-y-8">
           {block.heading && (
-            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 sm:mb-6 lg:mb-6 text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-3xl font-bold mb-4 sm:mb-6 lg:mb-6 text-center text-blue-500">
               {block.heading}
             </h2>
           )}

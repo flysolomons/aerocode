@@ -30,7 +30,7 @@ export default function SimpleDropdownBlock({ block }: SimpleDropdownBlockProps)
           }`}
         >
           <h3 className={`text-lg sm:text-xl font-bold pr-4 transition-colors duration-300 ${
-            isOpen ? "text-blue-600" : "text-gray-900"
+            isOpen ? "text-blue-500" : "text-gray-900"
           }`}>
             {block.heading}
           </h3>

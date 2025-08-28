@@ -47,7 +47,7 @@ export default function SectionBlock({ block }: SectionBlockProps) {
         }`}
       >
         {block.heading && (
-          <h2 className="text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-gray-600 font-semibold leading-tight break-words">
+          <h2 className="text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 lg:mb-6 text-blue-500 font-semibold leading-tight break-words">
             {block.heading}
           </h2>
         )}

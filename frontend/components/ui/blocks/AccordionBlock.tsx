@@ -32,7 +32,7 @@ export default function AccordionBlock({ block }: AccordionBlockProps) {
   return (
     <div className="w-full ">
       {block.title && (
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-600 mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-blue-500 mb-8">
           {block.title}
         </h2>
       )}

@@ -38,7 +38,7 @@ export default function GenericPageTemplate({
       {
         initialPage.subTitle && (
           <Container>
-              <h4 className="px-4 text-center text-3xl pt-8 font-bold text-gray-600">{initialPage.subTitle}</h4>
+              <h4 className="px-4 text-center text-3xl pt-8 font-bold text-blue-500">{initialPage.subTitle}</h4>
           </Container>
           
         )
