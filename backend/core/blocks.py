@@ -82,6 +82,26 @@ class SectionBlock(StructBlock):
 
 
 @register_streamfield_block
+class GenericSectionBlock(StructBlock):
+    heading = CharBlock(required=True, max_length=100)
+    text = TextBlock(required=True)
+    image = ImageChooserBlock(required=False)
+    image_position = ChoiceBlock(
+        choices=[("left", "Left"), ("right", "Right")], default="right"
+    )
+
+    graphql_fields = [
+        GraphQLString("heading", name="heading"),
+        GraphQLString("text", name="text"),
+        GraphQLImage("image", name="image"),
+        GraphQLString("image_position", name="imagePosition"),
+    ]
+
+    class Meta:
+        graphql_type = "GenericSectionBlock"
+
+
+@register_streamfield_block
 class GridCardBlock(StructBlock):
     heading = CharBlock(required=True, max_length=100)
     text = TextBlock(required=True)
@@ -427,8 +447,12 @@ class MagazineBlock(StructBlock):
     """A magazine block with document, cover image and title."""
 
     title = CharBlock(required=True, max_length=100, help_text="Magazine title")
-    cover_image = ImageChooserBlock(required=True, help_text="Cover image for the magazine")
-    document = DocumentChooserBlock(required=True, help_text="Magazine document (PDF, etc.)")
+    cover_image = ImageChooserBlock(
+        required=True, help_text="Cover image for the magazine"
+    )
+    document = DocumentChooserBlock(
+        required=True, help_text="Magazine document (PDF, etc.)"
+    )
 
     graphql_fields = [
         GraphQLString("title", name="title"),
@@ -448,7 +472,9 @@ class StoryBlock(StructBlock):
 
     title = CharBlock(required=True, max_length=100, help_text="Story title")
     subtitle = CharBlock(required=False, max_length=200, help_text="Story subtitle")
-    cover_image = ImageChooserBlock(required=True, help_text="Cover image for the story")
+    cover_image = ImageChooserBlock(
+        required=True, help_text="Cover image for the story"
+    )
     url = URLBlock(required=True, help_text="URL link to the full story")
 
     graphql_fields = [
@@ -468,8 +494,12 @@ class StoryBlock(StructBlock):
 class CompanyCultureHighlightBlock(StructBlock):
     """A block for company culture highlights with image, title and description."""
 
-    image = ImageChooserBlock(required=True, help_text="Image for the culture highlight")
-    title = CharBlock(required=True, max_length=100, help_text="Culture highlight title")
+    image = ImageChooserBlock(
+        required=True, help_text="Image for the culture highlight"
+    )
+    title = CharBlock(
+        required=True, max_length=100, help_text="Culture highlight title"
+    )
     description = TextBlock(required=True, help_text="Culture highlight description")
 
     graphql_fields = [
@@ -488,7 +518,9 @@ class CompanyCultureHighlightBlock(StructBlock):
 class DepartmentBlock(StructBlock):
     """A block for departments with name, description and image."""
 
-    department_name = CharBlock(required=True, max_length=100, help_text="Department name")
+    department_name = CharBlock(
+        required=True, max_length=100, help_text="Department name"
+    )
     description = TextBlock(required=True, help_text="Department description")
     image = ImageChooserBlock(required=True, help_text="Department image")
 
