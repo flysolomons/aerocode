@@ -1,6 +1,7 @@
 import { useState } from "react";
 import parse from "html-react-parser";
 import { AccordionBlock as AccordionBlockType } from "@/graphql/genericPageQuery";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface AccordionBlockProps {
   block: AccordionBlockType;
@@ -29,9 +30,9 @@ export default function AccordionBlock({ block }: AccordionBlockProps) {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full ">
       {block.title && (
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-blue-500 mb-8">
           {block.title}
         </h2>
       )}
@@ -40,20 +41,20 @@ export default function AccordionBlock({ block }: AccordionBlockProps) {
         {accordionItems.map((item, index) => (
           <div
             key={index}
-            className="rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-md transition-all duration-300 hover:shadow-lg"
+            className="rounded-md overflow-hidden bg-white  transition-all duration-300 hover:shadow-lg border-b-2 border-b-gray-200"
           >
             <button
               onClick={() => toggleItem(index)}
-              className={`w-full px-6 py-5 text-left flex items-center justify-between transition-all duration-300 focus:outline-none ${
+              className={` w-full px-6 py-5 text-left flex items-center justify-between transition-all duration-300 focus:outline-none ${
                 openItems.has(index)
-                  ? "bg-yellow-50 hover:bg-yellow-200"
+                  ? " hover:bg-gray-100 "
                   : "hover:bg-gray-50"
               }`}
             >
               <h3
-                className={`text-lg sm:text-xl font-bold pr-4 transition-colors duration-300 ${
-                  openItems.has(index) ? "text-blue-600" : "text-gray-900"
-                }`}
+                className={`text-lg sm:text-xl font-semibold pr-4 transition-colors duration-300 ${
+                  openItems.has(index) ? "text-gray-700 " : "text-gray-600"
+                } `}
               >
                 {item.heading}
               </h3>
@@ -81,9 +82,9 @@ export default function AccordionBlock({ block }: AccordionBlockProps) {
             </button>
 
             {openItems.has(index) && (
-              <div className="px-6 pb-6 pt-2">
-                <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
-                  {item.content && parse(item.content)}
+              <div className="p-8 border-t-2 border-gray-100">
+                <div className="prose prose-sm max-w-none text-gray-500 leading-relaxed">
+                  {item.content && beautifyHtml(item.content)}
                 </div>
               </div>
             )}

@@ -6,7 +6,7 @@ import Container from "@/components/layout/Container";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import RouteCard from "@/components/ui/cards/RouteCard";
 import { WhereWeFlyPage } from "@/graphql/WhereWeFlyPageQuery";
-import parse from "html-react-parser";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface WhereWeFlyProps {
   initialPage: WhereWeFlyPage;
@@ -32,7 +32,7 @@ export default function WhereWeFlyTemplate({ initialPage }: WhereWeFlyProps) {
           {initialPage.description && (
             <div className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
-                {parse(initialPage.description)}
+                {beautifyHtml(initialPage.description)}
               </div>
             </div>
           )}

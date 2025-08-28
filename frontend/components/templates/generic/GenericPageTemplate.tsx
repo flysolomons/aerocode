@@ -15,6 +15,7 @@ import ManageMyBookingWidget from "@/components/layout/booking-widget/ManageMyBo
 import FlightUpgradeWidget from "@/components/layout/booking-widget/FlightUpgradeWidget";
 import { GenericPage } from "@/graphql/genericPageQuery";
 import parse from "html-react-parser";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface GenericPageTemplateProps {
   initialPage: GenericPage;
@@ -32,19 +33,31 @@ export default function GenericPageTemplate({
           breadcrumbs={initialPage.url}
         />
       )}
-
+      <div className="py-12">
+        {/* Subtitle */}
+      {
+        initialPage.subTitle && (
+          <Container>
+              <h4 className="px-4 text-center text-3xl pt-8 font-bold text-blue-500">{initialPage.subTitle}</h4>
+          </Container>
+          
+        )
+      }
       {/* Description section with container */}
       {initialPage.description && (
         <Container>
-          <div className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
+          <div className=" lg:py-4 lg:px-4 px-6">
             <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
-                {parse(initialPage.description)}
+              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-[2]">
+                {beautifyHtml(initialPage.description)}
               </div>
             </div>
           </div>
         </Container>
       )}
+
+      </div>
+      
 
       {/* Widget section - appears before content */}
       {(initialPage.includeManageBookingWidget ||

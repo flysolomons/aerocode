@@ -2,7 +2,7 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import GenericCard from "@/components/ui/cards/GenericCard";
 import { DestinationIndexPage } from "@/graphql/DestinationIndexPageQuery";
-import parse from "html-react-parser";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface ExploreProps {
   initialPage: DestinationIndexPage;
@@ -24,7 +24,7 @@ export default function DestinationIndexTemplate({
           {initialPage.description && (
             <div className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-left text-gray-600 leading-relaxed">
-                {parse(initialPage.description)}
+                {beautifyHtml(initialPage.description)}
               </div>
             </div>
           )}

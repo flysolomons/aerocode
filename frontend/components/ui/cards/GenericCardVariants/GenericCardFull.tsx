@@ -15,7 +15,7 @@ function GenericCardFull({
   url,
 }: GenericCardFullProps) {
   const cardContent = (
-    <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden w-full h-48 md:h-64 lg:h-72 xl:h-80 shadow-lg lg:shadow-xl bg-white border-4 border-white">
+    <div className="relative rounded-xl lg:rounded-lg overflow-hidden w-full h-48 md:h-64 lg:h-72 xl:h-80 shadow-lg lg:shadow-xl bg-white border-4 border-white">
       <div className="absolute inset-0"></div>
 
       <Image

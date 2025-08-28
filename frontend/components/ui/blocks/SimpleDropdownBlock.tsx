@@ -1,6 +1,7 @@
 import { useState } from "react";
 import parse from "html-react-parser";
 import { SimpleDropdownBlock as SimpleDropdownBlockType } from "@/graphql/genericPageQuery";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface SimpleDropdownBlockProps {
   block: SimpleDropdownBlockType;
@@ -29,7 +30,7 @@ export default function SimpleDropdownBlock({ block }: SimpleDropdownBlockProps)
           }`}
         >
           <h3 className={`text-lg sm:text-xl font-bold pr-4 transition-colors duration-300 ${
-            isOpen ? "text-blue-600" : "text-gray-900"
+            isOpen ? "text-blue-500" : "text-gray-900"
           }`}>
             {block.heading}
           </h3>
@@ -57,7 +58,7 @@ export default function SimpleDropdownBlock({ block }: SimpleDropdownBlockProps)
         {isOpen && (
           <div className="px-6 pb-6 pt-2">
             <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
-              {parse(block.content)}
+              {beautifyHtml(block.content)}
             </div>
           </div>
         )}

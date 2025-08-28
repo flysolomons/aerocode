@@ -3,6 +3,7 @@ import Container from "@/components/layout/Container";
 import GenericCard from "@/components/ui/cards/GenericCard";
 import { ExperienceIndexPage } from "@/graphql/ExperiencePageQuery";
 import parse from "html-react-parser";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface ExperienceProps {
   initialPage: ExperienceIndexPage;
@@ -24,7 +25,7 @@ export default function ExperienceIndexTemplate({
           {initialPage.description && (
             <div className="mx-auto w-full">
               <div className="text-sm sm:text-base lg:text-base text-center text-gray-700 leading-relaxed">
-                {parse(initialPage.description)}
+                {beautifyHtml(initialPage.description)}
               </div>
             </div>
           )}

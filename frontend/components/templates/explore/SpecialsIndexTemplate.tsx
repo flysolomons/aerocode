@@ -1,14 +1,12 @@
 "use client";
-import { useState } from "react";
 import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import SpecialCard from "@/components/ui/cards/SpecialCard";
 import { SpecialsIndexPage } from "@/graphql/SpecialsIndexPageQuery";
-import parse from "html-react-parser";
 import StrippedBookingWidget from "@/components/layout/booking-widget/StrippedBookingWidget";
 import ThumbnailCarousel from "@/components/layout/carousel/ThumbnailCarouselRouteSpecialCard";
-import PrimaryButton from "@/components/ui/buttons/PrimaryButton";
 import ReadyToFly from "@/components/layout/sections/ReadyToFly";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface SpecialsIndexTemplateProps {
   initialPage: SpecialsIndexPage;
@@ -51,7 +49,7 @@ export default function SpecialsIndexTemplate({
             {pageDescription && (
               <div className="mx-auto w-full">
                 <div className="text-sm sm:text-base lg:text-base text-gray-600 leading-relaxed">
-                  {parse(pageDescription)}
+                  {beautifyHtml(pageDescription)}
                 </div>
               </div>
             )}

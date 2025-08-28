@@ -4,7 +4,6 @@ import SecondaryHero from "@/components/layout/hero/SecondaryHero";
 import Container from "@/components/layout/Container";
 import RadioButton from "@/components/ui/buttons/RadioButton";
 import Accordion from "@/components/ui/Accordion";
-import Recommendations from "@/components/layout/sections/Recommendations";
 import FlightTimetableWidget from "@/components/layout/booking-widget/FlightTimetableWidget";
 import TableOfContents, {
   TOCSection,
@@ -18,7 +17,7 @@ import {
   fetchScheduleFlights,
   prefetchAdjacentSchedules,
 } from "@/graphql/FlightSchedulePageQuery";
-import parse from "html-react-parser";
+import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface FlightScheduleProps {
   initialPage: ScheduleWithFlightData;
@@ -443,7 +442,7 @@ export default function FlightScheduleTemplate({
             {initialPage.description && (
               <div className="mx-auto w-full">
                 <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-relaxed">
-                  {parse(initialPage.description)}
+                  {beautifyHtml(initialPage.description)}
                 </div>
               </div>
             )}
