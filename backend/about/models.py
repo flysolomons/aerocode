@@ -1,8 +1,13 @@
 from django.db import models
 from core.models import BasePage
 from wagtail.fields import RichTextField
-from wagtail.admin.panels import FieldPanel
-from grapple.models import GraphQLString, GraphQLStreamfield, GraphQLImage, GraphQLDocument
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from grapple.models import (
+    GraphQLString,
+    GraphQLStreamfield,
+    GraphQLImage,
+    GraphQLDocument,
+)
 from grapple.helpers import register_query_field
 from wagtail.fields import StreamField
 from wagtail.snippets.models import register_snippet
@@ -27,6 +32,28 @@ class AboutIndexPage(BasePage):
         blank=True,
         null=True,
         help_text="Hero video for the about page",
+    )
+
+    history_title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Title for the history section",
+    )
+
+    history_body = RichTextField(
+        blank=True,
+        help_text="Content for the history section",
+    )
+
+    present_title = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Title for the present section",
+    )
+
+    present_body = RichTextField(
+        blank=True,
+        help_text="Content for the present section",
     )
 
     mission_statement = RichTextField(
@@ -92,6 +119,14 @@ class AboutIndexPage(BasePage):
 
     content_panels = BasePage.content_panels + [
         FieldPanel("hero_video", heading="Hero Video"),
+        MultiFieldPanel([
+            FieldPanel("history_title"),
+            FieldPanel("history_body"),
+        ], heading="History Section"),
+        MultiFieldPanel([
+            FieldPanel("present_title"),
+            FieldPanel("present_body"),
+        ], heading="Present Section"),
         FieldPanel("mission_statement", heading="Mission Statement"),
         FieldPanel("vision_statement", heading="Vision Statement"),
         FieldPanel("values", heading="Values"),
@@ -104,6 +139,10 @@ class AboutIndexPage(BasePage):
 
     graphql_fields = BasePage.graphql_fields + [
         GraphQLString("hero_video", name="heroVideo"),
+        GraphQLString("history_title", name="historyTitle"),
+        GraphQLString("history_body", name="historyBody"),
+        GraphQLString("present_title", name="presentTitle"),
+        GraphQLString("present_body", name="presentBody"),
         GraphQLString("mission_statement", name="missionStatement"),
         GraphQLString("vision_statement", name="visionStatement"),
         GraphQLStreamfield("values", name="values"),
@@ -177,28 +216,17 @@ class CareersPage(BasePage):
 
 @register_query_field("jobVacancy", "jobVacancies")
 class JobVacancy(models.Model):
-    position_title = models.CharField(
-        max_length=200,
-        help_text="Job position title"
-    )
-    department_name = models.CharField(
-        max_length=100,
-        help_text="Department name"
-    )
-    location = models.CharField(
-        max_length=100,
-        help_text="Job location"
-    )
-    closing_date = models.DateField(
-        help_text="Application closing date"
-    )
+    position_title = models.CharField(max_length=200, help_text="Job position title")
+    department_name = models.CharField(max_length=100, help_text="Department name")
+    location = models.CharField(max_length=100, help_text="Job location")
+    closing_date = models.DateField(help_text="Application closing date")
     document = models.ForeignKey(
         "wagtaildocs.Document",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text="Job vacancy document (PDF)"
+        help_text="Job vacancy document (PDF)",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
