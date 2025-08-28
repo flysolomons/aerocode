@@ -82,22 +82,6 @@ export default function AboutPageTemplate({
   initialPage,
 }: AboutPageTemplateProps): React.JSX.Element {
 
-  const whereWeAreToday = `
-  Today, Solomon Airlines is the national carrier and market leader in air transport across the Solomon Islands. We are based in Honiara but also have offices in several of our regional destinations including Brisbane, Australia and Fiji, Nadi.
-              <ul className="mt-4 space-y-2 text-left max-w-2xl mx-auto">
-                <li>The Airbus A320-200 "Spirit of Solomons" for international routes</li>
-                <li>A Dash 8 and three Twin Otters for extensive domestic coverage</li>
-              </ul>
-              <p className="mt-4">
-                With a workforce of 250+ employees, 95% of whom are locally based, we provide scheduled passenger services, cargo transport, and charter flights strengthening connections across the Pacific and supporting tourism, trade, and community development.
-              </p> 
-              <br>
-              <p className="my-4" >
-              Discover our roadmap for the future in our <br/>
-              [doc]<a href="https://www.flysolomons.com/library/content/AboutFlySolomonPage/solomon-airlines-strategic-plan-2024-to-2028-lr.pdf">Strategic Plan Document</a>[/doc]
-              
-              </p>
-  `;
   const getVideoUrl = (videoPath: string) => {
     // If it's already an absolute URL, return it as is
     if (videoPath.startsWith("http")) {
@@ -167,10 +151,10 @@ export default function AboutPageTemplate({
               <path d="M128,136a8,8,0,0,1-8,8H72a8,8,0,0,1,0-16h48A8,8,0,0,1,128,136Zm-8-40H72a8,8,0,0,0,0,16h48a8,8,0,0,0,0-16Zm112,65.47V224A8,8,0,0,1,220,231l-24-13.74L172,231A8,8,0,0,1,160,224V200H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216a16,16,0,0,1,16,16V86.53a51.88,51.88,0,0,1,0,74.94ZM160,184V161.47A52,52,0,0,1,216,76V56H40V184Zm56-12a51.88,51.88,0,0,1-40,0v38.22l16-9.16a8,8,0,0,1,7.94,0l16,9.16Zm16-48a36,36,0,1,0-36,36A36,36,0,0,0,232,124Z"></path>
             </svg>
             <h2 className="font-semibold text-4xl lg:text-3xl text-center text-blue-500">
-              60+ Years of Innovation and Excellence in Global Aviation
+              {initialPage.historyTitle}
             </h2>
             <div className="text-gray-500 text-center py-4">
-              {beautifyHtml(initialPage.description) ||
+              {beautifyHtml(initialPage.historyBody) ||
                 "Solomon Airlines has a proud legacy that began in 1962, when Mr. Laurie Crowly founded Megapode Airways, a small charter company. In 1968, the airline became Solomon Island Airways (SOLAIR) under Macair PNG, marking its place as the world’s smallest international airline at the time. The Solomon Islands Government acquired a 49% stake in 1979, and by 1984, took full ownership—rebranding the airline as Solomon Airlines Limited and laying the foundation for a new era of national pride, connectivity, and growth."}
             </div>
 
@@ -204,10 +188,10 @@ export default function AboutPageTemplate({
               <path d="M215.12,123.64a8,8,0,1,0-14.24-7.28,79.58,79.58,0,0,1-33.08,33.5l-16.58-37.32A40,40,0,0,0,136,40.8V24a8,8,0,0,0-16,0V40.8a40,40,0,0,0-15.22,71.74L56.69,220.75a8,8,0,1,0,14.62,6.5l25.14-56.56A95.48,95.48,0,0,0,128,176a99.13,99.13,0,0,0,31.6-5.21l25.09,56.46a8,8,0,0,0,14.62-6.5l-25-56.25A95.81,95.81,0,0,0,215.12,123.64ZM128,56a24,24,0,1,1-24,24A24,24,0,0,1,128,56Zm0,104a79.52,79.52,0,0,1-25-4l16.42-36.94a39.81,39.81,0,0,0,17.2,0l16.48,37.06A83.21,83.21,0,0,1,128,160Z"></path>
             </svg>
             <h2 className="font-semibold text-3xl text-center text-blue-500">
-              Where we are today
+              {initialPage.presentTitle}
             </h2>
             <div className="text-gray-500 text-center">
-              {beautifyHtml(whereWeAreToday)}
+              {beautifyHtml(initialPage.presentBody)}
               
             </div>
           </div>
