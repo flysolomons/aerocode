@@ -57,6 +57,10 @@ export interface AboutIndexPage {
   subTitle: string;
   url: string;
   description: string;
+  historyTitle:string;
+  historyBody:string;
+  presentTitle:string;
+  presentBody:string;
   missionStatement: string;
   visionStatement: string;
   values: ValueCardBlock[];
@@ -86,6 +90,10 @@ export const GET_ABOUT_PAGE_QUERY = gql`
         subTitle
         url
         description
+        historyTitle
+        historyBody
+        presentTitle
+        presentBody
         missionStatement
         visionStatement
         values {
@@ -190,6 +198,10 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
         seoTitle: "About Us",
         subTitle: "",
         url: "/about",
+        historyTitle:"About us",
+        historyBody:"we are solomon airlines",
+        presentTitle:"Where we are today",
+        presentBody:"we are venom",
         description: "Learn more about Solomon Airlines",
         missionStatement: "",
         visionStatement: "",
@@ -211,6 +223,10 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
       description: aboutPage.description || "Learn more about Solomon Airlines",
+      historyTitle: aboutPage.historyTitle ||  "60+ Years",
+      historyBody:aboutPage.historyBody || "we are solomon airlines",
+      presentTitle: aboutPage.presentTitle || "Where we are today",
+      presentBody:aboutPage.presentBody || "we are venom",
       missionStatement: aboutPage.missionStatement || "",
       visionStatement: aboutPage.visionStatement || "",
       values: aboutPage.values || [],
@@ -231,6 +247,10 @@ export async function fetchAboutPage(): Promise<AboutIndexPage> {
       subTitle: "",
       url: "/about",
       description: "",
+      historyTitle:"About us",
+      historyBody:"we are solomon airlines",
+      presentTitle:"Where we are today",
+      presentBody:"we are venom",
       missionStatement: "",
       visionStatement: "",
       values: [],
@@ -272,6 +292,10 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
         subTitle: "",
         url: "/about",
         description: "",
+        historyTitle:"About us",
+        historyBody:"we are solomon airlines",
+        presentTitle:"Where we are today",
+        presentBody:"we are venom",
         missionStatement: "",
         visionStatement: "",
         values: [],
@@ -292,6 +316,10 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       subTitle: aboutPage.subTitle || "",
       url: aboutPage.url || "/about",
       description: aboutPage.description || "Learn more about Solomon Airlines",
+      historyTitle:aboutPage.historyTitle || "About us",
+      historyBody:aboutPage.historyBody || "we are solomon airlines",
+      presentTitle:aboutPage.presentTitle || "Where we are today",
+      presentBody:aboutPage.presentBody || "we are venom",
       missionStatement: aboutPage.missionStatement || "",
       visionStatement: aboutPage.visionStatement || "",
       values: aboutPage.values || [],
@@ -312,6 +340,10 @@ export async function fetchAboutPageServer(): Promise<AboutIndexPage> {
       subTitle: "",
       url: "/about",
       description: "Learn more about Solomon Airlines",
+      historyTitle:"About us",
+        historyBody:"we are solomon airlines",
+        presentTitle:"Where we are today",
+        presentBody:"we are venom",
       missionStatement: "",
       visionStatement: "",
       values: [],
@@ -334,6 +366,10 @@ export const fallbackAboutPage: AboutIndexPage = {
   subTitle: "",
   url: "/about",
   description: "Learn more about Solomon Airlines",
+  historyTitle:"About us",
+  historyBody:"we are solomon airlines",
+  presentTitle:"Where we are today",
+  presentBody:"we are venom",
   missionStatement:
     "Our mission is to connect the Solomon Islands through reliable air transport.",
   visionStatement: "To be the leading airline in the Pacific region.",
