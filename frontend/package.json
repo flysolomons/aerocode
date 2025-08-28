@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.23.4",
     "@apollo/client": "^3.13.6",
     "@azure/identity": "^4.11.1",
     "@microsoft/microsoft-graph-client": "^3.0.7",

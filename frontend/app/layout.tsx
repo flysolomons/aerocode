@@ -2,10 +2,12 @@
 import type { Metadata } from "next";
 import { Inter, Rubik } from "next/font/google";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import TravelAlertsBanner from "@/components/layout/banner/TravelAlertsBanner";
 import ClientProviders from "@/components/providers/ClientProviders";
+import { PageVisitTracker } from "./PageVisitTracker";
 import {
   fetchHeaderDataServer,
   fallbackHeaderData,
@@ -69,7 +71,6 @@ export const metadata: Metadata = {
   description: "Solomon Airlines",
 };
 
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -83,31 +84,44 @@ export default async function RootLayout({
   ]);
 
   // Extract results with fallbacks
-  const headerData = headerResult.status === 'fulfilled' 
-    ? headerResult.value 
-    : (() => {
-        console.error("Failed to fetch header data in layout, using fallback:", 
-          headerResult.status === 'rejected' ? headerResult.reason : 'Unknown error');
-        return fallbackHeaderData;
-      })();
+  const headerData =
+    headerResult.status === "fulfilled"
+      ? headerResult.value
+      : (() => {
+          console.error(
+            "Failed to fetch header data in layout, using fallback:",
+            headerResult.status === "rejected"
+              ? headerResult.reason
+              : "Unknown error"
+          );
+          return fallbackHeaderData;
+        })();
 
-  const footerMenus = footerResult.status === 'fulfilled' 
-    ? footerResult.value 
-    : (() => {
-        console.error("Failed to fetch footer menu in layout, using fallback:", 
-          footerResult.status === 'rejected' ? footerResult.reason : 'Unknown error');
-        return fallbackFooterMenu;
-      })();
+  const footerMenus =
+    footerResult.status === "fulfilled"
+      ? footerResult.value
+      : (() => {
+          console.error(
+            "Failed to fetch footer menu in layout, using fallback:",
+            footerResult.status === "rejected"
+              ? footerResult.reason
+              : "Unknown error"
+          );
+          return fallbackFooterMenu;
+        })();
 
-  const activeTravelAlert = alertResult.status === 'fulfilled' && alertResult.value?.activeAlert
-    ? alertResult.value
-    : (() => {
-        if (alertResult.status === 'rejected') {
-          console.error("Failed to fetch travel alert data in layout:", alertResult.reason);
-        }
-        return null;
-      })();
-
+  const activeTravelAlert =
+    alertResult.status === "fulfilled" && alertResult.value?.activeAlert
+      ? alertResult.value
+      : (() => {
+          if (alertResult.status === "rejected") {
+            console.error(
+              "Failed to fetch travel alert data in layout:",
+              alertResult.reason
+            );
+          }
+          return null;
+        })();
 
   return (
     <html lang="en">
@@ -115,17 +129,22 @@ export default async function RootLayout({
         {/* DNS prefetch for better performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        
+
         {/* Preconnect to font domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${inter.variable} ${rubik.variable} ${veneer.variable} ${edmondsans.variable} antialiased`}
       >
-        <ClientProviders 
-          initialCurrencies={headerData.currencies}
-        >
+        <ClientProviders initialCurrencies={headerData.currencies}>
+          <Suspense fallback={<></>}>
+            <PageVisitTracker />
+          </Suspense>
           <TravelAlertsBanner activeAlert={activeTravelAlert} />
           <Header
             headerMenus={headerData.headerMenus}
