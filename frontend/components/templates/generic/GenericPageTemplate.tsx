@@ -107,13 +107,8 @@ export default function GenericPageTemplate({
                   />
                 )}
 
-                
-
                 {/* Text block */}
                 {block.blockType === "TextBlock" && <TextBlock block={block} />}
-
-                {/* Generic section block */}
-                {block.blockType === "GenericSectionBlock" && <GenericSectionBlock block={block}/>}
 
                 {/* Image block */}
                 {block.blockType === "ImageBlock" && (
