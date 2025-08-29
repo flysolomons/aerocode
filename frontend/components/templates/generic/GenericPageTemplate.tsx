@@ -7,7 +7,6 @@ import TextBlock from "@/components/ui/blocks/TextBlock";
 import ImageBlock from "@/components/ui/blocks/ImageBlock";
 import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
-import GenericSectionBlock from "@/components/ui/blocks/GenericSectionBlock";
 import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import TableBlock from "@/components/ui/blocks/TableBlock";
 import AccordionBlock from "@/components/ui/blocks/AccordionBlock";
