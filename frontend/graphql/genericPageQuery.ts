@@ -26,6 +26,11 @@ export const GET_GENERIC_PAGE_QUERY = gql`
             url
           }
         }
+        ... on GenericSectionBlock {
+          heading
+          text
+        
+        }
         ... on ImageBlock {
           blockType
           caption
@@ -130,6 +135,13 @@ interface SectionBlock {
   imagePosition?: string;
   image?: ImageType;
 }
+interface GenericSectionBlock {
+  blockType: "GenericSectionBlock";
+  heading?: string;
+  text?: string;
+  imagePosition?: string;
+  image?: ImageType;
+}
 
 interface ImageBlock {
   blockType: "ImageBlock";
@@ -201,6 +213,7 @@ export interface SimpleDropdownBlock {
 
 type ContentBlock =
   | SectionBlock
+  | GenericSectionBlock
   | ImageBlock
   | HeadingTextBlock
   | FullWidthImageBlock

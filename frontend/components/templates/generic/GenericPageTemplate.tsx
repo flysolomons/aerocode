@@ -7,6 +7,7 @@ import TextBlock from "@/components/ui/blocks/TextBlock";
 import ImageBlock from "@/components/ui/blocks/ImageBlock";
 import HeadingTextBlock from "@/components/ui/blocks/HeadingTextBlock";
 import GridCardSectionBlock from "@/components/ui/blocks/GridCardSectionBlock";
+import GenericSectionBlock from "@/components/ui/blocks/GenericSectionBlock";
 import FullWidthImageBlock from "@/components/ui/blocks/FullWidthImageBlock";
 import TableBlock from "@/components/ui/blocks/TableBlock";
 import AccordionBlock from "@/components/ui/blocks/AccordionBlock";
@@ -14,7 +15,6 @@ import SimpleDropdownBlock from "@/components/ui/blocks/SimpleDropdownBlock";
 import ManageMyBookingWidget from "@/components/layout/booking-widget/ManageMyBookingWidget";
 import FlightUpgradeWidget from "@/components/layout/booking-widget/FlightUpgradeWidget";
 import { GenericPage } from "@/graphql/genericPageQuery";
-import parse from "html-react-parser";
 import { beautifyHtml } from "@/lib/beautifyHtml";
 
 interface GenericPageTemplateProps {
@@ -110,8 +110,13 @@ export default function GenericPageTemplate({
                   />
                 )}
 
+                
+
                 {/* Text block */}
                 {block.blockType === "TextBlock" && <TextBlock block={block} />}
+
+                {/* Generic section block */}
+                {block.blockType === "GenericSectionBlock" && <GenericSectionBlock block={block}/>}
 
                 {/* Image block */}
                 {block.blockType === "ImageBlock" && (
