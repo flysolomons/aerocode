@@ -35,29 +35,26 @@ export default function GenericPageTemplate({
       )}
       <div className="py-12">
         {/* Subtitle */}
-      {
-        initialPage.subTitle && (
+        {initialPage.subTitle && (
           <Container>
-              <h4 className="px-4 text-center text-3xl pt-8 font-bold text-blue-500">{initialPage.subTitle}</h4>
+            <h4 className="px-4 text-center text-3xl pt-8 font-bold text-blue-500">
+              {initialPage.subTitle}
+            </h4>
           </Container>
-          
-        )
-      }
-      {/* Description section with container */}
-      {initialPage.description && (
-        <Container>
-          <div className=" lg:py-4 lg:px-4 px-6">
-            <div className="mx-auto w-full">
-              <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-[2]">
-                {beautifyHtml(initialPage.description)}
+        )}
+        {/* Description section with container */}
+        {initialPage.description && (
+          <Container>
+            <div className=" lg:py-4 lg:px-4 px-6">
+              <div className="mx-auto w-full">
+                <div className="text-sm sm:text-base lg:text-base text-left text-gray-700 leading-[2]">
+                  {beautifyHtml(initialPage.description)}
+                </div>
               </div>
             </div>
-          </div>
-        </Container>
-      )}
-
+          </Container>
+        )}
       </div>
-      
 
       {/* Widget section - appears before content */}
       {(initialPage.includeManageBookingWidget ||
