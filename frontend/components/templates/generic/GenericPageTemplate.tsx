@@ -94,7 +94,7 @@ export default function GenericPageTemplate({
             <Container key={index}>
               <div className="px-4 sm:px-6 pb-8">
                 {/* Section block */}
-                {block.blockType === "SectionBlock" && (
+                {block.blockType === "GenericSectionBlock" && (
                   <SectionBlock
                     block={{
                       ...block,

@@ -18,7 +18,7 @@ export const GET_GENERIC_PAGE_QUERY = gql`
       includeManageBookingWidget
       content {
         blockType
-        ... on SectionBlock {
+        ... on GenericSectionBlock {
           heading
           text
           imagePosition
@@ -124,7 +124,7 @@ interface ListBlock {
 }
 
 interface SectionBlock {
-  blockType: "SectionBlock";
+  blockType: "GenericSectionBlock";
   heading?: string;
   text?: string;
   imagePosition?: string;
